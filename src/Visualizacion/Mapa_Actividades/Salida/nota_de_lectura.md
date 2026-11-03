@@ -1,7 +1,5 @@
 # Nota de lectura: ¿Dónde se concentra cada actividad en Chile?
 
-Actualizado 03-11-26
-
 ## Qué muestra
 Elige una actividad económica para ver en qué regiones pesa más que en el país. Al elegir una región, se ven sus cifras y las carreras más ligadas a esa actividad a nivel nacional.
 
@@ -17,9 +15,19 @@ Elige una actividad económica para ver en qué regiones pesa más que en el pa�
 | **Ingreso al 1er y al 5° año** | Ingreso bruto mensual medio, en pesos de septiembre de 2025 | MiFuturo |
 
 ## Lectura de colores
-- **Concentra:** 1,2 veces o más. Son umbrales de trabajo, no un estándar oficial.
-- **Similar:** entre 0,8 y 1,2.
-- **Bajo lo nacional:** 0,8 o menos.
+El mapa usa 7 tramos de color, agrupados en las 3 lecturas que aparecen en cada región. Los cortes son criterios de trabajo, no un estándar oficial.
+
+| Veces sobre lo nacional | Color | Lectura |
+|---|---|---|
+| **Hasta 0,4** | Azul intenso | Bajo lo nacional |
+| **Más de 0,4 y hasta 0,6** | Azul medio | Bajo lo nacional |
+| **Más de 0,6 y hasta 0,8** | Azul claro | Bajo lo nacional |
+| **Más de 0,8 y menos de 1,2** | Gris | Similar |
+| **Desde 1,2 y menos de 1,6** | Rojo claro | Concentra |
+| **Desde 1,6 y menos de 2,5** | Rojo medio | Concentra |
+| **2,5 o más** | Rojo intenso | Concentra |
+
+Las cifras se muestran con 1 decimal, o con más si están cerca de un corte, para que siempre calcen con su color.
 
 ## Qué no dice
 - **No mide demanda ni vacantes,** ni la probabilidad de encontrar trabajo.

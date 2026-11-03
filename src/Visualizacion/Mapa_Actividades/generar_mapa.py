@@ -9,7 +9,8 @@ Ejecutar: .venv/bin/python src/Visualizacion/Mapa_Actividades/generar_mapa.py (r
 
 Decisiones:
   - Simplificación por cobertura: mantiene exactos los bordes compartidos; simplificar cada región por separado
-    abriría huecos entre ellas.
+    abriría huecos entre ellas. Exige bordes que calcen entre regiones, y la capa oficial no los trae: por eso se
+    reconstruyen antes con una grilla de 0,01° (unos 1 km), un quinto de píxel a la escala del mapa.
   - Se omiten los territorios insulares lejanos (Rapa Nui, Juan Fernández): al incluirlos, el continente se vería
     diminuto. Sus datos siguen dentro de sus regiones.
   - Actividad U fuera de la lista: se conserva en la tabla, pero no aporta al mapa.
@@ -48,6 +49,8 @@ ANCHO_SVG = 250
 LATITUD_REFERENCIA = -36.0  # Mantiene una proporción razonable en un país tan largo.
 LONGITUD_MINIMA_CONTINENTE = -76.0
 TOLERANCIA_GRADOS = 0.035
+GRILLA_GRADOS = 0.01
+DIFERENCIA_AREA_MAXIMA_PCT = 0.5
 AREA_MINIMA_PX = 3.0
 AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]
 CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
@@ -98,10 +101,29 @@ def a_svg(coordenadas: np.ndarray, x0: float, y1: float, escala: float, cos_lat:
     return "M" + "L".join(f"{a:.1f},{b:.1f}" for a, b in zip(x, y)) + "Z"
 
 
+def reconstruir_cobertura(regiones: np.ndarray) -> np.ndarray:
+    """Hace que regiones vecinas compartan exactamente su borde; cada trozo queda en la región que lo contiene."""
+    ajustadas = shapely.set_precision(shapely.make_valid(regiones), GRILLA_GRADOS)
+    red = shapely.union_all(shapely.boundary(ajustadas))
+    caras = shapely.get_parts(shapely.polygonize(list(shapely.get_parts(red))))
+    indice_cara, indice_region = shapely.STRtree(ajustadas).query(shapely.point_on_surface(caras), predicate="within")
+    # Los trozos que no caen en ninguna región son lagos o fiordos, y quedan fuera.
+    region_de_cara: dict[int, int] = {}
+    for cara, region in zip(indice_cara, indice_region):
+        region_de_cara.setdefault(int(cara), int(region))
+    por_region: list[list] = [[] for _ in regiones]
+    for cara, region in region_de_cara.items():
+        por_region[region].append(caras[cara])
+    return np.array([shapely.union_all(p) for p in por_region])
+
+
 def construir_geometria() -> dict:
-    """Devuelve los trazados SVG de cada región y el tamaño del lienzo."""
+    """Devuelve los trazados SVG de cada región, el tamaño del lienzo y los controles de la geometría."""
     g = gpd.read_parquet(RUTA_REGIONES).set_geometry("SHAPE")
-    simplificadas = shapely.coverage_simplify(g.geometry.values, TOLERANCIA_GRADOS)
+    cobertura = reconstruir_cobertura(g.geometry.values)
+    simplificadas = shapely.coverage_simplify(cobertura, TOLERANCIA_GRADOS)
+    diferencia_area = float(np.abs(100 * (shapely.area(cobertura) / shapely.area(g.geometry.values) - 1)).max())
+    geometria_valida = bool(shapely.coverage_is_valid(cobertura) and shapely.coverage_is_valid(simplificadas) and shapely.is_valid(simplificadas).all())
     cos_lat = math.cos(math.radians(LATITUD_REFERENCIA))
     partes = {}
     limites = []
@@ -118,7 +140,7 @@ def construir_geometria() -> dict:
         area_minima = AREA_MINIMA_PX / (escala ** 2 * cos_lat)
         elegidos = [p for p in poligonos if p.area >= area_minima] or [max(poligonos, key=lambda p: p.area)]
         trazados[int(region)] = "".join(a_svg(np.asarray(p.exterior.coords), x0, y1, escala, cos_lat) for p in elegidos)
-    return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados}
+    return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados, "geometria_valida": geometria_valida, "diferencia_area_pct": diferencia_area}
 
 
 def clase_color(peso: float) -> int | None:
@@ -188,6 +210,8 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
         "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
         "20 actividades en la lista": len(datos["actividades"]) == 20 and "U" not in [a["ciiu"] for a in datos["actividades"]],
+        "Bordes válidos antes y después de simplificar": geo["geometria_valida"],
+        "El área de cada región cambia menos de 0,5%": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
         "16 regiones con trazado": sorted(geo["trazados"]) == sorted(NOMBRES_REGION),
         "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),
         "Antofagasta en Minería: 101.929": next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["ocupados"] == 101_929,
@@ -196,7 +220,7 @@ def validar(datos: dict, geo: dict, html: str) -> None:
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)
-    log.info("  [i] Celdas sin dato: %d", sin_dato)
+    log.info("  [i] Celdas sin dato: %d; mayor cambio de área: %.3f%%", sin_dato, geo["diferencia_area_pct"])
     fallidos = [n for n, ok in controles.items() if not ok]
     if fallidos:
         raise ValueError(f"Validaciones fallidas: {fallidos}")
@@ -205,7 +229,7 @@ def validar(datos: dict, geo: dict, html: str) -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     datos, geo = construir_datos(), construir_geometria()
-    html = RUTA_PLANTILLA.read_text(encoding="utf-8").replace("__DATOS__", json.dumps(datos, ensure_ascii=False)).replace("__GEO__", json.dumps(geo))
+    html = RUTA_PLANTILLA.read_text(encoding="utf-8").replace("__DATOS__", json.dumps(datos, ensure_ascii=False)).replace("__GEO__", json.dumps({k: geo[k] for k in ("ancho", "alto", "trazados")}))
     validar(datos, geo, html)
     RUTA_SALIDA.parent.mkdir(exist_ok=True)
     RUTA_SALIDA.write_text(html, encoding="utf-8")
