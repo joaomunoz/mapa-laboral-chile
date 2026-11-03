@@ -1,0 +1,41 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: fuerza_trabajo_region_nivel.csv
+============================================================
+🔹 Dimensiones: 48 filas | 11 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.01 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.000    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.003    MB
+nivel_titulo                   | object       | 0        | 0.00   % | 3        | 0               | 0.003    MB
+ocupados_residencia            | int64        | 0        | 0.00   % | 48       | 0               | 0.000    MB
+ocupados_trabajo               | int64        | 0        | 0.00   % | 48       | 0               | 0.000    MB
+desocupados                    | int64        | 0        | 0.00   % | 48       | 0               | 0.000    MB
+fuera_fuerza_trabajo           | int64        | 0        | 0.00   % | 48       | 0               | 0.000    MB
+tasa_desocupacion              | float64      | 0        | 0.00   % | 48       | 0               | 0.000    MB
+tasa_nacional_nivel            | float64      | 0        | 0.00   % | 3        | 0               | 0.000    MB
+ene_tasa_desocupacion          | float64      | 0        | 0.00   % | 48       | 0               | 0.000    MB
+ene_fiabilidad                 | object       | 0        | 0.00   % | 2        | 0               | 0.003    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (8): ['codigo_region', 'ocupados_residencia', 'ocupados_trabajo', 'desocupados', 'fuera_fuerza_trabajo', 'tasa_desocupacion', 'tasa_nacional_nivel', 'ene_tasa_desocupacion']
+   - Categóricas/Texto (3): ['nombre_region', 'nivel_titulo', 'ene_fiabilidad']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+    codigo_region       nombre_region  ... ene_tasa_desocupacion  ene_fiabilidad
+27             10           LOS LAGOS  ...              6.089172          fiable
+40             14            LOS RIOS  ...              9.330979          fiable
+26              9        LA ARAUCANIA  ...              6.659885       no_fiable
+43             15  ARICA Y PARINACOTA  ...              8.206117          fiable
+24              9        LA ARAUCANIA  ...              6.763803          fiable
+
+[5 rows x 11 columns]
+============================================================

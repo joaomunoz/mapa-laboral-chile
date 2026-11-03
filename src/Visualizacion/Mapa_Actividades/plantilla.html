@@ -91,6 +91,7 @@ footer p{margin:4px 0}
 </div>
 <script>
 const DATOS=__DATOS__;const GEO=__GEO__;
+const NIVELES=[["Profesional","Profesional"],["Tecnico","Técnico"],["Sin_titulo","Sin título superior"]];
 const LECT={concentra:"concentra",similar:"similar a lo nacional",bajo_lo_nacional:"bajo lo nacional",base_pequena:"base pequeña",sin_muestra:"sin muestra suficiente"};
 const num=(x,d=0)=>x==null?"s/d":Number(x).toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d});
 const pesos=x=>x==null?"Sin dato":"$"+num(x);
@@ -134,6 +135,8 @@ function detalle(){
  if(act.alerta_fuente)h+=`<div class="aviso">El Censo y ENE difieren bastante en el tamaño de esta actividad. Confía más en las veces que en el número de ocupados.</div>`;
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de sus ocupados en Chile trabaja en varias comunas o sin región informada, y no se cuenta aquí. La cifra real es mayor.</div>`;
  if(otras.length)h+=`<h3>Otras actividades que concentra esta región</h3><div>${otras.slice(0,5).map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.glosa)}</button> <span class="nota">${a.regiones[reg].peso_txt}</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ h+=`<hr class="separador"><h2>Situación en la región por nivel educativo</h2><div class="nota">Toda la región, no cambia con la actividad. No indica desempleo dentro de ${esc(act.glosa)}.</div>
+ <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Trabajan en la región</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th><th class="n">Chile</th><th class="n">ENE</th></tr></thead><tbody>`+NIVELES.map(([k,t])=>{const n=DATOS.niveles[reg][k];return `<tr><td>${t}</td><td class="n">${num(n.trabajo)}</td><td class="n">${num(n.desocupados)}</td><td class="n">${num(n.tasa,1)}%</td><td class="n">${num(n.nacional,1)}%</td><td class="n" ${n.ene==null?'title="ENE no tiene muestra suficiente"':""}>${n.ene==null?"sin muestra":num(n.ene,1)+"%"+(n.ene_poco?" *":"")}</td></tr>`}).join("")+`</tbody></table><p class="nota" style="margin:6px 0 0">Censo 2024. Los desocupados y la tasa se cuentan donde viven; los ocupados, donde trabajan. ENE 2025-2026 es una encuesta más reciente y sus tasas pueden diferir${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?"; * poco fiable":""}.</p>`;
  h+=`<hr class="separador"><h2>Carreras más ligadas a esta actividad</h2><div class="nota">Dato nacional, igual para todas las regiones. No indica cuántos titulados hay en ${esc(DATOS.regiones[reg])}.</div>`;
  if(act.afines.length){h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">% de sus ocupados en esta actividad</th><th class="n">Titulados en la actividad</th></tr></thead><tbody>`+act.afines.map(c=>`<tr><td><button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>${c.fiab==="poco_fiable"?'<span class="etiqueta">poco fiable</span>':""}</td><td class="n" title="Rango 95%: ${num(c.min,1)} a ${num(c.max,1)}">${num(c.pct,1)}%</td><td class="n">${num(c.tit)}</td></tr>`).join("")+"</tbody></table>"}
  else h+=`<p class="nota">Ninguna carrera alcanza un vínculo firme con esta actividad.</p>`;
