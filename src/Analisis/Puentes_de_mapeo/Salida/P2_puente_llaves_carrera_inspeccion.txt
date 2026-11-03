@@ -1,0 +1,50 @@
+[esquema] Seleccionado diccionario con 19/19 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: P2_puente_llaves_carrera.csv
+============================================================
+🔹 Dimensiones: 8623 filas | 19 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 7.62 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+id_institucion                 | int64        | 0        | 0.00   % | 207      | 0               | 0.066    MB
+institucion                    | object       | 0        | 0.00   % | 214      | 0               | 0.613    MB
+tipo_institucion               | object       | 0        | 0.00   % | 6        | 0               | 0.606    MB
+carrera                        | object       | 0        | 0.00   % | 3140     | 0               | 1.054    MB
+carrera_norm                   | object       | 0        | 0.00   % | 2885     | 0               | 0.684    MB
+carrera_generica               | object       | 0        | 0.00   % | 307      | 0               | 0.638    MB
+cine13_area                    | object       | 289      | 3.35   % | 33       | 0               | 0.726    MB
+cine13_subarea                 | object       | 289      | 3.35   % | 136      | 0               | 0.678    MB
+nivel_carrera                  | object       | 289      | 3.35   % | 5        | 0               | 0.597    MB
+origen                         | object       | 0        | 0.00   % | 3        | 0               | 0.461    MB
+nivel_match                    | object       | 0        | 0.00   % | 4        | 0               | 0.464    MB
+empleabilidad_1er_anio         | float64      | 1576     | 18.28  % | 789      | 0               | 0.066    MB
+empleabilidad_fuente           | object       | 0        | 0.00   % | 4        | 0               | 0.525    MB
+n_empleabilidad_asociadas      | Int64        | 0        | 0.00   % | 36       | 0               | 0.074    MB
+titulaciones_total             | Int64        | 0        | 0.00   % | 1665     | 0               | 0.074    MB
+titulaciones_ult_anio          | Int64        | 0        | 0.00   % | 457      | 0               | 0.074    MB
+titulados_mayores_40           | Int64        | 0        | 0.00   % | 528      | 0               | 0.074    MB
+n_regiones_titulados           | Int64        | 0        | 0.00   % | 17       | 0               | 0.074    MB
+anio_ultima_titulacion         | Int64        | 289      | 3.35   % | 19       | 0               | 0.074    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (8): ['id_institucion', 'empleabilidad_1er_anio', 'n_empleabilidad_asociadas', 'titulaciones_total', 'titulaciones_ult_anio', 'titulados_mayores_40', 'n_regiones_titulados', 'anio_ultima_titulacion']
+   - Categóricas/Texto (11): ['institucion', 'tipo_institucion', 'carrera', 'carrera_norm', 'carrera_generica', 'cine13_area', 'cine13_subarea', 'nivel_carrera', 'origen', 'nivel_match', 'empleabilidad_fuente']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+      id_institucion  ... anio_ultima_titulacion
+3589              74  ...                   2025
+222               20  ...                   2010
+5964              77  ...                   2025
+4649              17  ...                   2023
+2638             430  ...                   <NA>
+
+[5 rows x 19 columns]
+============================================================

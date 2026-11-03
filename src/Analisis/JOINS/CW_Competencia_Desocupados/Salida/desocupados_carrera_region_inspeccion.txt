@@ -1,0 +1,46 @@
+[esquema] Seleccionado diccionario con 15/15 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: desocupados_carrera_region.csv
+============================================================
+🔹 Dimensiones: 2607 filas | 15 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 1.22 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.020    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.145    MB
+titulo_comun                   | object       | 0        | 0.00   % | 5        | 0               | 0.154    MB
+carrera_generica               | object       | 0        | 0.00   % | 304      | 0               | 0.193    MB
+entra_al_indice                | bool         | 0        | 0.00   % | 2        | 0               | 0.003    MB
+stock_sies                     | int64        | 0        | 0.00   % | 1303     | 0               | 0.020    MB
+share_stock                    | float64      | 0        | 0.00   % | 2461     | 0               | 0.020    MB
+share_usada                    | float64      | 0        | 0.00   % | 2603     | 0               | 0.020    MB
+origen_tasa                    | object       | 0        | 0.00   % | 3        | 0               | 0.136    MB
+tasa_desempleo_usada           | float64      | 230      | 8.82   % | 11       | 0               | 0.020    MB
+origen_reparto                 | object       | 0        | 0.00   % | 1        | 0               | 0.152    MB
+desocupados_estimados          | float64      | 0        | 0.00   % | 2603     | 0               | 0.020    MB
+desocupados_solo_stock         | float64      | 0        | 0.00   % | 2461     | 0               | 0.020    MB
+origen_celda                   | object       | 0        | 0.00   % | 2        | 0               | 0.155    MB
+fiabilidad_celda               | object       | 0        | 0.00   % | 3        | 0               | 0.141    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (7): ['codigo_region', 'stock_sies', 'share_stock', 'share_usada', 'tasa_desempleo_usada', 'desocupados_estimados', 'desocupados_solo_stock']
+   - Categóricas/Texto (7): ['nombre_region', 'titulo_comun', 'carrera_generica', 'origen_tasa', 'origen_reparto', 'origen_celda', 'fiabilidad_celda']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+      codigo_region nombre_region  ...     origen_celda fiabilidad_celda
+782               5    VALPARAISO  ...     celda_propia           fiable
+786               5    VALPARAISO  ...     celda_propia           fiable
+602               5    VALPARAISO  ...  mezcla_nacional        no_fiable
+420               4      COQUIMBO  ...  mezcla_nacional        no_fiable
+2319             14      LOS RIOS  ...  mezcla_nacional        no_fiable
+
+[5 rows x 15 columns]
+============================================================

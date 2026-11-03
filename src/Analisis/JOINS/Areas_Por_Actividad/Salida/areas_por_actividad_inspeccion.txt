@@ -1,0 +1,45 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: areas_por_actividad.csv
+============================================================
+🔹 Dimensiones: 210 filas | 15 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.09 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.002    MB
+actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.010    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.025    MB
+area_cine                      | object       | 0        | 0.00   % | 10       | 0               | 0.023    MB
+ocupados_titulados             | float64      | 0        | 0.00   % | 203      | 0               | 0.002    MB
+n_personas                     | int64        | 0        | 0.00   % | 128      | 0               | 0.002    MB
+gl                             | int64        | 0        | 0.00   % | 80       | 0               | 0.002    MB
+cv_pct                         | float64      | 7        | 3.33   % | 201      | 0               | 0.002    MB
+pct_en_actividad               | float64      | 0        | 0.00   % | 204      | 0               | 0.002    MB
+pct_en_actividad_min           | float64      | 7        | 3.33   % | 183      | 0               | 0.002    MB
+pct_en_actividad_max           | float64      | 7        | 3.33   % | 203      | 0               | 0.002    MB
+pct_en_area                    | float64      | 0        | 0.00   % | 204      | 0               | 0.002    MB
+pct_en_area_min                | float64      | 7        | 3.33   % | 183      | 0               | 0.002    MB
+pct_en_area_max                | float64      | 7        | 3.33   % | 203      | 0               | 0.002    MB
+fiabilidad                     | object       | 0        | 0.00   % | 3        | 0               | 0.012    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (11): ['actividad_caenes', 'ocupados_titulados', 'n_personas', 'gl', 'cv_pct', 'pct_en_actividad', 'pct_en_actividad_min', 'pct_en_actividad_max', 'pct_en_area', 'pct_en_area_min', 'pct_en_area_max']
+   - Categóricas/Texto (4): ['actividad_ciiu', 'actividad_glosa', 'area_cine', 'fiabilidad']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+     actividad_caenes actividad_ciiu  ... pct_en_area_max   fiabilidad
+30                  4              D  ...        2.327440       fiable
+172                18              R  ...        2.206121  poco_fiable
+84                  9              I  ...        2.324381       fiable
+199                20              T  ...        0.658188    no_fiable
+60                  7              G  ...       19.166424       fiable
+
+[5 rows x 15 columns]
+============================================================

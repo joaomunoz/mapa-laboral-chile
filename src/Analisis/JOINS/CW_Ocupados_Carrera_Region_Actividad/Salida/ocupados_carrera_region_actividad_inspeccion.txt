@@ -1,0 +1,45 @@
+[esquema] Seleccionado diccionario con 14/14 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: ocupados_carrera_region_actividad.csv
+============================================================
+🔹 Dimensiones: 41600 filas | 14 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 23.79 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.318    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 2.314    MB
+nivel_titulo                   | object       | 0        | 0.00   % | 2        | 0               | 2.312    MB
+carrera_generica               | object       | 0        | 0.00   % | 274      | 0               | 3.101    MB
+area_cine_sies                 | object       | 0        | 0.00   % | 10       | 0               | 4.594    MB
+nivel_confianza                | object       | 0        | 0.00   % | 3        | 0               | 2.344    MB
+actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.318    MB
+actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 1.984    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 4.922    MB
+stock_sies                     | int64        | 0        | 0.00   % | 1222     | 0               | 0.318    MB
+ocupados_carrera_region        | float64      | 0        | 0.00   % | 2233     | 0               | 0.318    MB
+ocupados_estimados             | float64      | 0        | 0.00   % | 41284    | 0               | 0.318    MB
+pct_en_carrera_region          | float64      | 0        | 0.00   % | 27249    | 0               | 0.318    MB
+pct_perfil_nacional            | float64      | 0        | 0.00   % | 1815     | 0               | 0.318    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (7): ['codigo_region', 'actividad_caenes', 'stock_sies', 'ocupados_carrera_region', 'ocupados_estimados', 'pct_en_carrera_region', 'pct_perfil_nacional']
+   - Categóricas/Texto (7): ['nombre_region', 'nivel_titulo', 'carrera_generica', 'area_cine_sies', 'nivel_confianza', 'actividad_ciiu', 'actividad_glosa']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+       codigo_region nombre_region  ... pct_en_carrera_region pct_perfil_nacional
+10157              5    VALPARAISO  ...              2.913825            3.596382
+29533             12    MAGALLANES  ...              4.666000            8.211406
+28961             12    MAGALLANES  ...              9.788655           14.947233
+16071              7         MAULE  ...              1.787687            3.457716
+13120              5    VALPARAISO  ...              0.829442            0.679880
+
+[5 rows x 14 columns]
+============================================================

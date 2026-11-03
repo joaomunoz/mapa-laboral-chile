@@ -1,0 +1,61 @@
+[esquema] Seleccionado diccionario con 30/30 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: ene_procesado.csv
+============================================================
+🔹 Dimensiones: 324054 filas | 30 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 124.92 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+idrph                          | int64        | 0        | 0.00   % | 158216   | 0               | 2.472    MB
+ano_encuesta                   | int64        | 0        | 0.00   % | 2        | 0               | 2.472    MB
+mes_encuesta                   | int64        | 0        | 0.00   % | 10       | 0               | 2.472    MB
+mes                            | object       | 0        | 0.00   % | 10       | 0               | 17.306   MB
+codigo_region                  | Int64        | 0        | 0.00   % | 16       | 0               | 2.782    MB
+codigo_region_trabajo          | Int64        | 184092   | 56.81  % | 16       | 0               | 2.782    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 18.021   MB
+tipo                           | Int64        | 0        | 0.00   % | 2        | 0               | 2.782    MB
+estrato                        | Int64        | 0        | 0.00   % | 232      | 0               | 2.782    MB
+conglomerado                   | Int64        | 0        | 0.00   % | 6541     | 0               | 2.782    MB
+fact_cal                       | float64      | 0        | 0.00   % | 281676   | 0               | 2.472    MB
+sexo                           | Int64        | 0        | 0.00   % | 2        | 0               | 2.782    MB
+edad                           | Int64        | 0        | 0.00   % | 108      | 0               | 2.782    MB
+nivel                          | Int64        | 140      | 0.04   % | 15       | 0               | 2.782    MB
+termino_nivel                  | Int64        | 10065    | 3.11   % | 2        | 0               | 2.782    MB
+estudia_actual                 | Int64        | 50       | 0.02   % | 2        | 0               | 2.782    MB
+cine11_1d                      | Int64        | 1619     | 0.50   % | 7        | 0               | 2.782    MB
+cine11_2d                      | object       | 1619     | 0.50   % | 12       | 0               | 15.732   MB
+activ                          | Int64        | 50791    | 15.67  % | 3        | 0               | 2.782    MB
+cae_general                    | Int64        | 0        | 0.00   % | 10       | 0               | 2.782    MB
+cae_especifico                 | Int64        | 0        | 0.00   % | 29       | 0               | 2.782    MB
+b1                             | Int64        | 184081   | 56.81  % | 10       | 0               | 2.782    MB
+ciso1                          | Int64        | 184018   | 56.79  % | 2        | 0               | 2.782    MB
+ciso2                          | Int64        | 184018   | 56.79  % | 7        | 0               | 2.782    MB
+categoria_ocupacion            | Int64        | 184018   | 56.79  % | 7        | 0               | 2.782    MB
+ocup_form                      | Int64        | 184018   | 56.79  % | 2        | 0               | 2.782    MB
+sector                         | Int64        | 184018   | 56.79  % | 3        | 0               | 2.782    MB
+r_p_rev4cl_caenes              | Int64        | 184345   | 56.89  % | 21       | 0               | 2.782    MB
+habituales                     | Int64        | 184018   | 56.79  % | 109      | 0               | 2.782    MB
+tpi                            | Int64        | 184018   | 56.79  % | 2        | 0               | 2.782    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (27): ['idrph', 'ano_encuesta', 'mes_encuesta', 'codigo_region', 'codigo_region_trabajo', 'tipo', 'estrato', 'conglomerado', 'fact_cal', 'sexo', 'edad', 'nivel', 'termino_nivel', 'estudia_actual', 'cine11_1d', 'activ', 'cae_general', 'cae_especifico', 'b1', 'ciso1', 'ciso2', 'categoria_ocupacion', 'ocup_form', 'sector', 'r_p_rev4cl_caenes', 'habituales', 'tpi']
+   - Categóricas/Texto (3): ['mes', 'nombre_region', 'cine11_2d']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+               idrph  ano_encuesta  ...  habituales   tpi
+321407   99264854219          2026  ...          60     0
+82153   326264104798          2026  ...        <NA>  <NA>
+227388  730173460510          2026  ...        <NA>  <NA>
+147916  508889434942          2026  ...        <NA>  <NA>
+92230   354422237578          2026  ...        <NA>  <NA>
+
+[5 rows x 30 columns]
+============================================================

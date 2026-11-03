@@ -1,0 +1,46 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: concentracion_region_area.csv
+============================================================
+🔹 Dimensiones: 160 filas | 16 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.06 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.001    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.009    MB
+area_cine                      | object       | 0        | 0.00   % | 10       | 0               | 0.017    MB
+titulados                      | float64      | 0        | 0.00   % | 159      | 0               | 0.001    MB
+n_personas                     | int64        | 0        | 0.00   % | 130      | 0               | 0.001    MB
+gl                             | int64        | 0        | 0.00   % | 118      | 0               | 0.001    MB
+cv_pct                         | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+pct_en_region                  | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+pct_min                        | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+pct_max                        | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+pct_nacional                   | float64      | 0        | 0.00   % | 10       | 0               | 0.001    MB
+peso_relativo                  | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+peso_min                       | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+peso_max                       | float64      | 0        | 0.00   % | 160      | 0               | 0.001    MB
+fiabilidad                     | object       | 0        | 0.00   % | 3        | 0               | 0.009    MB
+lectura                        | object       | 0        | 0.00   % | 4        | 0               | 0.009    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (12): ['codigo_region', 'titulados', 'n_personas', 'gl', 'cv_pct', 'pct_en_region', 'pct_min', 'pct_max', 'pct_nacional', 'peso_relativo', 'peso_min', 'peso_max']
+   - Categóricas/Texto (4): ['nombre_region', 'area_cine', 'fiabilidad', 'lectura']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+     codigo_region       nombre_region  ... fiabilidad      lectura
+105             11               AYSEN  ...     fiable    concentra
+108             11               AYSEN  ...     fiable    concentra
+141             15  ARICA Y PARINACOTA  ...  no_fiable  sin_muestra
+55               6           O'HIGGINS  ...     fiable    concentra
+94              10           LOS LAGOS  ...  no_fiable  sin_muestra
+
+[5 rows x 16 columns]
+============================================================

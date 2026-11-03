@@ -1,0 +1,121 @@
+(PIZARRA.md Actualizada el 03-11-26)
+
+# 🧙 PIZARRA — Mapa de Actividades y Carreras por Región (Chile)
+
+> Tablero vivo del proyecto. Bitácora ejecutiva para entender rápidamente el estado actual y los siguientes pasos.
+
+**Contexto activo:** entorno local `Proyecto Probabilidad_carreras`, sin git. `.venv/` para leer parquet y generar el mapa. El nombre del proyecto es de trabajo: falta confirmarlo.
+
+---
+
+## 🎯 Visión
+
+Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se concentra cada actividad económica y qué carreras están más ligadas a ella.
+
+**Flujo:** eliges una actividad → el mapa se colorea según cuánto la concentra cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
+
+**Cambio de alcance (02 y 03-11-26):** se retiró el Índice de Cupos. Carrera × región no es medible: de 3.040 combinaciones, solo 62 pasan el filtro en ocupados y 0 en desocupados. El proyecto muestra solo lo medido, y cada dato conserva su fuente.
+
+| Capa | Pregunta | Fuente | Alcance |
+|---|---|---|---|
+| **Concentración** | ¿Qué actividad pesa más en cada región? | Censo 2024; ENE como contraste | Regional, donde está el trabajo |
+| **Formación** | ¿De qué áreas vienen sus titulados? | CASEN 2024 | Nacional |
+| **Carreras afines** | ¿Qué carreras dependen más de esa actividad? | CASEN 2024 | Nacional |
+| **Ficha de carrera** | Títulos, empleabilidad e ingresos | SIES y MiFuturo | Nacional |
+
+---
+
+## 📊 Avance general estimado: ~85%
+
+> Baja desde ~90% porque cambió la meta: ahora se mide contra el mapa, no contra el índice.
+
+| Área | Avance | Estado | Notas |
+|---|---|---|---|
+| Fuentes y scrapers | 100% | 🟢 | 6 fuentes; Censo 2024 agregado |
+| Procesamiento `procesar.py` | 95% | 🟢 | Pendientes menores en ENADEL y MiFuturo, que no afectan al mapa |
+| Puentes `src/Analisis/` | 100% | 🟢 | P1, P2 y P4 a P9 |
+| Tablas del mapa | 100% | 🟢 | Censo, áreas y carreras; ENE y área × región como apoyo |
+| Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
+| Mapa interactivo | 85% | 🟡 | Generado y probado por código; falta clic real y revisión del usuario |
+| Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
+| Archivar lo retirado | 0% | 🔴 | Índice y demandas siguen en `JOINS/` |
+| README y presentación | 0% | 🔴 | Para portafolio |
+
+---
+
+## 🔶 En curso / parcial
+
+- **Revisión del mapa por el usuario:** el clic real y el recuadro al pasar el cursor no están probados, porque falló el navegador automatizado. Se probó con clics por código y capturas de escritorio, móvil y modo oscuro.
+- **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. La causa no está comprobada; el mapa lo avisa.
+- **Limpieza pendiente de confirmar:** `titulados_ocupados_region_sector.csv` y `CENSO/Entrada/Sin confirmar 585366.crdownload`.
+
+---
+
+## ⏳ Pendiente — Roadmap
+
+1. **Ajustar el mapa** según la revisión del usuario.
+2. **Archivar lo retirado** en `Archivo/`: `Indice_Cupos`, `CW_Demanda_Jubilacion`, `CW_Demanda_Publica`, y los repartos por carrera y región. Revisar antes qué depende de cada uno.
+3. **README y presentación para portafolio,** y confirmar el nombre del proyecto.
+4. **Publicar el mapa** como página, si el usuario lo decide.
+5. **Opcional, actualización a 2026:** censo × variación de ENE 2024 a 2026. Requiere descargar ENE 2024 y un piloto.
+6. **Opcional, capa de área CINE:** `concentracion_region_area` ya existe, rotulada "dónde viven los titulados".
+7. **Ajustes menores:** suma con nulos en ENADEL, `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+
+---
+
+## 🧭 Decisiones de arquitectura clave
+
+**Alcance y fuentes**
+- **Solo datos medidos en el mapa:** se descartaron la probabilidad, el Índice de Cupos y el reparto sintético carrera × región, porque suponen la misma mezcla en todas las regiones. Alternativa de respaldo: estimación por área, rotulada, si se valida.
+- **Censo como capa principal, ENE como contraste:** el censo cubre las 336 combinaciones y ENE deja 112 sin muestra. No se mezclan sus cifras. El contraste de Minería favorece al censo (268 mil frente a 156 mil de ENE; estudios sectoriales van de 200 a 286 mil), aunque no lo confirma.
+- **CASEN es la única fuente que une carrera y actividad, y solo a nivel nacional:** ENE, ENADEL y el censo no traen carrera. El puente con el censo sería una estimación, y queda fuera del mapa.
+- **ENADEL fuera del mapa:** sus vacantes solo son fiables en 26 de 280 combinaciones. Ninguna fuente mide demanda por carrera.
+- **Sede fuera del análisis:** la región de Titulados es la sede, no el trabajo.
+- **Región según lo que representa:** Censo y ENE permiten región de trabajo; CASEN solo residencia. Por eso el vínculo con carreras es nacional.
+
+**Criterios (de trabajo, no estándares externos)**
+- **Filtro de fiabilidad en encuestas:** n ≥ 60, gl ≥ 9 y CV ≤ 30 (poco fiable sobre 15), con linealización de Taylor y todo el diseño muestral.
+- **Lectura del censo:** `concentra` desde 1,2 veces y `bajo_lo_nacional` hasta 0,8; `base_pequena` bajo 60 personas. Sin error de muestreo no sirve la regla del rango.
+- **Afinidad:** al menos 10% de los ocupados de la carrera en la actividad y el doble de lo normal. Con muestra insuficiente y 10 casos o más es `indicio_sin_muestra`; con menos, `indicio_debil`, que no se muestra.
+- **Quien trabaja en varias comunas queda sin región,** igual que la matriz del INE. Afecta a Transporte, Construcción y Electricidad, y el mapa lo avisa.
+- **MiFuturo:** los ingresos de cada año vienen de cohortes distintas, así que no se presentan como evolución. La empleabilidad mide ingresos sobre el sueldo mínimo. Con 1 o 2 instituciones hay alerta (56 carreras).
+
+**Datos y técnica**
+- **Censo agregado en CSV:** 15,2 millones de personas pasan a 14.793 filas, sin perder totales, porque no usa factores de expansión. El parquet original queda en `Entrada/`.
+- **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
+- **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
+- **Actividad U fuera de la lista:** se conserva en la tabla, porque con unas 2.800 personas distorsionaba la lectura de la Metropolitana.
+- **Nombres según glosarios:** `categoria_ocupacion` y `actividad_*`. `Scrapers/` conserva los nombres de cada fuente; `Analisis/` usa los normalizados.
+- **Región = `codigo_region` + `nombre_region`:** fuente única en `comun/normalizador.py`; los cruces se hacen por código.
+- **Módulos por tabla:** cada una con `obtener.py`, `esquema.py` y `crosswalk.py` o `procesar.py`, más `Salida/` auditada con `inspect_data.py`.
+- **`Titulo que compite`:** Técnico de Nivel Superior y Profesional con o sin licenciatura; postítulo y posgrado no cuentan como títulos 2025.
+- **ENE:** 8 trimestres solapados pasan a 324.054 entrevistas con el peso del mes central; reproduce el boletín INE (ver anexo).
+- **FF.AA. en `asalariado_publico`:** son funcionarios públicos; CASEN y ENE difieren 0,8% al incluirlas.
+- **Fuentes sin datos de terceros en los cálculos:** las cifras sectoriales de Minería solo sirven de contraste.
+
+---
+
+## 🔜 Próximo paso inmediato
+
+Que el usuario abra `src/Visualizacion/Mapa_Actividades/Salida/index.html` y diga qué cambiar. Después, archivar lo retirado.
+
+---
+
+## 📎 Anexo — Validación contra el dato oficial (Boletín INE n°336, JAS 2026)
+
+Prueba de exactitud de `Salida/ene_procesado.csv` contra el boletín oficial del INE
+(Edición n°336, 29-10-2026, trimestre móvil julio–septiembre 2026; recetas §7 del libro de
+códigos: `cae_especifico` 1-7 ocupados, 8-9 desocupados, 1-9 fuerza de trabajo).
+
+| Indicador | INE oficial | Nuestra salida | desv. |
+|---|---:|---:|---:|
+| Fuerza de trabajo | 10.282.718 | 10.282.930 | +0.00% |
+| Ocupadas | 9.274.742 | 9.275.130 | +0.00% |
+| Desocupadas | 1.007.976 | 1.007.799 | −0.02% |
+| Ocupadas informales | 2.451.443 | 2.452.190 | +0.03% |
+| Tasa de desocupación | 9,8% | 9,80% | exacta |
+
+> **Interpretación:** la deduplicación (782,303 → 324,054 entrevistas), la política de peso
+> "central" y la limpieza de sentinelas reproducen la estadística oficial con desviación
+> ≤0.08%. Este chequeo queda embebido como **validación 9** en `src/Scrapers/ENE/procesar.py`
+> (constantes `INE_JAS_2026` / `MESES_JAS_2026`), por lo que el pipeline falla si se rompe.

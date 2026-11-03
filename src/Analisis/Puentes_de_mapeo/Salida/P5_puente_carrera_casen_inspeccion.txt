@@ -1,0 +1,42 @@
+[esquema] Seleccionado diccionario con 11/11 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: P5_puente_carrera_casen.csv
+============================================================
+🔹 Dimensiones: 11163 filas | 11 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 5.11 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+e6a                            | int64        | 0        | 0.00   % | 4        | 0               | 0.085    MB
+carrera_normalizada            | object       | 0        | 0.00   % | 9821     | 0               | 0.870    MB
+texto_limpio                   | object       | 0        | 0.00   % | 8800     | 0               | 0.858    MB
+nivel_titulo                   | object       | 0        | 0.00   % | 2        | 0               | 0.620    MB
+carrera_generica               | object       | 5331     | 47.76  % | 264      | 0               | 0.604    MB
+area_cine_sies                 | object       | 5331     | 47.76  % | 10       | 0               | 0.649    MB
+metodo                         | object       | 0        | 0.00   % | 9        | 0               | 0.625    MB
+estado                         | object       | 0        | 0.00   % | 6        | 0               | 0.621    MB
+conflicto_nivel                | bool         | 0        | 0.00   % | 2        | 0               | 0.011    MB
+n_personas                     | int64        | 0        | 0.00   % | 168      | 0               | 0.085    MB
+n_ocupados_titulados           | int64        | 0        | 0.00   % | 125      | 0               | 0.085    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (3): ['e6a', 'n_personas', 'n_ocupados_titulados']
+   - Categóricas/Texto (7): ['carrera_normalizada', 'texto_limpio', 'nivel_titulo', 'carrera_generica', 'area_cine_sies', 'metodo', 'estado']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+       e6a  ... n_ocupados_titulados
+4132    13  ...                    1
+1160    12  ...                    5
+5391    13  ...                    0
+9695    12  ...                    0
+10983   13  ...                    0
+
+[5 rows x 11 columns]
+============================================================

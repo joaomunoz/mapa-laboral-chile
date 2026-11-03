@@ -1,0 +1,39 @@
+[esquema] Seleccionado diccionario con 8/8 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: P5_puente_carrera_casen_cobertura.csv
+============================================================
+🔹 Dimensiones: 13 filas | 8 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.00 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+estado                         | object       | 0        | 0.00   % | 6        | 0               | 0.001    MB
+metodo                         | object       | 0        | 0.00   % | 9        | 0               | 0.001    MB
+n_textos                       | int64        | 0        | 0.00   % | 13       | 0               | 0.000    MB
+n_personas                     | int64        | 0        | 0.00   % | 13       | 0               | 0.000    MB
+pct_personas                   | float64      | 0        | 0.00   % | 13       | 0               | 0.000    MB
+pct_ocupados_titulados_exp     | float64      | 0        | 0.00   % | 13       | 0               | 0.000    MB
+n_comparables                  | int64        | 0        | 0.00   % | 9        | 0               | 0.000    MB
+pct_acuerdo_cine               | float64      | 5        | 38.46  % | 8        | 0               | 0.000    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (6): ['n_textos', 'n_personas', 'pct_personas', 'pct_ocupados_titulados_exp', 'n_comparables', 'pct_acuerdo_cine']
+   - Categóricas/Texto (2): ['estado', 'metodo']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+       estado                 metodo  ...  n_comparables  pct_acuerdo_cine
+11  no_valido             sin_metodo  ...              0               NaN
+9    asignado      generica_segmento  ...            240         98.750000
+0    asignado               generica  ...          25773         99.840919
+8    asignado  carrera_sies_segmento  ...            248         92.741935
+5    asignado                  tipeo  ...           1362         98.164464
+
+[5 rows x 8 columns]
+============================================================

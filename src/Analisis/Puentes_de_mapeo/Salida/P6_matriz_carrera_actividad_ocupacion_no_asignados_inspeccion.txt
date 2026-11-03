@@ -1,0 +1,34 @@
+[esquema] Seleccionado diccionario con 5/5 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: P6_matriz_carrera_actividad_ocupacion_no_asignados.csv
+============================================================
+🔹 Dimensiones: 61 filas | 5 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.01 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+dimension                      | object       | 0        | 0.00   % | 5        | 0               | 0.004    MB
+categoria                      | object       | 0        | 0.00   % | 41       | 0               | 0.003    MB
+pct_asignados                  | float64      | 0        | 0.00   % | 61       | 0               | 0.001    MB
+pct_no_asignados               | float64      | 0        | 0.00   % | 61       | 0               | 0.001    MB
+diferencia                     | float64      | 0        | 0.00   % | 61       | 0               | 0.001    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (3): ['pct_asignados', 'pct_no_asignados', 'diferencia']
+   - Categóricas/Texto (2): ['dimension', 'categoria']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+              dimension  categoria  pct_asignados  pct_no_asignados  diferencia
+0   actividad_economica        1.0       2.324657          2.094935   -0.229722
+5   actividad_economica        6.0       4.394501          4.115647   -0.278854
+46               region          2       3.196459          3.198133    0.001673
+31               titulo  Doctorado       0.661070          2.580674    1.919604
+13  actividad_economica       14.0       2.542117          3.067252    0.525135
+============================================================

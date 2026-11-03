@@ -1,0 +1,43 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: ocupados_region_actividad.csv
+============================================================
+🔹 Dimensiones: 650 filas | 13 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.22 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+base_region                    | object       | 0        | 0.00   % | 2        | 0               | 0.036    MB
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.005    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.036    MB
+actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.005    MB
+actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.031    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.077    MB
+ocupados                       | float64      | 0        | 0.00   % | 613      | 0               | 0.005    MB
+n_personas                     | int64        | 0        | 0.00   % | 374      | 0               | 0.005    MB
+gl                             | int64        | 0        | 0.00   % | 284      | 0               | 0.005    MB
+fiable_n_gl                    | bool         | 0        | 0.00   % | 2        | 0               | 0.001    MB
+pct_en_region                  | float64      | 0        | 0.00   % | 650      | 0               | 0.005    MB
+pct_nacional                   | float64      | 0        | 0.00   % | 42       | 0               | 0.005    MB
+peso_relativo                  | float64      | 0        | 0.00   % | 650      | 0               | 0.005    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (8): ['codigo_region', 'actividad_caenes', 'ocupados', 'n_personas', 'gl', 'pct_en_region', 'pct_nacional', 'peso_relativo']
+   - Categóricas/Texto (4): ['base_region', 'nombre_region', 'actividad_ciiu', 'actividad_glosa']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+    base_region  codigo_region  ... pct_nacional  peso_relativo
+637     trabajo             16  ...     6.728697       0.811042
+220  residencia             11  ...     3.444946       0.460337
+428     trabajo              6  ...     9.201091       1.071209
+326     trabajo              1  ...     1.669301       3.324617
+72   residencia              4  ...     4.190941       0.929027
+
+[5 rows x 13 columns]
+============================================================

@@ -1,0 +1,38 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: censo_procesado.csv
+============================================================
+🔹 Dimensiones: 14793 filas | 8 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 2.92 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.113    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.818    MB
+codigo_region_trabajo          | Int64        | 2786     | 18.83  % | 16       | 0               | 0.127    MB
+sit_fuerza_trabajo             | Int64        | 64       | 0.43   % | 3        | 0               | 0.127    MB
+actividad_ciiu                 | object       | 1099     | 7.43   % | 21       | 0               | 0.687    MB
+nivel_titulo                   | object       | 822      | 5.56   % | 3        | 0               | 0.804    MB
+p44_lug_trab                   | Int64        | 601      | 4.06   % | 5        | 0               | 0.127    MB
+personas                       | int64        | 0        | 0.00   % | 1952     | 0               | 0.113    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (5): ['codigo_region', 'codigo_region_trabajo', 'sit_fuerza_trabajo', 'p44_lug_trab', 'personas']
+   - Categóricas/Texto (3): ['nombre_region', 'actividad_ciiu', 'nivel_titulo']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+       codigo_region       nombre_region  ...  p44_lug_trab  personas
+14654             16               NUBLE  ...             4         1
+12594             14            LOS RIOS  ...             3        15
+13206             15  ARICA Y PARINACOTA  ...             3        13
+13693             15  ARICA Y PARINACOTA  ...             5         3
+6167               7               MAULE  ...             3        22
+
+[5 rows x 8 columns]
+============================================================

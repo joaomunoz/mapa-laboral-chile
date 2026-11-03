@@ -1,0 +1,21 @@
+prueba;grupo;valor;descripcion
+razon_publico_privado;Tecnico;0.11397205421106782;Entradas públicas / privadas
+razon_minima_95;Tecnico;0.08361673354117156;Remuestreo de conglomerados
+razon_maxima_95;Tecnico;0.14961025036428513;Remuestreo de conglomerados
+vacantes_publicas;Tecnico;4030.187350725844;Vacantes privadas × razón
+entradas_panel_publico;Tecnico;78.0;Casos en la muestra
+entradas_anuales_privadas;Tecnico;327881.61458135716;"Se calibran; no son vacantes"
+razon_publico_privado;Profesional;0.19137031591254847;Entradas públicas / privadas
+razon_minima_95;Profesional;0.1571130174577365;Remuestreo de conglomerados
+razon_maxima_95;Profesional;0.2308937280441418;Remuestreo de conglomerados
+vacantes_publicas;Profesional;8515.050061054686;Vacantes privadas × razón
+entradas_panel_publico;Profesional;200.0;Casos en la muestra
+entradas_anuales_privadas;Profesional;572101.5413603086;"Se calibran; no son vacantes"
+parte_actividad_O;Profesional;44.61685616850974;% de entradas públicas
+parte_actividad_P;Profesional;27.42563334293184;% de entradas públicas
+parte_actividad_Q;Profesional;21.922470697349475;% de entradas públicas
+parte_actividad_otros;Profesional;6.035039791208954;% de entradas públicas
+parte_actividad_O;Tecnico;53.413740009603764;% de entradas públicas
+parte_actividad_P;Tecnico;11.487613328699508;% de entradas públicas
+parte_actividad_Q;Tecnico;30.17762629793174;% de entradas públicas
+parte_actividad_otros;Tecnico;4.9210203637649865;% de entradas públicas

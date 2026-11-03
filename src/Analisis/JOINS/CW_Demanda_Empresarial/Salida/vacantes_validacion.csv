@@ -1,0 +1,9 @@
+prueba;grupo;valor;descripcion
+celdas_ocultas;mezcla_nacional;9.348457926921398;Disimilitud en 8 regiones con 2 o más celdas fiables
+celdas_ocultas;mezcla_ponderada;6.892374161404029;Disimilitud en 8 regiones con 2 o más celdas fiables
+ocupacion_cargos;Tecnico;21.62025672337601;Disimilitud entre ocupación predicha y cargos c1
+ocupacion_cargos;Profesional;11.049105615408243;Disimilitud entre ocupación predicha y cargos c1
+rango_total;base;79856.33456222485;Con tope y π de contrataciones
+rango_total;sin_tope;99844.46065570384;Sin tope y π de contrataciones
+rango_total;con_menciones;148450.79373318105;Con tope y π de cargos 2025
+rango_total;todas_las_vacantes;397362.12374020985;Con tope, con y sin título

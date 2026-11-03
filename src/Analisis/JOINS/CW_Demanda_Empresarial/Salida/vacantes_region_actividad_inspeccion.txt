@@ -1,0 +1,42 @@
+[esquema] Seleccionado diccionario con 11/11 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: vacantes_region_actividad.csv
+============================================================
+🔹 Dimensiones: 280 filas | 11 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.06 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | int64        | 0        | 0.00   % | 16       | 0               | 0.002    MB
+nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.016    MB
+actividad_ciiu                 | object       | 0        | 0.00   % | 18       | 0               | 0.013    MB
+n_empresas                     | int64        | 0        | 0.00   % | 57       | 0               | 0.002    MB
+vacantes_sin_winsorizar        | float64      | 0        | 0.00   % | 259      | 0               | 0.002    MB
+vacantes_directo               | float64      | 0        | 0.00   % | 259      | 0               | 0.002    MB
+pct_empresa_mayor              | float64      | 0        | 0.00   % | 221      | 0               | 0.002    MB
+cv_pct                         | float64      | 21       | 7.50   % | 227      | 0               | 0.002    MB
+celda_fiable                   | bool         | 0        | 0.00   % | 2        | 0               | 0.000    MB
+origen_celda                   | object       | 0        | 0.00   % | 2        | 0               | 0.020    MB
+vacantes_usadas                | float64      | 0        | 0.00   % | 280      | 0               | 0.002    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (7): ['codigo_region', 'n_empresas', 'vacantes_sin_winsorizar', 'vacantes_directo', 'pct_empresa_mayor', 'cv_pct', 'vacantes_usadas']
+   - Categóricas/Texto (3): ['nombre_region', 'actividad_ciiu', 'origen_celda']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+     codigo_region  ... vacantes_usadas
+33               2  ...        7.505739
+108              7  ...      373.027800
+240             14  ...      364.963401
+259             15  ...       27.832249
+154              9  ...      653.437088
+
+[5 rows x 11 columns]
+============================================================

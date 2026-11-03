@@ -1,0 +1,53 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: carreras_por_actividad.csv
+============================================================
+🔹 Dimensiones: 2162 filas | 23 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 1.36 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.017    MB
+actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.103    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.257    MB
+carrera_generica               | object       | 0        | 0.00   % | 189      | 0               | 0.158    MB
+nivel_titulo                   | object       | 0        | 0.00   % | 2        | 0               | 0.121    MB
+area_cine                      | object       | 0        | 0.00   % | 10       | 0               | 0.237    MB
+pct_en_carrera                 | float64      | 0        | 0.00   % | 2135     | 0               | 0.017    MB
+pct_en_carrera_min             | float64      | 0        | 0.00   % | 806      | 0               | 0.017    MB
+pct_en_carrera_max             | float64      | 0        | 0.00   % | 2136     | 0               | 0.017    MB
+ocupados_titulados             | float64      | 0        | 0.00   % | 1175     | 0               | 0.017    MB
+indice_especializacion         | float64      | 0        | 0.00   % | 2161     | 0               | 0.017    MB
+n_carrera                      | int64        | 0        | 0.00   % | 125      | 0               | 0.017    MB
+n_celda                        | int64        | 0        | 0.00   % | 116      | 0               | 0.017    MB
+cv_pct                         | float64      | 0        | 0.00   % | 2151     | 0               | 0.017    MB
+fiabilidad                     | object       | 0        | 0.00   % | 3        | 0               | 0.120    MB
+afinidad                       | object       | 0        | 0.00   % | 4        | 0               | 0.117    MB
+titulados_2025                 | int64        | 0        | 0.00   % | 177      | 0               | 0.017    MB
+empleabilidad_1er_anio         | float64      | 0        | 0.00   % | 187      | 0               | 0.017    MB
+ingreso_medio_1er_anio         | float64      | 133      | 6.15   % | 162      | 0               | 0.017    MB
+ingreso_medio_5to_anio         | float64      | 133      | 6.15   % | 162      | 0               | 0.017    MB
+n_instituciones                | int64        | 0        | 0.00   % | 35       | 0               | 0.017    MB
+pct_institucion_principal      | float64      | 0        | 0.00   % | 152      | 0               | 0.017    MB
+alerta_pocas_instituciones     | bool         | 0        | 0.00   % | 2        | 0               | 0.002    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (15): ['actividad_caenes', 'pct_en_carrera', 'pct_en_carrera_min', 'pct_en_carrera_max', 'ocupados_titulados', 'indice_especializacion', 'n_carrera', 'n_celda', 'cv_pct', 'titulados_2025', 'empleabilidad_1er_anio', 'ingreso_medio_1er_anio', 'ingreso_medio_5to_anio', 'n_instituciones', 'pct_institucion_principal']
+   - Categóricas/Texto (7): ['actividad_ciiu', 'actividad_glosa', 'carrera_generica', 'nivel_titulo', 'area_cine', 'fiabilidad', 'afinidad']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+      actividad_caenes  ... alerta_pocas_instituciones
+1134                11  ...                      False
+670                  7  ...                      False
+965                  9  ...                      False
+1754                16  ...                      False
+2058                19  ...                      False
+
+[5 rows x 23 columns]
+============================================================

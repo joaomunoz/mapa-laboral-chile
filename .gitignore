@@ -1,0 +1,22 @@
+# Entornos y archivos temporales
+.venv/
+venv/
+__pycache__/
+*.pyc
+.~lock*
+*.crdownload
+*.part
+
+# Datos crudos: pesan hasta 1,6 GB y cada fuente se vuelve a descargar con su obtener.py
+src/Scrapers/*/Entrada/
+Datos/datos_externos/ENADEL/
+
+# Microdatos procesados: se regeneran con procesar.py y son demasiado grandes para git
+src/Scrapers/Titulados/Salida/titulados_procesado.csv
+src/Scrapers/ENE/Salida/ene_procesado.csv
+src/Scrapers/CASEN/Salida/casen_procesado.csv
+src/Scrapers/ENADEL/Salida/enadel_*_procesado.csv
+
+# Tablas intermedias grandes: se regeneran con su crosswalk.py
+src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/Salida/oferta_empleabilidad_procesado.csv
+src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/Salida/ocupados_carrera_region_actividad.csv

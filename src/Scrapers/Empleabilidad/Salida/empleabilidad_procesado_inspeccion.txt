@@ -1,0 +1,53 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: empleabilidad_procesado.csv
+============================================================
+🔹 Dimensiones: 1690 filas | 23 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.92 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+id_institucion                 | int64        | 0        | 0.00   % | 105      | 0               | 0.013    MB
+institucion                    | object       | 0        | 0.00   % | 105      | 0               | 0.120    MB
+tipo_institucion               | object       | 0        | 0.00   % | 3        | 0               | 0.110    MB
+carrera                        | object       | 0        | 0.00   % | 645      | 0               | 0.194    MB
+carrera_generica               | object       | 0        | 0.00   % | 190      | 0               | 0.120    MB
+regiones_sede                  | object       | 105      | 6.21   % | 38       | 0               | 0.122    MB
+empleabilidad_1er_anio         | float64      | 0        | 0.00   % | 662      | 0               | 0.013    MB
+empleabilidad_2do_anio         | float64      | 178      | 10.53  % | 546      | 0               | 0.013    MB
+ingreso_medio_1er_anio         | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+ingreso_medio_2do_anio         | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+ingreso_medio_3er_anio         | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+ingreso_medio_4to_anio         | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+ingreso_medio_5to_anio         | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_10_anio_1            | Int64        | 58       | 3.43   % | 248      | 0               | 0.015    MB
+percentil_25_anio_1            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_50_anio_1            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_75_anio_1            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_90_anio_1            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_10_anio_5            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_25_anio_5            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_50_anio_5            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_75_anio_5            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+percentil_90_anio_5            | Int64        | 58       | 3.43   % | 249      | 0               | 0.015    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (18): ['id_institucion', 'empleabilidad_1er_anio', 'empleabilidad_2do_anio', 'ingreso_medio_1er_anio', 'ingreso_medio_2do_anio', 'ingreso_medio_3er_anio', 'ingreso_medio_4to_anio', 'ingreso_medio_5to_anio', 'percentil_10_anio_1', 'percentil_25_anio_1', 'percentil_50_anio_1', 'percentil_75_anio_1', 'percentil_90_anio_1', 'percentil_10_anio_5', 'percentil_25_anio_5', 'percentil_50_anio_5', 'percentil_75_anio_5', 'percentil_90_anio_5']
+   - Categóricas/Texto (5): ['institucion', 'tipo_institucion', 'carrera', 'carrera_generica', 'regiones_sede']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+      id_institucion  ... percentil_90_anio_5
+989               70  ...             1733848
+1635              93  ...             1972366
+1346              84  ...             2140618
+1174              76  ...             1972366
+1502              89  ...             1677753
+
+[5 rows x 23 columns]
+============================================================

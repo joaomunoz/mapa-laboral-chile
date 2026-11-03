@@ -1,0 +1,33 @@
+[esquema] Seleccionado diccionario con 4/4 columnas coincidentes.
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: vacantes_publicas_validacion.csv
+============================================================
+🔹 Dimensiones: 20 filas | 4 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.00 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+prueba                         | object       | 0        | 0.00   % | 10       | 0               | 0.001    MB
+grupo                          | object       | 0        | 0.00   % | 2        | 0               | 0.001    MB
+valor                          | float64      | 0        | 0.00   % | 20       | 0               | 0.000    MB
+descripcion                    | object       | 0        | 0.00   % | 6        | 0               | 0.002    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (1): ['valor']
+   - Categóricas/Texto (3): ['prueba', 'grupo', 'descripcion']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+                   prueba        grupo      valor                   descripcion
+0   razon_publico_privado      Tecnico   0.113972  Entradas públicas / privadas
+17      parte_actividad_P      Tecnico  11.487613        % de entradas públicas
+15  parte_actividad_otros  Profesional   6.035040        % de entradas públicas
+1         razon_minima_95      Tecnico   0.083617   Remuestreo de conglomerados
+8         razon_maxima_95  Profesional   0.230894   Remuestreo de conglomerados
+============================================================
