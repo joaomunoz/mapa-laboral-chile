@@ -170,10 +170,11 @@ function detalle(){
 function fichaHtml(c){const f=DATOS.fichas[c];
  return `<div class="fichero" id="ficha"><button class="cerrar" aria-label="Cerrar ficha">✕</button><h2>${esc(f.nombre)}</h2><div class="nota">${esc(f.area)} · ${f.nivel==="Tecnico"?"Técnico":"Profesional"} · dato nacional</div>
  <div class="datos"><div class="dato"><b>${num(f.tit)}</b><span>títulos en 2025</span></div><div class="dato"><b>${num(f.emp,1)}%</b><span>empleabilidad al 1er año*</span></div>
- <div class="dato"><b>${pesos(f.ing1)}</b><span>ingreso medio al 1er año</span></div><div class="dato"><b>${pesos(f.ing5)}</b><span>ingreso medio al 5° año</span></div></div>
+ <div class="dato"><b>${pesos(f.ing1)}</b><span>ingreso medio al 1er año</span></div><div class="dato"><b>${pesos(f.ing5)}</b><span>ingreso medio al 5° año</span></div>
+ <div class="dato"><b>${f.no_trab==null?"Sin muestra":num(f.no_trab,1)+"%"}</b><span>${f.no_trab==null?"suficiente para saber cuántos titulados de 22 a 54 años no trabajan":`de los titulados de 22 a 54 años no trabaja (${num(f.no_trab_n)} personas)**`}${f.no_trab_poco?'<span class="etiqueta">poco fiable</span>':""}</span></div></div>
  ${f.alerta_inst?`<div class="aviso">Basado en ${f.inst===1?"1 institución":f.inst+" instituciones"}: describe más a ${f.inst===1?"esa institución":"esas instituciones"} que a la carrera.</div>`:""}
  ${f.actividades.length?`<h3>Actividades donde tiene vínculo firme</h3><div>${f.actividades.map(a=>`${esc(a[1])} <span class="nota">${num(a[2],1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`:""}
- <p class="nota" style="margin:10px 0 0">*% de titulados con ingresos iguales o superiores al sueldo mínimo. Los ingresos del 1er y 5° año vienen de generaciones distintas (2021-2023 y 2017-2019), así que no muestran una evolución. Fuente: MiFuturo, pesos de septiembre de 2025.</p></div>`}
+ <p class="nota" style="margin:10px 0 0">*% de titulados con ingresos iguales o superiores al sueldo mínimo. Los ingresos del 1er y 5° año vienen de generaciones distintas (2021-2023 y 2017-2019), así que no muestran una evolución. Fuente: MiFuturo, pesos de septiembre de 2025.${f.no_trab==null?"":"<br>**Incluye desocupados e inactivos, como quienes estudian o se dedican a cuidados, así que no equivale a desempleo. Fuente: CASEN 2024."}</p></div>`}
 pintar();
 </script>
 </body></html>

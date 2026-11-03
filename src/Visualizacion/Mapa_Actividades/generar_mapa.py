@@ -210,7 +210,8 @@ def construir_datos() -> dict:
         v = usadas[(usadas["carrera_generica"] == c) & (usadas["afinidad"] == "afin")].sort_values("pct_en_carrera", ascending=False)
         fichas[c] = {"nombre": nombre_legible(c), "nivel": f["nivel_titulo"], "area": f["area_cine"], "tit": int(f["titulados_2025"]), "emp": redondear(f["empleabilidad_1er_anio"], 1),
                      "ing1": redondear(f["ingreso_medio_1er_anio"], 0), "ing5": redondear(f["ingreso_medio_5to_anio"], 0), "inst": int(f["n_instituciones"]),
-                     "alerta_inst": bool(f["alerta_pocas_instituciones"]), "pct_principal": redondear(f["pct_institucion_principal"], 0),
+                     "alerta_inst": bool(f["alerta_pocas_instituciones"]), "no_trab": redondear(f["pct_no_trabajan"], 1) if f["fiabilidad_no_trabajan"] != "no_fiable" else None,
+                     "no_trab_n": int(round(f["titulados_no_trabajan"])) if f["fiabilidad_no_trabajan"] != "no_fiable" else None, "no_trab_poco": f["fiabilidad_no_trabajan"] == "poco_fiable", "pct_principal": redondear(f["pct_institucion_principal"], 0),
                      "actividades": v[["actividad_ciiu", "actividad_glosa", "pct_en_carrera"]].round(1).values.tolist()}
     niveles = pd.read_csv(RUTA_NIVELES, sep=";")
     por_region = {str(r): {f["nivel_titulo"]: {"trabajo": int(f["ocupados_trabajo"]), "desocupados": int(f["desocupados"]), "tasa": redondear(f["tasa_desocupacion"], 1),

@@ -13,6 +13,7 @@ Elige una actividad económica para ver en qué regiones pesa más que en el pa�
 | **% de sus ocupados en la actividad** | Parte de los ocupados de una carrera que trabaja en esa actividad, en Chile | CASEN 2024 |
 | **Titulados en la actividad** | Titulados de la carrera que trabajan en esa actividad, en Chile | CASEN 2024 |
 | **Empleabilidad al 1er año** | % de titulados con ingresos iguales o superiores al sueldo mínimo | MiFuturo |
+| **Titulados que no trabajan** | % de titulados de 22 a 54 años de la carrera desocupados o inactivos, en Chile. Solo se muestra con muestra suficiente | CASEN 2024 |
 | **Ingreso al 1er y al 5° año** | Ingreso bruto mensual medio, en pesos de septiembre de 2025 | MiFuturo |
 
 ## Lectura de colores
@@ -37,6 +38,7 @@ Las cifras se muestran con 1 decimal, o con más si están cerca de un corte, pa
 - **Los desocupados no se abren por actividad ni carrera:** ninguna fuente lo permite con solidez. El bloque por nivel no indica desempleo dentro de la actividad elegida.
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
 - **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta como empleado en ese indicador.
+- **"No trabajan" no es desempleo:** incluye a quienes no buscan trabajo. Se mide de 22 a 54 años porque con todas las edades pesarían los jubilados.
 - **Los ingresos no muestran una evolución:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
 
 ## Criterios y límites

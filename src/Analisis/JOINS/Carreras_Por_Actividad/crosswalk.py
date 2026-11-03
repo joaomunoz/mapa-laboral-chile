@@ -20,6 +20,10 @@ se usa el promedio simple: es preferible a dejarla sin dato, y se informa cuánt
 Ingresos: cada año sale de cohortes distintas (año 1: 2021-2023; año 5: 2017-2019), así que no siguen a las
 mismas personas. Por eso no deben presentarse como una evolución.
 
+No trabajan: se mide de 22 a 54 años, igual que P8. Con todas las edades pesan los jubilados: Pedagogía Básica
+pasa de 9,8% a 35,0%. Incluye desocupados e inactivos, y por eso no equivale a desempleo. No se desglosa porque la
+parte con muestra suficiente baja de 63 carreras a cerca de la mitad.
+
 Este vínculo es NACIONAL: no dice cuántos titulados de una carrera hay en una región.
 """
 
@@ -45,6 +49,10 @@ ANIO_TITULADOS = 2025
 CARRERAS_MIFUTURO = 190
 MAX_INSTITUCIONES_ALERTA = 2
 Z_95 = 1.96
+EDAD_MINIMA, EDAD_MAXIMA = 22, 54
+OCUPADO = 1
+N_MINIMO, GL_MINIMO, CV_MAXIMO, CV_POCO_FIABLE = 60, 9, 30, 15
+CARRERAS_CON_DATO_NO_TRABAJAN = 63
 COLUMNAS_MIFUTURO = ["empleabilidad_1er_anio", "ingreso_medio_1er_anio", "ingreso_medio_5to_anio"]
 
 
@@ -74,6 +82,29 @@ def resumir_carreras(mifuturo: pd.DataFrame, titulados: pd.DataFrame) -> tuple[p
     return r, sin_peso
 
 
+def medir_no_trabajan(casen: pd.DataFrame, diseno: pd.DataFrame) -> pd.DataFrame:
+    """% de titulados de 22 a 54 años que no trabajan, por carrera, con su error por linealización de Taylor."""
+    diseno = diseno.assign(h=diseno.groupby("varstrat")["varunit"].transform("size"))
+    filas = []
+    for carrera, x in casen[casen["edad"].between(EDAD_MINIMA, EDAD_MAXIMA)].groupby("carrera_generica"):
+        no_trabaja = (x["activ"] != OCUPADO).astype(float)
+        total = x["expr"].sum()
+        p = (x["expr"] * no_trabaja).sum() / total
+        y = x.assign(y=x["expr"] * (no_trabaja - p) / total).groupby(["varstrat", "varunit"], as_index=False)["y"].sum()
+        g = diseno.merge(y, how="left", on=["varstrat", "varunit"]).fillna({"y": 0.0})
+        # Un estrato con un solo conglomerado no permite estimar varianza: no aporta.
+        g = g[g["h"] > 1]
+        media = g.groupby("varstrat")["y"].transform("mean")
+        ee = float((g["h"] / (g["h"] - 1) * (g["y"] - media) ** 2).sum() ** 0.5)
+        cv = 100 * ee / p if p > 0 else np.inf
+        gl = x["varunit"].nunique() - x["varstrat"].nunique()
+        no_fiable = len(x) < N_MINIMO or gl < GL_MINIMO or cv > CV_MAXIMO
+        filas.append({"carrera_generica": carrera, "pct_no_trabajan": 100 * p, "pct_no_trabajan_min": 100 * max(p - Z_95 * ee, 0),
+                      "pct_no_trabajan_max": 100 * min(p + Z_95 * ee, 1), "titulados_no_trabajan": p * total,
+                      "fiabilidad_no_trabajan": "no_fiable" if no_fiable else "poco_fiable" if cv > CV_POCO_FIABLE else "fiable"})
+    return pd.DataFrame(filas)
+
+
 def clasificar_afinidad(t: pd.DataFrame) -> pd.Series:
     cumple = (t["pct_en_carrera"] >= PCT_AFIN_MINIMO) & (t["indice_especializacion"] >= INDICE_AFIN_MINIMO)
     firme = cumple & (t["fiabilidad"] != "no_fiable")
@@ -81,8 +112,9 @@ def clasificar_afinidad(t: pd.DataFrame) -> pd.Series:
     return pd.Series(np.select([firme, con_casos, cumple], ["afin", "indicio_sin_muestra", "indicio_debil"], "no_afin"), index=t.index)
 
 
-def construir(perfil: pd.DataFrame, carreras: pd.DataFrame) -> pd.DataFrame:
+def construir(perfil: pd.DataFrame, carreras: pd.DataFrame, no_trabajan: pd.DataFrame) -> pd.DataFrame:
     t = perfil.merge(carreras, on="carrera_generica", how="inner", validate="many_to_one").rename(columns={"area_cine_sies": "area_cine"})
+    t = t.merge(no_trabajan, on="carrera_generica", how="left", validate="many_to_one").fillna({"fiabilidad_no_trabajan": "no_fiable"})
     t["afinidad"] = clasificar_afinidad(t)
     t["pct_en_carrera_min"] = (t["pct_en_carrera"] - Z_95 * t["error_estandar"]).clip(lower=0)
     t["pct_en_carrera_max"] = (t["pct_en_carrera"] + Z_95 * t["error_estandar"]).clip(upper=100)
@@ -105,6 +137,8 @@ def validar(t: pd.DataFrame, carreras: pd.DataFrame, perfil: pd.DataFrame, sin_p
         "Ing. en Minas: 4.327 titulados en Minería": t.loc[(t["carrera_generica"] == "INGENIERIA EN MINAS") & (t["actividad_ciiu"] == "B"), "ocupados_titulados"].eq(4327).all(),
         "56 carreras con alerta de pocas instituciones": int(carreras["alerta_pocas_instituciones"].sum()) == 56,
         "Psicología: 44 instituciones": fila("PSICOLOGIA")["n_instituciones"] == 44,
+        "Psicología: 11,6% no trabaja (9.747 personas)": np.isclose(fila("PSICOLOGIA")["pct_no_trabajan"], 11.6, atol=0.05) and np.isclose(fila("PSICOLOGIA")["titulados_no_trabajan"], 9747, atol=1),
+        "63 carreras con dato usable de no trabajan": (t.drop_duplicates("carrera_generica")["fiabilidad_no_trabajan"] != "no_fiable").sum() == CARRERAS_CON_DATO_NO_TRABAJAN,
         "Afines y fiabilidad coherentes": (t.loc[t["afinidad"] == "afin", "fiabilidad"] != "no_fiable").all() and t.loc[t["afinidad"].str.startswith("indicio"), "fiabilidad"].eq("no_fiable").all(),
         "Indicios mostrados con al menos 10 casos, y débiles con menos": (t.loc[t["afinidad"] == "indicio_sin_muestra", "n_celda"] >= CASOS_MINIMOS_INDICIO).all() and (t.loc[t["afinidad"] == "indicio_debil", "n_celda"] < CASOS_MINIMOS_INDICIO).all(),
         "Ningún vínculo bajo los umbrales": fuera.empty,
@@ -126,7 +160,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     perfil = obtener.cargar_perfil()
     carreras, sin_peso = resumir_carreras(obtener.cargar_mifuturo(), obtener.cargar_titulados())
-    tabla = construir(perfil, carreras)
+    tabla = construir(perfil, carreras, medir_no_trabajan(obtener.cargar_casen(), obtener.cargar_diseno()))
     validar(tabla, carreras, perfil, sin_peso)
     RUTA_SALIDA.parent.mkdir(exist_ok=True)
     tabla.to_csv(RUTA_SALIDA, sep=";", index=False, encoding="utf-8")

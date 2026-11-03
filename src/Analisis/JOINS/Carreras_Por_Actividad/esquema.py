@@ -10,6 +10,7 @@ afinidad:
   indicio_debil: cumple ambos umbrales con menos de 10 casos. Se conserva, pero no se muestra.
   no_afin: no cumple los umbrales.
 Los datos de MiFuturo y Titulados son de la carrera y se repiten en todas sus filas.
+Lo mismo ocurre con *_no_trabajan: titulados de 22 a 54 años desocupados o inactivos, según CASEN.
 """
 
 CARRERAS_POR_ACTIVIDAD = {
@@ -35,5 +36,10 @@ CARRERAS_POR_ACTIVIDAD = {
     "ingreso_medio_5to_anio": "float64",
     "n_instituciones": "int64",           # Instituciones que respaldan el dato de MiFuturo
     "pct_institucion_principal": "float64",  # % de títulos 2021-2023 de la institución más grande; vacío sin títulos
+    "pct_no_trabajan": "float64",         # Vacío si la carrera no tiene titulados de 22 a 54 años en CASEN
+    "pct_no_trabajan_min": "float64",     # Rango 95%
+    "pct_no_trabajan_max": "float64",
+    "titulados_no_trabajan": "float64",
+    "fiabilidad_no_trabajan": "object",   # fiable, poco_fiable o no_fiable
     "alerta_pocas_instituciones": "bool",    # 1 o 2 instituciones: el dato describe más a ellas que a la carrera
 }
