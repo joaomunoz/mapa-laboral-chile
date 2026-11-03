@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Competencia_Desocupados/obtener.py>
+<src/Analisis/Archivo/CW_Competencia_Desocupados/obtener.py>
 
 Carga las entradas del Paso 2. El stock se lee de Titulados y no del Paso 1 porque este aún no
 trae carrera_clasificacion_nivel_1, necesaria para aplicar la definición de título que compite.
@@ -44,7 +44,7 @@ def cargar_razon() -> pd.DataFrame:
 
 
 def cargar_ocupados() -> pd.DataFrame:
-    return pd.read_csv(DIR_ANALISIS / "JOINS" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")
+    return pd.read_csv(DIR_ANALISIS / "Archivo" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")
 
 
 def cargar_casen() -> pd.DataFrame:

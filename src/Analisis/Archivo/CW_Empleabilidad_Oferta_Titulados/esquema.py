@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/esquema.py>
+<src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/esquema.py>
 
 Single Source de Truth (SSOT) para la salida del Paso 1:
 `oferta_empleabilidad_procesado.csv`

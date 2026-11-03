@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/validar_reparto.py>
+<src/Analisis/Archivo/CW_Ocupados_Carrera_Region_Actividad/validar_reparto.py>
 
 Evalúa si el reparto predice lo que no vio.
 

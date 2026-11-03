@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Empresarial/obtener.py>
+<src/Analisis/Archivo/CW_Demanda_Empresarial/obtener.py>
 
 Carga las entradas del Paso 4: ENADEL, ocupados por carrera, región y actividad, pesos regionales,
 P1 y P7. CASEN se usa solo para informar qué parte de cada carrera trabaja en el sector privado.
@@ -27,7 +27,7 @@ def cargar_cargos() -> pd.DataFrame:
 
 
 def cargar_ocupados() -> pd.DataFrame:
-    return pd.read_csv(DIR_ANALISIS / "JOINS" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")
+    return pd.read_csv(DIR_ANALISIS / "Archivo" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")
 
 
 def cargar_pesos() -> pd.DataFrame:

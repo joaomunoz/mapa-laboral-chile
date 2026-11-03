@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/obtener.py>
+<src/Analisis/Archivo/CW_Ocupados_Carrera_Region_Actividad/obtener.py>
 
 Carga las entradas del reparto: stock de SIES por sede, ocupados de ENE con educación superior
 completa (julio-septiembre 2026), el perfil de P7 y las secciones de P1.

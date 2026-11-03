@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/Indice_Cupos/crosswalk.py>
+<src/Analisis/Archivo/Indice_Cupos/crosswalk.py>
 
 Paso 5: calcula el índice uniendo las partes de la fórmula.
 

@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/Indice_Cupos/esquema.py>
+<src/Analisis/Archivo/Indice_Cupos/esquema.py>
 
 Single Source of Truth del Paso 5: índice por carrera, región y a nivel nacional.
 

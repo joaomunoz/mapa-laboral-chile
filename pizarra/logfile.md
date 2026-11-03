@@ -4,6 +4,10 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 03-11-26 — Enfoque retirado archivado (`src/Analisis/Archivo/`; índice reejecutado con salidas idénticas, mapa sin cambios) → log 03-11-26 19:22
+- 03-11-26 — Mapa: vista nacional, situación por nivel y titulados que no trabajan (`b4f093e`, `4a437ce`, `ed32210`; 14/14 controles del mapa) → log 03-11-26 17:17
+- 03-11-26 — Revisión de código del mapa aplicada, puntos 1 a 10 (`58eb5fc`, `7af79d2`; controles de color y geometría en verde) → log 03-11-26 16:00
+- 03-11-26 — Proyecto versionado con git (`ee89660`, `4f66e05`; rama `main`, sin remoto) → log 03-11-26 15:09
 - 03-11-26 — Mapa interactivo generado (`Mapa_Actividades/Salida/index.html`, 6/6 controles; 20 actividades y 115 fichas recorridas por código sin valores vacíos; clic real pendiente) → log 03-11-26 13:11
 - 03-11-26 — Revisión de MiFuturo: años de ingreso confirmados en la fuente y alerta de pocas instituciones (`carreras_por_actividad.csv`, 13/13 controles) → log 03-11-26 13:04
 - 03-11-26 — Capa principal con censo (`concentracion_region_actividad_censo.csv` 336×17, 9/9 controles) → log 03-11-26 12:29
@@ -48,6 +52,26 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 03-11-26 19:22 — Archivo del enfoque retirado y pizarra
+- **Contexto / Discusión:** el usuario pidió archivar lo retirado y actualizar la pizarra. Se revisó antes que ninguna tabla vigente dependiera de esas carpetas.
+- **Acción / Cambio realizado:** 7 carpetas movidas de `JOINS/` a `src/Analisis/Archivo/` con su `README.md`; rutas internas y `.gitignore` ajustados. `Indice_Cupos` se reejecutó desde la nueva ubicación con CSV idénticos, y el mapa no cambió. Las otras 6 carpetas no se reejecutaron: se comprobaron sus rutas. Tablas de control y puentes se mantienen. Borrados, con confirmación del usuario: `titulados_ocupados_region_sector.csv` (copia antigua, recuperable desde git), su archivo de bloqueo y una descarga incompleta del censo.
+- **Estado:** verificado.
+
+## 03-11-26 17:17 — Vista nacional, situación por nivel y titulados que no trabajan
+- **Contexto / Discusión:** el usuario vio Salud gris en la Metropolitana. No era un error: tiene 43,7% de los ocupados en Salud y 41,9% de todos los ocupados, así que su peso es 1,04. Pidió además desocupados por nivel, una vista nacional y titulados sin actividad.
+- **Acción / Cambio realizado:** `Fuerza_Trabajo_Region_Nivel/`; Chile como vista inicial, con región con más personas y región donde más pesa; la región se mantiene al cambiar de actividad. Ficha con % de titulados de 22 a 54 años que no trabajan (63 de 189 carreras con dato usable). Se corrigió la afirmación de que ENE siempre da tasas más altas.
+- **Estado:** verificado por código y capturas; falta la prueba real del usuario. Selector de cantidad o peso en pausa.
+
+## 03-11-26 16:00 — Revisión de código del mapa
+- **Contexto / Discusión:** el usuario pidió revisar valores mal pintados y notó el recuadro del cursor ilegible.
+- **Acción / Cambio realizado:** el recuadro estaba fuera del bloque de colores. Color y cifras se calculan en Python sin redondear antes; corte 0,625 pasa a 0,6; frases coherentes con la lista; dato vacío en gris propio. Bordes reconstruidos con grilla de 0,01° (cambio máximo de área 0,072%; página de 537 a 196 KB). Foco de teclado conservado. Nota con los 7 tramos.
+- **Estado:** verificado por controles y eventos simulados.
+
+## 03-11-26 15:09 — Git
+- **Contexto / Discusión:** el usuario pidió integrar git. El proyecto pesa 3,4 GB, casi todo en datos crudos.
+- **Acción / Cambio realizado:** `git init` en `main`, `.gitignore` y primer commit de 191 archivos (27,5 MB). Se quitó la línea `Actualizado` de 82 scripts, según la regla de cabecera en repositorios git. El usuario descargó `ENE/Entrada/ano-2024.csv`: sirve para el piloto opcional, sin procesar.
+- **Estado:** verificado. Sin repositorio remoto.
 
 ## 03-11-26 14:59 — Pizarra actualizada al nuevo alcance
 - **Contexto / Discusión:** el usuario pidió actualizar la pizarra, que seguía describiendo el índice.

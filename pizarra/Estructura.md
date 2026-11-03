@@ -37,284 +37,295 @@
 │       │       └── url
 │       ├── censo_proyecciones_ed_superior.csv
 │       └── cut_comuna.csv
-└── src
-    ├── Analisis
-    │   ├── Calculos_control
-    │   │   ├── cobertura_enadel_ene_region_actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── cobertura_enadel_ene_region_actividad.csv
-    │   │   │   │   └── cobertura_enadel_ene_region_actividad_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── conteo_instituciones_empleabilidad_titulados
-    │   │   │   ├── Salida
-    │   │   │   │   ├── conteo_instituciones_empleabilidad_titulados.csv
-    │   │   │   │   └── conteo_instituciones_empleabilidad_titulados_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── ocupados_region_actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── ocupados_region_actividad.csv
-    │   │   │   │   └── ocupados_region_actividad_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── ocupados_region_actividad_categoria
-    │   │   │   ├── Salida
-    │   │   │   │   ├── ocupados_region_actividad_categoria.csv
-    │   │   │   │   └── ocupados_region_actividad_categoria_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   └── titulados_ocupados_region_actividad
-    │   │       ├── Salida
-    │   │       │   ├── .~lock.titulados_ocupados_region_sector.csv#
-    │   │       │   ├── titulados_ocupados_region_actividad.csv
-    │   │       │   ├── titulados_ocupados_region_actividad_inspeccion.txt
-    │   │       │   └── titulados_ocupados_region_sector.csv
-    │   │       ├── crosswalk.py
-    │   │       ├── esquema.py
-    │   │       └── obtener.py
-    │   ├── JOINS
-    │   │   ├── Areas_Por_Actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── areas_por_actividad.csv
-    │   │   │   │   └── areas_por_actividad_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── Carreras_Por_Actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── carreras_por_actividad.csv
-    │   │   │   │   └── carreras_por_actividad_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── Concentracion_Region_Actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── concentracion_region_actividad.csv
-    │   │   │   │   └── concentracion_region_actividad_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── Concentracion_Region_Actividad_Censo
-    │   │   │   ├── Salida
-    │   │   │   │   ├── concentracion_region_actividad_censo.csv
-    │   │   │   │   └── concentracion_region_actividad_censo_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── Concentracion_Region_Area
-    │   │   │   ├── Salida
-    │   │   │   │   ├── concentracion_region_area.csv
-    │   │   │   │   └── concentracion_region_area_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Competencia_Desocupados
-    │   │   │   ├── Salida
-    │   │   │   │   ├── desocupados_carrera_region.csv
-    │   │   │   │   ├── desocupados_carrera_region_inspeccion.txt
-    │   │   │   │   ├── desocupados_region_titulo.csv
-    │   │   │   │   ├── desocupados_region_titulo_inspeccion.txt
-    │   │   │   │   ├── desocupados_validacion.csv
-    │   │   │   │   └── desocupados_validacion_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Demanda_Empresarial
-    │   │   │   ├── Salida
-    │   │   │   │   ├── vacantes_carrera_region_actividad.csv
-    │   │   │   │   ├── vacantes_carrera_region_actividad_inspeccion.txt
-    │   │   │   │   ├── vacantes_carrera_region.csv
-    │   │   │   │   ├── vacantes_carrera_region_inspeccion.txt
-    │   │   │   │   ├── vacantes_region_actividad.csv
-    │   │   │   │   ├── vacantes_region_actividad_inspeccion.txt
-    │   │   │   │   ├── vacantes_validacion.csv
-    │   │   │   │   └── vacantes_validacion_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Demanda_Jubilacion
-    │   │   │   ├── Salida
-    │   │   │   │   ├── jubilacion_carrera_region.csv
-    │   │   │   │   ├── jubilacion_carrera_region_inspeccion.txt
-    │   │   │   │   ├── jubilacion_region_titulo.csv
-    │   │   │   │   ├── jubilacion_region_titulo_inspeccion.txt
-    │   │   │   │   ├── jubilacion_validacion.csv
-    │   │   │   │   └── jubilacion_validacion_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Demanda_Publica
-    │   │   │   ├── Salida
-    │   │   │   │   ├── vacantes_publicas_carrera_region.csv
-    │   │   │   │   ├── vacantes_publicas_carrera_region_inspeccion.txt
-    │   │   │   │   ├── vacantes_publicas_validacion.csv
-    │   │   │   │   └── vacantes_publicas_validacion_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Empleabilidad_Oferta_Titulados
-    │   │   │   ├── Salida
-    │   │   │   │   ├── oferta_empleabilidad_procesado.csv
-    │   │   │   │   └── oferta_empleabilidad_procesado_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   └── obtener.py
-    │   │   ├── CW_Ocupados_Carrera_Region_Actividad
-    │   │   │   ├── Salida
-    │   │   │   │   ├── ocupados_carrera_region_actividad.csv
-    │   │   │   │   ├── ocupados_carrera_region_actividad_inspeccion.txt
-    │   │   │   │   ├── ocupados_carrera_region_actividad_validacion.csv
-    │   │   │   │   └── ocupados_carrera_region_actividad_validacion_inspeccion.txt
-    │   │   │   ├── crosswalk.py
-    │   │   │   ├── esquema.py
-    │   │   │   ├── obtener.py
-    │   │   │   └── validar_reparto.py
-    │   │   └── Indice_Cupos
-    │   │       ├── Salida
-    │   │       │   ├── indice_cupos_carrera_nacional.csv
-    │   │       │   ├── indice_cupos_carrera_nacional_inspeccion.txt
-    │   │       │   ├── indice_cupos_carrera_region.csv
-    │   │       │   ├── indice_cupos_carrera_region_inspeccion.txt
-    │   │       │   ├── indice_cupos_validacion.csv
-    │   │       │   └── indice_cupos_validacion_inspeccion.txt
-    │   │       ├── crosswalk.py
-    │   │       ├── esquema.py
-    │   │       └── obtener.py
-    │   ├── Puentes_de_mapeo
-    │   │   ├── Salida
-    │   │   │   ├── P1_puente_actividades.csv
-    │   │   │   ├── P1_puente_actividades_inspeccion.txt
-    │   │   │   ├── P2_puente_llaves_carrera.csv
-    │   │   │   ├── P2_puente_llaves_carrera_inspeccion.txt
-    │   │   │   ├── P4_puente_niveles_educativos.csv
-    │   │   │   ├── P4_puente_niveles_educativos_inspeccion.txt
-    │   │   │   ├── P5_puente_carrera_casen_cobertura.csv
-    │   │   │   ├── P5_puente_carrera_casen_cobertura_inspeccion.txt
-    │   │   │   ├── P5_puente_carrera_casen.csv
-    │   │   │   ├── P5_puente_carrera_casen_inspeccion.txt
-    │   │   │   ├── P6_matriz_carrera_actividad_ocupacion.csv
-    │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_inspeccion.txt
-    │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados.csv
-    │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados_inspeccion.txt
-    │   │   │   ├── P7_perfil_carrera_actividad_ocupacion.csv
-    │   │   │   ├── P7_perfil_carrera_actividad_ocupacion_inspeccion.txt
-    │   │   │   ├── P8_razon_empleo_carrera.csv
-    │   │   │   ├── P8_razon_empleo_carrera_inspeccion.txt
-    │   │   │   ├── P9_perfil_laboral_carrera.csv
-    │   │   │   └── P9_perfil_laboral_carrera_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── P1_puente_actividades.py
-    │   │   ├── P2_puente_llaves_carrera.py
-    │   │   ├── P4_puente_niveles_educativos.py
-    │   │   ├── P5_puente_carrera_casen.py
-    │   │   ├── P6_matriz_carrera_actividad_ocupacion.py
-    │   │   ├── P7_perfil_carrera_actividad_ocupacion.py
-    │   │   ├── P8_razon_empleo_carrera.py
-    │   │   └── P9_perfil_laboral_carrera.py
-    │   └── diccionario_atributos_relaciones.md
-    ├── Scrapers
-    │   ├── CASEN
-    │   │   ├── Entrada
-    │   │   │   └── casen_2024.dta
-    │   │   ├── Salida
-    │   │   │   ├── casen_procesado.csv
-    │   │   │   └── casen_procesado_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── obtener.py
-    │   │   └── procesar.py
-    │   ├── CENSO
-    │   │   ├── Entrada
-    │   │   │   ├── cartografia
-    │   │   │   │   └── Cartografia_censo2024_Pais_Regional.parquet
-    │   │   │   ├── hogares_censo2024.parquet
-    │   │   │   ├── personas_censo2024.parquet
-    │   │   │   ├── Sin confirmar 585366.crdownload
-    │   │   │   ├── viv_hog_per_censo2024.zip
-    │   │   │   └── viviendas_censo2024.parquet
-    │   │   ├── Salida
-    │   │   │   ├── censo_procesado.csv
-    │   │   │   └── censo_procesado_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── obtener.py
-    │   │   └── procesar.py
-    │   ├── comun
-    │   │   ├── inspect_data.py
-    │   │   └── normalizador.py
-    │   ├── Empleabilidad
-    │   │   ├── Entrada
-    │   │   │   ├── empleabilidad_inspeccion.txt
-    │   │   │   └── empleabilidad_mifuturo.csv
-    │   │   ├── Salida
-    │   │   │   ├── empleabilidad_procesado.csv
-    │   │   │   └── empleabilidad_procesado_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── obtener.py
-    │   │   └── procesar.py
-    │   ├── ENADEL
-    │   │   ├── Entrada
-    │   │   │   ├── ENADEL_2025.csv
-    │   │   │   ├── ENADEL_2025_inspeccion.txt
-    │   │   │   └── FORMATO-CSV-ENADEL.zip
-    │   │   ├── Salida
-    │   │   │   ├── enadel_cargos_procesado.csv
-    │   │   │   ├── enadel_cargos_procesado_inspeccion.txt
-    │   │   │   ├── enadel_empresas_procesado.csv
-    │   │   │   └── enadel_empresas_procesado_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── obtener.py
-    │   │   └── procesar.py
-    │   ├── ENE
-    │   │   ├── Entrada
-    │   │   │   ├── 2026
-    │   │   │   │   ├── ene-2026-01-def.csv
-    │   │   │   │   ├── ene-2026-01-def_inspeccion.txt
-    │   │   │   │   ├── ene-2026-02-efm.csv
-    │   │   │   │   ├── ene-2026-02-efm_inspeccion.txt
-    │   │   │   │   ├── ene-2026-03-fma.csv
-    │   │   │   │   ├── ene-2026-03-fma_inspeccion.txt
-    │   │   │   │   ├── ene-2026-04-mam.csv
-    │   │   │   │   ├── ene-2026-04-mam_inspeccion.txt
-    │   │   │   │   ├── ene-2026-05-amj.csv
-    │   │   │   │   ├── ene-2026-05-amj_inspeccion.txt
-    │   │   │   │   ├── ene-2026-06-mjj.csv
-    │   │   │   │   ├── ene-2026-06-mjj_inspeccion.txt
-    │   │   │   │   ├── ene-2026-07-jja.csv
-    │   │   │   │   ├── ene-2026-07-jja_inspeccion.txt
-    │   │   │   │   ├── ene-2026-08-jas.csv
-    │   │   │   │   └── ene-2026-08-jas_inspeccion.txt
-    │   │   │   └── ano-2024.csv
-    │   │   ├── Salida
-    │   │   │   ├── ene_procesado.csv
-    │   │   │   └── ene_procesado_inspeccion.txt
-    │   │   ├── esquema.py
-    │   │   ├── obtener.py
-    │   │   └── procesar.py
-    │   └── Titulados
-    │       ├── Entrada
-    │       │   ├── titulados_2007_2025.xlsx
-    │       │   └── titulados_inspeccion.txt
-    │       ├── Salida
-    │       │   ├── titulados_procesado.csv
-    │       │   └── titulados_procesado_inspeccion.txt
-    │       ├── obtener.py
-    │       └── procesar.py
-    └── Visualizacion
-        └── Mapa_Actividades
-            ├── Salida
-            │   ├── index.html
-            │   └── nota_de_lectura.md
-            ├── generar_mapa.py
-            └── plantilla.html
+├── src
+│   ├── Analisis
+│   │   ├── Archivo
+│   │   │   ├── CW_Competencia_Desocupados
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── desocupados_carrera_region.csv
+│   │   │   │   │   ├── desocupados_carrera_region_inspeccion.txt
+│   │   │   │   │   ├── desocupados_region_titulo.csv
+│   │   │   │   │   ├── desocupados_region_titulo_inspeccion.txt
+│   │   │   │   │   ├── desocupados_validacion.csv
+│   │   │   │   │   └── desocupados_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── CW_Demanda_Empresarial
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── vacantes_carrera_region_actividad.csv
+│   │   │   │   │   ├── vacantes_carrera_region_actividad_inspeccion.txt
+│   │   │   │   │   ├── vacantes_carrera_region.csv
+│   │   │   │   │   ├── vacantes_carrera_region_inspeccion.txt
+│   │   │   │   │   ├── vacantes_region_actividad.csv
+│   │   │   │   │   ├── vacantes_region_actividad_inspeccion.txt
+│   │   │   │   │   ├── vacantes_validacion.csv
+│   │   │   │   │   └── vacantes_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── CW_Demanda_Jubilacion
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── jubilacion_carrera_region.csv
+│   │   │   │   │   ├── jubilacion_carrera_region_inspeccion.txt
+│   │   │   │   │   ├── jubilacion_region_titulo.csv
+│   │   │   │   │   ├── jubilacion_region_titulo_inspeccion.txt
+│   │   │   │   │   ├── jubilacion_validacion.csv
+│   │   │   │   │   └── jubilacion_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── CW_Demanda_Publica
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── vacantes_publicas_carrera_region.csv
+│   │   │   │   │   ├── vacantes_publicas_carrera_region_inspeccion.txt
+│   │   │   │   │   ├── vacantes_publicas_validacion.csv
+│   │   │   │   │   └── vacantes_publicas_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── CW_Empleabilidad_Oferta_Titulados
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── oferta_empleabilidad_procesado.csv
+│   │   │   │   │   └── oferta_empleabilidad_procesado_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── CW_Ocupados_Carrera_Region_Actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── ocupados_carrera_region_actividad.csv
+│   │   │   │   │   ├── ocupados_carrera_region_actividad_inspeccion.txt
+│   │   │   │   │   ├── ocupados_carrera_region_actividad_validacion.csv
+│   │   │   │   │   └── ocupados_carrera_region_actividad_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   ├── obtener.py
+│   │   │   │   └── validar_reparto.py
+│   │   │   ├── Indice_Cupos
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── indice_cupos_carrera_nacional.csv
+│   │   │   │   │   ├── indice_cupos_carrera_nacional_inspeccion.txt
+│   │   │   │   │   ├── indice_cupos_carrera_region.csv
+│   │   │   │   │   ├── indice_cupos_carrera_region_inspeccion.txt
+│   │   │   │   │   ├── indice_cupos_validacion.csv
+│   │   │   │   │   └── indice_cupos_validacion_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   └── README.md
+│   │   ├── Calculos_control
+│   │   │   ├── cobertura_enadel_ene_region_actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── cobertura_enadel_ene_region_actividad.csv
+│   │   │   │   │   └── cobertura_enadel_ene_region_actividad_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── conteo_instituciones_empleabilidad_titulados
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── conteo_instituciones_empleabilidad_titulados.csv
+│   │   │   │   │   └── conteo_instituciones_empleabilidad_titulados_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── ocupados_region_actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── ocupados_region_actividad.csv
+│   │   │   │   │   └── ocupados_region_actividad_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── ocupados_region_actividad_categoria
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── ocupados_region_actividad_categoria.csv
+│   │   │   │   │   └── ocupados_region_actividad_categoria_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   └── titulados_ocupados_region_actividad
+│   │   │       ├── Salida
+│   │   │       │   ├── titulados_ocupados_region_actividad.csv
+│   │   │       │   └── titulados_ocupados_region_actividad_inspeccion.txt
+│   │   │       ├── crosswalk.py
+│   │   │       ├── esquema.py
+│   │   │       └── obtener.py
+│   │   ├── JOINS
+│   │   │   ├── Areas_Por_Actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── areas_por_actividad.csv
+│   │   │   │   │   └── areas_por_actividad_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── Carreras_Por_Actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── carreras_por_actividad.csv
+│   │   │   │   │   └── carreras_por_actividad_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── Concentracion_Region_Actividad
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── concentracion_region_actividad.csv
+│   │   │   │   │   └── concentracion_region_actividad_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── Concentracion_Region_Actividad_Censo
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── concentracion_region_actividad_censo.csv
+│   │   │   │   │   └── concentracion_region_actividad_censo_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   ├── Concentracion_Region_Area
+│   │   │   │   ├── Salida
+│   │   │   │   │   ├── concentracion_region_area.csv
+│   │   │   │   │   └── concentracion_region_area_inspeccion.txt
+│   │   │   │   ├── crosswalk.py
+│   │   │   │   ├── esquema.py
+│   │   │   │   └── obtener.py
+│   │   │   └── Fuerza_Trabajo_Region_Nivel
+│   │   │       ├── Salida
+│   │   │       │   ├── fuerza_trabajo_region_nivel.csv
+│   │   │       │   └── fuerza_trabajo_region_nivel_inspeccion.txt
+│   │   │       ├── crosswalk.py
+│   │   │       ├── esquema.py
+│   │   │       └── obtener.py
+│   │   ├── Puentes_de_mapeo
+│   │   │   ├── Salida
+│   │   │   │   ├── P1_puente_actividades.csv
+│   │   │   │   ├── P1_puente_actividades_inspeccion.txt
+│   │   │   │   ├── P2_puente_llaves_carrera.csv
+│   │   │   │   ├── P2_puente_llaves_carrera_inspeccion.txt
+│   │   │   │   ├── P4_puente_niveles_educativos.csv
+│   │   │   │   ├── P4_puente_niveles_educativos_inspeccion.txt
+│   │   │   │   ├── P5_puente_carrera_casen_cobertura.csv
+│   │   │   │   ├── P5_puente_carrera_casen_cobertura_inspeccion.txt
+│   │   │   │   ├── P5_puente_carrera_casen.csv
+│   │   │   │   ├── P5_puente_carrera_casen_inspeccion.txt
+│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion.csv
+│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_inspeccion.txt
+│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados.csv
+│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados_inspeccion.txt
+│   │   │   │   ├── P7_perfil_carrera_actividad_ocupacion.csv
+│   │   │   │   ├── P7_perfil_carrera_actividad_ocupacion_inspeccion.txt
+│   │   │   │   ├── P8_razon_empleo_carrera.csv
+│   │   │   │   ├── P8_razon_empleo_carrera_inspeccion.txt
+│   │   │   │   ├── P9_perfil_laboral_carrera.csv
+│   │   │   │   └── P9_perfil_laboral_carrera_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── P1_puente_actividades.py
+│   │   │   ├── P2_puente_llaves_carrera.py
+│   │   │   ├── P4_puente_niveles_educativos.py
+│   │   │   ├── P5_puente_carrera_casen.py
+│   │   │   ├── P6_matriz_carrera_actividad_ocupacion.py
+│   │   │   ├── P7_perfil_carrera_actividad_ocupacion.py
+│   │   │   ├── P8_razon_empleo_carrera.py
+│   │   │   └── P9_perfil_laboral_carrera.py
+│   │   └── diccionario_atributos_relaciones.md
+│   ├── Scrapers
+│   │   ├── CASEN
+│   │   │   ├── Entrada
+│   │   │   │   └── casen_2024.dta
+│   │   │   ├── Salida
+│   │   │   │   ├── casen_procesado.csv
+│   │   │   │   └── casen_procesado_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── obtener.py
+│   │   │   └── procesar.py
+│   │   ├── CENSO
+│   │   │   ├── Entrada
+│   │   │   │   ├── cartografia
+│   │   │   │   │   └── Cartografia_censo2024_Pais_Regional.parquet
+│   │   │   │   ├── hogares_censo2024.parquet
+│   │   │   │   ├── personas_censo2024.parquet
+│   │   │   │   ├── viv_hog_per_censo2024.zip
+│   │   │   │   └── viviendas_censo2024.parquet
+│   │   │   ├── Salida
+│   │   │   │   ├── censo_procesado.csv
+│   │   │   │   └── censo_procesado_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── obtener.py
+│   │   │   └── procesar.py
+│   │   ├── comun
+│   │   │   ├── inspect_data.py
+│   │   │   └── normalizador.py
+│   │   ├── Empleabilidad
+│   │   │   ├── Entrada
+│   │   │   │   ├── empleabilidad_inspeccion.txt
+│   │   │   │   └── empleabilidad_mifuturo.csv
+│   │   │   ├── Salida
+│   │   │   │   ├── empleabilidad_procesado.csv
+│   │   │   │   └── empleabilidad_procesado_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── obtener.py
+│   │   │   └── procesar.py
+│   │   ├── ENADEL
+│   │   │   ├── Entrada
+│   │   │   │   ├── ENADEL_2025.csv
+│   │   │   │   ├── ENADEL_2025_inspeccion.txt
+│   │   │   │   └── FORMATO-CSV-ENADEL.zip
+│   │   │   ├── Salida
+│   │   │   │   ├── enadel_cargos_procesado.csv
+│   │   │   │   ├── enadel_cargos_procesado_inspeccion.txt
+│   │   │   │   ├── enadel_empresas_procesado.csv
+│   │   │   │   └── enadel_empresas_procesado_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── obtener.py
+│   │   │   └── procesar.py
+│   │   ├── ENE
+│   │   │   ├── Entrada
+│   │   │   │   ├── 2026
+│   │   │   │   │   ├── ene-2026-01-def.csv
+│   │   │   │   │   ├── ene-2026-01-def_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-02-efm.csv
+│   │   │   │   │   ├── ene-2026-02-efm_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-03-fma.csv
+│   │   │   │   │   ├── ene-2026-03-fma_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-04-mam.csv
+│   │   │   │   │   ├── ene-2026-04-mam_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-05-amj.csv
+│   │   │   │   │   ├── ene-2026-05-amj_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-06-mjj.csv
+│   │   │   │   │   ├── ene-2026-06-mjj_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-07-jja.csv
+│   │   │   │   │   ├── ene-2026-07-jja_inspeccion.txt
+│   │   │   │   │   ├── ene-2026-08-jas.csv
+│   │   │   │   │   └── ene-2026-08-jas_inspeccion.txt
+│   │   │   │   └── ano-2024.csv
+│   │   │   ├── Salida
+│   │   │   │   ├── ene_procesado.csv
+│   │   │   │   └── ene_procesado_inspeccion.txt
+│   │   │   ├── esquema.py
+│   │   │   ├── obtener.py
+│   │   │   └── procesar.py
+│   │   └── Titulados
+│   │       ├── Entrada
+│   │       │   ├── titulados_2007_2025.xlsx
+│   │       │   └── titulados_inspeccion.txt
+│   │       ├── Salida
+│   │       │   ├── titulados_procesado.csv
+│   │       │   └── titulados_procesado_inspeccion.txt
+│   │       ├── obtener.py
+│   │       └── procesar.py
+│   └── Visualizacion
+│       └── Mapa_Actividades
+│           ├── Salida
+│           │   ├── index.html
+│           │   └── nota_de_lectura.md
+│           ├── generar_mapa.py
+│           └── plantilla.html
+└── .gitignore
 
-77 directories, 228 files
+80 directories, 232 files
 ```
 
 ## 📝 Descripción de Componentes
+
+### Raíz
+
+- **`.gitignore`**: Deja fuera `.venv/`, datos crudos, microdatos y tablas intermedias grandes, que se regeneran.
 
 ### Datos
 
@@ -374,7 +385,6 @@
 - **`src/Scrapers/CENSO/procesar.py`**: Deriva región de trabajo, actividad y `nivel_titulo`, y agrega por combinación; 12 controles contra el manual del INE. Requiere `.venv` (pyarrow).
 - **`src/Scrapers/CENSO/Entrada/*.parquet`, `viv_hog_per_censo2024.zip`**: Microdatos oficiales de personas, hogares y viviendas, y su zip.
 - **`src/Scrapers/CENSO/Entrada/cartografia/Cartografia_censo2024_Pais_Regional.parquet`**: Límites oficiales de las 16 regiones.
-- **`src/Scrapers/CENSO/Entrada/Sin confirmar 585366.crdownload`**: Descarga incompleta del navegador del usuario; se puede borrar si la confirma.
 - **`src/Scrapers/CENSO/Salida/censo_procesado.csv`**: 14,793×8, personas de 15 años o más agregadas; sumar `personas`, no contar filas.
 
 ### Compartido
@@ -415,21 +425,24 @@
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/`**: Capa principal del mapa. `Salida/concentracion_region_actividad_censo.csv`, 336×17: ocupados, peso relativo, lectura, contraste con ENE y alertas.
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad/`**: Misma medida con ENE, con rango y fiabilidad; sirve de contraste. `Salida/concentracion_region_actividad.csv`, 336×18.
 - **`src/Analisis/JOINS/Areas_Por_Actividad/`**: Áreas CINE por actividad, nacional, con CASEN. `Salida/areas_por_actividad.csv`, 210×15.
-- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras.
+- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras; incluye respaldo por instituciones y titulados que no trabajan.
+- **`src/Analisis/JOINS/Fuerza_Trabajo_Region_Nivel/`**: Ocupados y desocupados por región y nivel educativo, con ENE como contraste. `Salida/fuerza_trabajo_region_nivel.csv`, 48×12.
 - **`src/Analisis/JOINS/Concentracion_Region_Area/`**: Áreas CINE por región según dónde viven los titulados; capa opcional, no usada en el mapa. `Salida/concentracion_region_area.csv`, 160×16.
 
-### Análisis (JOINS / retirado, pendiente de archivar)
+### Análisis (Archivo / enfoque retirado)
 
-- **`src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/obtener.py`**: Carga y valida `titulados_procesado.csv` y `P2_puente_llaves_carrera.csv`.
-- **`src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/esquema.py`**: SSOT de `oferta_empleabilidad_procesado.csv`.
-- **`src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/crosswalk.py`**: Cruce exacto + fallback genérico institucional; 4 validaciones.
-- **`src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/Salida/oferta_empleabilidad_procesado.csv`**: Paso 1 del PER (234,074×28).
-- **`src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/`**: Ocupados estimados por región, carrera y sector (`Salida/ocupados_carrera_region_actividad.csv`, 41,600 filas); `validar_reparto.py` hace la prueba de región oculta (`..._validacion.csv`).
-- **`src/Analisis/JOINS/CW_Competencia_Desocupados/`**: Paso 2. `Salida/desocupados_carrera_region.csv` (2,607 filas) entra al índice; `desocupados_region_titulo.csv` y `desocupados_validacion.csv` lo respaldan.
-- **`src/Analisis/JOINS/CW_Demanda_Jubilacion/`**: Paso 3. `Salida/jubilacion_carrera_region.csv` (2,333 filas), más `jubilacion_region_titulo.csv` y `jubilacion_validacion.csv`.
-- **`src/Analisis/JOINS/CW_Demanda_Publica/`**: Vacantes públicas estimadas con el panel ENE. `Salida/vacantes_publicas_carrera_region.csv` y `vacantes_publicas_validacion.csv`.
-- **`src/Analisis/JOINS/CW_Demanda_Empresarial/`**: Paso 4. `Salida/vacantes_carrera_region.csv` (2,377 filas), más el detalle por sector, las celdas y `vacantes_validacion.csv`.
-- **`src/Analisis/JOINS/Indice_Cupos/`**: Paso 5. `Salida/indice_cupos_carrera_nacional.csv` (274 filas, la lectura más sólida), `indice_cupos_carrera_region.csv` (3,540 filas) y `indice_cupos_validacion.csv`.
+- **`src/Analisis/Archivo/README.md`**: Por qué se retiró el Índice de Cupos, qué contiene y en qué orden se vuelve a ejecutar.
+
+- **`src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/obtener.py`**: Carga y valida `titulados_procesado.csv` y `P2_puente_llaves_carrera.csv`.
+- **`src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/esquema.py`**: SSOT de `oferta_empleabilidad_procesado.csv`.
+- **`src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/crosswalk.py`**: Cruce exacto + fallback genérico institucional; 4 validaciones.
+- **`src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/Salida/oferta_empleabilidad_procesado.csv`**: Paso 1 del PER (234,074×28).
+- **`src/Analisis/Archivo/CW_Ocupados_Carrera_Region_Actividad/`**: Ocupados estimados por región, carrera y sector (`Salida/ocupados_carrera_region_actividad.csv`, 41,600 filas); `validar_reparto.py` hace la prueba de región oculta (`..._validacion.csv`).
+- **`src/Analisis/Archivo/CW_Competencia_Desocupados/`**: Paso 2. `Salida/desocupados_carrera_region.csv` (2,607 filas) entra al índice; `desocupados_region_titulo.csv` y `desocupados_validacion.csv` lo respaldan.
+- **`src/Analisis/Archivo/CW_Demanda_Jubilacion/`**: Paso 3. `Salida/jubilacion_carrera_region.csv` (2,333 filas), más `jubilacion_region_titulo.csv` y `jubilacion_validacion.csv`.
+- **`src/Analisis/Archivo/CW_Demanda_Publica/`**: Vacantes públicas estimadas con el panel ENE. `Salida/vacantes_publicas_carrera_region.csv` y `vacantes_publicas_validacion.csv`.
+- **`src/Analisis/Archivo/CW_Demanda_Empresarial/`**: Paso 4. `Salida/vacantes_carrera_region.csv` (2,377 filas), más el detalle por sector, las celdas y `vacantes_validacion.csv`.
+- **`src/Analisis/Archivo/Indice_Cupos/`**: Paso 5. `Salida/indice_cupos_carrera_nacional.csv` (274 filas, la lectura más sólida), `indice_cupos_carrera_region.csv` (3,540 filas) y `indice_cupos_validacion.csv`.
 
 ### Visualización
 

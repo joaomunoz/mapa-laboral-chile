@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/obtener.py>
+<src/Analisis/Archivo/CW_Empleabilidad_Oferta_Titulados/obtener.py>
 
 Módulo de obtención y verificación para el Paso 1 del índice:
 Carga y valida los datasets de entrada:

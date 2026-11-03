@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Jubilacion/esquema.py>
+<src/Analisis/Archivo/CW_Demanda_Jubilacion/esquema.py>
 
 Single Source of Truth del Paso 3 del índice: vacantes por jubilación al año.
 

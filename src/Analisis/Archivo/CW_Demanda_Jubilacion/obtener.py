@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Jubilacion/obtener.py>
+<src/Analisis/Archivo/CW_Demanda_Jubilacion/obtener.py>
 
 Carga las entradas del Paso 3: ENE, CASEN con P5 y la tabla de ocupados por carrera y región.
 """
@@ -34,4 +34,4 @@ def cargar_casen() -> pd.DataFrame:
 
 
 def cargar_ocupados() -> pd.DataFrame:
-    return pd.read_csv(DIR_ANALISIS / "JOINS" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")
+    return pd.read_csv(DIR_ANALISIS / "Archivo" / "CW_Ocupados_Carrera_Region_Actividad" / "Salida" / "ocupados_carrera_region_actividad.csv", sep=";")

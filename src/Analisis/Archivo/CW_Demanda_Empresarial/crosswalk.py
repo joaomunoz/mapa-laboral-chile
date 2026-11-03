@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Empresarial/crosswalk.py>
+<src/Analisis/Archivo/CW_Demanda_Empresarial/crosswalk.py>
 
 Paso 4 del índice: estima Vacantes Proyectadas por carrera y región, numerador de la fórmula.
 

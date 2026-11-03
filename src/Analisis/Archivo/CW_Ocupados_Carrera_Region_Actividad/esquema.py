@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/esquema.py>
+<src/Analisis/Archivo/CW_Ocupados_Carrera_Region_Actividad/esquema.py>
 
 Single Source of Truth del reparto de titulados ocupados por región, carrera y actividad.
 

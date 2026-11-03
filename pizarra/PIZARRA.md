@@ -4,7 +4,7 @@
 
 > Tablero vivo del proyecto. Bitácora ejecutiva para entender rápidamente el estado actual y los siguientes pasos.
 
-**Contexto activo:** entorno local `Proyecto Probabilidad_carreras`, sin git. `.venv/` para leer parquet y generar el mapa. El nombre del proyecto es de trabajo: falta confirmarlo.
+**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. El nombre del proyecto es de trabajo: falta confirmarlo.
 
 ---
 
@@ -12,7 +12,7 @@
 
 Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se concentra cada actividad económica y qué carreras están más ligadas a ella.
 
-**Flujo:** eliges una actividad → el mapa se colorea según cuánto la concentra cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
+**Flujo:** eliges una actividad → ves el resumen de Chile y el mapa coloreado según cuánto la concentra cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
 
 **Cambio de alcance (02 y 03-11-26):** se retiró el Índice de Cupos. Carrera × región no es medible: de 3.040 combinaciones, solo 62 pasan el filtro en ocupados y 0 en desocupados. El proyecto muestra solo lo medido, y cada dato conserva su fuente.
 
@@ -21,43 +21,44 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | **Concentración** | ¿Qué actividad pesa más en cada región? | Censo 2024; ENE como contraste | Regional, donde está el trabajo |
 | **Formación** | ¿De qué áreas vienen sus titulados? | CASEN 2024 | Nacional |
 | **Carreras afines** | ¿Qué carreras dependen más de esa actividad? | CASEN 2024 | Nacional |
-| **Ficha de carrera** | Títulos, empleabilidad e ingresos | SIES y MiFuturo | Nacional |
+| **Situación por nivel** | ¿Cuántos técnicos y profesionales trabajan o están desocupados? | Censo 2024; ENE como contraste | Regional y nacional |
+| **Ficha de carrera** | Títulos, empleabilidad, ingresos y titulados que no trabajan | SIES, MiFuturo y CASEN | Nacional |
 
 ---
 
-## 📊 Avance general estimado: ~85%
+## 📊 Avance general estimado: ~90%
 
-> Baja desde ~90% porque cambió la meta: ahora se mide contra el mapa, no contra el índice.
+> Sube desde ~85%: el mapa suma vista nacional y situación por nivel, se corrigieron sus errores de color, y lo retirado quedó archivado.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
-| Fuentes y scrapers | 100% | 🟢 | 6 fuentes; Censo 2024 agregado |
+| Fuentes y scrapers | 100% | 🟢 | 6 fuentes; ENE 2024 descargada, sin procesar |
 | Procesamiento `procesar.py` | 95% | 🟢 | Pendientes menores en ENADEL y MiFuturo, que no afectan al mapa |
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P2 y P4 a P9 |
-| Tablas del mapa | 100% | 🟢 | Censo, áreas y carreras; ENE y área × región como apoyo |
+| Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE y área × región como apoyo |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 85% | 🟡 | Generado y probado por código; falta clic real y revisión del usuario |
+| Mapa interactivo | 90% | 🟡 | Revisión de código aplicada; falta la revisión del usuario con mouse y teclado reales |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
-| Archivar lo retirado | 0% | 🔴 | Índice y demandas siguen en `JOINS/` |
+| Archivar lo retirado | 100% | 🟢 | `src/Analisis/Archivo/`, con su README |
+| Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
 | README y presentación | 0% | 🔴 | Para portafolio |
 
 ---
 
 ## 🔶 En curso / parcial
 
-- **Revisión del mapa por el usuario:** el clic real y el recuadro al pasar el cursor no están probados, porque falló el navegador automatizado. Se probó con clics por código y capturas de escritorio, móvil y modo oscuro.
-- **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. La causa no está comprobada; el mapa lo avisa.
-- **Limpieza pendiente de confirmar:** `titulados_ocupados_region_sector.csv` y `CENSO/Entrada/Sin confirmar 585366.crdownload`.
+- **Revisión del mapa por el usuario:** el usuario ya usa el mapa y reportó observaciones, pero sigue sin probarse de forma completa con mouse y teclado reales. La automatización de navegador falló; se probó con eventos por código y capturas.
+- **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Ajustar el mapa** según la revisión del usuario.
-2. **Archivar lo retirado** en `Archivo/`: `Indice_Cupos`, `CW_Demanda_Jubilacion`, `CW_Demanda_Publica`, y los repartos por carrera y región. Revisar antes qué depende de cada uno.
-3. **README y presentación para portafolio,** y confirmar el nombre del proyecto.
-4. **Publicar el mapa** como página, si el usuario lo decide.
-5. **Opcional, actualización a 2026:** censo × variación de ENE 2024 a 2026. Requiere descargar ENE 2024 y un piloto.
+1. **Terminar la revisión del mapa** y ajustar lo que el usuario pida.
+2. **README y presentación para portafolio,** y confirmar el nombre del proyecto.
+3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado.
+4. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+5. **Opcional, actualización a 2026:** censo × variación de ENE. `ENE/Entrada/ano-2024.csv` ya está; falta un piloto, considerando `fact_anual` y la diferencia de meses.
 6. **Opcional, capa de área CINE:** `concentracion_region_area` ya existe, rotulada "dónde viven los titulados".
 7. **Ajustes menores:** suma con nulos en ENADEL, `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
@@ -84,6 +85,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Censo agregado en CSV:** 15,2 millones de personas pasan a 14.793 filas, sin perder totales, porque no usa factores de expansión. El parquet original queda en `Entrada/`.
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
+- **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
+- **Chile como vista inicial:** muestra juntas la región con más personas y la región donde más pesa, que son lecturas distintas de "concentrar". Por eso el selector quedó en pausa.
+- **Desocupados por nivel y región, no por actividad ni carrera:** un desocupado no tiene actividad registrada. "Titulados que no trabajan" se mide de 22 a 54 años, porque con todas las edades pesan los jubilados.
+- **Git:** quedan fuera los datos crudos y los microdatos, que se regeneran. Los scripts no llevan fecha en su cabecera, porque git ya la registra.
+- **Archivo en vez de borrar:** el enfoque anterior sigue ejecutable en `src/Analisis/Archivo/`, y el índice se reprodujo idéntico tras moverlo.
 - **Actividad U fuera de la lista:** se conserva en la tabla, porque con unas 2.800 personas distorsionaba la lectura de la Metropolitana.
 - **Nombres según glosarios:** `categoria_ocupacion` y `actividad_*`. `Scrapers/` conserva los nombres de cada fuente; `Analisis/` usa los normalizados.
 - **Región = `codigo_region` + `nombre_region`:** fuente única en `comun/normalizador.py`; los cruces se hacen por código.
@@ -97,7 +103,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Que el usuario abra `src/Visualizacion/Mapa_Actividades/Salida/index.html` y diga qué cambiar. Después, archivar lo retirado.
+Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Después, escribir el README del portafolio.
 
 ---
 

@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/crosswalk.py>
+<src/Analisis/Archivo/CW_Ocupados_Carrera_Region_Actividad/crosswalk.py>
 
 Estima cuántos titulados de cada carrera trabajan en cada actividad y región.
 

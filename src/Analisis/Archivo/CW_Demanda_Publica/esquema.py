@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Publica/esquema.py>
+<src/Analisis/Archivo/CW_Demanda_Publica/esquema.py>
 
 Single Source of Truth de la demanda pública estimada: la parte que ENADEL no ve.
 

@@ -1,5 +1,5 @@
 """
-<src/Analisis/JOINS/CW_Demanda_Empresarial/esquema.py>
+<src/Analisis/Archivo/CW_Demanda_Empresarial/esquema.py>
 
 Single Source of Truth del Paso 4 del índice: vacantes proyectadas para titulados.
 
