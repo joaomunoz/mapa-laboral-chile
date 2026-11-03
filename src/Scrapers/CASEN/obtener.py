@@ -6,7 +6,7 @@ Descarga a Entrada/ los microdatos de la versión más reciente publicada, en fo
 
 Por qué CASEN (decisión 02-11-26): es la única fuente con campo de estudio, ocupación y
 sector de actividad en la misma persona, lo que permite medir el vínculo carrera → ocupación
-→ sector que ENE y ENADEL no entregan. Es la quinta fuente oficial del proyecto.
+→ actividad que ENE no entrega. Es la quinta fuente oficial del proyecto.
 
 Detección dinámica: el año se toma del menú de encuestas de la página oficial, de modo que
 una versión nueva (CASEN 2026, en levantamiento) se detecta sin cambiar el código.

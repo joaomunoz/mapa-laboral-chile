@@ -13,7 +13,7 @@ UNIVERSO Y TÍTULO (verificado en los microdatos, 02-11-26):
     titulados. Por eso `titulo_comun` solo se asigna con e6c_completo == 1 y queda NA si no
     terminó o sigue estudiando (13,555 + 7,342 personas). Se conservan esas filas porque el
     puente e7 → carrera_generica aprovecha todos los textos.
-  * titulo_comun usa el catálogo del puente P4. CASEN no distingue postítulo.
+  * titulo_comun usa el catálogo común de títulos del proyecto. CASEN no distingue postítulo.
   * Magíster y doctorado: `e7` suele nombrar el pregrado; solo 18-24% de esos textos menciona
     un posgrado (medido 02-11-26).
 
@@ -60,7 +60,7 @@ ESQUEMA_CASEN: dict[str, str] = {
     "asiste": "int64",             # 1 Sí, 2 No
     "e6a": "int64",                # 12 Técnico, 13 Profesional, 14 Magíster, 15 Doctorado
     "e6c_completo": "Int64",       # 1 Sí, 2 No; NA si sigue asistiendo
-    "titulo_comun": "object",      # DERIVADA: llave P4; NA si no tiene el título
+    "titulo_comun": "object",      # DERIVADA: título común; NA si no tiene el título
     "e7": "object",                # Nombre de la carrera, tal como se declaró
     "carrera_normalizada": "object",  # DERIVADA: e7 sin tildes, en mayúsculas
     "cinef13_area": "Int64",       # CINE-F campo amplio 1-10

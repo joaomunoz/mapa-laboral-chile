@@ -1,10 +1,10 @@
 (PIZARRA.md Actualizada el 03-11-26)
 
-# 🧙 PIZARRA — Mapa de Actividades y Carreras por Región (Chile)
+# 🧙 PIZARRA — Mapa Laboral de Chile
 
 > Tablero vivo del proyecto. Bitácora ejecutiva para entender rápidamente el estado actual y los siguientes pasos.
 
-**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. El nombre del proyecto es de trabajo: falta confirmarlo.
+**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. Nombre propuesto: "Mapa Laboral de Chile", carpeta `Mapa_Laboral_Chile`; falta renombrar la carpeta.
 
 ---
 
@@ -26,20 +26,20 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ---
 
-## 📊 Avance general estimado: ~90%
+## 📊 Avance general estimado: ~92%
 
-> Sube desde ~85%: el mapa suma vista nacional y situación por nivel, se corrigieron sus errores de color, y lo retirado quedó archivado.
+> Sube desde ~90%: el proyecto quedó solo con lo que produce el mapa, y el mapa salió idéntico tras regenerar toda la cadena.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
-| Fuentes y scrapers | 100% | 🟢 | 6 fuentes; ENE 2024 descargada, sin procesar |
-| Procesamiento `procesar.py` | 95% | 🟢 | Pendientes menores en ENADEL y MiFuturo, que no afectan al mapa |
-| Puentes `src/Analisis/` | 100% | 🟢 | P1, P2 y P4 a P9 |
-| Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE y área × región como apoyo |
+| Fuentes y scrapers | 100% | 🟢 | 5 fuentes: Censo, ENE, CASEN, SIES y MiFuturo |
+| Procesamiento `procesar.py` | 95% | 🟢 | Pendiente menor en MiFuturo, que no afecta al mapa |
+| Puentes `src/Analisis/` | 100% | 🟢 | P1, P5, P6 y P9 |
+| Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
 | Mapa interactivo | 90% | 🟡 | Revisión de código aplicada; falta la revisión del usuario con mouse y teclado reales |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
-| Archivar lo retirado | 100% | 🟢 | `src/Analisis/Archivo/`, con su README |
+| Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
 | README y presentación | 0% | 🔴 | Para portafolio |
 
@@ -55,12 +55,10 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 ## ⏳ Pendiente — Roadmap
 
 1. **Terminar la revisión del mapa** y ajustar lo que el usuario pida.
-2. **README y presentación para portafolio,** y confirmar el nombre del proyecto.
+2. **README y presentación para portafolio,** con el nombre "Mapa Laboral de Chile".
 3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado.
 4. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-5. **Opcional, actualización a 2026:** censo × variación de ENE. `ENE/Entrada/ano-2024.csv` ya está; falta un piloto, considerando `fact_anual` y la diferencia de meses.
-6. **Opcional, capa de área CINE:** `concentracion_region_area` ya existe, rotulada "dónde viven los titulados".
-7. **Ajustes menores:** suma con nulos en ENADEL, `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+5. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -70,7 +68,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Solo datos medidos en el mapa:** se descartaron la probabilidad, el Índice de Cupos y el reparto sintético carrera × región, porque suponen la misma mezcla en todas las regiones. Alternativa de respaldo: estimación por área, rotulada, si se valida.
 - **Censo como capa principal, ENE como contraste:** el censo cubre las 336 combinaciones y ENE deja 112 sin muestra. No se mezclan sus cifras. El contraste de Minería favorece al censo (268 mil frente a 156 mil de ENE; estudios sectoriales van de 200 a 286 mil), aunque no lo confirma.
 - **CASEN es la única fuente que une carrera y actividad, y solo a nivel nacional:** ENE, ENADEL y el censo no traen carrera. El puente con el censo sería una estimación, y queda fuera del mapa.
-- **ENADEL fuera del mapa:** sus vacantes solo son fiables en 26 de 280 combinaciones. Ninguna fuente mide demanda por carrera.
+- **ENADEL retirado:** sus vacantes solo son fiables en 26 de 280 combinaciones. Ninguna fuente mide demanda por carrera.
 - **Sede fuera del análisis:** la región de Titulados es la sede, no el trabajo.
 - **Región según lo que representa:** Censo y ENE permiten región de trabajo; CASEN solo residencia. Por eso el vínculo con carreras es nacional.
 
@@ -89,7 +87,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Chile como vista inicial:** muestra juntas la región con más personas y la región donde más pesa, que son lecturas distintas de "concentrar". Por eso el selector quedó en pausa.
 - **Desocupados por nivel y región, no por actividad ni carrera:** un desocupado no tiene actividad registrada. "Titulados que no trabajan" se mide de 22 a 54 años, porque con todas las edades pesan los jubilados.
 - **Git:** quedan fuera los datos crudos y los microdatos, que se regeneran. Los scripts no llevan fecha en su cabecera, porque git ya la registra.
-- **Archivo en vez de borrar:** el enfoque anterior sigue ejecutable en `src/Analisis/Archivo/`, y el índice se reprodujo idéntico tras moverlo.
+- **Etiqueta en vez de carpeta de archivo:** lo retirado salió del proyecto para que solo se vea lo que produce el mapa, y se recupera con la etiqueta de git `indice-cupos`. Se descartó mantener `Archivo/` a la vista porque obligaba a conservar P2, P4, P7, P8 y ENADEL sin uso. Tras borrar, la cadena se regeneró completa y `index.html` salió idéntico.
 - **Actividad U fuera de la lista:** se conserva en la tabla, porque con unas 2.800 personas distorsionaba la lectura de la Metropolitana.
 - **Nombres según glosarios:** `categoria_ocupacion` y `actividad_*`. `Scrapers/` conserva los nombres de cada fuente; `Analisis/` usa los normalizados.
 - **Región = `codigo_region` + `nombre_region`:** fuente única en `comun/normalizador.py`; los cruces se hacen por código.
@@ -103,7 +101,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Después, escribir el README del portafolio.
+Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Renombrar la carpeta del proyecto y, después, escribir el README del portafolio.
 
 ---
 

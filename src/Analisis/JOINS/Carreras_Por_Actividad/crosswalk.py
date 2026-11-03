@@ -20,7 +20,7 @@ se usa el promedio simple: es preferible a dejarla sin dato, y se informa cuánt
 Ingresos: cada año sale de cohortes distintas (año 1: 2021-2023; año 5: 2017-2019), así que no siguen a las
 mismas personas. Por eso no deben presentarse como una evolución.
 
-No trabajan: se mide de 22 a 54 años, igual que P8. Con todas las edades pesan los jubilados: Pedagogía Básica
+No trabajan: se mide de 22 a 54 años. Con todas las edades pesan los jubilados: Pedagogía Básica
 pasa de 9,8% a 35,0%. Incluye desocupados e inactivos, y por eso no equivale a desempleo. No se desglosa porque la
 parte con muestra suficiente baja de 63 carreras a cerca de la mitad.
 

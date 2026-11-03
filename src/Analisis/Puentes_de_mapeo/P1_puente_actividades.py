@@ -6,10 +6,10 @@ Generador del P1 · PUENTE_ACTIVIDADES del proyecto.
 Salida: Salida/P1_puente_actividades.csv (CAENES 1-21 ↔ CIIU A-U, 21 filas)
 
   Mapea oficial CAENES (rama de actividad de ENE, `r_p_rev4cl_caenes`) ↔ sección CIIU
-  (ENADEL, `actividad_ciiu`). Relación 1:1, transcrita VERBATIM del Libro de códigos ENE
+  (`actividad_ciiu`, la que usa el censo). Relación 1:1, transcrita VERBATIM del Libro de códigos ENE
   2020, Anexo 5 — no se interpreta ni se completa con fuentes externas.
 
-Esquema: esquema.py (PUENTE_ACTIVIDADES, VALIDACIONES)
+Esquema: esquema.py (PUENTE_ACTIVIDADES)
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ DIR_SCRAPERS = Path(__file__).resolve().parents[2] / "Scrapers"
 DIR_SALIDA = Path(__file__).parent / "Salida"
 SEPARADOR_SALIDA = ";"
 
-# P1 — Actividades: CAENES (ENE) ↔ Sección CIIU (ENADEL)
+# P1 — Actividades: CAENES (ENE, CASEN) ↔ Sección CIIU (censo)
 # Libro de códigos ENE 2020, Anexo 5 (transcripción verbatim, relación 1:1)
 # --------------------------------------------------------------------------- #
 ANEXO_5_ACTIVIDADES: list[tuple[int, str, str]] = [

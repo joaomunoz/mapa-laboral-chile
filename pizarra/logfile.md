@@ -4,6 +4,7 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 03-11-26 — Proyecto saneado: queda solo lo que produce el mapa (cadena completa regenerada; `index.html` y 13 tablas con huella idéntica; etiqueta `indice-cupos`) → log 03-11-26 19:50
 - 03-11-26 — Enfoque retirado archivado (`src/Analisis/Archivo/`; índice reejecutado con salidas idénticas, mapa sin cambios) → log 03-11-26 19:22
 - 03-11-26 — Mapa: vista nacional, situación por nivel y titulados que no trabajan (`b4f093e`, `4a437ce`, `ed32210`; 14/14 controles del mapa) → log 03-11-26 17:17
 - 03-11-26 — Revisión de código del mapa aplicada, puntos 1 a 10 (`58eb5fc`, `7af79d2`; controles de color y geometría en verde) → log 03-11-26 16:00
@@ -52,6 +53,11 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 03-11-26 19:50 — Saneamiento del proyecto y nombre
+- **Contexto / Discusión:** el usuario pidió dejar solo lo necesario, porque varios análisis no se pudieron aplicar por el alcance de los datos, y cambiar el nombre del proyecto.
+- **Acción / Cambio realizado:** etiqueta `indice-cupos` antes de borrar. Salieron `Analisis/Archivo/`, ENADEL completo, P2, P4, P7, P8, cuatro cálculos de control, `Concentracion_Region_Area`, `cut_comuna.csv`, `censo_proyecciones_ed_superior.csv`, PDF duplicados, el zip del censo, sus parquet de hogares y viviendas, y `ENE/Entrada/ano-2024.csv`. Lo no versionado fue a la Papelera, porque el permiso de `rm` se rechazó por irreversible. Se corrigieron `Puentes_de_mapeo/esquema.py`, el diccionario (suma el censo), `.gitignore` y comentarios. Se descartan la actualización a 2026 y la capa de área CINE. Nombre propuesto: "Mapa Laboral de Chile".
+- **Estado:** verificado: cadena completa regenerada (5 fuentes, 4 puentes, 1 control, 5 tablas y mapa) con `index.html` y 13 tablas de huella idéntica. Pendiente: renombrar la carpeta y vaciar la Papelera.
 
 ## 03-11-26 19:22 — Archivo del enfoque retirado y pizarra
 - **Contexto / Discusión:** el usuario pidió archivar lo retirado y actualizar la pizarra. Se revisó antes que ninguna tabla vigente dependiera de esas carpetas.

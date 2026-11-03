@@ -76,7 +76,7 @@ LECTURA DE LA SALIDA (importante): el CSV es texto, así que pandas infiere
 int64/float64 al releer. Siempre releer con los tipos del esquema:
     pd.read_csv("Salida/ene_procesado.csv", sep=";", dtype=ESQUEMA_ENE)
 (si no, `cine11_2d` pierde el cero a la izquierda —en el archivo está como
-"01" y un lector numérico lo vuelve 1.0—, igual que en ENADEL con ciiu_clase).
+"01" y un lector numérico lo vuelve 1.0—).
 El módulo comun/inspect_data.py ya aplica este dtype automáticamente.
 
 SENTINELAS (ver SENTINELAS): valores "sin información"/"no sabe"/"no responde"
@@ -86,13 +86,13 @@ agregados no los contengan como ceros ni como categorías válidas.
 REGIÓN DE RESIDENCIA Y DE TRABAJO (decisión 02-11-26):
   codigo_region es donde VIVE la persona y codigo_region_trabajo donde está su empleo (b18_region del
   cuestionario; 99,93% válido entre ocupados). Difieren en 3,9% de los ocupados, pero en 37,4% en
-  minería. La demanda se ubica donde está el empleo; desocupados y población, donde viven.
+  minería. El empleo se ubica donde está el trabajo; desocupados y población, donde viven.
 
 NIVEL EDUCATIVO Y TITULACIÓN (decisión 01-11-26, verificado en los 8 CSV crudos):
   * `nivel` registra el nivel más alto CURSADO, no si se tituló. Sin
     `termino_nivel` no se puede comparar con titulados SIES: en JAS 2026 no
     terminó el 34% de nivel=9 ni el 40% de nivel=7.
-    Paso 2 del PER (competencia de desocupados) filtra termino_nivel == 1.
+    Para contar a quienes tienen el título, filtrar termino_nivel == 1.
   * SIGNIFICADO REAL DE `nivel` 7-9 (las etiquetas del libro de códigos son
     legado y engañan: NO miden tipo de institución). Inferido de los microdatos
     cruzando edu2 (tipo de título) × curso (años aprobados); patrón determinístico
@@ -103,7 +103,7 @@ NIVEL EDUCATIVO Y TITULACIÓN (decisión 01-11-26, verificado en los 8 CSV crudo
                                      institución (incluye profesionales de IP)
     Por eso el nivel 8 casi nunca figura "no terminado" (0.3%): quien aprobó 3 años
     de técnico casi siempre lo terminó. No es error de codificación.
-    Llave de cruce correcta con SIES/ENADEL = TIPO DE TÍTULO (ver P4), no institución.
+    Llave de cruce correcta con SIES = TIPO DE TÍTULO, no institución.
   * Descartadas `edu3` y `edu2` del cuestionario 2020:
       - edu3 == termino_nivel en el 100% de los casos → redundante.
       - edu2 queda determinado por `nivel` (7 y 8 → 12 técnico, 9 → 13 profesional,

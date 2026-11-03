@@ -47,7 +47,7 @@ def cargar_esquema_si_existe(ruta_archivo: Path, columnas: list[str] | None = No
     Busca esquema.py en la carpeta del archivo o su padre y retorna el diccionario
     de tipos MEJOR AJUSTADO al dataset:
 
-      - Si hay varios diccionarios (p. ej. ENADEL define EMPRESAS y CARGOS),
+      - Si hay varios diccionarios (una fuente que genera dos tablas),
         se elige el que tenga MAYOR SOLAPE de columnas con el archivo real.
       - Se filtran las claves a las columnas efectivamente presentes.
     """

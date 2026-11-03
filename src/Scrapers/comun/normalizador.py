@@ -8,7 +8,7 @@ espacios y formatos de fecha/año.
 REGIONES es la fuente única de regiones del proyecto. Toda tabla con región expone las
 mismas dos columnas: `codigo_region` (1-16) y `nombre_region`. El cruce entre tablas se
 hace por código: en las fuentes el mismo nombre de columna significaba cosas distintas
-(`region` era código en ENE y nombre en ENADEL) y SIES nombraba distinto a O'Higgins.
+(`region` era código en ENE y nombre en otras fuentes) y SIES nombraba distinto a O'Higgins.
 """
 
 import re
@@ -42,7 +42,7 @@ def normalizar_texto(texto: str) -> str:
 def normalizar_region(nombre_region: str) -> str:
     """
     Normaliza los nombres de regiones de Chile para asegurar consistencia
-    entre SIES, MiFuturo, ENE y ENADEL.
+    entre SIES, MiFuturo, ENE, CASEN y el censo.
     """
     texto = normalizar_texto(nombre_region)
     return _ALIAS_REGION.get(texto, texto)

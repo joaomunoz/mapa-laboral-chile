@@ -7,8 +7,8 @@ Salida: Salida/ocupados_region_actividad.csv, con dos versiones: por residencia 
 
 Por qué todos y no solo titulados: la celda típica con 10 meses tiene 167 personas frente a 45
 de titulados, y mide igual de bien el peso dla actividad (idea del usuario, 02-11-26). Con ella, el
-reparto carrera × actividad mejoró en la prueba de región oculta. Alimenta a
-Archivo/CW_Ocupados_Carrera_Region_Actividad (retirado).
+reparto carrera × actividad mejoró en la prueba de región oculta. Sirve de
+control para Concentracion_Region_Actividad.
 """
 
 import logging

@@ -25,7 +25,7 @@ Transformaciones aplicadas:
   5. Edad promedio:        Redondeada matemáticamente y convertida a entero nullable (Int16)
   6. Rangos de edad:       6 rangos quinquenales + sin información (edad AL TITULARSE);
                            titulados_mayores_40 = rango "40 y más" y titulados_menores_40
-                           = total − mayores_40 se conservan por compatibilidad (P2, Paso 1)
+                           = total − mayores_40 se conservan por compatibilidad
   7. Descarte de columnas: 42 → 29 (se eliminan redundantes y legacy)
   8. Validaciones:         suma de sexos, suma de rangos de edad, rangos de valores
 
@@ -255,7 +255,7 @@ def limpiar_texto(df: pd.DataFrame) -> pd.DataFrame:
 def normalizar_claves_cruce(df: pd.DataFrame) -> pd.DataFrame:
     """
     Aplica normalizar_texto() a las columnas que serán claves de cruce
-    con otras fuentes (MiFuturo, ENADEL): region y carrera_generica.
+    con otras fuentes (MiFuturo): region y carrera_generica.
     """
     df["ÁREA CARRERA GENÉRICA"] = df["ÁREA CARRERA GENÉRICA"].apply(lambda x: normalizar_texto(x) if pd.notna(x) else x)
     df["REGIÓN"] = df["REGIÓN"].apply(normalizar_region)
