@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENADEL/esquema.py>
-Actualizado 02-11-26 01:37
 
 Definición del esquema oficial de ENADEL 2025 — Single Source of Truth.
 

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Estima cuántos titulados de cada carrera trabajan en cada actividad y región.
 

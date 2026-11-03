@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/validar_reparto.py>
-Actualizado 02-11-26 16:40
 
 Evalúa si el reparto predice lo que no vio.
 

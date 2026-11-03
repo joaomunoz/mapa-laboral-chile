@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENADEL/obtener.py>
-Actualizado 29-10-26 20:35
 
 Módulo de extracción de microdatos ENADEL (Encuesta Nacional de Demanda Laboral)
 de la Subsecretaría del Trabajo.

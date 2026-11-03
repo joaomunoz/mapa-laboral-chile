@@ -1,6 +1,5 @@
 """
 <src/Scrapers/Titulados/obtener.py>
-Actualizado 01-11-26 22:17
 
 Módulo de extracción de datos de Titulados desde mifuturo.cl.
 Descarga a la carpeta Entrada/ solo la base histórica oficial:

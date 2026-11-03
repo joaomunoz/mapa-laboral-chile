@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P6_matriz_carrera_actividad_ocupacion.py>
-Actualizado 02-11-26 16:40
 
 Generador del P6 · MATRIZ_CARRERA_ACTIVIDAD_OCUPACION del proyecto.
 

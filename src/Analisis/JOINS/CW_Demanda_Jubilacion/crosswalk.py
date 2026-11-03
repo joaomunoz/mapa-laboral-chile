@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Demanda_Jubilacion/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Paso 3 del índice: estima cuántos cupos deja la jubilación cada año, por carrera y región.
 

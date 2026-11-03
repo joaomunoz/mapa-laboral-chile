@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/ocupados_region_actividad/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Calcula cuántos ocupados tiene cada actividad en cada región, con todos los niveles educativos.
 

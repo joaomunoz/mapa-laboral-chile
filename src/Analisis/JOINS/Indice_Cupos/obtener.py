@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Indice_Cupos/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las salidas de los pasos 1 a 4, P7 y P8, y mide cuánto de cada carrera trabaja en la actividad
 privado por si P4 no lo trae (carreras con menos de 60 casos).

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Carreras_Por_Actividad/esquema.py>
-Actualizado 03-11-26 13:04
 
 Single Source of Truth de carreras_por_actividad.csv: qué carreras se vinculan a cada actividad económica.
 

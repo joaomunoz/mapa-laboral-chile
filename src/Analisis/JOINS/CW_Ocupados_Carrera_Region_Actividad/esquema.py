@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Ocupados_Carrera_Region_Actividad/esquema.py>
-Actualizado 02-11-26 16:40
 
 Single Source of Truth del reparto de titulados ocupados por región, carrera y actividad.
 

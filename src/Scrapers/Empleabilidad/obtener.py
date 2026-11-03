@@ -1,6 +1,5 @@
 """
 <src/Scrapers/Empleabilidad/obtener.py>
-Actualizado 29-10-26 16:52
 
 Módulo de extracción de Empleabilidad e Ingresos desde mifuturo.cl
 (Buscador de Empleabilidad e Ingresos).

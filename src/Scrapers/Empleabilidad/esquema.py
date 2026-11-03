@@ -1,6 +1,5 @@
 """
 <src/Scrapers/Empleabilidad/esquema.py>
-Actualizado 30-10-26 17:15
 
 Definición del esquema oficial para la tabla procesada de Empleabilidad (MiFuturo).
 Empleabilidad como float (porcentaje, ej. 88.4), ingresos y percentiles como enteros (int64).

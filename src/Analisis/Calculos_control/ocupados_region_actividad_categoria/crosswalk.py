@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/ocupados_region_actividad_categoria/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Cuenta a TODOS los ocupados por región, actividad, categoría en la ocupación y nivel de título.
 

@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CASEN/esquema.py>
-Actualizado 02-11-26 12:20
 
 Definición del esquema de CASEN 2024 — Single Source of Truth.
 

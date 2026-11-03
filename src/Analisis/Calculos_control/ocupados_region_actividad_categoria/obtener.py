@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/ocupados_region_actividad_categoria/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga ENE y P1 para contar a los ocupados por región, actividad, categoría en la ocupación y nivel.
 """

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad/obtener.py>
-Actualizado 02-11-26 21:14
 
 Carga ENE y P1, y la tabla de control usada para contrastar el resultado.
 """

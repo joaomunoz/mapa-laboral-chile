@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Demanda_Jubilacion/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las entradas del Paso 3: ENE, CASEN con P5 y la tabla de ocupados por carrera y región.
 """

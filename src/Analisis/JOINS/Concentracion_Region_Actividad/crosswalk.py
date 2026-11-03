@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad/crosswalk.py>
-Actualizado 02-11-26 21:14
 
 Mide qué actividades económicas concentra cada región, con su margen de error. Es la capa principal del mapa.
 

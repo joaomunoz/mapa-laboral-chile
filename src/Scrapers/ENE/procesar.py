@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENE/procesar.py>
-Actualizado 02-11-26 15:30
 
 Módulo de procesamiento de ENE 2026 (Encuesta Nacional de Empleo, INE).
 

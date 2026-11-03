@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Competencia_Desocupados/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las entradas del Paso 2. El stock se lee de Titulados y no del Paso 1 porque este aún no
 trae carrera_clasificacion_nivel_1, necesaria para aplicar la definición de título que compite.

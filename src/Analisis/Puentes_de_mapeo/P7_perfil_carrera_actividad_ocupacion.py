@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P7_perfil_carrera_actividad_ocupacion.py>
-Actualizado 02-11-26 16:40
 
 Generador del P7 · PERFIL_CARRERA_ACTIVIDAD_OCUPACION del proyecto.
 

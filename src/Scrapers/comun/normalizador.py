@@ -1,6 +1,5 @@
 """
 <src/Scrapers/comun/normalizador.py>
-Actualizado 02-11-26 01:37
 
 Módulo común de configuración y normalización de datos para los scrapers.
 Contiene funciones estándar para normalizar nombres de regiones, carreras, tildes,

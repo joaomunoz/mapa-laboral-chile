@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Carreras_Por_Actividad/crosswalk.py>
-Actualizado 03-11-26 13:04
 
 Vincula las carreras de MiFuturo con las actividades económicas donde trabajan sus titulados, a nivel nacional.
 

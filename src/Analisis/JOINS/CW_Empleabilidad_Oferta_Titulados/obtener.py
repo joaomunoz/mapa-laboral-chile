@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/obtener.py>
-Actualizado 02-11-26 16:40
 
 Módulo de obtención y verificación para el Paso 1 del índice:
 Carga y valida los datasets de entrada:

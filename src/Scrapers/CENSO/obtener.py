@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CENSO/obtener.py>
-Actualizado 03-11-26 03:00
 
 Descarga a Entrada/ los microdatos del Censo de Población y Vivienda 2024 (INE), en formato parquet, y los
 descomprime. Si los archivos ya están, no hace nada.

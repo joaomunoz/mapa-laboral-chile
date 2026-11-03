@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Demanda_Empresarial/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las entradas del Paso 4: ENADEL, ocupados por carrera, región y actividad, pesos regionales,
 P1 y P7. CASEN se usa solo para informar qué parte de cada carrera trabaja en el sector privado.

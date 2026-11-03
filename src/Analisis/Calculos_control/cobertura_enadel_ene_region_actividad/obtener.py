@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/cobertura_enadel_ene_region_actividad/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las entradas de la tabla de control cobertura_enadel_ene_region_actividad:
   1. src/Scrapers/ENADEL/Salida/enadel_empresas_procesado.csv

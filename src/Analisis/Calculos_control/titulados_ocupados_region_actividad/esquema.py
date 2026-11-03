@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/titulados_ocupados_region_actividad/esquema.py>
-Actualizado 02-11-26 16:40
 
 Single Source of Truth de la tabla de control titulados_ocupados_region_actividad.csv:
 cuántos titulados trabajan en cada actividad (CAENES) y región, por tipo de título.

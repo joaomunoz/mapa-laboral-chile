@@ -1,6 +1,5 @@
 """
 <src/Scrapers/comun/inspect_data.py>
-Actualizado 30-10-26 22:55
 
 Módulo de inspección rigurosa de datos para datasets CSV (con soporte de esquemas múltiples,
 selección por solape de columnas y delimitadores automáticos) y Excel.

@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/titulados_ocupados_region_actividad/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga las entradas de la tabla de control titulados_ocupados_region_actividad:
   1. src/Scrapers/ENE/Salida/ene_procesado.csv

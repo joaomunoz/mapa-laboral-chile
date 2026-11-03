@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENE/obtener.py>
-Actualizado 29-10-26 19:45
 
 Módulo de extracción de microdatos ENE (Encuesta Nacional de Empleo) del INE.
 

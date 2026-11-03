@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENADEL/procesar.py>
-Actualizado 02-11-26 01:37
 
 Módulo de procesamiento de ENADEL 2025 (Encuesta a empresas, Dirección del Trabajo).
 

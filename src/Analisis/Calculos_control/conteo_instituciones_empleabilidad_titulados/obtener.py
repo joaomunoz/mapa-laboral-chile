@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/conteo_instituciones_empleabilidad_titulados/obtener.py>
-Actualizado 02-11-26 18:01
 
 Carga Titulados y Empleabilidad procesados, las dos fuentes que se comparan.
 """

@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P2_puente_llaves_carrera.py>
-Actualizado 02-11-26 16:40
 
 Generador del P2 · PUENTE_LLAVES_CARRERA del proyecto.
 

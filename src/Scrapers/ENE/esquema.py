@@ -1,6 +1,5 @@
 """
 <src/Scrapers/ENE/esquema.py>
-Actualizado 02-11-26 15:30
 
 Definición del esquema oficial de ENE 2026 — Single Source of Truth.
 

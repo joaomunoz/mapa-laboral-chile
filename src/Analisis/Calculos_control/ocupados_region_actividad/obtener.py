@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/ocupados_region_actividad/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga ENE y P1 para contar todos los ocupados por región y actividad.
 """

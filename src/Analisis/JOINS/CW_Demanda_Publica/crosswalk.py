@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Demanda_Publica/crosswalk.py>
-Actualizado 02-11-26 17:02
 
 Estima las vacantes del sector público, para corregir que ENADEL solo vea empresas privadas.
 

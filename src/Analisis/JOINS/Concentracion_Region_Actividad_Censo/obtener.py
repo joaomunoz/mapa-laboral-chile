@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/obtener.py>
-Actualizado 03-11-26 12:29
 
 Carga el censo procesado, P1 y la tabla de concentración calculada con ENE.
 """

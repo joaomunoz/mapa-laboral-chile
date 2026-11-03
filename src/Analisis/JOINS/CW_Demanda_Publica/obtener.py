@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Demanda_Publica/obtener.py>
-Actualizado 02-11-26 16:40
 
 Carga ENE con su panel, las vacantes privadas del Paso 4, CASEN con P5 y la tabla de ocupados.
 """

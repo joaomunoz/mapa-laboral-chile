@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/cobertura_enadel_ene_region_actividad/esquema.py>
-Actualizado 02-11-26 16:40
 
 Single Source of Truth de la tabla de control cobertura_enadel_ene_region_actividad.csv:
 compara la dotación de ENADEL con los asalariados privados de la ENE, para saber en qué

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Areas_Por_Actividad/crosswalk.py>
-Actualizado 02-11-26 21:22
 
 Mide qué áreas de estudio se vinculan a cada actividad económica, a nivel nacional.
 

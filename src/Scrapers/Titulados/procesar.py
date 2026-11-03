@@ -1,6 +1,5 @@
 """
 <src/Scrapers/Titulados/procesar.py>
-Actualizado 02-11-26 01:37
 
 Módulo de procesamiento de la base de Titulados SIES.
 

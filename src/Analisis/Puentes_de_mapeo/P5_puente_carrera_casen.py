@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P5_puente_carrera_casen.py>
-Actualizado 02-11-26 16:40
 
 Generador del P5 · PUENTE_CARRERA_CASEN del proyecto.
 

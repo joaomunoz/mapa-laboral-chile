@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/crosswalk.py>
-Actualizado 03-11-26 13:00
 
 Mide qué actividades concentra cada región con el Censo 2024, y la contrasta con ENE.
 

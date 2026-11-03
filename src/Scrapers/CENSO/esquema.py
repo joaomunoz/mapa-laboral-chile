@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CENSO/esquema.py>
-Actualizado 03-11-26 03:00
 
 Definición del esquema del Censo 2024 — Single Source of Truth.
 

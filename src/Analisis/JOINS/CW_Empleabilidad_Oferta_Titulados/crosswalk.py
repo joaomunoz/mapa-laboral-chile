@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Empleabilidad_Oferta_Titulados/crosswalk.py>
-Actualizado 02-11-26 11:59
 
 Módulo de cruce (crosswalk) para el Paso 1:
 Cruza `titulados_procesado.csv` con el puente P2 (`P2_puente_llaves_carrera.csv`)

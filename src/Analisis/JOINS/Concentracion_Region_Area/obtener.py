@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Area/obtener.py>
-Actualizado 02-11-26 21:45
 
 Carga CASEN, su diseño muestral completo, P5 y las áreas de la tabla 2.
 """

@@ -1,6 +1,5 @@
 """
 <src/Visualizacion/Mapa_Actividades/generar_mapa.py>
-Actualizado 03-11-26 13:10
 
 Genera el mapa interactivo: una sola página HTML, sin servidor ni dependencias externas.
 

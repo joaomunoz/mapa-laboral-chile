@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/esquema.py>
-Actualizado 02-11-26 17:28
 
 Single Source of Truth de los PUENTES (crosswalk) del proyecto.
 

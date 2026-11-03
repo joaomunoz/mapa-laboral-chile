@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/conteo_instituciones_empleabilidad_titulados/esquema.py>
-Actualizado 02-11-26 18:01
 
 Single Source of Truth de conteo_instituciones_empleabilidad_titulados.csv.
 

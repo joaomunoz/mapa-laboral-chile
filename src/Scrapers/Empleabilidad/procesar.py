@@ -1,6 +1,5 @@
 """
 <src/Scrapers/Empleabilidad/procesar.py>
-Actualizado 30-10-26 17:15
 
 Módulo de procesamiento de la base de Empleabilidad (MiFuturo).
 

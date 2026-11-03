@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P1_puente_actividades.py>
-Actualizado 02-11-26 16:40
 
 Generador del P1 · PUENTE_ACTIVIDADES del proyecto.
 

@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/cobertura_enadel_ene_region_actividad/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Compara la dotación de ENADEL con los asalariados privados de la ENE por región y actividad,
 y exporta Salida/cobertura_enadel_ene_region_actividad.csv con su reporte de inspección.

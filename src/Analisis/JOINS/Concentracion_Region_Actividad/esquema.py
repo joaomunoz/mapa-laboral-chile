@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad/esquema.py>
-Actualizado 02-11-26 21:14
 
 Single Source of Truth de concentracion_region_actividad.csv: qué actividades económicas concentra cada región.
 

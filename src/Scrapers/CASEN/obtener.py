@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CASEN/obtener.py>
-Actualizado 02-11-26 03:00
 
 Módulo de extracción de la Encuesta CASEN (Ministerio de Desarrollo Social y Familia).
 Descarga a Entrada/ los microdatos de la versión más reciente publicada, en formato Stata.

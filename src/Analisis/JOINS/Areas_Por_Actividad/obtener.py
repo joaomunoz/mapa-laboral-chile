@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Areas_Por_Actividad/obtener.py>
-Actualizado 02-11-26 21:22
 
 Carga CASEN, su diseño muestral completo, P1, P5 y las áreas de Titulados.
 """

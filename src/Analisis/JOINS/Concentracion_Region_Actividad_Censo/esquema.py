@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/esquema.py>
-Actualizado 03-11-26 13:00
 
 Single Source of Truth de concentracion_region_actividad_censo.csv: capa principal del mapa.
 

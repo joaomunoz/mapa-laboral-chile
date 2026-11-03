@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/conteo_instituciones_empleabilidad_titulados/crosswalk.py>
-Actualizado 02-11-26 18:01
 
 Compara, por carrera_generica, cuántas instituciones tiene cada fuente.
 

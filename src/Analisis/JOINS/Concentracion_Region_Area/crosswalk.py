@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Area/crosswalk.py>
-Actualizado 02-11-26 21:45
 
 Mide qué áreas de estudio concentra cada región. Es la capa secundaria del mapa.
 

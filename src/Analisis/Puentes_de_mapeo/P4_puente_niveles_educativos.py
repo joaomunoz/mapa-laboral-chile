@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P4_puente_niveles_educativos.py>
-Actualizado 02-11-26 16:40
 
 Generador del P4 · PUENTE_NIVELES_EDUCATIVOS (v2) del proyecto.
 

@@ -1,6 +1,5 @@
 """
 <src/Analisis/Puentes_de_mapeo/P8_razon_empleo_carrera.py>
-Actualizado 02-11-26 16:40
 
 Generador del P8 · RAZON_EMPLEO_CARRERA del proyecto.
 

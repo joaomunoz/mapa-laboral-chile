@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Carreras_Por_Actividad/obtener.py>
-Actualizado 02-11-26 21:37
 
 Carga P9, MiFuturo y Titulados.
 """

@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CASEN/procesar.py>
-Actualizado 02-11-26 11:32
 
 Módulo de procesamiento de CASEN 2024 (Ministerio de Desarrollo Social y Familia).
 

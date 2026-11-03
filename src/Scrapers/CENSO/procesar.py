@@ -1,6 +1,5 @@
 """
 <src/Scrapers/CENSO/procesar.py>
-Actualizado 03-11-26 03:00
 
 Resume los microdatos del Censo 2024 en una tabla agregada por región, actividad y nivel.
 

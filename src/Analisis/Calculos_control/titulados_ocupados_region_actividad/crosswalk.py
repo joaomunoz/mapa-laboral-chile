@@ -1,6 +1,5 @@
 """
 <src/Analisis/Calculos_control/titulados_ocupados_region_actividad/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Calcula cuántos titulados trabajan en cada región y actividad (CAENES), por tipo de título,
 y exporta Salida/titulados_ocupados_region_actividad.csv con su reporte de inspección.

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Areas_Por_Actividad/esquema.py>
-Actualizado 02-11-26 21:22
 
 Single Source of Truth de areas_por_actividad.csv: qué áreas de estudio se vinculan a cada actividad económica.
 

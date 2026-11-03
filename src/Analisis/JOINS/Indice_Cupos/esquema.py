@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/Indice_Cupos/esquema.py>
-Actualizado 02-11-26 16:40
 
 Single Source of Truth del Paso 5: índice por carrera, región y a nivel nacional.
 

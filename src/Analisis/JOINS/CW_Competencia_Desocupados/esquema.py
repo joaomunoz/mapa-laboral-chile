@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Competencia_Desocupados/esquema.py>
-Actualizado 02-11-26 16:40
 
 Single Source of Truth del Paso 2 del índice: desocupados titulados por región y carrera.
 

@@ -1,6 +1,5 @@
 """
 <src/Analisis/JOINS/CW_Competencia_Desocupados/crosswalk.py>
-Actualizado 02-11-26 16:40
 
 Paso 2 del índice: estima Desocupados por carrera y región, parte del denominador de la fórmula.
 
