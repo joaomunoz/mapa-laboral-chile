@@ -1,7 +1,7 @@
 # Nota de lectura: ¿Dónde se concentra cada actividad en Chile?
 
 ## Qué muestra
-Elige una actividad económica para ver en qué regiones pesa más que en el país. Al elegir una región, se ven sus cifras y las carreras más ligadas a esa actividad a nivel nacional.
+Elige una actividad económica para ver en qué regiones pesa más que en el país. La vista inicial resume Chile: cuántos ocupados tiene la actividad, en qué región hay más personas y dónde pesa más. Al elegir una región, se ven sus cifras y las carreras más ligadas a esa actividad a nivel nacional.
 
 ## Qué significa cada dato
 | Dato | Significado | Fuente |
@@ -33,7 +33,7 @@ Las cifras se muestran con 1 decimal, o con más si están cerca de un corte, pa
 ## Qué no dice
 - **No mide demanda ni vacantes,** ni la probabilidad de encontrar trabajo.
 - **Las carreras son un dato nacional:** no indica cuántos titulados de una carrera hay en una región.
-- **Concentrar no es tener más personas:** una región puede concentrar una actividad y tener menos ocupados que otra.
+- **Concentrar no es tener más personas:** una región puede concentrar una actividad y tener menos ocupados que otra. En Salud, la Metropolitana tiene más personas y Biobío es donde más pesa.
 - **Los desocupados no se abren por actividad ni carrera:** ninguna fuente lo permite con solidez. El bloque por nivel no indica desempleo dentro de la actividad elegida.
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
 - **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta como empleado en ese indicador.

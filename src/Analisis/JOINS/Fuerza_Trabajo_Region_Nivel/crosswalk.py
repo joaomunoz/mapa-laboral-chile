@@ -90,12 +90,15 @@ def tabla_ene(ene: pd.DataFrame) -> pd.DataFrame:
     e = ene[ene["cae_especifico"].between(1, 9) & ene["cine11_1d"].notna()].copy()
     e["nivel_titulo"] = e["cine11_1d"].astype(int).map(NIVEL_POR_CINE).fillna("Sin_titulo")
     e["peso"] = e["fact_cal"] * FACTOR_10_MESES
+    # Cuenta a todos, sin filtro de fiabilidad: a nivel nacional hay muestra de sobra.
+    nacional = e.assign(desocupado=e["cae_especifico"].isin([8, 9]) * e["peso"]).groupby("nivel_titulo")[["desocupado", "peso"]].sum()
+    tasa_nacional = 100 * nacional["desocupado"] / nacional["peso"]
     filas = []
     for (region, nivel), celda in e.groupby(["codigo_region", "nivel_titulo"]):
         desocupados = celda[celda["cae_especifico"].isin([8, 9])]
         tasa, cv = tasa_con_error(celda, diseno)
         gl = desocupados["conglomerado"].nunique() - desocupados["estrato"].nunique()
-        filas.append({"codigo_region": region, "nivel_titulo": nivel, "ene_tasa_desocupacion": tasa,
+        filas.append({"codigo_region": region, "nivel_titulo": nivel, "ene_tasa_desocupacion": tasa, "ene_tasa_nacional_nivel": tasa_nacional[nivel],
                       "ene_fiabilidad": clasificar(desocupados["idrph"].nunique(), gl, cv)})
     return pd.DataFrame(filas)
 
@@ -113,6 +116,7 @@ def validar(t: pd.DataFrame, censo: pd.DataFrame) -> None:
         "Profesionales y técnicos desocupados como en la medición previa": nivel("Profesional") == DESOCUPADOS_PROFESIONALES and nivel("Tecnico") == DESOCUPADOS_TECNICOS,
         "Ocupados con región de trabajo no superan a los ocupados": t["ocupados_trabajo"].sum() <= t["ocupados_residencia"].sum(),
         "Tasas entre 0 y 100": t["tasa_desocupacion"].between(0, 100).all() and t["ene_tasa_desocupacion"].between(0, 100).all(),
+        "Tasa nacional de ENE: profesionales 8,1 y técnicos 8,5": np.isclose(t.loc[t["nivel_titulo"] == "Profesional", "ene_tasa_nacional_nivel"].iloc[0], 8.1, atol=0.05) and np.isclose(t.loc[t["nivel_titulo"] == "Tecnico", "ene_tasa_nacional_nivel"].iloc[0], 8.5, atol=0.05),
         "Contraste con ENE completo": t["ene_fiabilidad"].notna().all(),
         "Aysén, técnicos: 372 desocupados": region_nivel.loc[(11, "Tecnico"), "desocupados"] == 372,
     }

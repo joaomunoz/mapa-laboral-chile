@@ -42,6 +42,7 @@ RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "co
 RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
 RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
 RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
+RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
 RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
 RUTA_PLANTILLA = DIR / "plantilla.html"
 RUTA_SALIDA = DIR / "Salida" / "index.html"
@@ -53,6 +54,7 @@ TOLERANCIA_GRADOS = 0.035
 GRILLA_GRADOS = 0.01
 DIFERENCIA_AREA_MAXIMA_PCT = 0.5
 AREA_MINIMA_PX = 3.0
+OCUPADO = 1
 AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]
 CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
 CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
@@ -170,9 +172,21 @@ def redondear(valor: float, decimales: int = 2) -> float | None:
     return None if pd.isna(valor) else round(float(valor), decimales)
 
 
+def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dict:
+    """Totales del país para una actividad; total_censo incluye a quienes no tienen región de trabajo."""
+    con_personas, con_peso = g.loc[g["ocupados"].idxmax()], g.loc[g["peso_relativo"].idxmax()]
+    return {"ocupados": int(g["ocupados"].sum()), "censo_total": total_censo, "ene_ocupados": int(round(g["ene_ocupados"].sum())),
+            "ene_pct": redondear(100 * g["ene_ocupados"].sum() / ene_total, 1), "conc": int((g["lectura"] == "concentra").sum()),
+            "mas_personas": {"r": int(con_personas["codigo_region"]), "n": int(con_personas["ocupados"]), "pct": redondear(100 * con_personas["ocupados"] / g["ocupados"].sum(), 1)},
+            "mas_peso": {"r": int(con_peso["codigo_region"]), "txt": texto_peso(con_peso["peso_relativo"])}}
+
+
 def construir_datos() -> dict:
     censo = pd.read_csv(RUTA_CENSO, sep=";")
+    ene_total = float(censo["ene_ocupados"].sum())
     censo = censo[censo["mostrar_en_mapa"]]
+    procesado = pd.read_csv(RUTA_CENSO_PROCESADO, sep=";")
+    totales_censo = procesado[procesado["sit_fuerza_trabajo"] == OCUPADO].groupby("actividad_ciiu")["personas"].sum()
     areas = pd.read_csv(RUTA_AREAS, sep=";")
     carreras = pd.read_csv(RUTA_CARRERAS, sep=";")
     actividades = []
@@ -182,7 +196,7 @@ def construir_datos() -> dict:
         vinculadas = carreras[(carreras["actividad_ciiu"] == ciiu) & carreras["afinidad"].isin(AFINIDADES_VISIBLES)].sort_values("pct_en_carrera", ascending=False)
         actividades.append({
             "ciiu": ciiu, "glosa": glosa, "pct_nacional": redondear(primero["pct_nacional"], 1), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
-            "alerta_fuente": bool(primero["alerta_difiere_fuente"]),
+            "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total),
             "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 1), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
                                                  "pob": redondear(f["pct_poblacion_15_mas"], 1), "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
             "areas": [{"area": f["area_cine"], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1)} for _, f in a.iterrows()],
@@ -202,7 +216,11 @@ def construir_datos() -> dict:
     por_region = {str(r): {f["nivel_titulo"]: {"trabajo": int(f["ocupados_trabajo"]), "desocupados": int(f["desocupados"]), "tasa": redondear(f["tasa_desocupacion"], 1),
                                                "nacional": redondear(f["tasa_nacional_nivel"], 1), "ene": redondear(f["ene_tasa_desocupacion"], 1) if f["ene_fiabilidad"] != "no_fiable" else None,
                                                "ene_poco": f["ene_fiabilidad"] == "poco_fiable"} for _, f in g.iterrows()} for r, g in niveles.groupby("codigo_region")}
-    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS}
+    suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados"]].sum()
+    primera = niveles.drop_duplicates("nivel_titulo").set_index("nivel_titulo")
+    niveles_chile = {n: {"ocupados": int(suma.loc[n, "ocupados_residencia"]), "desocupados": int(suma.loc[n, "desocupados"]), "tasa": redondear(primera.loc[n, "tasa_nacional_nivel"], 1),
+                         "ene": redondear(primera.loc[n, "ene_tasa_nacional_nivel"], 1)} for n in suma.index}
+    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS}
 
 
 def validar(datos: dict, geo: dict, html: str) -> None:
@@ -217,6 +235,9 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "20 actividades en la lista": len(datos["actividades"]) == 20 and "U" not in [a["ciiu"] for a in datos["actividades"]],
         "Bordes válidos antes y después de simplificar": geo["geometria_valida"],
         "El área de cada región cambia menos de 0,5%": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
+        "Minería en Chile: 268.491 con región y 275.517 en total": next(a for a in datos["actividades"] if a["ciiu"] == "B")["nacional"]["ocupados"] == 268_491 and next(a for a in datos["actividades"] if a["ciiu"] == "B")["nacional"]["censo_total"] == 275_517,
+        "Salud: más personas en la Metropolitana y más peso en Biobío": next(a for a in datos["actividades"] if a["ciiu"] == "Q")["nacional"]["mas_personas"]["r"] == 13 and next(a for a in datos["actividades"] if a["ciiu"] == "Q")["nacional"]["mas_peso"]["r"] == 8,
+        "Profesionales desocupados en Chile: 153.695": datos["niveles_chile"]["Profesional"]["desocupados"] == 153_695,
         "Las 16 regiones tienen sus 3 niveles": len(datos["niveles"]) == 16 and all(len(n) == 3 for n in datos["niveles"].values()),
         "16 regiones con trazado": sorted(geo["trazados"]) == sorted(NOMBRES_REGION),
         "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),

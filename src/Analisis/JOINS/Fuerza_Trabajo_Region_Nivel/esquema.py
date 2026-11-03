@@ -20,5 +20,6 @@ FUERZA_TRABAJO_REGION_NIVEL = {
     "tasa_desocupacion": "float64",
     "tasa_nacional_nivel": "float64",
     "ene_tasa_desocupacion": "float64",  # ENE 2025-2026; contraste
+    "ene_tasa_nacional_nivel": "float64",  # ENE 2025-2026, todo Chile
     "ene_fiabilidad": "object",          # fiable, poco_fiable o no_fiable; medida sobre los desocupados
 }

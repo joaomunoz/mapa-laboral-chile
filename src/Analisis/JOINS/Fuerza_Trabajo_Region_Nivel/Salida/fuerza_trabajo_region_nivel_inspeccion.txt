@@ -2,7 +2,7 @@
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
 📁 Archivo: fuerza_trabajo_region_nivel.csv
 ============================================================
-🔹 Dimensiones: 48 filas | 11 columnas
+🔹 Dimensiones: 48 filas | 12 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
 🔹 Registros Duplicados Absolutos: 0 (0.00%)
 🔹 Memoria Total Estimada: 0.01 MB
@@ -21,21 +21,22 @@ fuera_fuerza_trabajo           | int64        | 0        | 0.00   % | 48       |
 tasa_desocupacion              | float64      | 0        | 0.00   % | 48       | 0               | 0.000    MB
 tasa_nacional_nivel            | float64      | 0        | 0.00   % | 3        | 0               | 0.000    MB
 ene_tasa_desocupacion          | float64      | 0        | 0.00   % | 48       | 0               | 0.000    MB
+ene_tasa_nacional_nivel        | float64      | 0        | 0.00   % | 3        | 0               | 0.000    MB
 ene_fiabilidad                 | object       | 0        | 0.00   % | 2        | 0               | 0.003    MB
 -------------------------------------------------------------------------------------------------------------------
 
 🧠 Clasificación Automática de Variables:
-   - Numéricas (8): ['codigo_region', 'ocupados_residencia', 'ocupados_trabajo', 'desocupados', 'fuera_fuerza_trabajo', 'tasa_desocupacion', 'tasa_nacional_nivel', 'ene_tasa_desocupacion']
+   - Numéricas (9): ['codigo_region', 'ocupados_residencia', 'ocupados_trabajo', 'desocupados', 'fuera_fuerza_trabajo', 'tasa_desocupacion', 'tasa_nacional_nivel', 'ene_tasa_desocupacion', 'ene_tasa_nacional_nivel']
    - Categóricas/Texto (3): ['nombre_region', 'nivel_titulo', 'ene_fiabilidad']
    - Fechas (0): []
 
 🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
-    codigo_region       nombre_region  ... ene_tasa_desocupacion  ene_fiabilidad
-27             10           LOS LAGOS  ...              6.089172          fiable
-40             14            LOS RIOS  ...              9.330979          fiable
-26              9        LA ARAUCANIA  ...              6.659885       no_fiable
-43             15  ARICA Y PARINACOTA  ...              8.206117          fiable
-24              9        LA ARAUCANIA  ...              6.763803          fiable
+    codigo_region       nombre_region  ... ene_tasa_nacional_nivel  ene_fiabilidad
+27             10           LOS LAGOS  ...                8.138302          fiable
+40             14            LOS RIOS  ...                9.901553          fiable
+26              9        LA ARAUCANIA  ...                8.454685       no_fiable
+43             15  ARICA Y PARINACOTA  ...                9.901553          fiable
+24              9        LA ARAUCANIA  ...                8.138302          fiable
 
-[5 rows x 11 columns]
+[5 rows x 12 columns]
 ============================================================
