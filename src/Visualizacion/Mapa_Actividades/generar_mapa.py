@@ -13,6 +13,10 @@ Decisiones:
   - Se omiten los territorios insulares lejanos (Rapa Nui, Juan Fernández): al incluirlos, el continente se vería
     diminuto. Sus datos siguen dentro de sus regiones.
   - Actividad U fuera de la lista: se conserva en la tabla, pero no aporta al mapa.
+  - El color y el texto de las veces se calculan aquí, una sola vez y con el valor sin redondear. Si se
+    redondea antes, un 1,2024 cae en el tramo equivocado, aunque su lectura diga concentra.
+  - Los cortes 0,8 y 1,2 son los de la lectura de la tabla. Vienen de otro módulo, así que validar() detiene el
+    proceso si el color y la lectura dejan de coincidir.
 """
 
 from __future__ import annotations
@@ -46,6 +50,12 @@ LONGITUD_MINIMA_CONTINENTE = -76.0
 TOLERANCIA_GRADOS = 0.035
 AREA_MINIMA_PX = 3.0
 AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]
+CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
+CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
+TRAMOS = ["hasta 0,4", "0,4–0,6", "0,6–0,8", "0,8–1,2", "1,2–1,6", "1,6–2,5", "2,5 o más"]
+CLASE_NEUTRA = 3
+MARGEN_CORTE = 0.05              # Cerca de un corte, 1 decimal ya no permite explicar el color.
+MAX_DECIMALES = 4
 NOMBRES_REGION = {
     1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
     9: "La Araucanía", 10: "Los Lagos", 11: "Aysén", 12: "Magallanes", 13: "Metropolitana", 14: "Los Ríos", 15: "Arica y Parinacota", 16: "Ñuble",
@@ -111,6 +121,28 @@ def construir_geometria() -> dict:
     return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados}
 
 
+def clase_color(peso: float) -> int | None:
+    """Tramo de color; usa las mismas comparaciones que la lectura. Vacío si no hay dato."""
+    if pd.isna(peso):
+        return None
+    if peso <= CORTES_AZUL[2]:
+        return sum(peso > c for c in CORTES_AZUL[:2])
+    if peso < CORTES_ROJO[0]:
+        return CLASE_NEUTRA
+    return CLASE_NEUTRA + 1 + sum(peso >= c for c in CORTES_ROJO[1:])
+
+
+def texto_peso(peso: float) -> str:
+    """Muestra 1 decimal, o más si hace falta para que la cifra visible calce con el tramo de su color."""
+    if pd.isna(peso):
+        return "s/d"
+    cerca_de_corte = any(abs(peso - c) <= MARGEN_CORTE for c in CORTES_AZUL + CORTES_ROJO)
+    for decimales in range(2 if cerca_de_corte else 1, MAX_DECIMALES + 1):
+        if clase_color(round(peso, decimales)) == clase_color(peso):
+            break
+    return f"{peso:.{decimales}f}".replace(".", ",")
+
+
 def redondear(valor: float, decimales: int = 2) -> float | None:
     return None if pd.isna(valor) else round(float(valor), decimales)
 
@@ -126,10 +158,10 @@ def construir_datos() -> dict:
         a = areas[(areas["actividad_ciiu"] == ciiu) & (areas["fiabilidad"] != "no_fiable")].nlargest(4, "pct_en_actividad")
         vinculadas = carreras[(carreras["actividad_ciiu"] == ciiu) & carreras["afinidad"].isin(AFINIDADES_VISIBLES)].sort_values("pct_en_carrera", ascending=False)
         actividades.append({
-            "ciiu": ciiu, "glosa": glosa, "pct_nacional": redondear(primero["pct_nacional"]), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
+            "ciiu": ciiu, "glosa": glosa, "pct_nacional": redondear(primero["pct_nacional"], 1), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
             "alerta_fuente": bool(primero["alerta_difiere_fuente"]),
-            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"]), "peso": redondear(f["peso_relativo"]), "lectura": f["lectura"],
-                                                 "pob": redondear(f["pct_poblacion_15_mas"], 1), "ene_peso": redondear(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
+            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 1), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
+                                                 "pob": redondear(f["pct_poblacion_15_mas"], 1), "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
             "areas": [{"area": f["area_cine"], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1)} for _, f in a.iterrows()],
             "afines": [{"c": f["carrera_generica"], "pct": redondear(f["pct_en_carrera"], 1), "min": redondear(f["pct_en_carrera_min"], 1), "max": redondear(f["pct_en_carrera_max"], 1),
                         "tit": int(round(f["ocupados_titulados"])), "fiab": f["fiabilidad"]} for _, f in vinculadas[vinculadas["afinidad"] == "afin"].iterrows()],
@@ -143,11 +175,18 @@ def construir_datos() -> dict:
                      "ing1": redondear(f["ingreso_medio_1er_anio"], 0), "ing5": redondear(f["ingreso_medio_5to_anio"], 0), "inst": int(f["n_instituciones"]),
                      "alerta_inst": bool(f["alerta_pocas_instituciones"]), "pct_principal": redondear(f["pct_institucion_principal"], 0),
                      "actividades": v[["actividad_ciiu", "actividad_glosa", "pct_en_carrera"]].round(1).values.tolist()}
-    return {"actividades": actividades, "fichas": fichas, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR}
+    return {"actividades": actividades, "fichas": fichas, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS}
 
 
 def validar(datos: dict, geo: dict, html: str) -> None:
+    celdas = [d for a in datos["actividades"] for d in a["regiones"].values() if d["clase"] is not None]
+    lectura_esperada = lambda c: "bajo_lo_nacional" if c < CLASE_NEUTRA else "similar" if c == CLASE_NEUTRA else "concentra"
+    con_base = [d for d in celdas if d["lectura"] != "base_pequena"]
+    texto_calza = lambda d: clase_color(float(d["peso_txt"].replace(",", "."))) == d["clase"]
+    sin_dato = sum(d["clase"] is None for a in datos["actividades"] for d in a["regiones"].values())
     controles = {
+        "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
+        "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
         "20 actividades en la lista": len(datos["actividades"]) == 20 and "U" not in [a["ciiu"] for a in datos["actividades"]],
         "16 regiones con trazado": sorted(geo["trazados"]) == sorted(NOMBRES_REGION),
         "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),
@@ -157,6 +196,7 @@ def validar(datos: dict, geo: dict, html: str) -> None:
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)
+    log.info("  [i] Celdas sin dato: %d", sin_dato)
     fallidos = [n for n, ok in controles.items() if not ok]
     if fallidos:
         raise ValueError(f"Validaciones fallidas: {fallidos}")
