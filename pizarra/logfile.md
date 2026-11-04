@@ -1,9 +1,10 @@
-(logfile.md Actualizada el 03-11-26)
+(logfile.md Actualizada el 04-11-26)
 
 # 📜 Logfile — Bitácora de Sesiones, Cambios y Completados
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 04-11-26 — Captura del mapa en el README (`docs/mapa.png`, revisada visualmente) → log 04-11-26 00:14
 - 03-11-26 — Matriz P6 retirada y P6 renombrado a control (`P6_control_no_asignados.py`; control, P9 e `index.html` con huella idéntica) → log 03-11-26 23:53
 - 03-11-26 — Mapa regenerable desde un clon limpio (`CENSO/obtener_cartografia.py`; capa e `index.html` con huella idéntica) → log 03-11-26 21:25
 - 03-11-26 — README de portafolio escrito (`README.md`; cadena desde `procesar.py` probada en clon limpio con `index.html` idéntico) → log 03-11-26 21:25
@@ -56,6 +57,14 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 04-11-26 00:14 — Captura del mapa en el README
+- **Contexto / Discusión:** el usuario pidió agregar la captura al README. Se eligió la vista inicial, con Explotación de minas y canteras, por ser lo primero que ve quien abre el mapa y mostrar el mayor contraste de color.
+- **Acción / Cambio realizado:** creado `docs/mapa.png` (2800×3055 px, 697 KB) con Chromium sin interfaz sobre `index.html`, sin modificar la página. Se recortó el borde inferior, donde quedaba cortado el texto "Cómo leer". Agregada al README con pie de foto.
+- **Sin comprobar:** cómo se ve la imagen en GitHub, porque aún no hay remoto.
+- **Estado:** verificado en local.
+
+---
 
 ## 03-11-26 23:53 — Retiro de la matriz P6, renombre y corrección del README
 - **Contexto / Discusión:** el usuario preguntó por qué estaban los archivos de `Puentes_de_mapeo/Salida/`. Al revisar quién los lee, resultó que ningún script leía la matriz P6: P9 solo importa dos funciones del script. El usuario pidió quitarla, renombrar P6 y corregir el término "sector" en `Estructura.md`.

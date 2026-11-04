@@ -6,6 +6,10 @@ Eliges una actividad, como Minería o Salud, y el mapa colorea cada región seg�
 
 **Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 216 KB, sin servidor ni dependencias.
 
+![Mapa de Chile con la actividad Explotación de minas y canteras: Antofagasta pesa 8,1 veces lo nacional, junto a la lista de regiones, las cifras nacionales y las carreras más ligadas a la actividad](docs/mapa.png)
+
+*Vista inicial del mapa, con Explotación de minas y canteras. El rojo indica que la actividad pesa más que en el país, y el azul, que pesa menos.*
+
 ## Qué permite ver
 
 - **Concentrar no es tener más personas.** En Salud, la Metropolitana tiene más ocupados (283.529), pero donde más pesa la actividad es en Biobío (1,21 veces lo nacional). El mapa muestra ambas lecturas.

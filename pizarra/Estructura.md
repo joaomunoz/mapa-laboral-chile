@@ -1,4 +1,4 @@
-(Estructura.md Actualizada el 03-11-26)
+(Estructura.md Actualizada el 04-11-26)
 
 # 📂 Estructura del Proyecto — Mapa Laboral de Chile
 
@@ -26,6 +26,8 @@
 │           └── TITULADOS
 │               ├── GLOSARIO_DE_TITULADO_2007_2025_E.md
 │               └── url
+├── docs
+│   └── mapa.png
 ├── src
 │   ├── Analisis
 │   │   ├── Calculos_control
@@ -169,7 +171,7 @@
 ├── .gitignore
 └── README.md
 
-50 directories, 113 files
+51 directories, 114 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -177,6 +179,7 @@
 ### Raíz
 
 - **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
+- **`docs/mapa.png`**: Captura de la vista inicial del mapa, que se muestra en el README.
 - **`.gitignore`**: Deja fuera `.venv/`, datos crudos y microdatos, que se regeneran.
 
 ### Datos

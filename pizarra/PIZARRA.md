@@ -1,4 +1,4 @@
-(PIZARRA.md Actualizada el 03-11-26)
+(PIZARRA.md Actualizada el 04-11-26)
 
 # 🧙 PIZARRA — Mapa Laboral de Chile
 
@@ -26,9 +26,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ---
 
-## 📊 Avance general estimado: ~94%
+## 📊 Avance general estimado: ~95%
 
-> Sube desde ~92%: ya existe el README y el mapa se regenera desde un clon limpio. Falta la presentación visual y decidir la publicación.
+> Sube desde ~94%: el README ya tiene la captura del mapa. Falta la licencia, un enlace para ver el mapa y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -41,7 +41,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
-| README y presentación | 60% | 🟡 | README escrito; falta captura, enlace para ver el mapa y licencia |
+| README y presentación | 75% | 🟡 | README con captura; falta enlace para ver el mapa y licencia |
 
 ---
 
@@ -55,7 +55,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 ## ⏳ Pendiente — Roadmap
 
 1. **Terminar la revisión del mapa** y ajustar lo que el usuario pida.
-2. **Presentación para portafolio:** captura del mapa y licencia.
+2. **Licencia del proyecto.**
 3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
 4. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
 5. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
@@ -103,7 +103,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Luego, agregar la captura y la licencia al README, y decidir si se sube a GitHub.
+Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 
