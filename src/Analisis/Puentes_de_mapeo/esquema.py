@@ -20,11 +20,9 @@ P5 · PUENTE_CARRERA_CASEN  →  Salida/P5_puente_carrera_casen.csv  ✅ constru
     estado (asignado, generico, posgrado, uniformado, no_valido, sin_asignar). Base para medir
     carrera → ocupación → actividad. Cobertura en Salida/P5_puente_carrera_casen_cobertura.csv.
 
-P6 · MATRIZ_CARRERA_ACTIVIDAD_OCUPACION  →  Salida/P6_matriz_carrera_actividad_ocupacion.csv  ✅ construido (02-11-26)
-    Grain: 1 fila por (carrera_generica, dimension, actividad_caenes, grupo_ocupacion), con celdas observadas.
-    Representa: dónde trabajan los titulados de cada carrera a nivel nacional (CASEN 2024), con
-    error estándar según el diseño muestral y fiabilidad INE. Es nacional: CASEN no
-    permite medirla por región.
+P6 · CONTROL_NO_ASIGNADOS  →  Salida/P6_control_no_asignados.csv
+    Grain: 1 fila por (dimension, categoria).
+    Representa: si los ocupados con título y carrera asignada difieren de quienes no la tienen.
 
 P9 · PERFIL_LABORAL_CARRERA  →  Salida/P9_perfil_laboral_carrera.csv  ✅ construido (02-11-26)
     Grain: 1 fila por (carrera_generica, dimension, categoría). Representa: dónde trabajan los
@@ -83,29 +81,8 @@ METODOS_P5: list[str] = [
 ]
 
 # --------------------------------------------------------------------------- #
-# P6 · Matriz carrera → actividad y ocupación (CASEN, nacional)
+# P6 · Control de sesgo de la asignación de carrera (CASEN, nacional)
 # --------------------------------------------------------------------------- #
-MATRIZ_CARRERA_ACTIVIDAD_OCUPACION: dict[str, str] = {
-    "carrera_generica": "object",
-    "nivel_titulo": "object",        # Tecnico o Profesional (catálogo de P5)
-    "area_cine_sies": "object",
-    "dimension": "object",             # actividad_economica, grupo_ocupacion u ocupacion_actividad
-    "actividad_caenes": "Int64",                 # CAENES 1-21; NA en dimension = grupo_ocupacion
-    "actividad_ciiu": "object",          # Sección CIIU (P1)
-    "actividad_glosa": "object",
-    "grupo_ocupacion": "Int64",        # CIUO-08 con numeración ENE (10 = FF.AA.); NA en dimension = actividad_economica
-    "glosa_ocupacion": "object",
-    "n_carrera": "int64",              # Personas de la carrera con dato en esta dimensión
-    "n_celda": "int64",                # Personas de la celda
-    "gl": "int64",                     # Conglomerados - estratos de la carrera
-    "expandido_celda": "float64",
-    "expandido_carrera": "float64",
-    "pct": "float64",                  # % dentro de la carrera
-    "error_estandar": "float64",       # En puntos porcentuales
-    "cv_pct": "float64",               # Coeficiente de variación de pct
-    "fiabilidad": "object",            # fiable, poco_fiable o no_fiable (estándar INE)
-}
-
 CONTROL_NO_ASIGNADOS: dict[str, str] = {
     "dimension": "object",
     "categoria": "object",
@@ -114,8 +91,6 @@ CONTROL_NO_ASIGNADOS: dict[str, str] = {
     "diferencia": "float64",           # No asignados - asignados, en puntos porcentuales
 }
 
-DIMENSIONES_P6: list[str] = ["actividad_economica", "grupo_ocupacion", "ocupacion_actividad"]
-FIABILIDADES_P6: list[str] = ["fiable", "poco_fiable", "no_fiable"]
 
 # --------------------------------------------------------------------------- #
 # P9 · Perfil laboral de cada carrera (nombres normalizados según glosarios)

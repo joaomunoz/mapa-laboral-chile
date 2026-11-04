@@ -80,16 +80,14 @@
 │   │   │   │   ├── P5_puente_carrera_casen_cobertura_inspeccion.txt
 │   │   │   │   ├── P5_puente_carrera_casen.csv
 │   │   │   │   ├── P5_puente_carrera_casen_inspeccion.txt
-│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion.csv
-│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_inspeccion.txt
-│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados.csv
-│   │   │   │   ├── P6_matriz_carrera_actividad_ocupacion_no_asignados_inspeccion.txt
+│   │   │   │   ├── P6_control_no_asignados.csv
+│   │   │   │   ├── P6_control_no_asignados_inspeccion.txt
 │   │   │   │   ├── P9_perfil_laboral_carrera.csv
 │   │   │   │   └── P9_perfil_laboral_carrera_inspeccion.txt
 │   │   │   ├── esquema.py
 │   │   │   ├── P1_puente_actividades.py
 │   │   │   ├── P5_puente_carrera_casen.py
-│   │   │   ├── P6_matriz_carrera_actividad_ocupacion.py
+│   │   │   ├── P6_control_no_asignados.py
 │   │   │   └── P9_perfil_laboral_carrera.py
 │   │   └── diccionario_atributos_relaciones.md
 │   ├── Scrapers
@@ -171,7 +169,7 @@
 ├── .gitignore
 └── README.md
 
-50 directories, 115 files
+50 directories, 113 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -246,14 +244,14 @@
 - **`src/Analisis/Puentes_de_mapeo/P1_puente_actividades.py`** → **`Salida/P1_puente_actividades.csv`**: P1 — 21 filas, relación 1:1 CAENES (ENE, CASEN) ↔ sección CIIU (censo).
 
 - **`src/Analisis/Puentes_de_mapeo/P5_puente_carrera_casen.py`** → **`Salida/P5_puente_carrera_casen.csv`**: P5 — 11,163 filas, texto `e7` de CASEN → `carrera_generica`, con método y estado; asigna 88,4% de las personas. Incluye `Salida/P5_puente_carrera_casen_cobertura.csv`.
-- **`src/Analisis/Puentes_de_mapeo/P6_matriz_carrera_actividad_ocupacion.py`** → **`Salida/P6_matriz_carrera_actividad_ocupacion.csv`**: P6 — 9,773 filas, carrera → sector y ocupación medido a nivel nacional, con error por diseño y fiabilidad. Incluye `Salida/P6_matriz_carrera_actividad_ocupacion_no_asignados.csv`.
+- **`src/Analisis/Puentes_de_mapeo/P6_control_no_asignados.py`** → **`Salida/P6_control_no_asignados.csv`**: P6 — 61 filas, control de sesgo: compara a los ocupados con título que tienen carrera asignada con quienes no la tienen. También aporta a P9 las funciones de error y fiabilidad. La matriz carrera × actividad × ocupación se retiró porque ninguna tabla la leía.
 - **`src/Analisis/Puentes_de_mapeo/P9_perfil_laboral_carrera.py`** → **`Salida/P9_perfil_laboral_carrera.csv`**: P9 — 7,288 filas, 259 carreras: categoría en la ocupación, actividad económica y ambas, con % en la carrera, % en el grupo, especialización, error y fiabilidad.
 
 ### Análisis (cálculos de control)
 
 - **`src/Analisis/Calculos_control/<tabla>/`**: Cada cálculo tiene `obtener.py`, `esquema.py`, `crosswalk.py` y `Salida/`. Solo queda `ocupados_region_actividad`, que controla a `Concentracion_Region_Actividad`.
 
-- **`src/Analisis/Calculos_control/ocupados_region_actividad/Salida/ocupados_region_actividad.csv`**: Todos los ocupados por región × CAENES y peso relativo del sector, en dos versiones (`base_region`: residencia o trabajo); el reparto usa trabajo.
+- **`src/Analisis/Calculos_control/ocupados_region_actividad/Salida/ocupados_region_actividad.csv`**: Todos los ocupados por región × CAENES y peso relativo de la actividad económica, en dos versiones (`base_region`: residencia o trabajo); `Concentracion_Region_Actividad` usa trabajo.
 
 ### Análisis (JOINS / tablas del mapa)
 

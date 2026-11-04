@@ -34,7 +34,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 |---|---|---|---|
 | Fuentes y scrapers | 100% | 🟢 | 5 fuentes: Censo, ENE, CASEN, SIES y MiFuturo |
 | Procesamiento `procesar.py` | 95% | 🟢 | Pendiente menor en MiFuturo, que no afecta al mapa |
-| Puentes `src/Analisis/` | 100% | 🟢 | P1, P5, P6 y P9 |
+| Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
 | Mapa interactivo | 90% | 🟡 | Revisión de código aplicada; falta la revisión del usuario con mouse y teclado reales |
@@ -88,6 +88,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Chile como vista inicial:** muestra juntas la región con más personas y la región donde más pesa, que son lecturas distintas de "concentrar". Por eso el selector quedó en pausa.
 - **Desocupados por nivel y región, no por actividad ni carrera:** un desocupado no tiene actividad registrada. "Titulados que no trabajan" se mide de 22 a 54 años, porque con todas las edades pesan los jubilados.
 - **Git:** quedan fuera los datos crudos y los microdatos, que se regeneran. Los scripts no llevan fecha en su cabecera, porque git ya la registra.
+- **Matriz P6 retirada:** ninguna tabla la leía, porque P9 mide el perfil por su cuenta. P6 queda como `P6_control_no_asignados`, con el control de sesgo y las funciones de error y fiabilidad que usa P9. Se descartó conservarla, porque contradecía el criterio de dejar solo lo que produce el mapa.
 - **Etiqueta en vez de carpeta de archivo:** lo retirado salió del proyecto para que solo se vea lo que produce el mapa, y se recupera con la etiqueta de git `indice-cupos`. Se descartó mantener `Archivo/` a la vista porque obligaba a conservar P2, P4, P7, P8 y ENADEL sin uso. Tras borrar, la cadena se regeneró completa y `index.html` salió idéntico.
 - **Actividad U fuera de la lista:** se conserva en la tabla, porque con unas 2.800 personas distorsionaba la lectura de la Metropolitana.
 - **Nombres según glosarios:** `categoria_ocupacion` y `actividad_*`. `Scrapers/` conserva los nombres de cada fuente; `Analisis/` usa los normalizados.

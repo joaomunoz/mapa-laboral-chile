@@ -4,6 +4,7 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 03-11-26 — Matriz P6 retirada y P6 renombrado a control (`P6_control_no_asignados.py`; control, P9 e `index.html` con huella idéntica) → log 03-11-26 23:53
 - 03-11-26 — Mapa regenerable desde un clon limpio (`CENSO/obtener_cartografia.py`; capa e `index.html` con huella idéntica) → log 03-11-26 21:25
 - 03-11-26 — README de portafolio escrito (`README.md`; cadena desde `procesar.py` probada en clon limpio con `index.html` idéntico) → log 03-11-26 21:25
 - 03-11-26 — Proyecto saneado: queda solo lo que produce el mapa (cadena completa regenerada; `index.html` y 13 tablas con huella idéntica; etiqueta `indice-cupos`) → log 03-11-26 19:50
@@ -55,6 +56,15 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 03-11-26 23:53 — Retiro de la matriz P6, renombre y corrección del README
+- **Contexto / Discusión:** el usuario preguntó por qué estaban los archivos de `Puentes_de_mapeo/Salida/`. Al revisar quién los lee, resultó que ningún script leía la matriz P6: P9 solo importa dos funciones del script. El usuario pidió quitarla, renombrar P6 y corregir el término "sector" en `Estructura.md`.
+- **Acción / Cambio realizado:** borrados `P6_matriz_carrera_actividad_ocupacion.csv` y su inspección (9.773 filas, se recuperan con `git show e1a7160:<ruta>`). Quitado del script el cálculo de la matriz y la lectura del `.dta`, y del esquema lo propio de la matriz. Renombrados script y salidas a `P6_control_no_asignados`, con el import de P9, el esquema y el README al día. En `Estructura.md`, "sector" pasa a "actividad económica", y "el reparto usa trabajo" a `Concentracion_Region_Actividad` usa trabajo.
+- **Corrección del README:** el bloque de la cadena completa definía `PY` con `-W ignore` dentro de la variable, lo que falla en zsh. Ahora usa `PY=.venv/bin/python` y `PYTHONWARNINGS=ignore`; esa forma se probó en zsh y bash con un comando corto, no con la cadena completa.
+- **Pruebas:** regenerados P6, P9, `Areas_Por_Actividad`, `Carreras_Por_Actividad` y el mapa, sin controles fallidos. El control, P9 e `index.html` salieron con huella idéntica, también tras el renombre (P6, P9 y mapa). Un primer intento no había ejecutado nada por el mismo problema de zsh, y se repitió. La cadena completa no se volvió a correr, porque el resto no depende de P6.
+- **Estado:** verificado.
+
+---
 
 ## 03-11-26 21:25 — README de portafolio, script de cartografía y corrección de la nota
 - **Contexto / Discusión:** el usuario pidió el README del portafolio. Al contrastarlo con los datos aparecieron tres problemas: ningún script obtenía la capa regional del mapa, la nota decía 5,7% de ocupados sin región de trabajo cuando la medición da 5,75%, y el 0,95 entre Censo y ENE solo vale para las 209 combinaciones fiables en ENE (0,94 en las 336). Se decidió separar la cartografía de `obtener.py` y bajar el zip completo en vez de pedir por rangos, por simplicidad.

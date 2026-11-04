@@ -36,7 +36,7 @@ import numpy as np
 import pandas as pd
 
 from esquema import DIMENSIONES_P9, PERFIL_LABORAL_CARRERA  # noqa: E402
-from P6_matriz_carrera_actividad_ocupacion import clasificar, error_estandar  # noqa: E402
+from P6_control_no_asignados import clasificar, error_estandar  # noqa: E402
 
 log = logging.getLogger(__name__)
 

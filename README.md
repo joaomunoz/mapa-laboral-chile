@@ -88,7 +88,8 @@ Los datos crudos no están en el repositorio porque pesan hasta 1,6 GB. Para reg
 **La cadena completa.** El procesamiento tarda unos 10 minutos con los datos ya descargados:
 
 ```bash
-PY=".venv/bin/python -W ignore"
+PY=.venv/bin/python
+export PYTHONWARNINGS=ignore
 
 # 1. Descargar y procesar las fuentes
 for f in Titulados Empleabilidad ENE CASEN CENSO; do
@@ -97,7 +98,7 @@ for f in Titulados Empleabilidad ENE CASEN CENSO; do
 done
 
 # 2. Puentes entre fuentes
-for p in P1_puente_actividades P5_puente_carrera_casen P6_matriz_carrera_actividad_ocupacion P9_perfil_laboral_carrera; do
+for p in P1_puente_actividades P5_puente_carrera_casen P6_control_no_asignados P9_perfil_laboral_carrera; do
   $PY src/Analisis/Puentes_de_mapeo/$p.py
 done
 
