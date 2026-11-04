@@ -108,6 +108,8 @@
 │   │   │   │   │   └── Cartografia_censo2024_Pais_Regional.parquet
 │   │   │   │   └── personas_censo2024.parquet
 │   │   │   ├── Salida
+│   │   │   │   ├── censo_por_sexo.csv
+│   │   │   │   ├── censo_por_sexo_inspeccion.txt
 │   │   │   │   ├── censo_procesado.csv
 │   │   │   │   └── censo_procesado_inspeccion.txt
 │   │   │   ├── esquema.py
@@ -171,7 +173,7 @@
 ├── .gitignore
 └── README.md
 
-51 directories, 114 files
+51 directories, 116 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -225,11 +227,12 @@
 
 - **`src/Scrapers/CENSO/obtener.py`**: Descarga a `Entrada/` el zip oficial en parquet y lo descomprime; no repite la descarga si ya existe.
 - **`src/Scrapers/CENSO/obtener_cartografia.py`**: Descarga el zip oficial de cartografía (795 MB), extrae solo la capa regional a `Entrada/cartografia/` y borra el zip; no repite la descarga si la capa ya existe.
-- **`src/Scrapers/CENSO/esquema.py`**: SSOT de `censo_procesado.csv` (8 columnas).
-- **`src/Scrapers/CENSO/procesar.py`**: Deriva región de trabajo, actividad y `nivel_titulo`, y agrega por combinación; 12 controles contra el manual del INE. Requiere `.venv` (pyarrow).
+- **`src/Scrapers/CENSO/esquema.py`**: SSOT de `censo_procesado.csv` (8 columnas) y `censo_por_sexo.csv` (6 columnas).
+- **`src/Scrapers/CENSO/procesar.py`**: Deriva región de trabajo, actividad y `nivel_titulo`, y agrega por combinación; escribe también la tabla por sexo; 16 controles (12 de la tabla principal y 4 por sexo). Requiere `.venv` (pyarrow).
 - **`src/Scrapers/CENSO/Entrada/personas_censo2024.parquet`**: Microdatos oficiales de personas; `obtener.py` lo vuelve a descargar si falta.
 - **`src/Scrapers/CENSO/Entrada/cartografia/Cartografia_censo2024_Pais_Regional.parquet`**: Límites oficiales de las 16 regiones.
 - **`src/Scrapers/CENSO/Salida/censo_procesado.csv`**: 14,793×8, personas de 15 años o más agregadas; sumar `personas`, no contar filas.
+- **`src/Scrapers/CENSO/Salida/censo_por_sexo.csv`**: 7,554×6, las mismas personas de 15 años o más abiertas por sexo (1 Hombre, 2 Mujer), con región de residencia y de trabajo, situación laboral y actividad; sumar `personas`, no contar filas. No incluye género. Va con su `_inspeccion.txt`.
 
 ### Compartido
 
@@ -266,7 +269,7 @@
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades y la situación de la población, y escribe la página; 24 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo, y escribe la página; 37 controles. Requiere `.venv` (geopandas y pyarrow).
 - **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar.
 - **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
 - **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.

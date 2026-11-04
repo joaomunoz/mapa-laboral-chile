@@ -44,6 +44,7 @@ RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad
 RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
 RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
 RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
+RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.csv"
 RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
 RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
 RUTA_PLANTILLA = DIR / "plantilla.html"
@@ -62,7 +63,6 @@ CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
 CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
 TRAMOS = ["hasta 0,4", "0,4–0,6", "0,6–0,8", "0,8–1,2", "1,2–1,6", "1,6–2,5", "2,5 o más"]
 CLASE_NEUTRA = 3
-MARGEN_CORTE = 0.05              # Cerca de un corte, 1 decimal ya no permite explicar el color.
 MAX_DECIMALES = 4
 NOMBRES_REGION = {
     1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
@@ -80,6 +80,11 @@ REGION_METROPOLITANA = 13
 # Filas de personas_censo2024.parquet. Va como constante porque censo_procesado.csv solo trae 15 años o más, y regenerar
 # el mapa no debe exigir los microdatos; validar() la compara con el archivo cuando está disponible.
 POBLACION_TOTAL_CENSO = 18_480_432
+HOMBRE, MUJER = 1, 2
+POBLACION_POR_SEXO = {HOMBRE: 8_967_033, MUJER: 9_513_399}
+# Solo dos totales nacionales para la nota: el género es dato sensible y está suprimido en parte de las comunas, así que no
+# se guarda en ninguna tabla ni se abre por actividad. validar() los compara con los microdatos cuando están disponibles.
+OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO = 38_491, 633_803
 DESOCUPADO, FUERA_FUERZA_TRABAJO = 2, 3
 ORDEN_NORTE_SUR = [15, 1, 2, 3, 4, 5, 13, 6, 7, 16, 8, 9, 14, 10, 11, 12]
 TILDES = {
@@ -173,14 +178,18 @@ def clase_color(peso: float) -> int | None:
 
 
 def texto_peso(peso: float) -> str:
-    """Muestra 1 decimal, o más si hace falta para que la cifra visible calce con el tramo de su color."""
+    """Muestra 2 decimales, o más si hace falta para que la cifra visible calce con el tramo de su color."""
     if pd.isna(peso):
         return "s/d"
-    cerca_de_corte = any(abs(peso - c) <= MARGEN_CORTE for c in CORTES_AZUL + CORTES_ROJO)
-    for decimales in range(2 if cerca_de_corte else 1, MAX_DECIMALES + 1):
+    for decimales in range(2, MAX_DECIMALES + 1):
         if clase_color(round(peso, decimales)) == clase_color(peso):
             break
     return f"{peso:.{decimales}f}".replace(".", ",")
+
+
+def personas_con_promedio(ocupados: int, peso: float) -> int | None:
+    """Cuántas personas habría si la región tuviera el promedio de Chile. Es una cuenta para comparar, no un dato medido ni una meta."""
+    return None if pd.isna(peso) or peso <= 0 else int(round(ocupados / peso))
 
 
 def redondear(valor: float, decimales: int = 2) -> float | None:
@@ -196,7 +205,14 @@ def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dic
             "mas_peso": {"r": int(con_peso["codigo_region"]), "txt": texto_peso(con_peso["peso_relativo"])}}
 
 
-def situacion_poblacion(procesado: pd.DataFrame) -> dict:
+def sexo_por_actividad(por_sexo: pd.DataFrame) -> dict:
+    """Ocupados por sexo en cada actividad, con la misma base que el mapa: lugar de trabajo y actividad informados."""
+    base = por_sexo[(por_sexo["sit_fuerza_trabajo"] == OCUPADO) & por_sexo["codigo_region_trabajo"].notna() & por_sexo["actividad_ciiu"].notna()]
+    tabla = base.pivot_table(index="actividad_ciiu", columns="sexo", values="personas", aggfunc="sum", fill_value=0)
+    return {c: {"h": int(f[HOMBRE]), "m": int(f[MUJER]), "pct_h": redondear(100 * f[HOMBRE] / (f[HOMBRE] + f[MUJER]), 1), "pct_m": redondear(100 * f[MUJER] / (f[HOMBRE] + f[MUJER]), 1)} for c, f in tabla.iterrows()}
+
+
+def situacion_poblacion(procesado: pd.DataFrame, por_sexo: pd.DataFrame) -> dict:
     """Situación laboral de las personas de 15 años o más; la región es donde viven, porque quien no trabaja no tiene región de trabajo."""
     def contar(g: pd.DataFrame) -> dict:
         total = int(g["personas"].sum())
@@ -204,10 +220,20 @@ def situacion_poblacion(procesado: pd.DataFrame) -> dict:
         trabajan, buscan, no_buscan = (int(por_situacion.get(c, 0)) for c in (OCUPADO, DESOCUPADO, FUERA_FUERZA_TRABAJO))
         return {"total": total, "trabajan": trabajan, "buscan": buscan, "no_buscan": no_buscan, "sin_dato": total - trabajan - buscan - no_buscan,
                 "pct_trabajan": redondear(100 * trabajan / total, 1), "pct_buscan": redondear(100 * buscan / total, 1), "pct_no_buscan": redondear(100 * no_buscan / total, 1),
-                "pct_sin_dato": redondear(100 * (total - trabajan - buscan - no_buscan) / total, 1)}
+                "pct_sin_dato": redondear(100 * (total - trabajan - buscan - no_buscan) / total, 1),
+                "tasa_desocupacion": redondear(100 * buscan / (trabajan + buscan), 1), "tasa_participacion": redondear(100 * (trabajan + buscan) / total, 1)}
     chile = contar(procesado)
-    return {"poblacion_total": POBLACION_TOTAL_CENSO, "menores_15": POBLACION_TOTAL_CENSO - chile["total"], "chile": chile,
-            "regiones": {str(int(r)): contar(g) for r, g in procesado.groupby("codigo_region")}}
+    # Se suma aparte porque esta tabla agrupa por residencia, y quien trabaja en otra región cuenta donde trabaja.
+    ocupados_con_lugar = procesado[(procesado["sit_fuerza_trabajo"] == OCUPADO) & procesado["codigo_region_trabajo"].notna()]
+    por_lugar = ocupados_con_lugar.groupby("codigo_region_trabajo")["personas"].sum()
+    chile["lugar_trabajo"] = int(por_lugar.sum())
+    regiones = {str(int(r)): contar(g) | {"lugar_trabajo": int(por_lugar.get(r, 0)), "pct_lugar_trabajo": redondear(100 * por_lugar.get(r, 0) / por_lugar.sum(), 1)} for r, g in procesado.groupby("codigo_region")}
+    sexo = {}
+    for nombre, codigo in (("hombres", HOMBRE), ("mujeres", MUJER)):
+        grupo = contar(por_sexo[por_sexo["sexo"] == codigo])
+        sexo[nombre] = grupo | {"poblacion_total": POBLACION_POR_SEXO[codigo], "menores_15": POBLACION_POR_SEXO[codigo] - grupo["total"]}
+    return {"poblacion_total": POBLACION_TOTAL_CENSO, "menores_15": POBLACION_TOTAL_CENSO - chile["total"], "chile": chile, "regiones": regiones, "sexo": sexo,
+            "genero_ocupados": {"diversidades": OCUPADOS_DIVERSIDAD_GENERO, "suprimido": OCUPADOS_GENERO_SUPRIMIDO}}
 
 
 def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
@@ -237,9 +263,13 @@ def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
 def construir_datos() -> dict:
     censo = pd.read_csv(RUTA_CENSO, sep=";")
     ene_total = float(censo["ene_ocupados"].sum())
+    # Base de la participación: se toma antes del filtro porque incluye a la actividad que no se lista.
+    base_ocupados = {"chile": int(censo["ocupados"].sum()), "regiones": {str(int(r)): int(v) for r, v in censo.groupby("codigo_region")["ocupados"].sum().items()}}
     censo = censo[censo["mostrar_en_mapa"]]
     procesado = pd.read_csv(RUTA_CENSO_PROCESADO, sep=";")
     totales_censo = procesado[procesado["sit_fuerza_trabajo"] == OCUPADO].groupby("actividad_ciiu")["personas"].sum()
+    por_sexo = pd.read_csv(RUTA_CENSO_SEXO, sep=";")
+    sexo_actividad = sexo_por_actividad(por_sexo)
     areas = pd.read_csv(RUTA_AREAS, sep=";")
     carreras = pd.read_csv(RUTA_CARRERAS, sep=";")
     actividades = []
@@ -248,10 +278,10 @@ def construir_datos() -> dict:
         a = areas[(areas["actividad_ciiu"] == ciiu) & (areas["fiabilidad"] != "no_fiable")].nlargest(4, "pct_en_actividad")
         vinculadas = carreras[(carreras["actividad_ciiu"] == ciiu) & carreras["afinidad"].isin(AFINIDADES_VISIBLES)].sort_values("pct_en_carrera", ascending=False)
         actividades.append({
-            "ciiu": ciiu, "glosa": glosa, "corto": NOMBRES_CORTOS[ciiu], "pct_nacional": redondear(primero["pct_nacional"], 1), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
-            "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total),
-            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 1), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
-                                                 "pob": redondear(f["pct_poblacion_15_mas"], 1), "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
+            "ciiu": ciiu, "glosa": glosa, "corto": NOMBRES_CORTOS[ciiu], "pct_nacional": redondear(primero["pct_nacional"], 2), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
+            "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total), "sexo": sexo_actividad[ciiu],
+            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 2), "peso": redondear(f["peso_relativo"], 6), "con_promedio": personas_con_promedio(f["ocupados"], f["peso_relativo"]), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
+                                                 "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
             "areas": [{"area": f["area_cine"], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1)} for _, f in a.iterrows()],
             "afines": [{"c": f["carrera_generica"], "pct": redondear(f["pct_en_carrera"], 1), "min": redondear(f["pct_en_carrera_min"], 1), "max": redondear(f["pct_en_carrera_max"], 1),
                         "tit": int(round(f["ocupados_titulados"])), "fiab": f["fiabilidad"]} for _, f in vinculadas[vinculadas["afinidad"] == "afin"].iterrows()],
@@ -274,7 +304,16 @@ def construir_datos() -> dict:
     primera = niveles.drop_duplicates("nivel_titulo").set_index("nivel_titulo")
     niveles_chile = {n: {"ocupados": int(suma.loc[n, "ocupados_residencia"]), "desocupados": int(suma.loc[n, "desocupados"]), "tasa": redondear(primera.loc[n, "tasa_nacional_nivel"], 1),
                          "ene": redondear(primera.loc[n, "ene_tasa_nacional_nivel"], 1)} for n in suma.index}
-    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado)}
+    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados}
+
+
+def totales_sexo_genero_correctos() -> bool:
+    """Compara las constantes con los microdatos; regenerar el mapa no los exige, así que sin ellos no hay nada que comparar."""
+    if not RUTA_PERSONAS.exists():
+        return True
+    d = pd.read_parquet(RUTA_PERSONAS, columns=["sexo", "div_genero", "sit_fuerza_trabajo"])
+    genero = d.loc[d["sit_fuerza_trabajo"] == OCUPADO, "div_genero"].value_counts()
+    return d["sexo"].value_counts().to_dict() == POBLACION_POR_SEXO and genero[1] == OCUPADOS_DIVERSIDAD_GENERO and genero[-66] == OCUPADOS_GENERO_SUPRIMIDO
 
 
 def validar(datos: dict, geo: dict, html: str) -> None:
@@ -307,7 +346,21 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Población: 15,2 millones de 15 años o más, y suman sus cuatro grupos": pob["chile"]["total"] == 15_205_784 and pob["chile"]["trabajan"] + pob["chile"]["buscan"] + pob["chile"]["no_buscan"] + pob["chile"]["sin_dato"] == pob["chile"]["total"],
         "Población: las regiones suman el total de Chile": sum(d["total"] for d in pob["regiones"].values()) == pob["chile"]["total"] and len(pob["regiones"]) == 16,
         "Población: el % que trabaja va de Ñuble a Aysén": min(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "16" and max(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "11",
+        # El título y "Lo principal" llevan estas afirmaciones escritas a mano: si los datos cambian, la generación se detiene.
+        "Título: la Metropolitana reúne 4 de cada 10 ocupados (42,1%)": pob["regiones"]["13"]["pct_lugar_trabajo"] == 42.1 and pob["regiones"]["13"]["lugar_trabajo"] == 3_286_880,
+        "Lo principal: Minería en el norte, Agricultura en el centro-sur y Adm. pública en los extremos": {c: sorted(int(r) for r, d in datos["resumen"]["regiones"].items() if d["ciiu"] == c) for c in "BAO"} == {"B": [1, 2, 3, 4], "A": [6, 7, 9, 10, 14, 16], "O": [11, 12, 15]},
+        "Lo principal: Antofagasta, Maule y Aysén son el mayor CL de sus grupos": all(max((d["peso"], int(r)) for r, d in datos["resumen"]["regiones"].items() if d["ciiu"] == c)[1] == m for c, m in (("B", 2), ("A", 7), ("O", 11))),
+        "Sexo: hombres y mujeres suman cada grupo de la población de Chile": all(pob["sexo"]["hombres"][k] + pob["sexo"]["mujeres"][k] == v for k, v in (("poblacion_total", pob["poblacion_total"]), ("menores_15", pob["menores_15"]), ("total", pob["chile"]["total"]), ("trabajan", pob["chile"]["trabajan"]), ("buscan", pob["chile"]["buscan"]), ("no_buscan", pob["chile"]["no_buscan"]), ("sin_dato", pob["chile"]["sin_dato"]))),
+        "Sexo: en cada actividad, hombres y mujeres suman sus ocupados": all(a["sexo"]["h"] + a["sexo"]["m"] == a["nacional"]["ocupados"] for a in datos["actividades"]),
+        "Sexo: Comercio 665.041 y 646.953; Construcción 496.948 y 46.279": (lambda c, f: (c["h"], c["m"], f["h"], f["m"]) == (665_041, 646_953, 496_948, 46_279))(next(a for a in datos["actividades"] if a["ciiu"] == "G")["sexo"], next(a for a in datos["actividades"] if a["ciiu"] == "F")["sexo"]),
+        "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
+        "Con el promedio de Chile: Valparaíso en Artes 7.781 y Antofagasta en Minería 12.645": next(a for a in datos["actividades"] if a["ciiu"] == "R")["regiones"][5]["con_promedio"] == 7_781 and next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["con_promedio"] == 12_645,
+        "Coquimbo en Artes: 3.356 personas, 3.264 con el promedio y 1,03 veces": (lambda d: d["ocupados"] == 3_356 and d["con_promedio"] == 3_264 and d["peso_txt"] == "1,03")(next(a for a in datos["actividades"] if a["ciiu"] == "R")["regiones"][4]),
+        "Base de la participación: Valparaíso 706.053 y Chile 7.395.105": datos["base_ocupados"]["regiones"]["5"] == 706_053 and datos["base_ocupados"]["chile"] == 7_395_105,
+        "Cada participación se puede recalcular con ocupados y su base": all(abs(100 * d["ocupados"] / datos["base_ocupados"]["regiones"][str(r)] - d["pct"]) < 0.0051 for a in datos["actividades"] for r, d in a["regiones"].items()),
+        "Población: Chile con tasa de desocupación 8,6%, participación 59,6% y 7.801.449 con lugar de trabajo": pob["chile"]["tasa_desocupacion"] == 8.6 and pob["chile"]["tasa_participacion"] == 59.6 and pob["chile"]["lugar_trabajo"] == 7_801_449,
+        "Población: ocupados por lugar de trabajo suman Chile; Antofagasta 372.015": sum(d["lugar_trabajo"] for d in pob["regiones"].values()) == pob["chile"]["lugar_trabajo"] and pob["regiones"]["2"]["lugar_trabajo"] == 372_015,
         "La plantilla quedó completa": "__DATOS__" not in html and "__GEO__" not in html,
     }
     for nombre, ok in controles.items():

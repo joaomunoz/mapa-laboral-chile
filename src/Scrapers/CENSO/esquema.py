@@ -30,3 +30,14 @@ ESQUEMA_CENSO: dict[str, str] = {
     "p44_lug_trab": "Int64",           # 1-2 en su comuna, 3 otra comuna, 4 otro país, 5 varias; vacía sin respuesta o si no aplica
     "personas": "int64",
 }
+
+# Tabla aparte para no alterar censo_procesado.csv, cuyas cifras ya están validadas (decisión 04-11-26).
+# Salida: Salida/censo_por_sexo.csv. Universo: el mismo, 15 años o más. Sumar personas, nunca contar filas.
+ESQUEMA_CENSO_SEXO: dict[str, str] = {
+    "codigo_region": "int64",          # Región donde vive
+    "codigo_region_trabajo": "Int64",  # Región donde trabaja; se necesita para usar la misma base que las actividades
+    "sit_fuerza_trabajo": "Int64",     # 1 Ocupado, 2 Desocupado, 3 Fuera de la fuerza de trabajo; vacía sin respuesta
+    "actividad_ciiu": "object",        # Sección A-U; vacía si no es codificable o no aplica
+    "sexo": "int64",                   # 1 Hombre, 2 Mujer: las dos únicas categorías de la variable
+    "personas": "int64",
+}

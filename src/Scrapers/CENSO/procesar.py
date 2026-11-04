@@ -4,7 +4,7 @@
 Resume los microdatos del Censo 2024 en una tabla agregada por región, actividad y nivel.
 
 Entrada: Entrada/personas_censo2024.parquet (requiere pyarrow: ejecutar con .venv/bin/python)
-Salida:  Salida/censo_procesado.csv
+Salida:  Salida/censo_procesado.csv y Salida/censo_por_sexo.csv
 
 Decisiones (aprobadas el 02-11-26):
   - Quien trabaja en varias comunas queda sin región de trabajo, igual que en la matriz de conmutación del
@@ -13,6 +13,8 @@ Decisiones (aprobadas el 02-11-26):
   - Región de trabajo: según el manual, se obtiene del código de comuna dividido por 1.000. Se exige un código
     de comuna: con p44 = 3, los códigos menores son -99; con p44 = 4 son continentes y con p44 = 5, el 998.
   - Se excluyen las variables sensibles: el mapa no las necesita.
+  - Sexo (04-11-26): va en una tabla aparte para no alterar la validada. El manual no lo trata como sensible, a
+    diferencia del género (div_genero), que además está suprimido en parte de las comunas y no se agrega aquí.
 
 Los totales de control vienen del diccionario del manual de microdatos del INE.
 """
@@ -29,13 +31,14 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from comun.normalizador import REGIONES  # noqa: E402
 sys.path.insert(0, str(Path(__file__).parent))
-from esquema import ESQUEMA_CENSO  # noqa: E402
+from esquema import ESQUEMA_CENSO, ESQUEMA_CENSO_SEXO  # noqa: E402
 import obtener  # noqa: E402
 
 log = logging.getLogger(__name__)
 
 RUTA_SALIDA = Path(__file__).parent / "Salida" / "censo_procesado.csv"
-COLUMNAS_ENTRADA = ["region", "sit_fuerza_trabajo", "cod_caenes", "cine11", "p44_lug_trab", "p44_lug_trab_esp"]
+RUTA_SALIDA_SEXO = Path(__file__).parent / "Salida" / "censo_por_sexo.csv"
+COLUMNAS_ENTRADA = ["region", "sexo", "sit_fuerza_trabajo", "cod_caenes", "cine11", "p44_lug_trab", "p44_lug_trab_esp"]
 SIN_RESPUESTA = -99
 ACTIVIDAD_SIN_DATO = ["999", "-99"]
 P44_EN_CHILE = [1, 2, 3]
@@ -43,10 +46,13 @@ P44_VARIAS_COMUNAS = 5
 CODIGO_COMUNA_MINIMO, DIVISOR_COMUNA = 1000, 1000
 NIVEL_POR_CINE = {8: "Tecnico", 9: "Profesional", 10: "Profesional", 11: "Profesional"}
 CLAVES = [c for c in ESQUEMA_CENSO if c not in ("nombre_region", "personas")]
+CLAVES_SEXO = [c for c in ESQUEMA_CENSO_SEXO if c != "personas"]
 N_REGIONES = 16
 # Diccionario de personas del manual de microdatos Censo 2024.
 TOTALES_MANUAL = {"personas_15_o_mas": 15_205_784, "ocupados": 8_277_501, "desocupados": 777_920, "fuera_fuerza": 6_060_837,
                   "sit_sin_respuesta": 89_526, "mineria": 275_517, "varias_comunas": 460_346}
+# Todas las edades: el manual no publica el sexo de los 15 años o más.
+SEXO_MANUAL = {1: 8_967_033, 2: 9_513_399}
 
 
 def preparar(crudo: pd.DataFrame) -> pd.DataFrame:
@@ -67,6 +73,29 @@ def agregar(d: pd.DataFrame) -> pd.DataFrame:
     t = d.groupby(CLAVES, dropna=False).size().rename("personas").reset_index()
     t["nombre_region"] = t["codigo_region"].map(REGIONES)
     return t[list(ESQUEMA_CENSO)].astype(ESQUEMA_CENSO).sort_values(CLAVES).reset_index(drop=True)
+
+
+def agregar_por_sexo(d: pd.DataFrame) -> pd.DataFrame:
+    """Suma personas por sexo, conservando las columnas vacías como un grupo más."""
+    t = d.groupby(CLAVES_SEXO, dropna=False).size().rename("personas").reset_index()
+    return t[list(ESQUEMA_CENSO_SEXO)].astype(ESQUEMA_CENSO_SEXO).sort_values(CLAVES_SEXO).reset_index(drop=True)
+
+
+def validar_sexo(por_sexo: pd.DataFrame, tabla: pd.DataFrame, crudo: pd.DataFrame) -> None:
+    """Detiene el proceso si abrir por sexo pierde o agrega personas respecto de la tabla validada."""
+    grupos = [c for c in CLAVES_SEXO if c != "sexo"]
+    sumar = lambda t: t.groupby(grupos, dropna=False)["personas"].sum().sort_index()
+    controles = {
+        "Sexo: clave única": not por_sexo.duplicated(CLAVES_SEXO, keep=False).any(),
+        "Sexo: solo hombres y mujeres": set(por_sexo["sexo"]) == set(SEXO_MANUAL),
+        "Sexo: todas las edades igual al manual": crudo["sexo"].value_counts().to_dict() == SEXO_MANUAL,
+        "Sexo: cada grupo suma igual que la tabla validada": sumar(por_sexo).equals(sumar(tabla)),
+    }
+    for nombre, ok in controles.items():
+        log.info("  [%s] %s", "✓" if ok else "✗", nombre)
+    fallidos = [n for n, ok in controles.items() if not ok]
+    if fallidos:
+        raise ValueError(f"Validaciones fallidas: {fallidos}")
 
 
 def validar(t: pd.DataFrame) -> None:
@@ -102,11 +131,15 @@ def validar(t: pd.DataFrame) -> None:
 
 def procesar_censo() -> Path:
     crudo = pd.read_parquet(obtener.obtener(), columns=COLUMNAS_ENTRADA)
-    tabla = agregar(preparar(crudo))
+    preparado = preparar(crudo)
+    tabla, por_sexo = agregar(preparado), agregar_por_sexo(preparado)
     validar(tabla)
+    validar_sexo(por_sexo, tabla, crudo)
     RUTA_SALIDA.parent.mkdir(exist_ok=True)
     tabla.to_csv(RUTA_SALIDA, sep=";", index=False, encoding="utf-8")
+    por_sexo.to_csv(RUTA_SALIDA_SEXO, sep=";", index=False, encoding="utf-8")
     log.info("CSV generado: %s (%d filas)", RUTA_SALIDA.name, len(tabla))
+    log.info("CSV generado: %s (%d filas)", RUTA_SALIDA_SEXO.name, len(por_sexo))
     return RUTA_SALIDA
 
 
@@ -116,3 +149,4 @@ if __name__ == "__main__":
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "comun"))
     from inspect_data import inspeccion_rigurosa  # noqa: E402
     inspeccion_rigurosa(ruta)
+    inspeccion_rigurosa(RUTA_SALIDA_SEXO)

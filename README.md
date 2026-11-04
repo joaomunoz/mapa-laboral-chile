@@ -4,11 +4,11 @@
 
 La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades y lo que distingue a cada región. Luego eliges una actividad, como Minería o Salud, y el mapa colorea cada región según cuánto pesa esa actividad allí frente al país. Al hacer clic en una región ves sus cifras y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 216 KB, sin servidor ni dependencias.
+**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 245 KB, sin servidor ni dependencias.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a la lista de regiones, lo principal del país y la tabla de las 20 actividades](docs/mapa.png)
 
-*Vista inicial: el resumen de la población y las 20 actividades. Cada región tiene el color de la actividad que más pesa ahí comparada con Chile, y un color más suave indica que la diferencia es menor.*
+*Vista inicial: el resumen de la población y las 20 actividades. Cada región tiene el color de la actividad con mayor coeficiente de localización (CL), y un color más suave indica un CL menor a 1,6.*
 
 ## Qué permite ver
 
@@ -56,7 +56,7 @@ Cada paso se detiene si falla uno de sus controles. Estas comprobaciones se repi
 Son criterios de trabajo, no estándares oficiales.
 
 - **Encuestas (ENE y CASEN):** un dato es fiable con n ≥ 60, gl ≥ 9 y CV ≤ 30, con errores calculados según el diseño muestral (linealización de Taylor).
-- **Lectura regional:** una región concentra una actividad desde 1,2 veces lo nacional, y queda bajo lo nacional hasta 0,8. No se lee con menos de 60 personas.
+- **Coeficiente de localización (CL):** participación de la actividad en la región ÷ participación en Chile. Una región queda sobre Chile desde 1,2, y bajo Chile hasta 0,8. No se lee con menos de 60 personas.
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable. Si la muestra es insuficiente pero hay 10 casos o más, se muestra como posible vínculo.
 
 ## Límites

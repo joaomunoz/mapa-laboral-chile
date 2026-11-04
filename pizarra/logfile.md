@@ -4,6 +4,9 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 04-11-26 — Título con el hallazgo, "Lo principal" arriba y selector fijo a la derecha (`plantilla.html`; 37/37 controles; 410 vistas simuladas de 360 a 1600 px) → log 04-11-26 19:11
+- 04-11-26 — Apertura por hombres y mujeres (`censo_por_sexo.csv` 7,554×6; 4 controles contra el manual y la tabla validada; datos previos idénticos) → log 04-11-26 19:11
+- 04-11-26 — Lenguaje técnico y valores absolutos: formato `valor (n%)`, CL con ocupados esperados y situación laboral por región (`generar_mapa.py`, controles en verde; datos previos idénticos) → log 04-11-26 19:11
 - 04-11-26 — Resumen ejecutivo como vista inicial, con población y 20 actividades (`generar_mapa.py`, 24/24 controles; más de 400 vistas simuladas sin errores) → log 04-11-26 01:25
 - 04-11-26 — Lenguaje simplificado, fuentes con enlace y mejor lectura en ambos modos (`plantilla.html`; datos previos idénticos) → log 04-11-26 01:25
 - 04-11-26 — Captura del mapa en el README (`docs/mapa.png`, revisada visualmente) → log 04-11-26 00:14
@@ -59,6 +62,21 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 04-11-26 19:11 — Evaluación de la visualización y prioridades altas
+- **Contexto / Discusión:** el usuario pidió una evaluación como diseñador de información. Conclusión: el mapa funcionaba como tablero, pero el título no se respondía, el color podía leerse como "aquí se trabaja en esto", "CL" no estaba definido arriba y la superficie ocultaba el tamaño de cada región. La evaluación la hizo quien construyó el mapa y se basó en capturas, sin usuarios reales.
+- **Acción / Cambio realizado:** título con el hallazgo (42,1% en la Metropolitana); "Lo principal" sobre las tarjetas, con concentración, especialización y brecha por sexo; mapa inicial "En qué se especializa cada región" con la aclaración de que no es la actividad con más ocupados; definición de CL en la cabecera; "Total región" con barra gris en cada tarjeta; se quitó "Chile:" de las tarjetas; cabecera en dos columnas con el selector siempre a la derecha. Se retiraron de "Lo principal" la tasa mínima y máxima, Comercio en 12 de 16 regiones y las actividades sin CL de 1,2 o más. Tres controles nuevos detienen la generación si los datos dejan de respaldar esas frases. `plantilla.html`, `generar_mapa.py`, `nota_de_lectura.md`, `README.md`, `docs/mapa.png`.
+- **Estado:** verificado con 37/37 controles, 410 vistas simuladas (360 px real con marco) y capturas. A 905 px, la tabla Actividades se desplaza por dentro. El selector no cambia de posición entre vistas (medido). El mapa subió 85 px en la vista inicial y 59 px más en la de actividad. Pendiente: clics reales con mouse y teclado, y la prueba con alguien que lo vea por primera vez.
+
+## 04-11-26 19:11 — Apertura por hombres y mujeres
+- **Contexto / Discusión:** el usuario pidió abrir el resumen por sexo y notó que podía haber más categorías. El Censo tiene dos variables: `sexo` (solo hombre y mujer, sin vacíos) y `div_genero` (desde 18 años, dato sensible según el manual, suprimido por anonimización en 633.803 ocupados). Se descartó una tercera columna por actividad: lo suprimido (8,0% de la base) supera a quienes responden "Sí" (34.128).
+- **Acción / Cambio realizado:** tabla nueva `censo_por_sexo.csv`, sin tocar `censo_procesado.csv`. Población y Actividades con columnas Hombres y Mujeres, % sobre la actividad y nota de género aprobada. Tabla Actividades con bloques Chile, Región con más ocupados y Región con mayor CL, separados por línea gris; se descartó la línea roja, porque se leería como alerta. Género solo como dos totales nacionales, comparados con los microdatos si están.
+- **Estado:** verificado: 4 controles de la tabla y 4 del mapa; hombres y mujeres suman cada grupo y las 20 actividades; `censo_procesado.csv` sin cambios. No se atribuyen causas a las diferencias entre hombres y mujeres.
+
+## 04-11-26 19:11 — Lenguaje técnico y valores absolutos
+- **Contexto / Discusión:** el usuario consideró que había demasiado texto y pidió lenguaje técnico y estandarizado, con valores y no solo porcentajes. Revisó Artes en Coquimbo y Valparaíso, y notó que 823.510 no coincidía con 706.053: son bases distintas (residencia y lugar de trabajo con actividad informada), y la diferencia se concilió.
+- **Acción / Cambio realizado:** coeficiente de localización (CL) en vez de "peso"; formato `valor (n%)`; ocupados esperados rotulados como cálculo; glosario en el pie; regiones en 2 filas de 8 con el detalle debajo; "Situación laboral por región" con fila Chile, tasas de desocupación y participación, y ocupados por residencia y lugar de trabajo pareados, de norte a sur.
+- **Estado:** verificado con controles y vistas simuladas. Sin confirmar: si la fórmula oficial del INE incluye a las personas sin dato en las tasas de ocupación y participación.
 
 ## 04-11-26 01:25 — Lenguaje, fuentes, lectura y resumen ejecutivo del mapa
 - **Contexto / Discusión:** el usuario revisó el mapa y pidió lenguaje para público general, fuentes con URL y mejor lectura, porque lo ve en modo oscuro. Luego pidió un resumen de todas las actividades, con las personas que no trabajan y la población total. El Censo no registra actividad de quienes no trabajan (0 de 6.838.757), así que ese dato va solo para Chile y por región. Al usuario el lenguaje aún no lo convence: queda una revisión aparte.

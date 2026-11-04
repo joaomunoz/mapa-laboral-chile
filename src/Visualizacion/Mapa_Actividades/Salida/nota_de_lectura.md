@@ -1,62 +1,65 @@
-# Nota de lectura: ¿En qué regiones de Chile pesa más cada actividad?
+# Nota de lectura: La Metropolitana concentra 4 de cada 10 ocupados, pero cada región tiene su propia especialización
 
 ## Qué muestra
-La vista inicial resume la población de Chile y las 20 actividades: cuántas personas trabajan, buscan trabajo o no lo buscan, lo principal del país, una tabla con todas ellas y la actividad que distingue a cada región. Al elegir una actividad, se ve en qué regiones pesa más que en el resto de Chile, cuántas personas trabajan en ella, en qué región trabajan más personas y dónde pesa más. Al elegir una región, se ven sus cifras y las carreras más ligadas a esa actividad en todo Chile.
+La vista inicial resume la población, las 20 actividades y la actividad con mayor coeficiente de localización (CL) en cada región. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
 
-## Qué significa cada dato
-| Dato | Significado | Fuente |
+## Glosario
+| Término | Definición | Fuente |
 |---|---|---|
-| **Trabajan, buscan o no buscan** | Situación de las personas de 15 años o más, en Chile y según la región donde viven | Censo 2024 |
-| **Actividad que distingue a una región** | La que tiene más veces el promedio de Chile en esa región, sin contar las de muy pocas personas. No siempre es la que emplea a más personas | Censo 2024 |
-| **Veces el promedio de Chile** | Parte de quienes trabajan en la región que está en esta actividad ÷ esa misma parte en todo Chile. 3 veces significa que pesa el triple | Censo 2024 |
-| **Personas que trabajan aquí** | Personas que trabajan en esa actividad y región | Censo 2024 |
-| **% de las personas de 15 años o más** | Quienes trabajan en la actividad ÷ personas de 15 años o más que viven en la región | Censo 2024 |
-| **Sin trabajo y % sin trabajo, por nivel de estudios** | Personas sin trabajo que buscan o están disponibles, en cada región y nivel. El % se calcula sobre quienes trabajan o están en esa situación. Es un dato de toda la región | Censo 2024; Encuesta Nacional de Empleo como segunda medición |
-| **De sus titulados con trabajo, % aquí** | Parte de los titulados con trabajo de una carrera que está en esa actividad, en Chile | CASEN 2024 |
-| **Titulados aquí** | Titulados de la carrera que trabajan en esa actividad, en Chile | CASEN 2024 |
-| **Con sueldo mínimo o más al 1er año** | % de titulados con ingresos iguales o superiores al sueldo mínimo. MiFuturo lo llama empleabilidad | MiFuturo |
-| **Titulados que no trabajan** | % de titulados de 22 a 54 años de la carrera que buscan trabajo o no trabajan ni lo buscan, en Chile. Solo se muestra con datos suficientes | CASEN 2024 |
-| **Ingreso promedio al 1er y al 5° año** | Ingreso bruto mensual promedio, en pesos de septiembre de 2025 | MiFuturo |
+| **Ocupados** | Personas de 15 años o más que trabajaron al menos una hora en la semana de referencia | Censo 2024 |
+| **Desocupados** | Sin ocupación, y disponibles para trabajar o en busca de trabajo | Censo 2024; ENE como contraste |
+| **Fuera de la fuerza de trabajo** | Ni ocupados ni desocupados; incluye, por ejemplo, a personas jubiladas o dedicadas a los quehaceres del hogar | Censo 2024 |
+| **Tasa de ocupación** | Ocupados ÷ población de 15 años o más, incluidas las personas sin dato | Censo 2024 |
+| **Tasa de desocupación** | Desocupados ÷ (ocupados + desocupados) | Censo 2024; ENE como contraste |
+| **Tasa de participación** | (Ocupados + desocupados) ÷ población de 15 años o más, incluidas las personas sin dato | Censo 2024 |
+| **Residencia y lugar de trabajo** | Los ocupados se cuentan donde viven (tasa de ocupación y situación laboral) o donde trabajan (participación y CL). Por eso los totales de una región difieren: en Valparaíso, 823.510 viven ahí y 706.053 trabajan ahí con actividad informada | Censo 2024 |
+| **Participación** | % de los ocupados de la región o de Chile, por lugar de trabajo y con actividad informada, que está en la actividad. Se muestra como ocupados (participación): 10.007 (1,42%) | Censo 2024 |
+| **Coeficiente de localización (CL)** | Participación en la región ÷ participación en Chile. 1 es igual que Chile; sobre 1, mayor | Censo 2024 |
+| **Hombres y mujeres** | Variable sexo, que solo registra esas dos categorías. En Actividades, el % es sobre los ocupados de cada actividad; en Población, sobre los 15 años o más de cada columna. La identidad de género se mide aparte, desde los 18 años: 38.491 ocupados se identifican como trans, no binarios u otra identidad, pero el dato está suprimido para 633.803 ocupados, por lo que no se abre por actividad | Censo 2024 |
+| **Ocupados esperados** | Ocupados de la región × participación en Chile. Es una cuenta para comparar, no un dato medido ni la cantidad que debería haber | Calculado con el Censo 2024 |
+| **Carrera afín: % de sus ocupados** | Parte de los titulados ocupados de una carrera que está en la actividad, en Chile | CASEN 2024 |
+| **Empleabilidad al 1er año** | % de titulados con ingresos iguales o superiores al sueldo mínimo | MiFuturo |
+| **Titulados que no trabajan** | % de titulados de 22 a 54 años desocupados o inactivos, en Chile. Solo con muestra suficiente | CASEN 2024 |
+| **Ingreso medio al 1er y al 5° año** | Ingreso bruto mensual medio, en pesos de septiembre de 2025 | MiFuturo |
 
 ## Lectura de colores
-**En el resumen de todas las actividades,** cada color es una actividad: la que distingue a esa región. Un color más suave indica menos de 1,6 veces el promedio de Chile, para que una diferencia pequeña no parezca igual de marcada que una grande. Hoy son Biobío, Valparaíso y La Araucanía.
+**En el resumen,** cada color es la actividad con mayor CL en la región, no la de más ocupados. La barra gris de cada tarjeta muestra el total de ocupados de la región según lugar de trabajo. Un color suave indica un CL menor a 1,6. Hoy son Biobío, Valparaíso y La Araucanía.
 
-**Al elegir una actividad,** el mapa usa 7 tramos de color, agrupados en las 3 lecturas que aparecen en cada región. Los cortes son criterios de trabajo, no un estándar oficial.
+**Al elegir una actividad,** el mapa usa 7 tramos de CL. Los cortes son criterios de trabajo, no un estándar oficial.
 
-| Veces el promedio de Chile | Color (modo claro) | Lectura |
+| CL | Color (modo claro) | Lectura |
 |---|---|---|
-| **Hasta 0,4** | Azul intenso | Pesa menos que en Chile |
-| **Más de 0,4 y hasta 0,6** | Azul medio | Pesa menos que en Chile |
-| **Más de 0,6 y hasta 0,8** | Azul claro | Pesa menos que en Chile |
-| **Más de 0,8 y menos de 1,2** | Gris | Parecido a Chile |
-| **Desde 1,2 y menos de 1,6** | Rojo claro | Pesa más que en Chile |
-| **Desde 1,6 y menos de 2,5** | Rojo medio | Pesa más que en Chile |
-| **2,5 o más** | Rojo intenso | Pesa más que en Chile |
+| **Hasta 0,4** | Azul intenso | Bajo Chile |
+| **Más de 0,4 y hasta 0,6** | Azul medio | Bajo Chile |
+| **Más de 0,6 y hasta 0,8** | Azul claro | Bajo Chile |
+| **Más de 0,8 y menos de 1,2** | Gris | Similar a Chile |
+| **Desde 1,2 y menos de 1,6** | Rojo claro | Sobre Chile |
+| **Desde 1,6 y menos de 2,5** | Rojo medio | Sobre Chile |
+| **2,5 o más** | Rojo intenso | Sobre Chile |
 
-En modo oscuro se mantienen el azul y el rojo, pero los tramos más alejados del promedio se ven más claros.
+En modo oscuro se mantienen el azul y el rojo, pero los tramos más alejados de 1 se ven más claros.
 
-Las cifras se muestran con 1 decimal, o con más si están cerca de un corte, para que siempre calcen con su color.
+El CL se muestra con 2 decimales, o con más si hace falta para que calce con su color. La participación lleva 2 decimales bajo 10%, y 1 decimal desde ahí.
 
 ## Qué no dice
 - **No mide demanda ni vacantes,** ni la probabilidad de encontrar trabajo.
-- **Las carreras son un dato de todo Chile:** no indican cuántos titulados de una carrera hay en una región.
-- **Quienes no trabajan no se abren por actividad:** el Censo solo pregunta la actividad a quienes trabajan.
-- **"No trabajan ni buscan" no es desempleo:** incluye, por ejemplo, a quienes están jubilados o se dedican a los quehaceres del hogar.
-- **El % que trabaja no basta para comparar el empleo entre regiones:** una región con más personas mayores o estudiantes puede tener un % menor sin que falte trabajo.
-- **Lo que distingue a una región no es de lo que más vive:** Comercio es lo que más personas emplea en 12 de las 16 regiones, aunque en ninguna sea lo que la distingue.
-- **Pesar más no es tener más personas:** en Salud, en la Metropolitana trabajan más personas, y Biobío es donde más pesa.
-- **Quienes no tienen trabajo no se abren por actividad ni carrera:** ninguna fuente lo permite con solidez. El bloque por nivel de estudios no muestra el desempleo dentro de la actividad elegida.
-- **Un vínculo con una carrera no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
-- **El % con sueldo mínimo o más no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta en ese indicador.
-- **"No trabajan" no es desempleo:** incluye a quienes no buscan trabajo. Se mide de 22 a 54 años porque con todas las edades pesarían los jubilados.
-- **Los ingresos no muestran cómo sube el sueldo con los años:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
+- **Un CL alto no significa más ocupados:** en Industria manufacturera, Biobío tiene el mayor CL (1,25), y la Metropolitana, más ocupados (276.233 frente a 59.327).
+- **Un CL alto no significa que sea la principal actividad de la región:** Valparaíso tiene su mayor CL en Artes y deportes (1,29), con 10.007 ocupados, y Comercio tiene 124.015. Comercio es la actividad con más ocupados en 12 de 16 regiones.
+- **Las carreras son un dato nacional:** no indican cuántos titulados de una carrera hay en una región.
+- **Los desocupados y quienes están fuera de la fuerza de trabajo no se abren por actividad:** el Censo registra la actividad solo de los ocupados.
+- **Estar fuera de la fuerza de trabajo no es desempleo.**
+- **La tasa de ocupación depende de la edad de cada región:** por sí sola no basta para comparar el empleo.
+- **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
+- **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta en ese indicador.
+- **"No trabajan" no es desempleo:** incluye a inactivos. Se mide de 22 a 54 años porque con todas las edades pesarían los jubilados.
+- **Los ingresos no muestran una evolución:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
 
 ## Criterios y límites
-- **Carrera ligada a una actividad:** al menos 10% de sus titulados con trabajo en la actividad, al menos el doble de lo normal entre titulados y un dato fiable (n ≥ 60, gl ≥ 9, CV ≤ 30). Es un criterio de trabajo. Si el CV está entre 15 y 30, el mapa lo marca como "dato aproximado".
-- **Posible vínculo:** cumple los dos primeros umbrales con pocas personas encuestadas, y al menos 10 casos. No es un dato firme.
-- **Región de trabajo:** 5,8% de quienes trabajan no la tiene, sobre todo quienes lo hacen en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
-- **El Censo y la Encuesta Nacional de Empleo difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
-- **También difieren en el % sin trabajo:** en profesionales, 6,3% y 8,1%; en técnicos, 7,8% y 8,5%. Influyen la fecha y quizá la forma de preguntar, sin comprobar.
+- **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable (n ≥ 60, gl ≥ 9, CV ≤ 30). Es un criterio de trabajo. Con CV entre 15 y 30, el mapa la marca como "poco fiable".
+- **Posible vínculo:** cumple los dos primeros umbrales con muestra insuficiente, y al menos 10 casos. No es un dato firme.
+- **Región de trabajo:** 5,8% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
+- **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
+- **También difieren en la tasa de desocupación:** en profesionales, 6,3% y 8,1%; en técnicos, 7,8% y 8,5%. Influyen la fecha y quizá la forma de preguntar, sin comprobar.
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.
 - **Mapa:** no se dibujan Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.
 
