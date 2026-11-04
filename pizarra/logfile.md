@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 04-11-26 — Resumen ejecutivo como vista inicial, con población y 20 actividades (`generar_mapa.py`, 24/24 controles; más de 400 vistas simuladas sin errores) → log 04-11-26 01:25
+- 04-11-26 — Lenguaje simplificado, fuentes con enlace y mejor lectura en ambos modos (`plantilla.html`; datos previos idénticos) → log 04-11-26 01:25
 - 04-11-26 — Captura del mapa en el README (`docs/mapa.png`, revisada visualmente) → log 04-11-26 00:14
 - 03-11-26 — Matriz P6 retirada y P6 renombrado a control (`P6_control_no_asignados.py`; control, P9 e `index.html` con huella idéntica) → log 03-11-26 23:53
 - 03-11-26 — Mapa regenerable desde un clon limpio (`CENSO/obtener_cartografia.py`; capa e `index.html` con huella idéntica) → log 03-11-26 21:25
@@ -57,6 +59,17 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 04-11-26 01:25 — Lenguaje, fuentes, lectura y resumen ejecutivo del mapa
+- **Contexto / Discusión:** el usuario revisó el mapa y pidió lenguaje para público general, fuentes con URL y mejor lectura, porque lo ve en modo oscuro. Luego pidió un resumen de todas las actividades, con las personas que no trabajan y la población total. El Censo no registra actividad de quienes no trabajan (0 de 6.838.757), así que ese dato va solo para Chile y por región. Al usuario el lenguaje aún no lo convence: queda una revisión aparte.
+- **Acción / Cambio realizado:** en `plantilla.html`, textos más simples, 5 fuentes con enlace, notas con más contraste y letra, y nueva vista "Todas las actividades". En `generar_mapa.py`, nombres cortos, `resumen_general()`, `situacion_poblacion()` y 10 controles nuevos. Se actualizaron `nota_de_lectura.md`, el README y `docs/mapa.png`.
+- **Frase retirada:** "confía más en las veces que en el número" no tenía respaldo: en Salud, Biobío da 1,21 veces en el Censo y 0,85 en ENE. El ejemplo de Biobío en el README sigue pendiente de aclarar.
+- **Corregido al probar:** columna fuera del panel, scroll horizontal en anchos medianos y a 360 px, y un tono casi invisible en modo oscuro. Un control detuvo la generación por esperar solo a Valparaíso y Biobío en color suave: La Araucanía tiene 1,5976 veces, así que el dato estaba bien y se corrigió el control.
+- **Pruebas:** 24/24 controles. Los datos previos salieron idénticos. Selector y clics simulados en más de 410 vistas, sin textos rotos, errores ni desbordes entre 360 y 1400 px (360 px dentro de un marco). URLs de las fuentes con respuesta 200. Colores pasados por `validate_palette.js`: el conjunto completo falla, y las actividades de regiones vecinas cumplen.
+- **Sin comprobar:** clics reales con mouse y teclado en esta versión, y un celular real. Los colores suaves no se validaron por separado.
+- **Estado:** verificado, salvo lo indicado como sin comprobar.
+
+---
 
 ## 04-11-26 00:14 — Captura del mapa en el README
 - **Contexto / Discusión:** el usuario pidió agregar la captura al README. Se eligió la vista inicial, con Explotación de minas y canteras, por ser lo primero que ve quien abre el mapa y mostrar el mayor contraste de color.

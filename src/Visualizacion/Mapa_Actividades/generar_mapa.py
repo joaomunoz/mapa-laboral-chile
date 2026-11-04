@@ -31,6 +31,7 @@ from pathlib import Path
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+import pyarrow.parquet as pq
 import shapely
 
 log = logging.getLogger(__name__)
@@ -43,6 +44,7 @@ RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad
 RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
 RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
 RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
+RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
 RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
 RUTA_PLANTILLA = DIR / "plantilla.html"
 RUTA_SALIDA = DIR / "Salida" / "index.html"
@@ -66,6 +68,19 @@ NOMBRES_REGION = {
     1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
     9: "La Araucanía", 10: "Los Lagos", 11: "Aysén", 12: "Magallanes", 13: "Metropolitana", 14: "Los Ríos", 15: "Arica y Parinacota", 16: "Ñuble",
 }
+NOMBRES_CORTOS = {
+    "A": "Agricultura y pesca", "B": "Minería", "C": "Industria manufacturera", "D": "Electricidad y gas", "E": "Agua y residuos", "F": "Construcción", "G": "Comercio",
+    "H": "Transporte", "I": "Alojamiento y comida", "J": "Información y comunicaciones", "K": "Finanzas y seguros", "L": "Inmobiliarias", "M": "Servicios profesionales",
+    "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud", "R": "Artes y deportes", "S": "Otros servicios", "T": "Hogares como empleadores",
+}
+# Índice de color de cada actividad que distingue a alguna región. Sigue a la actividad, no a su orden, y se eligió con
+# validate_palette.js para que las actividades de regiones vecinas se distingan, también con daltonismo (ΔE 8,4 o más).
+COLOR_RESUMEN = {"B": 0, "A": 1, "O": 2, "C": 3, "R": 4, "K": 5}
+REGION_METROPOLITANA = 13
+# Filas de personas_censo2024.parquet. Va como constante porque censo_procesado.csv solo trae 15 años o más, y regenerar
+# el mapa no debe exigir los microdatos; validar() la compara con el archivo cuando está disponible.
+POBLACION_TOTAL_CENSO = 18_480_432
+DESOCUPADO, FUERA_FUERZA_TRABAJO = 2, 3
 ORDEN_NORTE_SUR = [15, 1, 2, 3, 4, 5, 13, 6, 7, 16, 8, 9, 14, 10, 11, 12]
 TILDES = {
     "Ingenieria": "Ingeniería", "Tecnico": "Técnico", "Tecnica": "Técnica", "Pedagogia": "Pedagogía", "Educacion": "Educación", "Administracion": "Administración",
@@ -181,6 +196,44 @@ def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dic
             "mas_peso": {"r": int(con_peso["codigo_region"]), "txt": texto_peso(con_peso["peso_relativo"])}}
 
 
+def situacion_poblacion(procesado: pd.DataFrame) -> dict:
+    """Situación laboral de las personas de 15 años o más; la región es donde viven, porque quien no trabaja no tiene región de trabajo."""
+    def contar(g: pd.DataFrame) -> dict:
+        total = int(g["personas"].sum())
+        por_situacion = g.groupby("sit_fuerza_trabajo")["personas"].sum()
+        trabajan, buscan, no_buscan = (int(por_situacion.get(c, 0)) for c in (OCUPADO, DESOCUPADO, FUERA_FUERZA_TRABAJO))
+        return {"total": total, "trabajan": trabajan, "buscan": buscan, "no_buscan": no_buscan, "sin_dato": total - trabajan - buscan - no_buscan,
+                "pct_trabajan": redondear(100 * trabajan / total, 1), "pct_buscan": redondear(100 * buscan / total, 1), "pct_no_buscan": redondear(100 * no_buscan / total, 1),
+                "pct_sin_dato": redondear(100 * (total - trabajan - buscan - no_buscan) / total, 1)}
+    chile = contar(procesado)
+    return {"poblacion_total": POBLACION_TOTAL_CENSO, "menores_15": POBLACION_TOTAL_CENSO - chile["total"], "chile": chile,
+            "regiones": {str(int(r)): contar(g) for r, g in procesado.groupby("codigo_region")}}
+
+
+def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
+    """Panorama de todas las actividades. Una región se distingue por lo que más pesa ahí, sin contar bases pequeñas."""
+    pct_por_actividad = censo.drop_duplicates("actividad_ciiu")["pct_nacional"]
+    # El orden de mayor a menor se decide con el peso sin redondear, igual que el color.
+    peso_maximo = censo[censo["lectura"] != "base_pequena"].groupby("actividad_ciiu")["peso_relativo"].max().sort_values(ascending=False)
+    con_lectura = censo[censo["lectura"] != "base_pequena"]
+    regiones = {}
+    for r, g in con_lectura.groupby("codigo_region"):
+        distintiva = g.loc[g["peso_relativo"].idxmax()]
+        regiones[str(int(r))] = {"ciiu": distintiva["actividad_ciiu"], "peso": redondear(distintiva["peso_relativo"], 6), "txt": texto_peso(distintiva["peso_relativo"]),
+                                 "suave": bool(distintiva["peso_relativo"] < CORTES_ROJO[1])}
+    mas_empleo = censo.loc[censo.groupby("codigo_region")["ocupados"].idxmax()].set_index("codigo_region")["actividad_ciiu"]
+    for r, ciiu in mas_empleo.items():
+        regiones[str(int(r))]["mas_personas"] = ciiu
+    mayor_empleador = mas_empleo.value_counts()
+    por_actividad = {a["ciiu"]: a for a in actividades}
+    no_metropolitanas = [a for a in actividades if a["nacional"]["mas_personas"]["r"] != REGION_METROPOLITANA]
+    return {"total": sum(a["nacional"]["ocupados"] for a in actividades), "pct_5_mayores": redondear(pct_por_actividad.nlargest(5).sum(), 1),
+            "n_metropolitana": len(actividades) - len(no_metropolitanas), "excepciones": [{"ciiu": a["ciiu"], "r": a["nacional"]["mas_personas"]["r"]} for a in no_metropolitanas],
+            "mas_desiguales": [{"ciiu": c, "r": por_actividad[c]["nacional"]["mas_peso"]["r"], "txt": por_actividad[c]["nacional"]["mas_peso"]["txt"]} for c in peso_maximo.index[:2]],
+            "repartidas": [a["ciiu"] for a in actividades if a["nacional"]["conc"] == 0], "corte_suave": texto_peso(CORTES_ROJO[1]).replace(",60", ",6"),
+            "mayor_empleador": {"ciiu": mayor_empleador.index[0], "n": int(mayor_empleador.iloc[0])}, "colores": COLOR_RESUMEN, "regiones": regiones}
+
+
 def construir_datos() -> dict:
     censo = pd.read_csv(RUTA_CENSO, sep=";")
     ene_total = float(censo["ene_ocupados"].sum())
@@ -195,7 +248,7 @@ def construir_datos() -> dict:
         a = areas[(areas["actividad_ciiu"] == ciiu) & (areas["fiabilidad"] != "no_fiable")].nlargest(4, "pct_en_actividad")
         vinculadas = carreras[(carreras["actividad_ciiu"] == ciiu) & carreras["afinidad"].isin(AFINIDADES_VISIBLES)].sort_values("pct_en_carrera", ascending=False)
         actividades.append({
-            "ciiu": ciiu, "glosa": glosa, "pct_nacional": redondear(primero["pct_nacional"], 1), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
+            "ciiu": ciiu, "glosa": glosa, "corto": NOMBRES_CORTOS[ciiu], "pct_nacional": redondear(primero["pct_nacional"], 1), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
             "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total),
             "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 1), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
                                                  "pob": redondear(f["pct_poblacion_15_mas"], 1), "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
@@ -221,7 +274,7 @@ def construir_datos() -> dict:
     primera = niveles.drop_duplicates("nivel_titulo").set_index("nivel_titulo")
     niveles_chile = {n: {"ocupados": int(suma.loc[n, "ocupados_residencia"]), "desocupados": int(suma.loc[n, "desocupados"]), "tasa": redondear(primera.loc[n, "tasa_nacional_nivel"], 1),
                          "ene": redondear(primera.loc[n, "ene_tasa_nacional_nivel"], 1)} for n in suma.index}
-    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS}
+    return {"actividades": actividades, "fichas": fichas, "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado)}
 
 
 def validar(datos: dict, geo: dict, html: str) -> None:
@@ -230,6 +283,7 @@ def validar(datos: dict, geo: dict, html: str) -> None:
     con_base = [d for d in celdas if d["lectura"] != "base_pequena"]
     texto_calza = lambda d: clase_color(float(d["peso_txt"].replace(",", "."))) == d["clase"]
     sin_dato = sum(d["clase"] is None for a in datos["actividades"] for d in a["regiones"].values())
+    pob = datos["poblacion"]
     controles = {
         "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
         "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
@@ -244,6 +298,16 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),
         "Antofagasta en Minería: 101.929": next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["ocupados"] == 101_929,
         "Todas las carreras listadas tienen ficha": all(x["c"] in datos["fichas"] for a in datos["actividades"] for x in a["afines"] + a["indicios"]),
+        "Resumen: las 16 regiones tienen actividad distintiva y color": len(datos["resumen"]["regiones"]) == 16 and all(d["ciiu"] in COLOR_RESUMEN for d in datos["resumen"]["regiones"].values()),
+        "Resumen: cada color se usa": {d["ciiu"] for d in datos["resumen"]["regiones"].values()} == set(COLOR_RESUMEN),
+        "Resumen: Metropolitana en 18 de 20; excepciones en Maule y Antofagasta": datos["resumen"]["n_metropolitana"] == 18 and sorted(e["r"] for e in datos["resumen"]["excepciones"]) == [2, 7],
+        "Resumen: Comercio emplea más en 12 de 16 regiones": datos["resumen"]["mayor_empleador"] == {"ciiu": "G", "n": 12},
+        "Resumen: Minería y Agricultura son las más desiguales": [d["ciiu"] for d in datos["resumen"]["mas_desiguales"]] == ["B", "A"],
+        "Resumen: Valparaíso, Biobío y La Araucanía van en color suave": sorted(r for r, d in datos["resumen"]["regiones"].items() if d["suave"]) == ["5", "8", "9"],
+        "Población: 15,2 millones de 15 años o más, y suman sus cuatro grupos": pob["chile"]["total"] == 15_205_784 and pob["chile"]["trabajan"] + pob["chile"]["buscan"] + pob["chile"]["no_buscan"] + pob["chile"]["sin_dato"] == pob["chile"]["total"],
+        "Población: las regiones suman el total de Chile": sum(d["total"] for d in pob["regiones"].values()) == pob["chile"]["total"] and len(pob["regiones"]) == 16,
+        "Población: el % que trabaja va de Ñuble a Aysén": min(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "16" and max(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "11",
+        "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
         "La plantilla quedó completa": "__DATOS__" not in html and "__GEO__" not in html,
     }
     for nombre, ok in controles.items():

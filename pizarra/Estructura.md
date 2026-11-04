@@ -179,7 +179,7 @@
 ### Raíz
 
 - **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
-- **`docs/mapa.png`**: Captura de la vista inicial del mapa, que se muestra en el README.
+- **`docs/mapa.png`**: Captura de la parte superior de la vista inicial del mapa (resumen, modo claro), que se muestra en el README.
 - **`.gitignore`**: Deja fuera `.venv/`, datos crudos y microdatos, que se regeneran.
 
 ### Datos
@@ -266,7 +266,7 @@
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes y escribe la página; 14 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades y la situación de la población, y escribe la página; 24 controles. Requiere `.venv` (geopandas y pyarrow).
 - **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar.
 - **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
 - **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.

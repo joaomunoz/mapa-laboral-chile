@@ -12,7 +12,7 @@
 
 Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se concentra cada actividad económica y qué carreras están más ligadas a ella.
 
-**Flujo:** eliges una actividad → ves el resumen de Chile y el mapa coloreado según cuánto la concentra cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
+**Flujo:** partes en el resumen de la población y las 20 actividades → eliges una actividad → ves el resumen de Chile y el mapa coloreado según cuánto pesa en cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
 
 **Cambio de alcance (02 y 03-11-26):** se retiró el Índice de Cupos. Carrera × región no es medible: de 3.040 combinaciones, solo 62 pasan el filtro en ocupados y 0 en desocupados. El proyecto muestra solo lo medido, y cada dato conserva su fuente.
 
@@ -26,9 +26,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ---
 
-## 📊 Avance general estimado: ~95%
+## 📊 Avance general estimado: ~96%
 
-> Sube desde ~94%: el README ya tiene la captura del mapa. Falta la licencia, un enlace para ver el mapa y decidir la publicación.
+> Sube desde ~95%: el mapa suma el resumen ejecutivo, lenguaje más simple y fuentes con enlace. Falta terminar la revisión de lenguaje y de uso.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 90% | 🟡 | Revisión de código aplicada; falta la revisión del usuario con mouse y teclado reales |
+| Mapa interactivo | 92% | 🟡 | Resumen ejecutivo agregado; falta revisar el lenguaje y probar esta versión con mouse y teclado reales |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
@@ -47,18 +47,20 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔶 En curso / parcial
 
-- **Revisión del mapa por el usuario:** el usuario ya usa el mapa y reportó observaciones, pero sigue sin probarse de forma completa con mouse y teclado reales. La automatización de navegador falló; se probó con eventos por código y capturas.
+- **Lenguaje del mapa:** ya se simplificó, pero al usuario aún no lo convence; quedó para una revisión aparte.
+- **Revisión del mapa por el usuario:** el 04-11-26 informó que hasta ese momento funcionaba con mouse y teclado, antes del resumen ejecutivo. Esta versión solo se probó con eventos simulados y capturas, y el usuario seguirá indicando detalles.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Terminar la revisión del mapa** y ajustar lo que el usuario pida.
-2. **Licencia del proyecto.**
-3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
-4. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-5. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+1. **Terminar la revisión del mapa,** incluido el lenguaje, y ajustar lo que el usuario pida.
+2. **Ejemplo de Biobío en el README:** aclarar o cambiar, porque la cifra de Salud es solo del Censo (1,21 veces; 0,85 en ENE).
+3. **Licencia del proyecto.**
+4. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
+5. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+6. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -85,7 +87,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
 - **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
-- **Chile como vista inicial:** muestra juntas la región con más personas y la región donde más pesa, que son lecturas distintas de "concentrar". Por eso el selector quedó en pausa.
+- **Resumen como vista inicial:** da el panorama antes del detalle, con la población de 15 años o más, las 20 actividades y lo que distingue a cada región. Se descartó un bloque fijo sobre el mapa, porque alargaba todas las vistas.
+- **Quienes no trabajan, solo por Chile y región:** el Censo pregunta la actividad solo a quienes trabajan, así que abrirlo por actividad sería inventar la cifra. Se usa 15 años o más con aviso; se descartó por ahora un rango de 25 a 59 años, que exigía ampliar la tabla del Censo.
+- **Colores del resumen elegidos por vecindad:** 6 colores sin rojo ni azul, que ya significan más y menos que Chile. No pasan el validador comparados todos entre sí, pero sí entre actividades de regiones vecinas (ΔE 8,4 o más con daltonismo). Bajo 1,6 veces van más suaves.
+- **Población total como constante:** `censo_procesado.csv` solo trae 15 años o más, y regenerar el mapa no debe exigir los microdatos. Un control la compara con el parquet si está disponible.
+- **Modo oscuro y claro:** la página sigue el modo del sistema, así que ambos se revisan. Las notas usan el gris más contrastado, porque llevan advertencias.
 - **Desocupados por nivel y región, no por actividad ni carrera:** un desocupado no tiene actividad registrada. "Titulados que no trabajan" se mide de 22 a 54 años, porque con todas las edades pesan los jubilados.
 - **Git:** quedan fuera los datos crudos y los microdatos, que se regeneran. Los scripts no llevan fecha en su cabecera, porque git ya la registra.
 - **Matriz P6 retirada:** ninguna tabla la leía, porque P9 mide el perfil por su cuenta. P6 queda como `P6_control_no_asignados`, con el control de sesgo y las funciones de error y fiabilidad que usa P9. Se descartó conservarla, porque contradecía el criterio de dejar solo lo que produce el mapa.
@@ -103,7 +109,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Luego, agregar la licencia y decidir si se sube a GitHub.
+Revisar con el usuario el lenguaje del mapa y aclarar el ejemplo de Biobío en el README. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 

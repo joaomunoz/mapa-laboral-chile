@@ -2,13 +2,13 @@
 
 > Mapa interactivo que muestra dónde se concentra cada actividad económica en Chile y qué carreras están más ligadas a ella, usando solo datos medidos en fuentes oficiales.
 
-Eliges una actividad, como Minería o Salud, y el mapa colorea cada región según cuánto pesa esa actividad allí frente al país. Al hacer clic en una región ves sus cifras y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
+La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades y lo que distingue a cada región. Luego eliges una actividad, como Minería o Salud, y el mapa colorea cada región según cuánto pesa esa actividad allí frente al país. Al hacer clic en una región ves sus cifras y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
 **Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 216 KB, sin servidor ni dependencias.
 
-![Mapa de Chile con la actividad Explotación de minas y canteras: Antofagasta pesa 8,1 veces lo nacional, junto a la lista de regiones, las cifras nacionales y las carreras más ligadas a la actividad](docs/mapa.png)
+![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a la lista de regiones, lo principal del país y la tabla de las 20 actividades](docs/mapa.png)
 
-*Vista inicial del mapa, con Explotación de minas y canteras. El rojo indica que la actividad pesa más que en el país, y el azul, que pesa menos.*
+*Vista inicial: el resumen de la población y las 20 actividades. Cada región tiene el color de la actividad que más pesa ahí comparada con Chile, y un color más suave indica que la diferencia es menor.*
 
 ## Qué permite ver
 

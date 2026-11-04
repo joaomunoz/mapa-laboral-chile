@@ -7,12 +7,14 @@ Plantilla del mapa. generar_mapa.py inserta los datos y escribe Salida/index.htm
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dónde se concentra cada actividad en Chile</title>
+<title>En qué regiones de Chile pesa más cada actividad</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--t3:#6f6d68;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--aviso-fondo:#fdf4e3;
---sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--t3:#a3a198;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--aviso-fondo:#2a2416;
---sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;}}
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--aviso-fondo:#fdf4e3;
+--sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
+--k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--aviso-fondo:#2a2416;
+--sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
+--k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--plano)}
 .viz-root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--t1);background:var(--plano);padding:24px;min-height:100vh;font-size:14px;line-height:1.45}
@@ -24,11 +26,12 @@ label{font-weight:600}
 select{font:inherit;padding:8px 10px;border:1px solid var(--eje);border-radius:6px;background:var(--sup);color:var(--t1);max-width:100%;min-width:min(520px,100%)}
 .lectura{font-size:16px;margin:12px 0 16px;max-width:88ch}
 .lectura strong{font-weight:650}
-.grilla{display:grid;grid-template-columns:292px 300px minmax(0,1fr);gap:16px;align-items:start}
+.grilla{display:grid;grid-template-columns:330px 300px minmax(0,1fr);gap:16px;align-items:start}
 .tarjeta{background:var(--sup);border:1px solid var(--linea);border-radius:10px;padding:16px}
 h2{font-size:15px;margin:0 0 2px;font-weight:650}
 h3{font-size:13px;margin:18px 0 6px;font-weight:650}
-.nota{color:var(--t3);font-size:12.5px}
+/* Las notas llevan advertencias que evitan malas lecturas: por eso no van en un gris tenue ni en letra mínima. */
+.nota{color:var(--t2);font-size:13.5px}
 svg{display:block;width:100%;height:auto}
 .mapa svg{max-width:215px;margin:12px auto 0}
 .region{stroke:var(--sup);stroke-width:.7;cursor:pointer;outline:none;transition:opacity .1s}
@@ -37,8 +40,9 @@ svg{display:block;width:100%;height:auto}
 .contorno{fill:none;stroke:var(--t1);stroke-width:1.8;pointer-events:none}
 .leyenda{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:10px}
 .leyenda i{display:block;height:10px;border-radius:2px}
-.leyenda span{display:block;font-size:10.5px;color:var(--t2);text-align:center;margin-top:3px;font-variant-numeric:tabular-nums}
-.ejes{display:flex;justify-content:space-between;font-size:11.5px;color:var(--t2);margin-top:4px}
+.leyenda span{display:block;font-size:12px;line-height:1.2;color:var(--t2);text-align:center;margin-top:3px;font-variant-numeric:tabular-nums}
+.ejes[hidden]{display:none}
+.ejes{display:flex;justify-content:space-between;font-size:12.5px;color:var(--t2);margin-top:4px}
 .lista button{all:unset;display:grid;grid-template-columns:118px 1fr 40px;gap:8px;align-items:center;width:100%;padding:4px 6px;margin:0 -6px;border-radius:5px;cursor:pointer;box-sizing:content-box}
 .lista button:hover{background:var(--linea)}
 .lista button:focus-visible{outline:2px solid var(--acento)}
@@ -47,45 +51,76 @@ svg{display:block;width:100%;height:auto}
 .barra{height:10px;position:relative;background:transparent;border-left:1px solid var(--eje)}
 .barra i{display:block;height:100%;border-radius:0 3px 3px 0;min-width:2px}
 .lista .v{text-align:right;font-variant-numeric:tabular-nums}
+/* En el resumen, el nombre de la actividad no cabe junto a la región: va debajo, con su color al lado. */
+.lista button.fila-resumen{grid-template-columns:1fr 40px}
+.lista small{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--t2);font-weight:400}
+.muestra{display:inline-block;flex:none;width:12px;height:12px;border-radius:3px}
+.muestra.suave{opacity:.45}
+.leyenda-cat{display:grid;gap:4px;margin-top:10px;font-size:13px;color:var(--t2)}
+.leyenda-cat div{display:flex;align-items:center;gap:6px}
+.volver{display:inline-block;margin-bottom:10px;font-size:13.5px}
+/* En pantallas angostas, la tabla de 6 columnas se desplaza por dentro para no ensanchar toda la página. */
+.tabla-ancha{overflow-x:auto}
+/* Partes de un todo: la barra usa tonos propios para no confundirse con los colores de actividad ni con el rojo y azul del mapa. */
+.barra-poblacion{display:flex;gap:2px;height:14px;margin:10px 0 4px}
+.barra-poblacion i{display:block;min-width:2px;border-radius:2px}
+.s-trabajan{background:var(--acento)}.s-buscan{background:var(--t1)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:var(--eje);box-shadow:inset 0 0 0 1px var(--sd)}
+.celda-muestra{display:flex;align-items:center;gap:6px}
+.total td{font-weight:650}
+.principal{margin:6px 0 0;padding-left:18px}
+.principal li{margin:6px 0}
 .datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:10px}
 .dato b{display:block;font-size:22px;font-weight:650;letter-spacing:-.01em}
-.dato span{color:var(--t2);font-size:12.5px}
-.aviso{background:var(--aviso-fondo);border-radius:6px;padding:8px 10px;margin-top:10px;font-size:12.5px;color:var(--t2)}
+.dato span{color:var(--t2);font-size:13.5px}
+.aviso{background:var(--aviso-fondo);border-radius:6px;padding:8px 10px;margin-top:10px;font-size:13.5px;color:var(--t1)}
 .aviso::before{content:"⚠ ";color:var(--t1)}
 .separador{border:0;border-top:1px solid var(--linea);margin:16px 0}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;font-weight:600;color:var(--t2);font-size:12px;padding:4px 6px;border-bottom:1px solid var(--eje)}
+th{text-align:left;font-weight:600;color:var(--t2);font-size:13px;padding:4px 6px;border-bottom:1px solid var(--eje)}
 td{padding:5px 6px;border-bottom:1px solid var(--linea);vertical-align:top}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+/* Solo las cifras no se cortan: los encabezados en lenguaje simple son largos y deben poder pasar a dos líneas. */
+td.n{white-space:nowrap}
 .enlace{all:unset;color:var(--acento);cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:2px}
 .enlace:hover,.enlace:focus-visible{text-decoration-color:currentColor}
-.etiqueta{display:inline-block;font-size:11px;color:var(--t2);border:1px solid var(--eje);border-radius:4px;padding:0 4px;margin-left:4px;white-space:nowrap}
+.etiqueta{display:inline-block;font-size:12px;color:var(--t2);border:1px solid var(--eje);border-radius:4px;padding:0 4px;margin-left:4px;white-space:nowrap}
 .fichero{margin-top:12px;border:1px solid var(--eje);border-radius:8px;padding:12px}
 .cerrar{all:unset;float:right;cursor:pointer;color:var(--t2);padding:0 4px}
 .cerrar:focus-visible{outline:2px solid var(--acento)}
 #tip{position:fixed;pointer-events:none;background:var(--t1);color:var(--sup);padding:6px 9px;border-radius:6px;font-size:12.5px;display:none;z-index:9;max-width:240px}
-details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13px}
-footer{color:var(--t3);font-size:12.5px;margin-top:18px;max-width:100ch}
-footer p{margin:4px 0}
-@media(max-width:1020px){.grilla{grid-template-columns:minmax(0,290px) minmax(0,1fr)}.detalle{grid-column:1/-1}}
-@media(max-width:640px){.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}}
+details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
+footer{color:var(--t2);font-size:13.5px;margin-top:18px;max-width:100ch}
+footer p{margin:6px 0}
+footer ul{margin:4px 0;padding-left:18px}
+footer li{margin:3px 0}
+footer a{color:var(--acento);overflow-wrap:anywhere}
+@media(max-width:1290px){.grilla{grid-template-columns:minmax(0,330px) minmax(0,1fr)}.detalle{grid-column:1/-1}}
+@media(max-width:640px){table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}}
 </style>
 </head>
 <body>
 <div class="viz-root"><div class="envoltura">
-<h1>¿Dónde se concentra cada actividad en Chile?</h1>
+<h1>¿En qué regiones de Chile pesa más cada actividad?</h1>
 <p class="bajada">Elige una actividad económica y una región para ver cuántas personas trabajan ahí, y qué carreras están más ligadas a esa actividad en el país.</p>
 <div class="filtro"><label for="actividad">Actividad</label><select id="actividad"></select></div>
 <p class="lectura" id="lectura" aria-live="polite"></p>
 <div class="grilla">
-<section class="tarjeta mapa"><h2>Concentración por región</h2><div class="nota">Veces sobre el peso nacional, según dónde está el trabajo</div>
-<div class="leyenda" id="leyenda"></div><div class="ejes"><span>Menos que el país</span><span>Más que el país</span></div><div id="mapa"></div></section>
-<section class="tarjeta"><h2>Las 16 regiones</h2><div class="nota">De mayor a menor concentración. Chile muestra el peso de la actividad en el país.</div><div class="lista" id="lista" style="margin-top:10px"></div></section>
+<section class="tarjeta mapa"><h2 id="t-mapa"></h2><div class="nota" id="n-mapa"></div>
+<div class="leyenda" id="leyenda"></div><div class="ejes" id="ejes"><span>Menos que en Chile</span><span>Más que en Chile</span></div><div id="mapa"></div></section>
+<section class="tarjeta"><h2>Las 16 regiones</h2><div class="nota" id="n-lista"></div><div class="lista" id="lista" style="margin-top:10px"></div></section>
 <section class="tarjeta detalle" id="detalle"></section>
 </div>
 <footer>
-<p><strong>Cómo leer:</strong> "3 veces" significa que la actividad pesa en la región tres veces lo que pesa en el país. Concentrar no es tener más personas. Las carreras son un vínculo nacional: no indican cuántos titulados hay en la región.</p>
-<p><strong>Fuentes:</strong> Censo 2024 y ENE 2025-2026 (INE), CASEN 2024, SIES y MiFuturo (Mineduc). Se omiten en el dibujo Rapa Nui y Juan Fernández, cuyos datos siguen en Valparaíso.</p>
+<p><strong>Cómo leer:</strong> por ejemplo, si 2 de cada 100 personas que trabajan en Chile están en una actividad, y en una región son 6 de cada 100, esa región tiene 3 veces el promedio de Chile. Que una actividad pese más en una región no significa que ahí trabajen más personas. Las carreras son un dato de todo Chile: no indican cuántos titulados hay en cada región.</p>
+<p>El dibujo no incluye Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.</p>
+<p><strong>Fuentes:</strong></p>
+<ul>
+<li>Censo de Población y Vivienda 2024 y su cartografía (INE): <a href="https://censo2024.ine.gob.cl/resultados/" target="_blank" rel="noopener">censo2024.ine.gob.cl/resultados</a></li>
+<li>Encuesta Nacional de Empleo, diciembre de 2025 a septiembre de 2026 (INE): <a href="https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion" target="_blank" rel="noopener">ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion</a></li>
+<li>Encuesta CASEN 2024 (Ministerio de Desarrollo Social y Familia): <a href="https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024" target="_blank" rel="noopener">observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024</a></li>
+<li>Titulados 2007-2025, SIES (Ministerio de Educación): <a href="https://www.mifuturo.cl/bases-de-datos-titulados/" target="_blank" rel="noopener">mifuturo.cl/bases-de-datos-titulados</a></li>
+<li>Buscador de Empleabilidad e Ingresos, MiFuturo (Ministerio de Educación): <a href="https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/" target="_blank" rel="noopener">mifuturo.cl/buscador-de-empleabilidad-e-ingresos</a></li>
+</ul>
 </footer>
 </div>
 <div id="tip" role="status"></div>
@@ -93,88 +128,142 @@ footer p{margin:4px 0}
 <script>
 const DATOS=__DATOS__;const GEO=__GEO__;
 const NIVELES=[["Profesional","Profesional"],["Tecnico","Técnico"],["Sin_titulo","Sin título superior"]];
-const LECT={concentra:"concentra",similar:"similar a lo nacional",bajo_lo_nacional:"bajo lo nacional",base_pequena:"base pequeña",sin_muestra:"sin muestra suficiente"};
-const num=(x,d=0)=>x==null?"s/d":Number(x).toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d});
+const LECT={concentra:"pesa más que en Chile",similar:"parecido a Chile",bajo_lo_nacional:"pesa menos que en Chile",base_pequena:"muy pocas personas para comparar",sin_muestra:"sin datos suficientes"};
+const num=(x,d=0)=>x==null?"sin dato":Number(x).toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d});
 const pesos=x=>x==null?"Sin dato":"$"+num(x);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const relleno=d=>d.clase==null?"var(--sd)":`var(--c${d.clase})`;
 const ordenar=(a,b)=>(b.peso??-1)-(a.peso??-1);
 const nom=c=>DATOS.fichas[c]?.nombre??c;
 const CHILE=0;
-let act=DATOS.actividades.find(a=>a.ciiu==="B"),reg=null,ficha=null; // reg null es la vista de Chile.
+const RES=DATOS.resumen,POB=DATOS.poblacion;
+const porCiiu=c=>DATOS.actividades.find(a=>a.ciiu===c);
+const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+" y "+x[x.length-1];
+let act=null,reg=null,ficha=null; // act null es el resumen de todas las actividades; reg null es la vista de Chile.
 const sel=document.getElementById("actividad");
 [...DATOS.actividades].sort((a,b)=>a.glosa.localeCompare(b.glosa,"es")).forEach(a=>{const o=document.createElement("option");o.value=a.ciiu;o.textContent=a.glosa;sel.append(o)});
-sel.value=act.ciiu;
-sel.onchange=()=>{act=DATOS.actividades.find(a=>a.ciiu===sel.value);ficha=null;pintar()};
-document.getElementById("leyenda").innerHTML=DATOS.tramos.map((r,i)=>`<div><i style="background:var(--c${i})"></i><span>${r}</span></div>`).join("");
+{const o=document.createElement("option");o.value="";o.textContent="Todas las actividades";sel.prepend(o)}
+sel.value="";
+sel.onchange=()=>{act=sel.value?porCiiu(sel.value):null;if(!act)reg=null;ficha=null;pintar()};
 const tip=document.getElementById("tip");
 const svg=`<svg viewBox="-4 -4 ${GEO.ancho+8} ${GEO.alto+8}" role="group" aria-label="Mapa de Chile por región">`+DATOS.orden.map(r=>`<path class="region" data-r="${r}" d="${GEO.trazados[r]}" tabindex="0" role="button" fill-rule="evenodd"></path>`).join("")+'<path class="contorno" id="contorno" aria-hidden="true"></path></svg>';
 document.getElementById("mapa").innerHTML=svg;
 document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
- p.onclick=()=>{reg=r;ficha=null;pintar()};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();p.onclick()}};
- p.onmousemove=e=>{const d=act.regiones[r];tip.innerHTML=`<strong>${esc(DATOS.regiones[r])}</strong><br>${d.peso_txt} veces · ${num(d.ocupados)} ocupados`;tip.style.display="block";tip.style.left=Math.min(e.clientX+14,innerWidth-250)+"px";tip.style.top=e.clientY+14+"px"};
+ p.onclick=()=>{if(!act){act=porCiiu(RES.regiones[r].ciiu);sel.value=act.ciiu}reg=r;ficha=null;pintar()};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();p.onclick()}};
+ p.onmousemove=e=>{if(act){const d=act.regiones[r];tip.innerHTML=`<strong>${esc(DATOS.regiones[r])}</strong><br>${d.peso_txt} veces el promedio de Chile · ${num(d.ocupados)} personas trabajan aquí`}else{const d=RES.regiones[r];tip.innerHTML=`<strong>${esc(DATOS.regiones[r])}</strong><br>La distingue ${esc(porCiiu(d.ciiu).corto)}: ${d.txt} veces el promedio de Chile<br>Emplea a más personas: ${esc(porCiiu(d.mas_personas).corto)}`}tip.style.display="block";tip.style.left=Math.min(e.clientX+14,innerWidth-250)+"px";tip.style.top=e.clientY+14+"px"};
  p.onmouseleave=()=>{tip.style.display="none"}});
+function pintarResumen(){
+ const colores=Object.entries(RES.colores);
+ document.getElementById("t-mapa").textContent="Qué actividad distingue a cada región";
+ document.getElementById("n-mapa").textContent="La que más pesa en la región comparada con Chile. No siempre es la que emplea a más personas.";
+ document.getElementById("leyenda").className="leyenda-cat";
+ document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+`<div>Color más suave: menos de ${RES.corte_suave} veces</div>`;
+ document.getElementById("ejes").hidden=true;
+ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=RES.regiones[r],a=porCiiu(d.ciiu);p.style.fill=`var(--k${RES.colores[d.ciiu]})`;p.style.opacity=d.suave?.45:1;p.setAttribute("aria-label",`${DATOS.regiones[r]}: la distingue ${a.corto}, ${d.txt} veces el promedio de Chile`);p.setAttribute("aria-pressed",false)});
+ document.getElementById("contorno").setAttribute("d","");
+ document.getElementById("lectura").innerHTML=`En Chile viven <strong>${num(POB.poblacion_total)}</strong> personas. De las ${num(POB.chile.total)} con 15 años o más, <strong>${num(POB.chile.pct_trabajan,1)}%</strong> trabaja. Elige una región o una actividad para ver su detalle.`;
+ document.getElementById("n-lista").textContent=`De mayor a menor, en veces el promedio de Chile. ${porCiiu(RES.mayor_empleador.ciiu).corto} es lo que más personas emplea en ${RES.mayor_empleador.n} de las 16 regiones, aunque no sea lo que las distingue.`;
+ const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
+ document.getElementById("lista").innerHTML=orden.map(([r,d])=>`<button data-r="${r}" class="fila-resumen" aria-pressed="false"><span>${esc(DATOS.regiones[r])}<small><i class="muestra${d.suave?" suave":""}" style="background:var(--k${RES.colores[d.ciiu]})"></i>${esc(porCiiu(d.ciiu).corto)}</small></span><span class="v">${d.txt}</span></button>`).join("");
+ document.querySelectorAll("#lista button").forEach(b=>b.onclick=()=>{const r=Number(b.dataset.r);act=porCiiu(RES.regiones[r].ciiu);sel.value=act.ciiu;reg=r;ficha=null;pintar()});
+ detalle();
+}
+function vistaResumen(){
+ const c=x=>esc(porCiiu(x).corto),orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados),mayor=orden[0],[d1,d2]=RES.mas_desiguales;
+ const ch=POB.chile,rPob=Object.keys(POB.regiones).sort((a,b)=>POB.regiones[a].pct_trabajan-POB.regiones[b].pct_trabajan);
+ const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
+ return `<h2>Chile · Todas las actividades</h2><div class="nota">Censo 2024. Elige una actividad en la tabla para ver su detalle.</div>
+ <h3>La población de Chile y el trabajo</h3>
+ <div class="barra-poblacion" role="img" aria-label="${num(ch.pct_trabajan,1)}% trabaja, ${num(ch.pct_buscan,1)}% busca trabajo o está disponible, ${num(ch.pct_no_buscan,1)}% no trabaja ni busca, ${num(ch.pct_sin_dato,1)}% sin dato">${[["s-trabajan",ch.trabajan],["s-buscan",ch.buscan],["s-no-buscan",ch.no_buscan],["s-sin-dato",ch.sin_dato]].map(([k,v])=>`<i class="${k}" style="flex:${v} 0 0"></i>`).join("")}</div>
+ <table><thead><tr><th>Grupo</th><th class="n">Personas</th><th class="n">% de 15 años o más</th></tr></thead><tbody>
+ <tr class="total"><td>Población total del Censo</td><td class="n">${num(POB.poblacion_total)}</td><td class="n"></td></tr>
+ <tr><td>Menores de 15 años</td><td class="n">${num(POB.menores_15)}</td><td class="n"></td></tr>
+ <tr class="total"><td>Personas de 15 años o más</td><td class="n">${num(ch.total)}</td><td class="n">100%</td></tr>
+ ${[["s-trabajan","Trabajan",ch.trabajan,ch.pct_trabajan],["s-buscan","No trabajan, pero buscan o están disponibles",ch.buscan,ch.pct_buscan],["s-no-buscan","No trabajan ni buscan",ch.no_buscan,ch.pct_no_buscan],["s-sin-dato","Sin dato",ch.sin_dato,ch.pct_sin_dato]].map(([k,t,v,p])=>`<tr><td><span class="celda-muestra"><i class="muestra ${k}"></i>${t}</span></td><td class="n">${num(v)}</td><td class="n">${num(p,1)}%</td></tr>`).join("")}
+ </tbody></table>
+ <div class="aviso">"No trabajan ni buscan" no es desempleo: incluye, por ejemplo, a quienes están jubilados o se dedican a los quehaceres del hogar. El Censo no permite abrir este dato por actividad, porque la actividad solo se pregunta a quienes trabajan.</div>
+ <h3>Lo principal</h3><ul class="principal">
+ <li><strong>Cuántas personas trabajan:</strong> ${num(ch.pct_trabajan,1)}% de las personas de 15 años o más. Entre regiones, va de ${num(POB.regiones[rPob[0]].pct_trabajan,1)}% en ${esc(DATOS.regiones[rPob[0]])} a ${num(POB.regiones[rPob[rPob.length-1]].pct_trabajan,1)}% en ${esc(DATOS.regiones[rPob[rPob.length-1]])}.</li>
+ <li><strong>Dónde está el trabajo:</strong> ${esc(mayor.corto)} es la actividad más grande (${num(mayor.pct_nacional,1)}%). Las 5 mayores reúnen ${num(RES.pct_5_mayores,1)}% de quienes trabajan en Chile.</li>
+ <li><strong>Qué tan centralizado está:</strong> en ${RES.n_metropolitana} de las ${DATOS.actividades.length} actividades, la Metropolitana es donde trabajan más personas. Las excepciones son ${lista(RES.excepciones.map(e=>`${c(e.ciiu)} (${esc(DATOS.regiones[e.r])})`))}.</li>
+ <li><strong>Cuál es la más desigual:</strong> ${c(d1.ciiu)}, con ${d1.txt} veces el promedio de Chile en ${esc(DATOS.regiones[d1.r])}. Le sigue ${c(d2.ciiu)}, con ${d2.txt} veces en ${esc(DATOS.regiones[d2.r])}.</li>
+ <li><strong>Cuáles están más repartidas:</strong> en ${lista(RES.repartidas.map(c))}, ninguna región llega a 1,2 veces.</li></ul>
+ <hr class="separador"><h2>Las ${DATOS.actividades.length} actividades</h2><div class="nota">De mayor a menor, según cuántas personas trabajan en cada una. Suman ${num(RES.total)}: de los ${num(ch.trabajan)} que trabajan, ${num(ch.trabajan-RES.total)} no informaron región de trabajo o actividad, o están en organismos internacionales, que no se listan.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Personas</th><th class="n">% de Chile</th><th>Trabajan más personas en</th><th>Pesa más en</th><th class="n">Veces</th></tr></thead><tbody>`+orden.map(a=>{const n=a.nacional;return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button>${a.alerta_fuente?' <span title="El Censo y la Encuesta Nacional de Empleo dan cifras muy distintas">⚠</span>':""}</td><td class="n">${num(n.ocupados)}</td><td class="n">${num(a.pct_nacional,1)}%</td><td>${esc(DATOS.regiones[n.mas_personas.r])}</td><td>${esc(DATOS.regiones[n.mas_peso.r])}</td><td class="n">${n.mas_peso.txt}</td></tr>`}).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:8px 0 0">⚠ El Censo y la Encuesta Nacional de Empleo dan cifras muy distintas de cuántas personas trabajan en esta actividad.</p>
+ <p class="nota" style="margin:6px 0 0">En ${lista(sinRegion.map(a=>esc(a.corto)))}, entre ${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% y ${num(sinRegion[0].pct_sin_region,1)}% de las personas trabaja en varias comunas o no informó región. No se cuentan aquí, así que su cifra real es mayor.</p>
+ <hr class="separador"><h2>Las 16 regiones: quiénes trabajan</h2><div class="nota">Personas de 15 años o más, según dónde viven. De mayor a menor % que trabaja.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th><th class="n">Trabajan</th><th class="n">Buscan o están disponibles</th><th class="n">No trabajan ni buscan</th></tr></thead><tbody>`+[...rPob].reverse().map(r=>{const d=POB.regiones[r];return `<tr><td>${esc(DATOS.regiones[r])}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.pct_trabajan,1)}%</td><td class="n">${num(d.pct_buscan,1)}%</td><td class="n">${num(d.pct_no_buscan,1)}%</td></tr>`}).join("")+`</tbody></table></div>
+ <div class="aviso">No basta para comparar el empleo entre regiones: una región con más personas mayores o estudiantes puede tener un % menor sin que falte trabajo.</div>`}
 function pintar(){
- document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=act.regiones[r];p.style.fill=relleno(d);p.setAttribute("aria-label",`${DATOS.regiones[r]}: ${d.peso_txt} veces, ${LECT[d.lectura]}`);p.setAttribute("aria-pressed",r===reg)});
+ if(!act){pintarResumen();return}
+ document.getElementById("t-mapa").textContent="Dónde pesa más esta actividad";
+ document.getElementById("n-mapa").textContent="Cada región, en veces el promedio de Chile, según dónde está el trabajo";
+ document.getElementById("leyenda").className="leyenda";
+ document.getElementById("leyenda").innerHTML=DATOS.tramos.map((r,i)=>`<div><i style="background:var(--c${i})"></i><span>${r}</span></div>`).join("");
+ document.getElementById("ejes").hidden=false;
+ document.getElementById("n-lista").textContent="De mayor a menor, en veces el promedio de Chile. La fila Chile muestra qué parte de quienes trabajan en el país lo hace en esta actividad.";
+ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=act.regiones[r];p.style.fill=relleno(d);p.style.opacity=1;p.setAttribute("aria-label",`${DATOS.regiones[r]}: ${d.peso_txt} veces, ${LECT[d.lectura]}`);p.setAttribute("aria-pressed",r===reg)});
  // Se dibuja aparte: mover la región elegida al frente le quitaría el foco a quien navega con teclado.
  document.getElementById("contorno").setAttribute("d",reg==null?"":GEO.trazados[reg]);
  const foco=document.activeElement?.closest?.("#lista button")?.dataset.r;
  const orden=Object.entries(act.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>ordenar(a[1],b[1]));
  const max=orden[0][1].peso??1,mejor=orden[0],conc=orden.filter(([,d])=>d.lectura==="concentra");
- const mp=act.nacional.mas_personas,personas=mp.r===mejor[0]?`Ahí también hay más personas (${num(mp.n)}).`:`Hay más personas en <strong>${esc(DATOS.regiones[mp.r])}</strong> (${num(mp.n)}).`;
- document.getElementById("lectura").innerHTML=conc.length?`<strong>${esc(act.glosa)}</strong> pesa más en <strong>${esc(DATOS.regiones[mejor[0]])}</strong>, con ${mejor[1].peso_txt} veces su peso nacional. ${personas} ${conc.length===1?"Es la única región que llega a 1,2 veces o más.":conc.length+" regiones llegan a 1,2 veces o más."}`:`<strong>${esc(act.glosa)}</strong> no se concentra claramente en ninguna región: ninguna llega a 1,2 veces su peso nacional. La más alta es ${esc(DATOS.regiones[mejor[0]])}, con ${mejor[1].peso_txt}. ${personas}`;
+ const mp=act.nacional.mas_personas,personas=mp.r===mejor[0]?`Ahí también trabajan más personas (${num(mp.n)}).`:`Trabajan más personas en <strong>${esc(DATOS.regiones[mp.r])}</strong> (${num(mp.n)}).`;
+ document.getElementById("lectura").innerHTML=conc.length?`<strong>${esc(act.glosa)}</strong> pesa más en <strong>${esc(DATOS.regiones[mejor[0]])}</strong>, con ${mejor[1].peso_txt} veces el promedio de Chile. ${personas} ${conc.length===1?"Es la única región que llega a 1,2 veces o más.":conc.length+" regiones llegan a 1,2 veces o más."}`:`<strong>${esc(act.glosa)}</strong> no pesa claramente más en ninguna región: ninguna llega a 1,2 veces el promedio de Chile. La más alta es ${esc(DATOS.regiones[mejor[0]])}, con ${mejor[1].peso_txt} veces. ${personas}`;
  document.getElementById("lista").innerHTML=`<button data-r="${CHILE}" aria-pressed="${reg==null}" class="chile"><span>Chile</span><span></span><span class="v">${num(act.pct_nacional,1)}%</span></button>`+orden.map(([r,d])=>`<button data-r="${r}" aria-pressed="${r===reg}"><span>${esc(DATOS.regiones[r])}</span><span class="barra"><i style="width:${100*(d.peso??0)/max}%;background:${relleno(d)}"></i></span><span class="v">${d.peso_txt}</span></button>`).join("");
  document.querySelectorAll("#lista button").forEach(b=>b.onclick=()=>{const r=Number(b.dataset.r);reg=r===CHILE?null:r;ficha=null;pintar()});
  if(foco)document.querySelector(`#lista button[data-r="${foco}"]`)?.focus();
  detalle();
 }
 function avisos(){let h="";
- if(act.alerta_fuente)h+=`<div class="aviso">El Censo y ENE difieren bastante en el tamaño de esta actividad. Confía más en las veces que en el número de ocupados.</div>`;
- if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de sus ocupados en Chile trabaja en varias comunas o sin región informada, y no se cuenta en las regiones. La cifra real es mayor.</div>`;
+ if(act.alerta_fuente)h+=`<div class="aviso">El Censo y la Encuesta Nacional de Empleo dan cifras muy distintas de cuántas personas trabajan aquí. Usa ese número solo como referencia.</div>`;
+ if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de quienes trabajan en esta actividad en Chile lo hace en varias comunas o no informó región, y no se cuenta en las regiones. La cifra real es mayor.</div>`;
  return h}
 function bloqueCarreras(){
- let h=`<hr class="separador"><h2>Carreras más ligadas a esta actividad</h2><div class="nota">${reg==null?"Dato nacional.":`Dato nacional, igual para todas las regiones. No indica cuántos titulados hay en ${esc(DATOS.regiones[reg])}.`}</div>`;
- if(act.afines.length){h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">% de sus ocupados en esta actividad</th><th class="n">Titulados en la actividad</th></tr></thead><tbody>`+act.afines.map(c=>`<tr><td><button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>${c.fiab==="poco_fiable"?'<span class="etiqueta">poco fiable</span>':""}</td><td class="n" title="Rango 95%: ${num(c.min,1)} a ${num(c.max,1)}">${num(c.pct,1)}%</td><td class="n">${num(c.tit)}</td></tr>`).join("")+"</tbody></table>"}
- else h+=`<p class="nota">Ninguna carrera alcanza un vínculo firme con esta actividad.</p>`;
- if(act.indicios.length)h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos con muestra insuficiente (${act.indicios.length})</summary><p class="nota" style="margin:6px 0">Cumplen el criterio con pocos casos. No son datos firmes.</p>${act.indicios.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</details>`;
- if(act.areas.length)h+=`<h3>De qué áreas vienen los titulados de esta actividad</h3><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ let h=`<hr class="separador"><h2>Carreras más ligadas a esta actividad</h2><div class="nota">${reg==null?"Dato de todo Chile.":`Dato de todo Chile, igual para todas las regiones. No indica cuántos titulados hay en ${esc(DATOS.regiones[reg])}.`}</div>`;
+ if(act.afines.length){h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados con trabajo, % aquí</th><th class="n">Titulados aquí</th></tr></thead><tbody>`+act.afines.map(c=>`<tr><td><button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>${c.fiab==="poco_fiable"?'<span class="etiqueta">dato aproximado</span>':""}</td><td class="n" title="Valor probable: entre ${num(c.min,1)}% y ${num(c.max,1)}%">${num(c.pct,1)}%</td><td class="n">${num(c.tit)}</td></tr>`).join("")+"</tbody></table>"}
+ else h+=`<p class="nota">Ninguna carrera tiene un vínculo claro con esta actividad.</p>`;
+ if(act.indicios.length)h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos, con pocos casos (${act.indicios.length})</summary><p class="nota" style="margin:6px 0">Parecen ligadas a esta actividad, pero hay pocas personas encuestadas. Tómalo como una pista, no como un dato firme.</p>${act.indicios.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</details>`;
+ if(act.areas.length)h+=`<h3>De qué áreas de estudio vienen los titulados que trabajan aquí</h3><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
  return h}
 function vistaChile(){const n=act.nacional,rp=DATOS.regiones[n.mas_personas.r],rv=DATOS.regiones[n.mas_peso.r];
  return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024. Elige una región en el mapa o en la lista para ver su detalle.</div>
- <div class="datos"><div class="dato"><b>${num(n.ocupados)}</b><span>ocupados con región de trabajo</span></div><div class="dato"><b>${num(act.pct_nacional,1)}%</b><span>de los ocupados del país</span></div>
- <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región la concentra":"regiones la concentran"}</span></div></div>
- <table style="margin-top:12px"><tbody><tr><td>Región con más personas</td><td><button class="enlace" data-r="${n.mas_personas.r}">${esc(rp)}</button></td><td class="n">${num(n.mas_personas.n)} (${num(n.mas_personas.pct,1)}%)</td></tr>
+ <div class="datos"><div class="dato"><b>${num(n.ocupados)}</b><span>personas trabajan aquí, con región de trabajo conocida</span></div><div class="dato"><b>${num(act.pct_nacional,1)}%</b><span>de quienes trabajan en Chile</span></div>
+ <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región donde pesa más que en Chile":"regiones donde pesa más que en Chile"}</span></div></div>
+ <table style="margin-top:12px"><tbody><tr><td>Región donde trabajan más personas</td><td><button class="enlace" data-r="${n.mas_personas.r}">${esc(rp)}</button></td><td class="n">${num(n.mas_personas.n)} (${num(n.mas_personas.pct,1)}%)</td></tr>
  <tr><td>Región donde más pesa</td><td><button class="enlace" data-r="${n.mas_peso.r}">${esc(rv)}</button></td><td class="n">${n.mas_peso.txt} veces</td></tr></tbody></table>
- <p class="nota" style="margin:10px 0 0">Censo completo: ${num(n.censo_total)} ocupados, incluidos quienes no tienen región de trabajo. Contraste con ENE 2025-2026: ${num(n.ene_ocupados)} (${num(n.ene_pct,1)}%).</p>${avisos()}
- <hr class="separador"><h2>Situación en Chile por nivel educativo</h2><div class="nota">Todo el país, no cambia con la actividad. No indica desempleo dentro de ${esc(act.glosa)}.</div>
- <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th><th class="n">ENE</th></tr></thead><tbody>`+NIVELES.map(([k,t])=>{const x=DATOS.niveles_chile[k];return `<tr><td>${t}</td><td class="n">${num(x.ocupados)}</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.tasa,1)}%</td><td class="n">${num(x.ene,1)}%</td></tr>`}).join("")+`</tbody></table><p class="nota" style="margin:6px 0 0">Censo 2024; ENE 2025-2026 es una encuesta más reciente y sus tasas pueden diferir.</p>`}
+ ${avisos()}<details><summary>Ver detalle de las cifras</summary><p class="nota" style="margin:6px 0 0">Total del Censo: ${num(n.censo_total)} personas, contando a quienes no tienen región de trabajo. Otra medición, la Encuesta Nacional de Empleo 2025-2026: ${num(n.ene_ocupados)} personas (${num(n.ene_pct,1)}% de quienes trabajan en Chile).</p></details>
+ <hr class="separador"><h2>Situación en Chile por nivel de estudios</h2><div class="nota">Todo el país, en todas las actividades. No muestra el desempleo dentro de ${esc(act.glosa)}.</div>
+ <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Trabajan</th><th class="n">Sin trabajo*</th><th class="n">% sin trabajo</th><th class="n">Encuesta de Empleo</th></tr></thead><tbody>`+NIVELES.map(([k,t])=>{const x=DATOS.niveles_chile[k];return `<tr><td>${t}</td><td class="n">${num(x.ocupados)}</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.tasa,1)}%</td><td class="n">${num(x.ene,1)}%</td></tr>`}).join("")+`</tbody></table><p class="nota" style="margin:6px 0 0">*Buscan trabajo o están disponibles. El % se calcula sobre quienes trabajan o están en esa situación. Datos del Censo 2024; la Encuesta Nacional de Empleo 2025-2026 es más reciente y puede dar otro %.</p>`}
 function vistaRegion(){
  const d=act.regiones[reg],otras=DATOS.actividades.filter(a=>a.ciiu!==act.ciiu&&a.regiones[reg].lectura==="concentra").sort((a,b)=>ordenar(a.regiones[reg],b.regiones[reg]));
- let h=`<h2>${esc(DATOS.regiones[reg])} · ${esc(act.glosa)}</h2><div class="nota">Censo 2024, donde está el trabajo</div>
- <div class="datos"><div class="dato"><b>${num(d.ocupados)}</b><span>ocupados</span></div><div class="dato"><b>${d.peso_txt} veces</b><span>${LECT[d.lectura]}</span></div>
- <div class="dato"><b>${num(d.pct,1)}%</b><span>de los ocupados de la región (país: ${num(act.pct_nacional,1)}%)</span></div><div class="dato"><b>${num(d.pob,1)}%</b><span>de las personas de 15 años o más que viven en la región</span></div></div>
- <p class="nota" style="margin:10px 0 0">Contraste con ENE 2025-2026: ${d.ene_peso_txt} veces (${LECT[d.ene_lectura]??d.ene_lectura}).</p>`+avisos();
- if(otras.length)h+=`<h3>Otras actividades que concentra esta región</h3><div>${otras.slice(0,5).map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.glosa)}</button> <span class="nota">${a.regiones[reg].peso_txt}</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
- h+=`<hr class="separador"><h2>Situación en la región por nivel educativo</h2><div class="nota">Toda la región, no cambia con la actividad. No indica desempleo dentro de ${esc(act.glosa)}.</div>
- <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Trabajan en la región</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th><th class="n">Chile</th><th class="n">ENE</th></tr></thead><tbody>`+NIVELES.map(([k,t])=>{const n=DATOS.niveles[reg][k];return `<tr><td>${t}</td><td class="n">${num(n.trabajo)}</td><td class="n">${num(n.desocupados)}</td><td class="n">${num(n.tasa,1)}%</td><td class="n">${num(n.nacional,1)}%</td><td class="n" ${n.ene==null?'title="ENE no tiene muestra suficiente"':""}>${n.ene==null?"sin muestra":num(n.ene,1)+"%"+(n.ene_poco?" *":"")}</td></tr>`}).join("")+`</tbody></table><p class="nota" style="margin:6px 0 0">Censo 2024. Los desocupados y la tasa se cuentan donde viven; los ocupados, donde trabajan. ENE 2025-2026 es una encuesta más reciente y sus tasas pueden diferir${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?"; * poco fiable":""}.</p>`;
+ let h=`<h2>${esc(DATOS.regiones[reg])} · ${esc(act.glosa)}</h2><div class="nota">Censo 2024, según dónde está el trabajo</div>
+ <div class="datos"><div class="dato"><b>${num(d.ocupados)}</b><span>personas trabajan aquí</span></div><div class="dato"><b>${d.peso_txt} veces</b><span>el promedio de Chile: ${LECT[d.lectura]}</span></div>
+ <div class="dato"><b>${num(d.pct,1)}%</b><span>de quienes trabajan en la región (Chile: ${num(act.pct_nacional,1)}%)</span></div><div class="dato"><b>${num(d.pob,1)}%</b><span>de las personas de 15 años o más que viven en la región</span></div></div>
+ `+avisos()+`<details><summary>Ver detalle de las cifras</summary><p class="nota" style="margin:6px 0 0">Otra medición, la Encuesta Nacional de Empleo 2025-2026: ${d.ene_peso_txt} veces el promedio de Chile (${LECT[d.ene_lectura]??d.ene_lectura}).</p></details>`;
+ if(otras.length)h+=`<h3>Otras actividades que pesan más aquí que en Chile</h3><div>${otras.slice(0,5).map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.glosa)}</button> <span class="nota">${a.regiones[reg].peso_txt}</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ h+=`<hr class="separador"><h2>Situación en la región por nivel de estudios</h2><div class="nota">Toda la región, en todas las actividades. No muestra el desempleo dentro de ${esc(act.glosa)}.</div>
+ <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Trabajan en la región</th><th class="n">Sin trabajo*</th><th class="n">% sin trabajo</th><th class="n">% en Chile</th><th class="n">Encuesta de Empleo</th></tr></thead><tbody>`+NIVELES.map(([k,t])=>{const n=DATOS.niveles[reg][k];return `<tr><td>${t}</td><td class="n">${num(n.trabajo)}</td><td class="n">${num(n.desocupados)}</td><td class="n">${num(n.tasa,1)}%</td><td class="n">${num(n.nacional,1)}%</td><td class="n" ${n.ene==null?'title="La encuesta no tiene datos suficientes para este caso"':""}>${n.ene==null?"sin datos":num(n.ene,1)+"%"+(n.ene_poco?" *":"")}</td></tr>`}).join("")+`</tbody></table><p class="nota" style="margin:6px 0 0">*Buscan trabajo o están disponibles, y se cuentan donde viven; quienes trabajan se cuentan donde trabajan. El % se calcula sobre quienes trabajan o están en esa situación. Datos del Censo 2024; la Encuesta Nacional de Empleo 2025-2026 es más reciente y puede dar otro %${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?". Con * en esa columna: dato aproximado":""}.</p>`;
  return h}
 function detalle(){
- let h=(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
- if(ficha)h+=fichaHtml(ficha);
+ let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Ver todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
+ if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;
- e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=DATOS.actividades.find(a=>a.ciiu===b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus()});
+ document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});
+ e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
  e.querySelector(".cerrar")?.addEventListener("click",()=>{const previa=ficha;ficha=null;detalle();e.querySelector(`[data-c="${CSS.escape(previa)}"]`)?.focus()});
 }
 function fichaHtml(c){const f=DATOS.fichas[c];
- return `<div class="fichero" id="ficha"><button class="cerrar" aria-label="Cerrar ficha">✕</button><h2>${esc(f.nombre)}</h2><div class="nota">${esc(f.area)} · ${f.nivel==="Tecnico"?"Técnico":"Profesional"} · dato nacional</div>
- <div class="datos"><div class="dato"><b>${num(f.tit)}</b><span>títulos en 2025</span></div><div class="dato"><b>${num(f.emp,1)}%</b><span>empleabilidad al 1er año*</span></div>
- <div class="dato"><b>${pesos(f.ing1)}</b><span>ingreso medio al 1er año</span></div><div class="dato"><b>${pesos(f.ing5)}</b><span>ingreso medio al 5° año</span></div>
- <div class="dato"><b>${f.no_trab==null?"Sin muestra":num(f.no_trab,1)+"%"}</b><span>${f.no_trab==null?"suficiente para saber cuántos titulados de 22 a 54 años no trabajan":`de los titulados de 22 a 54 años no trabaja (${num(f.no_trab_n)} personas)**`}${f.no_trab_poco?'<span class="etiqueta">poco fiable</span>':""}</span></div></div>
+ return `<div class="fichero" id="ficha"><button class="cerrar" aria-label="Cerrar ficha">✕</button><h2>${esc(f.nombre)}</h2><div class="nota">${esc(f.area)} · ${f.nivel==="Tecnico"?"Técnico":"Profesional"} · dato de todo Chile</div>
+ <div class="datos"><div class="dato"><b>${num(f.tit)}</b><span>títulos en 2025</span></div><div class="dato"><b>${num(f.emp,1)}%</b><span>con sueldo mínimo o más al 1er año*</span></div>
+ <div class="dato"><b>${pesos(f.ing1)}</b><span>ingreso promedio al 1er año</span></div><div class="dato"><b>${pesos(f.ing5)}</b><span>ingreso promedio al 5° año</span></div>
+ <div class="dato"><b>${f.no_trab==null?"Sin datos":num(f.no_trab,1)+"%"}</b><span>${f.no_trab==null?"suficiente para saber cuántos titulados de 22 a 54 años no trabajan":`de los titulados de 22 a 54 años no trabaja (${num(f.no_trab_n)} personas)**`}${f.no_trab_poco?'<span class="etiqueta">dato aproximado</span>':""}</span></div></div>
  ${f.alerta_inst?`<div class="aviso">Basado en ${f.inst===1?"1 institución":f.inst+" instituciones"}: describe más a ${f.inst===1?"esa institución":"esas instituciones"} que a la carrera.</div>`:""}
- ${f.actividades.length?`<h3>Actividades donde tiene vínculo firme</h3><div>${f.actividades.map(a=>`${esc(a[1])} <span class="nota">${num(a[2],1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`:""}
- <p class="nota" style="margin:10px 0 0">*% de titulados con ingresos iguales o superiores al sueldo mínimo. Los ingresos del 1er y 5° año vienen de generaciones distintas (2021-2023 y 2017-2019), así que no muestran una evolución. Fuente: MiFuturo, pesos de septiembre de 2025.${f.no_trab==null?"":"<br>**Incluye desocupados e inactivos, como quienes estudian o se dedican a cuidados, así que no equivale a desempleo. Fuente: CASEN 2024."}</p></div>`}
+ ${f.actividades.length?`<h3>Actividades donde tiene un vínculo claro</h3><div>${f.actividades.map(a=>`${esc(a[1])} <span class="nota">${num(a[2],1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`:""}
+ <p class="nota" style="margin:10px 0 0">*MiFuturo lo llama empleabilidad. Ingresos brutos mensuales, en pesos de septiembre de 2025. Los del 1er y 5° año vienen de generaciones distintas (2021-2023 y 2017-2019), así que no muestran cómo sube el sueldo con los años. Fuente: MiFuturo.${f.no_trab==null?"":"<br>**Incluye a quienes buscan trabajo y a quienes no lo buscan, como quienes estudian o se dedican a cuidados, así que no equivale a desempleo. Fuente: CASEN 2024."}</p></div>`}
 pintar();
 </script>
 </body></html>
