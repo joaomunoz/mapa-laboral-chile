@@ -44,7 +44,7 @@ Las cifras se muestran con 1 decimal, o con más si están cerca de un corte, pa
 ## Criterios y límites
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable (n ≥ 60, gl ≥ 9, CV ≤ 30). Es un criterio de trabajo.
 - **Posible vínculo:** cumple los dos primeros umbrales con muestra insuficiente, y al menos 10 casos. No es un dato firme.
-- **Región de trabajo:** 5,7% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
+- **Región de trabajo:** 5,8% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
 - **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
 - **Censo y ENE difieren también en desempleo:** en profesionales, 6,3% y 8,1%; en técnicos, 7,8% y 8,5%. Influyen la fecha y quizá la forma de preguntar, sin comprobar.
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.

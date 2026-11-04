@@ -26,21 +26,21 @@ TAMANO_BLOQUE = 1024 * 1024
 TIEMPO_ESPERA = 60
 
 
-def descargar() -> Path:
-    """Descarga el zip usando un archivo .part, para no dejar uno truncado con el nombre definitivo."""
-    if RUTA_ZIP.exists():
-        log.info("Ya existe: %s", RUTA_ZIP.name)
-        return RUTA_ZIP
-    DIR_ENTRADA.mkdir(exist_ok=True)
-    parcial = RUTA_ZIP.with_suffix(".part")
-    with requests.get(URL_ZIP, stream=True, timeout=TIEMPO_ESPERA) as respuesta:
+def descargar(url: str, ruta: Path) -> Path:
+    """Descarga un zip usando un archivo .part, para no dejar uno truncado con el nombre definitivo."""
+    if ruta.exists():
+        log.info("Ya existe: %s", ruta.name)
+        return ruta
+    ruta.parent.mkdir(parents=True, exist_ok=True)
+    parcial = ruta.with_suffix(".part")
+    with requests.get(url, stream=True, timeout=TIEMPO_ESPERA) as respuesta:
         respuesta.raise_for_status()
         with parcial.open("wb") as destino:
             for bloque in respuesta.iter_content(TAMANO_BLOQUE):
                 destino.write(bloque)
-    parcial.rename(RUTA_ZIP)
-    log.info("Descargado: %s", RUTA_ZIP.name)
-    return RUTA_ZIP
+    parcial.rename(ruta)
+    log.info("Descargado: %s", ruta.name)
+    return ruta
 
 
 def obtener() -> Path:
@@ -48,7 +48,7 @@ def obtener() -> Path:
     if RUTA_PERSONAS.exists():
         log.info("Ya existe: %s", RUTA_PERSONAS.name)
         return RUTA_PERSONAS
-    with zipfile.ZipFile(descargar()) as archivo:
+    with zipfile.ZipFile(descargar(URL_ZIP, RUTA_ZIP)) as archivo:
         archivo.extractall(DIR_ENTRADA)
     return RUTA_PERSONAS
 

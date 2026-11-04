@@ -4,7 +4,7 @@
 
 > Tablero vivo del proyecto. Bitácora ejecutiva para entender rápidamente el estado actual y los siguientes pasos.
 
-**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. Nombre propuesto: "Mapa Laboral de Chile", carpeta `Mapa_Laboral_Chile`; falta renombrar la carpeta.
+**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. Carpeta renombrada a `Mapa_Laboral_Chile`. En claude-mem, el historial previo sigue bajo el proyecto `Proyecto Probabilidad_carreras`.
 
 ---
 
@@ -26,9 +26,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ---
 
-## 📊 Avance general estimado: ~92%
+## 📊 Avance general estimado: ~94%
 
-> Sube desde ~90%: el proyecto quedó solo con lo que produce el mapa, y el mapa salió idéntico tras regenerar toda la cadena.
+> Sube desde ~92%: ya existe el README y el mapa se regenera desde un clon limpio. Falta la presentación visual y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -41,22 +41,22 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
-| README y presentación | 0% | 🔴 | Para portafolio |
+| README y presentación | 60% | 🟡 | README escrito; falta captura, enlace para ver el mapa y licencia |
 
 ---
 
 ## 🔶 En curso / parcial
 
 - **Revisión del mapa por el usuario:** el usuario ya usa el mapa y reportó observaciones, pero sigue sin probarse de forma completa con mouse y teclado reales. La automatización de navegador falló; se probó con eventos por código y capturas.
-- **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
+- **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
 
 ## ⏳ Pendiente — Roadmap
 
 1. **Terminar la revisión del mapa** y ajustar lo que el usuario pida.
-2. **README y presentación para portafolio,** con el nombre "Mapa Laboral de Chile".
-3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado.
+2. **Presentación para portafolio:** captura del mapa y licencia.
+3. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
 4. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
 5. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
@@ -81,6 +81,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 **Datos y técnica**
 - **Censo agregado en CSV:** 15,2 millones de personas pasan a 14.793 filas, sin perder totales, porque no usa factores de expansión. El parquet original queda en `Entrada/`.
+- **Cartografía en script propio:** `CENSO/obtener_cartografia.py` va separado de `obtener.py`, porque quien solo regenera el mapa no necesita los microdatos de personas. Baja el zip completo (795 MB) en vez de pedir por rangos solo la capa (89 MB): gasta más datos, pero requiere menos código para un paso poco frecuente.
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
 - **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
@@ -101,7 +102,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Renombrar la carpeta del proyecto y, después, escribir el README del portafolio.
+Que el usuario termine de revisar `src/Visualizacion/Mapa_Actividades/Salida/index.html`. Luego, agregar la captura y la licencia al README, y decidir si se sube a GitHub.
 
 ---
 

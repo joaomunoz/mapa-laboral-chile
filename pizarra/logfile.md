@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 03-11-26 — Mapa regenerable desde un clon limpio (`CENSO/obtener_cartografia.py`; capa e `index.html` con huella idéntica) → log 03-11-26 21:25
+- 03-11-26 — README de portafolio escrito (`README.md`; cadena desde `procesar.py` probada en clon limpio con `index.html` idéntico) → log 03-11-26 21:25
 - 03-11-26 — Proyecto saneado: queda solo lo que produce el mapa (cadena completa regenerada; `index.html` y 13 tablas con huella idéntica; etiqueta `indice-cupos`) → log 03-11-26 19:50
 - 03-11-26 — Enfoque retirado archivado (`src/Analisis/Archivo/`; índice reejecutado con salidas idénticas, mapa sin cambios) → log 03-11-26 19:22
 - 03-11-26 — Mapa: vista nacional, situación por nivel y titulados que no trabajan (`b4f093e`, `4a437ce`, `ed32210`; 14/14 controles del mapa) → log 03-11-26 17:17
@@ -54,10 +56,19 @@
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
 
+## 03-11-26 21:25 — README de portafolio, script de cartografía y corrección de la nota
+- **Contexto / Discusión:** el usuario pidió el README del portafolio. Al contrastarlo con los datos aparecieron tres problemas: ningún script obtenía la capa regional del mapa, la nota decía 5,7% de ocupados sin región de trabajo cuando la medición da 5,75%, y el 0,95 entre Censo y ENE solo vale para las 209 combinaciones fiables en ENE (0,94 en las 336). Se decidió separar la cartografía de `obtener.py` y bajar el zip completo en vez de pedir por rangos, por simplicidad.
+- **Acción / Cambio realizado:** creados `README.md` y `src/Scrapers/CENSO/obtener_cartografia.py`. `descargar()` de `CENSO/obtener.py` ahora recibe URL y ruta. En `nota_de_lectura.md`, 5,7% pasa a 5,8%. Las versiones del README quedan fijadas, porque una instalación sin versiones trae pandas 3.1 y el proyecto solo está probado con 2.3.3.
+- **Pruebas:** en un clon limpio con los crudos enlazados, la cadena desde `procesar.py` dio `index.html` idéntico y sin cambios en archivos versionados. En otro clon sin crudos, `obtener_cartografia.py` descargó en 19 minutos, la capa salió idéntica a la local y `generar_mapa.py` dio `index.html` idéntico con 14/14 controles. Las versiones fijadas también lo regeneran igual.
+- **Sin comprobar:** los `obtener.py` de las 5 fuentes no se volvieron a ejecutar desde cero. El 62 de 3.040 del README viene de esta bitácora y no se recalculó. Sin commit a la fecha de esta entrada.
+- **Estado:** verificado, salvo lo indicado como sin comprobar.
+
+---
+
 ## 03-11-26 19:50 — Saneamiento del proyecto y nombre
 - **Contexto / Discusión:** el usuario pidió dejar solo lo necesario, porque varios análisis no se pudieron aplicar por el alcance de los datos, y cambiar el nombre del proyecto.
 - **Acción / Cambio realizado:** etiqueta `indice-cupos` antes de borrar. Salieron `Analisis/Archivo/`, ENADEL completo, P2, P4, P7, P8, cuatro cálculos de control, `Concentracion_Region_Area`, `cut_comuna.csv`, `censo_proyecciones_ed_superior.csv`, PDF duplicados, el zip del censo, sus parquet de hogares y viviendas, y `ENE/Entrada/ano-2024.csv`. Lo no versionado fue a la Papelera, porque el permiso de `rm` se rechazó por irreversible. Se corrigieron `Puentes_de_mapeo/esquema.py`, el diccionario (suma el censo), `.gitignore` y comentarios. Se descartan la actualización a 2026 y la capa de área CINE. Nombre propuesto: "Mapa Laboral de Chile".
-- **Estado:** verificado: cadena completa regenerada (5 fuentes, 4 puentes, 1 control, 5 tablas y mapa) con `index.html` y 13 tablas de huella idéntica. Pendiente: renombrar la carpeta y vaciar la Papelera.
+- **Estado:** verificado: cadena completa regenerada (5 fuentes, 4 puentes, 1 control, 5 tablas y mapa) con `index.html` y 13 tablas de huella idéntica. Carpeta renombrada y `.venv` comprobado en la nueva ruta. Pendiente: vaciar la Papelera.
 
 ## 03-11-26 19:22 — Archivo del enfoque retirado y pizarra
 - **Contexto / Discusión:** el usuario pidió archivar lo retirado y actualizar la pizarra. Se revisó antes que ninguna tabla vigente dependiera de esas carpetas.

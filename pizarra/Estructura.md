@@ -111,6 +111,7 @@
 │   │   │   │   ├── censo_procesado.csv
 │   │   │   │   └── censo_procesado_inspeccion.txt
 │   │   │   ├── esquema.py
+│   │   │   ├── obtener_cartografia.py
 │   │   │   ├── obtener.py
 │   │   │   └── procesar.py
 │   │   ├── comun
@@ -167,15 +168,17 @@
 │           │   └── nota_de_lectura.md
 │           ├── generar_mapa.py
 │           └── plantilla.html
-└── .gitignore
+├── .gitignore
+└── README.md
 
-50 directories, 113 files
+50 directories, 115 files
 ```
 
 ## 📝 Descripción de Componentes
 
 ### Raíz
 
+- **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
 - **`.gitignore`**: Deja fuera `.venv/`, datos crudos y microdatos, que se regeneran.
 
 ### Datos
@@ -220,6 +223,7 @@
 ### Fuente 5 — Censo 2024 (INE)
 
 - **`src/Scrapers/CENSO/obtener.py`**: Descarga a `Entrada/` el zip oficial en parquet y lo descomprime; no repite la descarga si ya existe.
+- **`src/Scrapers/CENSO/obtener_cartografia.py`**: Descarga el zip oficial de cartografía (795 MB), extrae solo la capa regional a `Entrada/cartografia/` y borra el zip; no repite la descarga si la capa ya existe.
 - **`src/Scrapers/CENSO/esquema.py`**: SSOT de `censo_procesado.csv` (8 columnas).
 - **`src/Scrapers/CENSO/procesar.py`**: Deriva región de trabajo, actividad y `nivel_titulo`, y agrega por combinación; 12 controles contra el manual del INE. Requiere `.venv` (pyarrow).
 - **`src/Scrapers/CENSO/Entrada/personas_censo2024.parquet`**: Microdatos oficiales de personas; `obtener.py` lo vuelve a descargar si falta.
