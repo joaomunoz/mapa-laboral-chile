@@ -1,4 +1,4 @@
-(Estructura.md Actualizada el 04-11-26)
+(Estructura.md Actualizada el 05-11-26)
 
 # 📂 Estructura del Proyecto — Mapa Laboral de Chile
 
@@ -272,7 +272,7 @@
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 48 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 53 controles. Requiere `.venv` (geopandas y pyarrow).
 - **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar.
 - **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
 - **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.

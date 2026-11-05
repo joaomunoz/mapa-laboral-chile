@@ -4,9 +4,9 @@
 
 La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades y lo que distingue a cada región. Luego eliges una actividad, como Minería o Salud, y el mapa colorea cada región según su coeficiente de localización (CL), que compara la participación de esa actividad en la región con la de Chile. Al hacer clic en una región ves sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 291 KB, sin servidor ni dependencias.
+**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 333 KB, sin servidor ni dependencias.
 
-![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a tres indicadores, la lista de regiones y el resumen de la población](docs/mapa.png)
+![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos y la lista de regiones](docs/mapa.png)
 
 *Vista inicial: el resumen de la población y las 20 actividades. Cada región tiene el color de la actividad con mayor coeficiente de localización (CL), y un color más suave indica un CL menor a 1,6.*
 

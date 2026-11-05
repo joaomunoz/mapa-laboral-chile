@@ -1,4 +1,4 @@
-(PIZARRA.md Actualizada el 04-11-26)
+(PIZARRA.md Actualizada el 05-11-26)
 
 # 🧙 PIZARRA — Mapa Laboral de Chile
 
@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el mapa suma el bloque de estudios y trabajo, y el README quedó alineado. Faltan ajustes menores, licencia y decidir la publicación.
+> Se mantiene en ~98%: el mapa suma el nivel de estudios por actividad y una cabecera con el nombre del proyecto. Faltan ajustes menores, licencia y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 98% | 🟢 | El usuario confirmó mouse y teclado antes del último bloque; falta probar sus accesos nuevos y decidir ajustes menores |
+| Mapa interactivo | 98% | 🟢 | El usuario confirmó mouse y teclado antes de los últimos cambios; falta probarlos con clics reales y decidir ajustes menores |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
@@ -47,17 +47,17 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔶 En curso / parcial
 
-- **Auditoría narrativa:** prioridades 1 a 4 aplicadas, y la 6 reemplazada por el bloque "Estudios y trabajo". Queda la 5: actividad con más ocupados por región.
+- **Auditoría narrativa:** prioridades 1 a 5 aplicadas, y la 6 reemplazada por el bloque "Estudios y trabajo".
 - **Evaluación anterior, prioridad media:** siguen sin aplicar leyenda con tonos suaves, peso del negro en la barra, "Sin dato", Metropolitana atenuada, frase de cada actividad, nombres unificados, "CL 1,598", nivel de estudios y "Lectura".
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
-- **Revisión del mapa por el usuario:** el 04-11-26 confirmó que cumple con mouse y teclado, antes del bloque "Estudios y trabajo". Falta probar sus accesos nuevos y mostrárselo a alguien que no lo conozca.
+- **Revisión del mapa por el usuario:** el 04-11-26 confirmó que cumple con mouse y teclado, antes del bloque "Estudios y trabajo", el nivel por actividad y los plegados. Falta probarlos con clics reales y mostrárselo a alguien que no lo conozca.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Terminar la revisión del mapa:** prioridad 5, cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px y lo que el usuario pida.
+1. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, confirmar el criterio de "menos de 10" y lo que el usuario pida.
 2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
 3. **Tabla Actividades:** decidir si se quita el % de los bloques regionales, porque está al límite de ancho.
 4. **Licencia del proyecto.**
@@ -92,7 +92,8 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.
 - **Sexo en tabla aparte; género sin abrir:** `censo_por_sexo.csv` no altera la tabla validada. `div_genero` es sensible y está suprimido para 633.803 ocupados, así que solo aparece como nota nacional. Se descartó una tercera columna por actividad, porque no sería confiable.
-- **Título con el hallazgo y frases protegidas:** responde con 4 de cada 10 ocupados y 13 de 15 regiones. Se descartó "cada región tiene su propia especialización", porque 16 regiones comparten 6 actividades. Esas afirmaciones están escritas a mano, y varios controles detienen la generación si los datos dejan de respaldarlas.
+- **Cabecera con el nombre del proyecto y hallazgos aparte:** el título dice qué es la página, y los hallazgos van en indicadores y en el título del mapa, junto a su evidencia. Se descartó el título con el hallazgo, por pedido del usuario. Se usa "13 de 16 regiones" en vez de "13 de las otras 15", que confundía. Se descartó "cada región tiene su propia especialización", porque 16 regiones comparten 6 actividades. Esas afirmaciones están escritas a mano, y varios controles detienen la generación si los datos dejan de respaldarlas.
+- **Nivel de estudios por actividad, sin tasas:** el Censo registra la actividad solo de quienes trabajan, así que la desocupación por actividad no existe y no se estima. Lo que no cambia con la actividad queda plegado en la región, para que no parezca propio de ella.
 - **Selector fijo a la izquierda:** no se mueve entre vistas, y va alineado con el título y el mapa. Se descartó dejarlo a la derecha por preferencia estética del usuario, y cambiarlo de lado entre vistas porque saltaba después del primer clic.
 - **Mapa de 149 × 760 px como mínimo:** Chile mide unas 5 veces su ancho, así que no cabe entero en una pantalla baja sin volverse difícil de leer. Se descartó el ajuste total a la ventana (97 px de ancho).
 - **Público y cierre:** el mapa responde a quien quiere conocer la situación laboral y educacional de Chile. El bloque "Estudios y trabajo" reemplaza un cierre orientado a una decisión de negocio, que habría que inventar. Las tablas no se pliegan, porque este público viene a consultarlas.
@@ -121,7 +122,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔜 Próximo paso inmediato
 
-Probar los accesos nuevos del bloque "Estudios y trabajo" y decidir los ajustes pendientes del mapa. Luego, agregar la licencia y decidir si se sube a GitHub.
+Probar con clics reales los últimos cambios y decidir los ajustes pendientes del mapa. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 

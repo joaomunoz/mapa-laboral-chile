@@ -1,9 +1,11 @@
-(logfile.md Actualizada el 04-11-26)
+(logfile.md Actualizada el 05-11-26)
 
 # 📜 Logfile — Bitácora de Sesiones, Cambios y Completados
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 05-11-26 — Nivel de estudios por actividad y por sexo, en Chile y cada región (`generar_mapa.py`, `plantilla.html`; 53/53 controles; 340 combinaciones recorridas sin textos rotos) → log 05-11-26 00:11
+- 05-11-26 — Cabecera con el nombre del proyecto y resumen; "13 de 16" y actividad con más ocupados en las tarjetas (`plantilla.html`; datos idénticos) → log 05-11-26 00:11
 - 04-11-26 — Mapa orientado a la situación laboral y educacional: cuarto indicador y bloque "Estudios y trabajo" (`plantilla.html`, `generar_mapa.py`; 48/48 controles; 410 vistas simuladas; datos previos idénticos) → log 04-11-26 22:06
 - 04-11-26 — README alineado con el público y el lenguaje del mapa (`README.md`; ejemplo de Biobío en Salud reemplazado por Industria manufacturera) → log 04-11-26 22:06
 - 04-11-26 — Vista inicial para lectura ejecutiva: título preciso, tres indicadores, mapa anotado y tarjetas reducidas (`plantilla.html`; 45/45 controles; 410 vistas simuladas; datos idénticos) → log 04-11-26 21:49
@@ -66,6 +68,16 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 05-11-26 00:11 — Nivel de estudios por actividad
+- **Contexto / Discusión:** el usuario notó que "Situación por nivel de estudios" se repetía en todas las actividades. El Censo registra la actividad solo de quienes trabajan: hay 0 desocupados con actividad, así que por actividad solo se pueden mostrar ocupados, no tasas.
+- **Acción / Cambio realizado:** tabla "Nivel de estudios de los ocupados" con Ocupados, Hombres y Mujeres, comparada con todas las actividades en Chile y con la misma actividad en Chile en cada región. Tabla general quitada en la vista de Chile, porque ya está en "Estudios y trabajo". En la región, "Toda la región, situación laboral" y "Toda la región, por nivel de estudios" quedan plegadas, lo que acorta la página unos 740 px. Bajo 60 personas lleva asterisco y bajo 10 muestra "menos de 10", sin escribir el valor en la página.
+- **Estado:** verificado con 53/53 controles, datos previos idénticos, 340 combinaciones de actividad y región, 410 vistas simuladas (360 px real con marco) y capturas. Pendiente: clics reales. Límite aceptado: "menos de 10" se puede deducir restando del total, en 16 filas regionales; es un criterio de presentación, no de anonimato, y el usuario aún no lo confirma.
+
+## 05-11-26 00:11 — Cabecera del proyecto y lectura de las tarjetas
+- **Contexto / Discusión:** el usuario pidió que la cabecera lleve el nombre del proyecto y un resumen, y notó que "15 regiones" confundía con las 16 del país. No era un error de cifra: excluía a la Metropolitana. También se aplicó la prioridad 5 de la auditoría.
+- **Acción / Cambio realizado:** título "Mapa Laboral de Chile" con resumen y fuente; frase dividida entre el indicador de 42,1% y el título del mapa, con "13 de 16 regiones"; rótulo "Principales hallazgos"; "Más ocupados" en cada tarjeta (Comercio en 12 regiones; solo en 4 coincide con el mayor CL).
+- **Estado:** verificado con controles y capturas. El mapa casi no subió (de 371 a 366 px), contra lo anticipado, y su título ocupa tres líneas. Se corrigieron una columna vacía en los indicadores y el punto de fijado del mapa.
 
 ## 04-11-26 22:06 — Público definido y bloque de estudios y trabajo
 - **Contexto / Discusión:** el usuario definió el público: quien quiere conocer la situación laboral y educacional de Chile. Con eso se descartó inventar una decisión de negocio, y la pregunta de cierre pasó a ser cómo se relacionan los estudios con el trabajo. También informó que la revisión con mouse y teclado ya cumple; esa confirmación es anterior al bloque nuevo.

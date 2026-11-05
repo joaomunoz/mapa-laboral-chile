@@ -1,4 +1,4 @@
-# Nota de lectura: La Metropolitana concentra 4 de cada 10 ocupados; 13 de las otras 15 regiones se especializan en minería, agricultura o administración pública
+# Nota de lectura: Mapa Laboral de Chile
 
 ## Qué muestra
 La vista inicial resume la población, las 20 actividades y la actividad con mayor coeficiente de localización (CL) en cada región. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
@@ -17,6 +17,7 @@ La vista inicial resume la población, las 20 actividades y la actividad con may
 | **Coeficiente de localización (CL)** | Participación en la región ÷ participación en Chile. 1 es igual que Chile; sobre 1, mayor | Censo 2024 |
 | **Hombres y mujeres** | Variable sexo, que solo registra esas dos categorías. En Actividades, el % es sobre los ocupados de cada actividad; en Población, sobre los 15 años o más de cada columna. En el detalle de región, participación por sexo = ocupados de ese sexo en la actividad ÷ ocupados de ese sexo en la región; el CL no se abre por sexo. Con menos de 60 personas, la cifra lleva un asterisco. En "Situación por nivel de estudios", la tasa por sexo siempre usa residencia. La identidad de género se mide aparte, desde los 18 años: 38.491 ocupados se identifican como trans, no binarios u otra identidad, pero el dato está suprimido para 633.803 ocupados, por lo que no se abre por actividad | Censo 2024 |
 | **Estudios y trabajo** | Ocupados, tasa de desocupación y tasa de participación por nivel, en Chile. Base: residencia y nivel informado (8.273.406 ocupados). El % con título técnico o profesional también se muestra por región y sexo. Son diferencias descriptivas: no indican causa | Censo 2024 |
+| **Nivel de estudios de los ocupados** | Perfil de cada actividad, en Chile o en la región elegida, por sexo. Base: lugar de trabajo y nivel informado. El Censo registra la actividad solo de quienes trabajan, así que no hay tasa de desocupación por actividad. Bajo 60 personas lleva un asterisco, y bajo 10 se muestra "menos de 10" | Censo 2024 |
 | **Títulos por sexo** | Títulos de pregrado terminal de 2025 por carrera, a nivel nacional. No son personas ocupadas y no se abren por región, porque el SIES registra la sede. Las titulaciones no binarias o indefinidas se informan solo como total de las carreras del mapa | SIES |
 | **Diferencia** | Ocupados en la actividad − ocupados esperados. Es una cuenta para comparar, no un déficit ni un exceso | Calculado con el Censo 2024 |
 | **Ocupados esperados** | Ocupados de la región × participación en Chile. Es una cuenta para comparar, no un dato medido ni la cantidad que debería haber | Calculado con el Censo 2024 |
@@ -26,7 +27,7 @@ La vista inicial resume la población, las 20 actividades y la actividad con may
 | **Ingreso medio al 1er y al 5° año** | Ingreso bruto mensual medio, en pesos de septiembre de 2025 | MiFuturo |
 
 ## Lectura de colores
-**En el resumen,** cada color es la actividad con mayor CL en la región, no la de más ocupados. La barra gris de cada tarjeta muestra el total de ocupados de la región según lugar de trabajo. Un color suave indica un CL menor a 1,6. Hoy son Biobío, Valparaíso y La Araucanía.
+**En el resumen,** cada color es la actividad con mayor CL en la región, no la de más ocupados. Cada tarjeta indica también la actividad con más ocupados de la región. La barra gris muestra el total de ocupados de la región según lugar de trabajo. Un color suave indica un CL menor a 1,6. Hoy son Biobío, Valparaíso y La Araucanía.
 
 **Al elegir una actividad,** el mapa usa 7 tramos de CL. Los cortes son criterios de trabajo, no un estándar oficial.
 
