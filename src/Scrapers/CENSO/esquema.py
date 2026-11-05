@@ -38,6 +38,7 @@ ESQUEMA_CENSO_SEXO: dict[str, str] = {
     "codigo_region_trabajo": "Int64",  # Región donde trabaja; se necesita para usar la misma base que las actividades
     "sit_fuerza_trabajo": "Int64",     # 1 Ocupado, 2 Desocupado, 3 Fuera de la fuerza de trabajo; vacía sin respuesta
     "actividad_ciiu": "object",        # Sección A-U; vacía si no es codificable o no aplica
+    "nivel_titulo": "object",          # DERIVADA de cine11: Tecnico, Profesional o Sin_titulo; vacía sin respuesta
     "sexo": "int64",                   # 1 Hombre, 2 Mujer: las dos únicas categorías de la variable
     "personas": "int64",
 }

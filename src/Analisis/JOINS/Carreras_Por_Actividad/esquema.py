@@ -31,6 +31,8 @@ CARRERAS_POR_ACTIVIDAD = {
     "fiabilidad": "object",               # fiable, poco_fiable o no_fiable
     "afinidad": "object",                 # afin, indicio_sin_muestra, indicio_debil o no_afin
     "titulados_2025": "int64",            # Títulos de pregrado terminal entregados en 2025
+    "titulados_2025_hombres": "int64",    # La diferencia con el total es la categoría no binaria o indefinida del SIES
+    "titulados_2025_mujeres": "int64",
     "empleabilidad_1er_anio": "float64",
     "ingreso_medio_1er_anio": "float64",  # Vacío si MiFuturo no lo informa
     "ingreso_medio_5to_anio": "float64",

@@ -77,8 +77,9 @@ def resumir_carreras(mifuturo: pd.DataFrame, titulados: pd.DataFrame) -> tuple[p
     respaldo["alerta_pocas_instituciones"] = respaldo["n_instituciones"] <= MAX_INSTITUCIONES_ALERTA
     r = r.merge(respaldo[["n_instituciones", "pct_institucion_principal", "alerta_pocas_instituciones"]], on="carrera_generica", validate="one_to_one")
     sin_peso = int((respaldo["total"] == 0).sum())
-    ultimo = titulados[titulados["anio"] == ANIO_TITULADOS].groupby("carrera_generica")["total_titulaciones"].sum().rename("titulados_2025")
-    r = r.merge(ultimo, on="carrera_generica", how="left").fillna({"titulados_2025": 0})
+    columnas_titulos = {"total_titulaciones": "titulados_2025", "titulaciones_hombres": "titulados_2025_hombres", "titulaciones_mujeres": "titulados_2025_mujeres"}
+    ultimo = titulados[titulados["anio"] == ANIO_TITULADOS].groupby("carrera_generica")[list(columnas_titulos)].sum().rename(columns=columnas_titulos)
+    r = r.merge(ultimo, on="carrera_generica", how="left").fillna({c: 0 for c in columnas_titulos.values()})
     return r, sin_peso
 
 
@@ -144,6 +145,8 @@ def validar(t: pd.DataFrame, carreras: pd.DataFrame, perfil: pd.DataFrame, sin_p
         "Ningún vínculo bajo los umbrales": fuera.empty,
         "Psicología: 8.212 títulos y 59,35% de empleabilidad": fila("PSICOLOGIA")["titulados_2025"] == 8212 and np.isclose(fila("PSICOLOGIA")["empleabilidad_1er_anio"], 59.3518, atol=0.001),
         "Medicina: 2.560 títulos": fila("MEDICINA")["titulados_2025"] == 2560,
+        "Títulos por sexo: hombres y mujeres no superan el total": (t["titulados_2025_hombres"] + t["titulados_2025_mujeres"] <= t["titulados_2025"]).all(),
+        "Enfermería: 845 hombres y 4.123 mujeres": (fila("ENFERMERIA")["titulados_2025_hombres"], fila("ENFERMERIA")["titulados_2025_mujeres"]) == (845, 4123),
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)

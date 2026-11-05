@@ -6,6 +6,8 @@
 
 ```text
 .
+├── .claude
+│   └── settings.json
 ├── Datos
 │   └── datos_externos
 │       └── glosarios
@@ -173,7 +175,7 @@
 ├── .gitignore
 └── README.md
 
-51 directories, 116 files
+52 directories, 117 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -181,6 +183,7 @@
 ### Raíz
 
 - **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
+- **`.claude/settings.json`**: Configuración local de Claude Code; sin versionar.
 - **`docs/mapa.png`**: Captura de la parte superior de la vista inicial del mapa (resumen, modo claro), que se muestra en el README.
 - **`.gitignore`**: Deja fuera `.venv/`, datos crudos y microdatos, que se regeneran.
 
@@ -227,12 +230,12 @@
 
 - **`src/Scrapers/CENSO/obtener.py`**: Descarga a `Entrada/` el zip oficial en parquet y lo descomprime; no repite la descarga si ya existe.
 - **`src/Scrapers/CENSO/obtener_cartografia.py`**: Descarga el zip oficial de cartografía (795 MB), extrae solo la capa regional a `Entrada/cartografia/` y borra el zip; no repite la descarga si la capa ya existe.
-- **`src/Scrapers/CENSO/esquema.py`**: SSOT de `censo_procesado.csv` (8 columnas) y `censo_por_sexo.csv` (6 columnas).
+- **`src/Scrapers/CENSO/esquema.py`**: SSOT de `censo_procesado.csv` (8 columnas) y `censo_por_sexo.csv` (7 columnas).
 - **`src/Scrapers/CENSO/procesar.py`**: Deriva región de trabajo, actividad y `nivel_titulo`, y agrega por combinación; escribe también la tabla por sexo; 16 controles (12 de la tabla principal y 4 por sexo). Requiere `.venv` (pyarrow).
 - **`src/Scrapers/CENSO/Entrada/personas_censo2024.parquet`**: Microdatos oficiales de personas; `obtener.py` lo vuelve a descargar si falta.
 - **`src/Scrapers/CENSO/Entrada/cartografia/Cartografia_censo2024_Pais_Regional.parquet`**: Límites oficiales de las 16 regiones.
 - **`src/Scrapers/CENSO/Salida/censo_procesado.csv`**: 14,793×8, personas de 15 años o más agregadas; sumar `personas`, no contar filas.
-- **`src/Scrapers/CENSO/Salida/censo_por_sexo.csv`**: 7,554×6, las mismas personas de 15 años o más abiertas por sexo (1 Hombre, 2 Mujer), con región de residencia y de trabajo, situación laboral y actividad; sumar `personas`, no contar filas. No incluye género. Va con su `_inspeccion.txt`.
+- **`src/Scrapers/CENSO/Salida/censo_por_sexo.csv`**: 17,531×7, las mismas personas de 15 años o más abiertas por sexo (1 Hombre, 2 Mujer), con región de residencia y de trabajo, situación laboral, actividad y nivel de estudios; sumar `personas`, no contar filas. No incluye género. Va con su `_inspeccion.txt`.
 
 ### Compartido
 
@@ -264,12 +267,12 @@
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/`**: Capa principal del mapa. `Salida/concentracion_region_actividad_censo.csv`, 336×17: ocupados, peso relativo, lectura, contraste con ENE y alertas.
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad/`**: Misma medida con ENE, con rango y fiabilidad; sirve de contraste. `Salida/concentracion_region_actividad.csv`, 336×18.
 - **`src/Analisis/JOINS/Areas_Por_Actividad/`**: Áreas CINE por actividad, nacional, con CASEN. `Salida/areas_por_actividad.csv`, 210×15.
-- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras; incluye respaldo por instituciones y titulados que no trabajan.
+- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras, 30 columnas, con títulos de 2025 por sexo; incluye respaldo por instituciones y titulados que no trabajan.
 - **`src/Analisis/JOINS/Fuerza_Trabajo_Region_Nivel/`**: Ocupados y desocupados por región y nivel educativo, con ENE como contraste. `Salida/fuerza_trabajo_region_nivel.csv`, 48×12.
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo, y escribe la página; 37 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 45 controles. Requiere `.venv` (geopandas y pyarrow).
 - **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar.
 - **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
 - **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.

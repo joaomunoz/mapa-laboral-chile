@@ -26,9 +26,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ---
 
-## 📊 Avance general estimado: ~97%
+## 📊 Avance general estimado: ~98%
 
-> Sube desde ~96%: el mapa suma lenguaje técnico, valores absolutos, apertura por sexo y un título con el hallazgo. Falta la prioridad media de la evaluación y probar con mouse y teclado.
+> Sube desde ~97%: el detalle de región muestra su cálculo, el sexo llega a regiones, niveles y carreras, y la vista inicial se reordenó para lectura ejecutiva. Falta cerrar la narrativa y probar con mouse y teclado.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 95% | 🟡 | Prioridad alta de la evaluación aplicada; falta la prioridad media y probar esta versión con mouse y teclado reales |
+| Mapa interactivo | 97% | 🟡 | Prioridades 1 a 4 de la auditoría aplicadas; faltan la 5 y la 6, y probar esta versión con mouse y teclado reales |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
@@ -47,7 +47,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔶 En curso / parcial
 
-- **Evaluación de la visualización:** prioridad alta aplicada (puntos 1 a 6). Quedan los puntos 7 a 16: leyenda con tonos suaves, peso del negro en la barra, "Sin dato", Metropolitana atenuada, frase de cada actividad, invitación a explorar, nombres unificados, "CL 1,598", nivel de estudios y "Lectura".
+- **Auditoría narrativa:** prioridades 1 a 4 aplicadas. Quedan la 5 (actividad con más ocupados por región) y la 6 (tablas plegadas y cierre con carreras afines); el cierre exige definir quién es el ejecutivo y qué decide.
+- **Evaluación anterior, prioridad media:** siguen sin aplicar leyenda con tonos suaves, peso del negro en la barra, "Sin dato", Metropolitana atenuada, frase de cada actividad, nombres unificados, "CL 1,598", nivel de estudios y "Lectura".
+- **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
 - **Revisión del mapa por el usuario:** el 04-11-26 informó que hasta ese momento funcionaba con mouse y teclado, antes del resumen ejecutivo. Esta versión solo se probó con eventos simulados y capturas. Falta mostrársela a alguien que no la conozca.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
@@ -55,7 +57,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Terminar la revisión del mapa:** decidir qué puntos de prioridad media aplicar y ajustar lo que el usuario pida.
+1. **Terminar la revisión del mapa:** prioridades 5 y 6, espacio vacío bajo 1290 px y lo que el usuario pida.
 2. **README:** cambiar el ejemplo de Biobío en Salud, porque la cifra es solo del Censo (1,21; 0,85 en ENE), y alinear "pesa" con el lenguaje de CL.
 3. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
 4. **Tabla Actividades:** decidir si se quita el % de los bloques regionales, porque está al límite de ancho.
@@ -91,8 +93,12 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.
 - **Sexo en tabla aparte; género sin abrir:** `censo_por_sexo.csv` no altera la tabla validada. `div_genero` es sensible y está suprimido para 633.803 ocupados, así que solo aparece como nota nacional. Se descartó una tercera columna por actividad, porque no sería confiable.
-- **Título con el hallazgo y frases protegidas:** responde con la concentración y la especialización en vez de preguntar. Esas frases están escritas a mano, y tres controles detienen la generación si los datos dejan de respaldarlas.
-- **Selector fijo a la derecha:** no se mueve entre vistas. Se descartó dejarlo a la izquierda al elegir una actividad, porque saltaba después del primer clic.
+- **Título con el hallazgo y frases protegidas:** responde con 4 de cada 10 ocupados y 13 de 15 regiones. Se descartó "cada región tiene su propia especialización", porque 16 regiones comparten 6 actividades. Esas afirmaciones están escritas a mano, y varios controles detienen la generación si los datos dejan de respaldarlas.
+- **Selector fijo a la izquierda:** no se mueve entre vistas, y va alineado con el título y el mapa. Se descartó dejarlo a la derecha por preferencia estética del usuario, y cambiarlo de lado entre vistas porque saltaba después del primer clic.
+- **Mapa de 149 × 760 px como mínimo:** Chile mide unas 5 veces su ancho, así que no cabe entero en una pantalla baja sin volverse difícil de leer. Se descartó el ajuste total a la ventana (97 px de ancho).
+- **Barra gris en las tarjetas:** compensa que la superficie no muestra cuántas personas trabajan en cada región. Los valores quedan en el texto emergente y en el detalle.
+- **Títulos por sexo en la tabla de carreras:** usan el mismo filtro de pregrado terminal que el total, y evitan leer un archivo que no está en el repositorio. Por carrera solo van hombres y mujeres.
+- **CASEN no se abre por sexo y CL tampoco:** la mayoría de las relaciones carrera-actividad no alcanzaría el mínimo de casos, y el CL por sexo suma una lectura más difícil a una tabla pensada para aclarar el cálculo.
 - **Resumen como vista inicial:** da el panorama antes del detalle, con la población de 15 años o más, las 20 actividades y lo que distingue a cada región. Se descartó un bloque fijo sobre el mapa, porque alargaba todas las vistas.
 - **Quienes no trabajan, solo por Chile y región:** el Censo pregunta la actividad solo a quienes trabajan, así que abrirlo por actividad sería inventar la cifra. Se usa 15 años o más con aviso; se descartó por ahora un rango de 25 a 59 años, que exigía ampliar la tabla del Censo.
 - **Colores del resumen elegidos por vecindad:** 6 colores sin rojo ni azul, que ya significan más y menos que Chile. No pasan el validador comparados todos entre sí, pero sí entre actividades de regiones vecinas (ΔE 8,4 o más con daltonismo). Bajo 1,6 veces van más suaves.
@@ -115,7 +121,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Decidir con el usuario qué puntos de prioridad media aplicar, probar con mouse y teclado, y corregir el ejemplo de Biobío en el README. Luego, agregar la licencia y decidir si se sube a GitHub.
+Definir quién es el ejecutivo y qué decide con el mapa, para el cierre de la prioridad 6. Probar con mouse y teclado, y corregir el ejemplo de Biobío en el README. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 

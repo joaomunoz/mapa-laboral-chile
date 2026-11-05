@@ -43,5 +43,6 @@ def cargar_mifuturo() -> pd.DataFrame:
 
 def cargar_titulados() -> pd.DataFrame:
     t = pd.read_csv(DIR_SCRAPERS / "Titulados" / "Salida" / "titulados_procesado.csv", sep=";", low_memory=False,
-                    usecols=["anio", "codigo_institucion", "carrera_generica", "carrera_clasificacion_nivel_1", "total_titulaciones"])
+                    usecols=["anio", "codigo_institucion", "carrera_generica", "carrera_clasificacion_nivel_1", "total_titulaciones",
+                             "titulaciones_hombres", "titulaciones_mujeres"])
     return t[t["carrera_clasificacion_nivel_1"].isin(CLASES_QUE_COMPITEN)]

@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 04-11-26 — Vista inicial para lectura ejecutiva: título preciso, tres indicadores, mapa anotado y tarjetas reducidas (`plantilla.html`; 45/45 controles; 410 vistas simuladas; datos idénticos) → log 04-11-26 21:49
+- 04-11-26 — Detalle de región como cadena de cálculo y sexo por región, nivel y carrera (`censo_por_sexo.csv` 17,531×7; `carreras_por_actividad.csv` con títulos por sexo; controles de suma en verde) → log 04-11-26 21:49
 - 04-11-26 — Título con el hallazgo, "Lo principal" arriba y selector fijo a la derecha (`plantilla.html`; 37/37 controles; 410 vistas simuladas de 360 a 1600 px) → log 04-11-26 19:11
 - 04-11-26 — Apertura por hombres y mujeres (`censo_por_sexo.csv` 7,554×6; 4 controles contra el manual y la tabla validada; datos previos idénticos) → log 04-11-26 19:11
 - 04-11-26 — Lenguaje técnico y valores absolutos: formato `valor (n%)`, CL con ocupados esperados y situación laboral por región (`generar_mapa.py`, controles en verde; datos previos idénticos) → log 04-11-26 19:11
@@ -62,6 +64,16 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 04-11-26 21:49 — Auditoría narrativa y vista inicial para ejecutivos
+- **Contexto / Discusión:** auditoría con la skill `visual-storytelling-design`, solo con capturas y mediciones, sin usuarios reales: 4,5 de 10 en su lista como historia, aunque el mapa funciona para explorar. El título anterior exageraba: las 16 regiones comparten 6 actividades, así que no cada una tiene "su propia" especialización. Prioridades 1 a 4 aprobadas; quedan abiertas la 5 y la 6.
+- **Acción / Cambio realizado:** título con 13 de 15 regiones y fuente arriba; tres indicadores (42,1%, 13 de 15 y 19,5 puntos) en lugar de "Lo principal"; anotaciones Norte, Centro-sur y Extremos en el mapa; tarjetas con actividad, barra gris y CL, y valores en el texto emergente y en el detalle; primeras cifras visibles de unas 85 a 35. El usuario prefirió el selector a la izquierda y un mapa más grande: mínimo de 149 × 760 px. El panel se fija recién cuando se ve su parte inferior, para no ocultar el sur en ventanas bajas.
+- **Estado:** verificado con 45/45 controles, 410 vistas simuladas (360 px real con marco), datos idénticos, capturas y medición de etiquetas y fijado. Pendiente: clics reales con mouse y teclado, espacio vacío bajo 1290 px, prioridades 5 y 6, y definir quién es el ejecutivo y qué decide.
+
+## 04-11-26 21:49 — Cadena de cálculo y sexo por región, nivel y carrera
+- **Contexto / Discusión:** el usuario no veía cómo se relacionaban los valores del detalle de región. También pidió sexo por región y por titulados. Se distinguieron tres fuentes de "titulados": SIES (títulos por carrera, nacional), CASEN (no se abre, porque la muestra es insuficiente) y Censo (nivel por región). No se calcula CL por sexo.
+- **Acción / Cambio realizado:** tabla A a F con cálculo visible y bloques Región y Chile por sexo; situación laboral por sexo en cada región; tabla por sexo en "Situación por nivel de estudios", donde la tasa usa residencia; títulos por sexo en la ficha. `censo_por_sexo.csv` sumó `nivel_titulo`. Un control detectó que sumaba también postítulos y posgrados y que el archivo fuente no está en el repositorio: se corrigió llevando los totales a `carreras_por_actividad.csv`, con el filtro de pregrado terminal, y las 13 titulaciones no binarias o indefinidas informadas antes pasaron a 6 en las carreras del mapa.
+- **Estado:** verificado: las columnas previas de `carreras_por_actividad.csv` quedaron idénticas, y 595 vistas con ficha abierta no muestran textos rotos. Abierto: en algunas carreras la categoría no binaria o indefinida se deduce restando; el usuario aún no decide si se muestran valores o solo porcentajes.
 
 ## 04-11-26 19:11 — Evaluación de la visualización y prioridades altas
 - **Contexto / Discusión:** el usuario pidió una evaluación como diseñador de información. Conclusión: el mapa funcionaba como tablero, pero el título no se respondía, el color podía leerse como "aquí se trabaja en esto", "CL" no estaba definido arriba y la superficie ocultaba el tamaño de cada región. La evaluación la hizo quien construyó el mapa y se basó en capturas, sin usuarios reales.
