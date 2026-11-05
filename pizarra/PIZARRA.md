@@ -10,7 +10,7 @@
 
 ## 🎯 Visión
 
-Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se concentra cada actividad económica y qué carreras están más ligadas a ella.
+Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conocer la situación laboral y educacional del país: dónde se concentra cada actividad económica, cómo se distribuye el trabajo por sexo y nivel de estudios, y qué carreras están más ligadas a cada actividad.
 
 **Flujo:** partes en el resumen de la población y las 20 actividades → eliges una actividad → ves el resumen de Chile y el mapa coloreado según cuánto pesa en cada región → haces clic en una región y ves sus estadísticas → ves las carreras afines a nivel nacional → abres la ficha de una carrera.
 
@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 📊 Avance general estimado: ~98%
 
-> Sube desde ~97%: el detalle de región muestra su cálculo, el sexo llega a regiones, niveles y carreras, y la vista inicial se reordenó para lectura ejecutiva. Falta cerrar la narrativa y probar con mouse y teclado.
+> Se mantiene en ~98%: el mapa suma el bloque de estudios y trabajo, y el README quedó alineado. Faltan ajustes menores, licencia y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,34 +37,33 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 97% | 🟡 | Prioridades 1 a 4 de la auditoría aplicadas; faltan la 5 y la 6, y probar esta versión con mouse y teclado reales |
+| Mapa interactivo | 98% | 🟢 | El usuario confirmó mouse y teclado antes del último bloque; falta probar sus accesos nuevos y decidir ajustes menores |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
-| README y presentación | 75% | 🟡 | README con captura; falta enlace para ver el mapa y licencia |
+| README y presentación | 85% | 🟡 | README alineado con el público y el lenguaje del mapa; falta enlace para ver el mapa y licencia |
 
 ---
 
 ## 🔶 En curso / parcial
 
-- **Auditoría narrativa:** prioridades 1 a 4 aplicadas. Quedan la 5 (actividad con más ocupados por región) y la 6 (tablas plegadas y cierre con carreras afines); el cierre exige definir quién es el ejecutivo y qué decide.
+- **Auditoría narrativa:** prioridades 1 a 4 aplicadas, y la 6 reemplazada por el bloque "Estudios y trabajo". Queda la 5: actividad con más ocupados por región.
 - **Evaluación anterior, prioridad media:** siguen sin aplicar leyenda con tonos suaves, peso del negro en la barra, "Sin dato", Metropolitana atenuada, frase de cada actividad, nombres unificados, "CL 1,598", nivel de estudios y "Lectura".
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
-- **Revisión del mapa por el usuario:** el 04-11-26 informó que hasta ese momento funcionaba con mouse y teclado, antes del resumen ejecutivo. Esta versión solo se probó con eventos simulados y capturas. Falta mostrársela a alguien que no la conozca.
+- **Revisión del mapa por el usuario:** el 04-11-26 confirmó que cumple con mouse y teclado, antes del bloque "Estudios y trabajo". Falta probar sus accesos nuevos y mostrárselo a alguien que no lo conozca.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Terminar la revisión del mapa:** prioridades 5 y 6, espacio vacío bajo 1290 px y lo que el usuario pida.
-2. **README:** cambiar el ejemplo de Biobío en Salud, porque la cifra es solo del Censo (1,21; 0,85 en ENE), y alinear "pesa" con el lenguaje de CL.
-3. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
-4. **Tabla Actividades:** decidir si se quita el % de los bloques regionales, porque está al límite de ancho.
-5. **Licencia del proyecto.**
-6. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
-7. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-8. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+1. **Terminar la revisión del mapa:** prioridad 5, cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px y lo que el usuario pida.
+2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
+3. **Tabla Actividades:** decidir si se quita el % de los bloques regionales, porque está al límite de ancho.
+4. **Licencia del proyecto.**
+5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
+6. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+7. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -96,6 +95,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 - **Título con el hallazgo y frases protegidas:** responde con 4 de cada 10 ocupados y 13 de 15 regiones. Se descartó "cada región tiene su propia especialización", porque 16 regiones comparten 6 actividades. Esas afirmaciones están escritas a mano, y varios controles detienen la generación si los datos dejan de respaldarlas.
 - **Selector fijo a la izquierda:** no se mueve entre vistas, y va alineado con el título y el mapa. Se descartó dejarlo a la derecha por preferencia estética del usuario, y cambiarlo de lado entre vistas porque saltaba después del primer clic.
 - **Mapa de 149 × 760 px como mínimo:** Chile mide unas 5 veces su ancho, así que no cabe entero en una pantalla baja sin volverse difícil de leer. Se descartó el ajuste total a la ventana (97 px de ancho).
+- **Público y cierre:** el mapa responde a quien quiere conocer la situación laboral y educacional de Chile. El bloque "Estudios y trabajo" reemplaza un cierre orientado a una decisión de negocio, que habría que inventar. Las tablas no se pliegan, porque este público viene a consultarlas.
 - **Barra gris en las tarjetas:** compensa que la superficie no muestra cuántas personas trabajan en cada región. Los valores quedan en el texto emergente y en el detalle.
 - **Títulos por sexo en la tabla de carreras:** usan el mismo filtro de pregrado terminal que el total, y evitan leer un archivo que no está en el repositorio. Por carrera solo van hombres y mujeres.
 - **CASEN no se abre por sexo y CL tampoco:** la mayoría de las relaciones carrera-actividad no alcanzaría el mínimo de casos, y el CL por sexo suma una lectura más difícil a una tabla pensada para aclarar el cálculo.
@@ -121,7 +121,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** que muestra dónde se c
 
 ## 🔜 Próximo paso inmediato
 
-Definir quién es el ejecutivo y qué decide con el mapa, para el cierre de la prioridad 6. Probar con mouse y teclado, y corregir el ejemplo de Biobío en el README. Luego, agregar la licencia y decidir si se sube a GitHub.
+Probar los accesos nuevos del bloque "Estudios y trabajo" y decidir los ajustes pendientes del mapa. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 

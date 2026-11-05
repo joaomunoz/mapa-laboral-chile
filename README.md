@@ -1,10 +1,10 @@
 # Mapa Laboral de Chile
 
-> Mapa interactivo que muestra dónde se concentra cada actividad económica en Chile y qué carreras están más ligadas a ella, usando solo datos medidos en fuentes oficiales.
+> Mapa interactivo para conocer la situación laboral y educacional de Chile: dónde se concentra cada actividad económica, cómo se distribuye el trabajo por sexo y nivel de estudios, y qué carreras están más ligadas a cada actividad, usando solo datos medidos en fuentes oficiales.
 
-La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades y lo que distingue a cada región. Luego eliges una actividad, como Minería o Salud, y el mapa colorea cada región según cuánto pesa esa actividad allí frente al país. Al hacer clic en una región ves sus cifras y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
+La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades y lo que distingue a cada región. Luego eliges una actividad, como Minería o Salud, y el mapa colorea cada región según su coeficiente de localización (CL), que compara la participación de esa actividad en la región con la de Chile. Al hacer clic en una región ves sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 288 KB, sin servidor ni dependencias.
+**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 291 KB, sin servidor ni dependencias.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a tres indicadores, la lista de regiones y el resumen de la población](docs/mapa.png)
 
@@ -12,8 +12,9 @@ La vista inicial resume cuántas personas trabajan en Chile, las 20 actividades 
 
 ## Qué permite ver
 
-- **Concentrar no es tener más personas.** En Salud, la Metropolitana tiene más ocupados (283.529), pero donde más pesa la actividad es en Biobío (1,21 veces lo nacional). El mapa muestra ambas lecturas.
-- **El peso de una actividad puede ser muy desigual.** Minería pesa 8,06 veces lo nacional en Antofagasta, con 101.929 ocupados.
+- **Un CL alto no significa más ocupados.** En Industria manufacturera, la Metropolitana tiene más ocupados (276.233), pero el mayor CL está en Biobío (1,25, con 59.327). El mapa muestra ambas lecturas.
+- **Una actividad puede estar muy concentrada.** Minería tiene un CL de 8,06 en Antofagasta, con 101.929 ocupados.
+- **El trabajo cambia según el nivel de estudios y el sexo.** La tasa de desocupación del Censo es 6,3% en profesionales, 7,8% en técnicos y 9,7% en quienes no tienen título superior. La tasa de participación es 69,7% en hombres y 50,2% en mujeres. El mapa no atribuye causas a estas diferencias.
 - **Una carrera se conecta con una actividad, no con una región.** Las carreras afines se presentan como dato nacional, porque ninguna fuente permite medirlas por región con solidez.
 
 ## La decisión que definió el proyecto
@@ -48,7 +49,7 @@ Cada paso se detiene si falla uno de sus controles. Estas comprobaciones se repi
 | Ocupadas informales | 2.451.443 | 2.452.190 | +0,03% |
 | Tasa de desocupación | 9,8% | 9,80% | exacta |
 
-- **Entre fuentes:** el peso relativo del censo y el de ENE tienen una correlación de 0,95 en las 209 combinaciones de región y actividad que ENE mide con fiabilidad. Sus tamaños sí difieren en seis actividades, y el mapa lo avisa.
+- **Entre fuentes:** el CL del censo y el de ENE tienen una correlación de 0,95 en las 209 combinaciones de región y actividad que ENE mide con fiabilidad. Sus tamaños sí difieren en seis actividades, y el mapa lo avisa.
 - **Coherencia del mapa:** color y cifra se calculan una sola vez, con el valor sin redondear. La generación se detiene si el color y la lectura se contradicen.
 
 ## Criterios principales
@@ -137,4 +138,4 @@ Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scr
 
 ## Estado
 
-El mapa está generado y validado en sus datos. Falta completar la revisión de uso con mouse y teclado.
+El mapa está generado y validado en sus datos. La revisión de uso con mouse y teclado la confirmó el autor el 04-11-26.

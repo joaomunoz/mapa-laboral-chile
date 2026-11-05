@@ -248,6 +248,21 @@ def sexo_por_nivel(por_sexo: pd.DataFrame) -> tuple[dict, dict]:
     return regiones, chile
 
 
+def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
+    """Relación entre nivel de estudios y trabajo en Chile, según residencia y con nivel informado. Describe, no explica: la edad también influye."""
+    suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum()
+    total = suma["ocupados_residencia"].sum()
+    con_titulo = ["Profesional", "Tecnico"]
+    por_nivel = {n: {"ocupados": int(f["ocupados_residencia"]), "pct": redondear(100 * f["ocupados_residencia"] / total, 1),
+                     "tasa_desocupacion": redondear(100 * f["desocupados"] / (f["ocupados_residencia"] + f["desocupados"]), 1),
+                     "tasa_participacion": redondear(100 * (f["ocupados_residencia"] + f["desocupados"]) / f.sum(), 1)} for n, f in suma.iterrows()}
+    region = niveles.assign(con_titulo=niveles["nivel_titulo"].isin(con_titulo)).groupby(["codigo_region", "con_titulo"])["ocupados_residencia"].sum().unstack()
+    pct_region = 100 * region[True] / region.sum(axis=1)
+    sexo = {clave: redondear(100 * sum(sexo_chile[n][campo] for n in con_titulo) / sum(d[campo] for d in sexo_chile.values()), 1) for clave, campo in (("hombres", "oh"), ("mujeres", "om"))}
+    return {"niveles": por_nivel, "total": int(total), "con_titulo": int(suma.loc[con_titulo, "ocupados_residencia"].sum()), "pct_con_titulo": redondear(100 * suma.loc[con_titulo, "ocupados_residencia"].sum() / total, 1),
+            "min": {"r": int(pct_region.idxmin()), "pct": redondear(pct_region.min(), 1)}, "max": {"r": int(pct_region.idxmax()), "pct": redondear(pct_region.max(), 1)}, "sexo": sexo}
+
+
 def situacion_poblacion(procesado: pd.DataFrame, por_sexo: pd.DataFrame) -> dict:
     """Situación laboral de las personas de 15 años o más; la región es donde viven, porque quien no trabaja no tiene región de trabajo."""
     def contar(g: pd.DataFrame) -> dict:
@@ -350,7 +365,7 @@ def construir_datos() -> dict:
             d["sexo"] = nivel_sexo_region[r][n]
     for n, d in niveles_chile.items():
         d["sexo"] = nivel_sexo_chile[n]
-    return {"actividades": actividades, "fichas": fichas,
+    return {"actividades": actividades, "fichas": fichas, "estudios": resumen_estudios(niveles, nivel_sexo_chile),
             # Solo el total de las carreras del mapa: por carrera son 1 o 2 personas, y no se abre.
             "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados}
 
@@ -403,6 +418,9 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Sexo: hombres y mujeres suman cada grupo de la población de Chile": all(pob["sexo"]["hombres"][k] + pob["sexo"]["mujeres"][k] == v for k, v in (("poblacion_total", pob["poblacion_total"]), ("menores_15", pob["menores_15"]), ("total", pob["chile"]["total"]), ("trabajan", pob["chile"]["trabajan"]), ("buscan", pob["chile"]["buscan"]), ("no_buscan", pob["chile"]["no_buscan"]), ("sin_dato", pob["chile"]["sin_dato"]))),
         "Sexo: en cada actividad, hombres y mujeres suman sus ocupados": all(a["sexo"]["h"] + a["sexo"]["m"] == a["nacional"]["ocupados"] for a in datos["actividades"]),
         "Sexo: Comercio 665.041 y 646.953; Construcción 496.948 y 46.279": (lambda c, f: (c["h"], c["m"], f["h"], f["m"]) == (665_041, 646_953, 496_948, 46_279))(next(a for a in datos["actividades"] if a["ciiu"] == "G")["sexo"], next(a for a in datos["actividades"] if a["ciiu"] == "F")["sexo"]),
+        "Estudios: 39,8% de los ocupados con título; desocupación 6,3%, 7,8% y 9,7%": (lambda e: e["pct_con_titulo"] == 39.8 and (e["niveles"]["Profesional"]["tasa_desocupacion"], e["niveles"]["Tecnico"]["tasa_desocupacion"], e["niveles"]["Sin_titulo"]["tasa_desocupacion"]) == (6.3, 7.8, 9.7))(datos["estudios"]),
+        "Estudios: los niveles suman el total y su tasa coincide con la tabla regional": sum(d["ocupados"] for d in datos["estudios"]["niveles"].values()) == datos["estudios"]["total"] and all(datos["estudios"]["niveles"][n]["tasa_desocupacion"] == d["tasa"] for n, d in datos["niveles_chile"].items()),
+        "Estudios: de Maule (31,7%) a la Metropolitana (44,3%); mujeres 46,5% y hombres 34,6%": (lambda e: (e["min"], e["max"], e["sexo"]) == ({"r": 7, "pct": 31.7}, {"r": 13, "pct": 44.3}, {"hombres": 34.6, "mujeres": 46.5}))(datos["estudios"]),
         "Sexo por región: en cada celda, hombres y mujeres suman sus ocupados": all(d["h"] + d["m"] == d["ocupados"] for a in datos["actividades"] for d in a["regiones"].values()),
         "Sexo por región: las bases suman la base de cada región y de Chile": all(v["h"] + v["m"] == datos["base_ocupados"]["regiones"][r] for r, v in datos["base_ocupados"]["sexo"]["regiones"].items()) and sum(datos["base_ocupados"]["sexo"]["chile"].values()) == datos["base_ocupados"]["chile"],
         "Sexo por región: Biobío en Salud 15.108 y 45.643; 4,91% y 17,22%": (lambda d: (d["h"], d["m"], d["pct_h"], d["pct_m"]) == (15_108, 45_643, 4.91, 17.22))(next(a for a in datos["actividades"] if a["ciiu"] == "Q")["regiones"][8]),

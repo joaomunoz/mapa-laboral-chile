@@ -20,7 +20,7 @@ body{margin:0;background:var(--plano)}
 .viz-root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--t1);background:var(--plano);padding:24px;min-height:100vh;font-size:14px;line-height:1.45}
 .envoltura{max-width:1240px;margin:0 auto}
 h1{font-size:24px;margin:0 0 4px;font-weight:650;letter-spacing:-.01em}
-.bajada{color:var(--t2);margin:0 0 18px;max-width:72ch}
+.bajada{color:var(--t2);margin:0 0 18px;max-width:120ch}
 .filtro{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
 label{font-weight:600}
 select{font:inherit;padding:8px 10px;border:1px solid var(--eje);border-radius:6px;background:var(--sup);color:var(--t1);max-width:100%;min-width:min(520px,100%)}
@@ -78,7 +78,7 @@ svg{display:block;width:100%;height:auto}
 .celda-muestra{display:flex;align-items:center;gap:6px}
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:0 0 8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 8px}
 .kpis[hidden]{display:none}
 .kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px}
 .kpi b{display:block;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
@@ -146,7 +146,7 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 <body>
 <div class="viz-root"><div class="envoltura">
 <h1>La Metropolitana concentra 4 de cada 10 ocupados; 13 de las otras 15 regiones se especializan en minería, agricultura o administración pública</h1>
-<p class="bajada">Ocupados por actividad económica y región, con las carreras afines a cada actividad. Fuente principal: Censo 2024, INE.</p>
+<p class="bajada">Situación laboral y educacional de Chile: ocupados por actividad económica, región, sexo y nivel de estudios, con las carreras afines a cada actividad. Fuente principal: Censo 2024, INE.</p>
 <div class="cabecera" id="cabecera">
 <div class="filtro"><label for="actividad">Actividad</label><select id="actividad"></select></div>
 <p class="lectura" id="lectura" aria-live="polite"></p>
@@ -197,7 +197,7 @@ const relleno=d=>d.clase==null?"var(--sd)":`var(--c${d.clase})`;
 const ordenar=(a,b)=>(b.peso??-1)-(a.peso??-1);
 const nom=c=>DATOS.fichas[c]?.nombre??c;
 const CHILE=0;
-const RES=DATOS.resumen,POB=DATOS.poblacion;
+const RES=DATOS.resumen,POB=DATOS.poblacion,EST=DATOS.estudios;
 const porCiiu=c=>DATOS.actividades.find(a=>a.ciiu===c);
 const nomReg=r=>esc(DATOS.regiones[r]);
 // Bajo 10 lleva dos decimales: en actividades pequeñas, con uno solo no se ve la diferencia entre la región y Chile.
@@ -249,7 +249,8 @@ function pintarResumen(){
  const principal=document.getElementById("principal");principal.hidden=false;document.getElementById("cabecera").classList.add("con-resumen");
  const fuera=Object.entries(RES.regiones).filter(([r])=>r!=="13"),patron=fuera.filter(([,d])=>["B","A","O"].includes(d.ciiu)),brecha=sx.hombres.tasa_participacion-sx.mujeres.tasa_participacion;
  principal.innerHTML=[[`${num(rm.pct_lugar_trabajo,1)}%`,"de los ocupados está en la Metropolitana",`${num(rm.lugar_trabajo)} de ${num(ch.lugar_trabajo)}, según lugar de trabajo. Tiene más ocupados en ${RES.n_metropolitana} de ${DATOS.actividades.length} actividades.`],
-  [`${patron.length} de ${fuera.length}`,"regiones fuera de la Metropolitana se especializan en minería, agricultura o administración pública","Según su mayor CL. Valparaíso y Biobío se distinguen por otras actividades."],
+  [`${patron.length} de ${fuera.length}`,"regiones fuera de la Metropolitana siguen ese patrón de especialización","Según su mayor CL. Valparaíso y Biobío se distinguen por otras actividades."],
+  [`${num(EST.pct_con_titulo,1)}%`,"de los ocupados tiene título técnico o profesional",`Desocupación: ${num(EST.niveles.Profesional.tasa_desocupacion,1)}% en profesionales, ${num(EST.niveles.Tecnico.tasa_desocupacion,1)}% en técnicos y ${num(EST.niveles.Sin_titulo.tasa_desocupacion,1)}% sin título superior.`],
   [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",`${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres. El Censo no indica su causa.`]]
   .map(([v,t,d])=>`<div class="kpi"><b>${v}</b><span class="kpi-t">${t}</span><span class="nota">${d}</span></div>`).join("");
  anotarMapa(NOTAS_MAPA=[[2,"izq","Norte","Minería",cl(2)],[7,"der","Centro-sur","Agricultura y pesca",cl(7)],[11,"der","Extremos","Administración pública",cl(11)]]);
@@ -261,7 +262,13 @@ function vistaResumen(){
  const orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados);
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
- return `<h2>Chile · Todas las actividades</h2><div class="nota">Censo 2024.</div>
+ const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
+ return `<h2>Estudios y trabajo</h2><div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${NIVELES.map(([k,t])=>{const x=EST.niveles[k];return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")}</tbody></table></div>
+ <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: de ${num(EST.min.pct,1)}% en ${nomReg(EST.min.r)} a ${num(EST.max.pct,1)}% en ${nomReg(EST.max.r)}, y ${num(EST.sexo.mujeres,1)}% de las mujeres frente a ${num(EST.sexo.hombres,1)}% de los hombres.</p>
+ <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
+ <p style="margin:8px 0 0"><strong>Carreras afines:</strong> elige una actividad para ver sus carreras, con títulos, empleabilidad e ingresos. Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
+ <hr class="separador"><h2>Chile · Todas las actividades</h2><div class="nota">Censo 2024.</div>
  <h3>Población y fuerza de trabajo</h3>
  <div class="barra-poblacion" role="img" aria-label="${num(ch.pct_trabajan,1)}% ocupados, ${num(ch.pct_buscan,1)}% desocupados, ${num(ch.pct_no_buscan,1)}% fuera de la fuerza de trabajo, ${num(ch.pct_sin_dato,1)}% sin dato">${[["s-trabajan",ch.trabajan],["s-buscan",ch.buscan],["s-no-buscan",ch.no_buscan],["s-sin-dato",ch.sin_dato]].map(([k,v])=>`<i class="${k}" style="flex:${v} 0 0"></i>`).join("")}</div>
  <div class="nota">Entre paréntesis, % de la población de 15 años o más de cada columna.</div>

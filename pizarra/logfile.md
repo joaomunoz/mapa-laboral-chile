@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 04-11-26 — Mapa orientado a la situación laboral y educacional: cuarto indicador y bloque "Estudios y trabajo" (`plantilla.html`, `generar_mapa.py`; 48/48 controles; 410 vistas simuladas; datos previos idénticos) → log 04-11-26 22:06
+- 04-11-26 — README alineado con el público y el lenguaje del mapa (`README.md`; ejemplo de Biobío en Salud reemplazado por Industria manufacturera) → log 04-11-26 22:06
 - 04-11-26 — Vista inicial para lectura ejecutiva: título preciso, tres indicadores, mapa anotado y tarjetas reducidas (`plantilla.html`; 45/45 controles; 410 vistas simuladas; datos idénticos) → log 04-11-26 21:49
 - 04-11-26 — Detalle de región como cadena de cálculo y sexo por región, nivel y carrera (`censo_por_sexo.csv` 17,531×7; `carreras_por_actividad.csv` con títulos por sexo; controles de suma en verde) → log 04-11-26 21:49
 - 04-11-26 — Título con el hallazgo, "Lo principal" arriba y selector fijo a la derecha (`plantilla.html`; 37/37 controles; 410 vistas simuladas de 360 a 1600 px) → log 04-11-26 19:11
@@ -64,6 +66,11 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 04-11-26 22:06 — Público definido y bloque de estudios y trabajo
+- **Contexto / Discusión:** el usuario definió el público: quien quiere conocer la situación laboral y educacional de Chile. Con eso se descartó inventar una decisión de negocio, y la pregunta de cierre pasó a ser cómo se relacionan los estudios con el trabajo. También informó que la revisión con mouse y teclado ya cumple; esa confirmación es anterior al bloque nuevo.
+- **Acción / Cambio realizado:** indicador de 39,8% de ocupados con título técnico o profesional; bajada con el público; bloque "Estudios y trabajo" antes de las tablas, con tabla por nivel, rango regional (Maule 31,7%, Metropolitana 44,3%), sexo (46,5% y 34,6%), aviso de que no indica causa y accesos a actividades con más carreras afines. Reemplaza a la prioridad 6; las tablas no se pliegan. README: público, ejemplo de Industria manufacturera, CL en vez de "pesa", y estado de la revisión.
+- **Estado:** verificado con 48/48 controles, datos previos idénticos, 410 vistas simuladas (360 px real con marco) y captura final en modo claro a 1400 px. Mapa en 371 px a 1400 de ancho. Pendiente: probar con clics reales los accesos nuevos, y revisar la cabecera entre 1000 y 1100 px, donde los indicadores ocupan dos filas.
 
 ## 04-11-26 21:49 — Auditoría narrativa y vista inicial para ejecutivos
 - **Contexto / Discusión:** auditoría con la skill `visual-storytelling-design`, solo con capturas y mediciones, sin usuarios reales: 4,5 de 10 en su lista como historia, aunque el mapa funciona para explorar. El título anterior exageraba: las 16 regiones comparten 6 actividades, así que no cada una tiene "su propia" especialización. Prioridades 1 a 4 aprobadas; quedan abiertas la 5 y la 6.
