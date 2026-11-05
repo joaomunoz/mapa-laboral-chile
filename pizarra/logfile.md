@@ -4,6 +4,7 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 05-11-26 — README reorganizado: resumen, objetivo, límites, metodología y fuentes (`README.md`) → log 05-11-26 01:08
 - 05-11-26 — Nivel de estudios por actividad y por sexo, en Chile y cada región (`generar_mapa.py`, `plantilla.html`; 53/53 controles; 340 combinaciones recorridas sin textos rotos) → log 05-11-26 00:11
 - 05-11-26 — Cabecera con el nombre del proyecto y resumen; "13 de 16" y actividad con más ocupados en las tarjetas (`plantilla.html`; datos idénticos) → log 05-11-26 00:11
 - 04-11-26 — Mapa orientado a la situación laboral y educacional: cuarto indicador y bloque "Estudios y trabajo" (`plantilla.html`, `generar_mapa.py`; 48/48 controles; 410 vistas simuladas; datos previos idénticos) → log 04-11-26 22:06
@@ -68,6 +69,11 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 05-11-26 01:08 — README por secciones y confirmación de clics
+- **Contexto / Discusión:** el usuario pidió que el README lleve resumen, objetivo, límites, metodología y fuentes. También confirmó que los clics funcionan y que la tabla "Nivel de estudios de los ocupados" está bien. Se propuso MIT para el código y CC BY 4.0 para el análisis; el usuario aún no decide.
+- **Acción / Cambio realizado:** `README.md` reordenado en esas cinco partes, con hallazgos, cinco límites nuevos, bases de cálculo y fuentes con enlace. "Qué permite ver" se repartió entre hallazgos y límites. Se dejó explícito que la prueba en clon limpio (03-11-26) es anterior a la versión actual.
+- **Estado:** README escrito y revisado contra el mapa y `P1_puente_actividades.py`. Clics verificados por el usuario. Pendiente: repetir la prueba en clon limpio antes de publicar.
 
 ## 05-11-26 00:11 — Nivel de estudios por actividad
 - **Contexto / Discusión:** el usuario notó que "Situación por nivel de estudios" se repetía en todas las actividades. El Censo registra la actividad solo de quienes trabajan: hay 0 desocupados con actividad, así que por actividad solo se pueden mostrar ocupados, no tasas.

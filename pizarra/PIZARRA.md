@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el mapa suma el nivel de estudios por actividad y una cabecera con el nombre del proyecto. Faltan ajustes menores, licencia y decidir la publicación.
+> Se mantiene en ~98%: el README quedó por secciones y el usuario confirmó los clics. Faltan ajustes menores, licencia, repetir la prueba en clon limpio y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,11 +37,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 90% | 🟢 | Años de ingreso confirmados; rótulo de percentiles sin confirmar, y el mapa no los usa |
-| Mapa interactivo | 98% | 🟢 | El usuario confirmó mouse y teclado antes de los últimos cambios; falta probarlos con clics reales y decidir ajustes menores |
+| Mapa interactivo | 98% | 🟢 | El usuario confirmó los clics el 05-11-26; faltan ajustes menores |
 | Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
-| README y presentación | 85% | 🟡 | README alineado con el público y el lenguaje del mapa; falta enlace para ver el mapa y licencia |
+| README y presentación | 90% | 🟡 | Resumen, objetivo, límites, metodología y fuentes; falta enlace para ver el mapa y licencia |
 
 ---
 
@@ -50,7 +50,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **Auditoría narrativa:** prioridades 1 a 5 aplicadas, y la 6 reemplazada por el bloque "Estudios y trabajo".
 - **Evaluación anterior, prioridad media:** siguen sin aplicar leyenda con tonos suaves, peso del negro en la barra, "Sin dato", Metropolitana atenuada, frase de cada actividad, nombres unificados, "CL 1,598", nivel de estudios y "Lectura".
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
-- **Revisión del mapa por el usuario:** el 04-11-26 confirmó que cumple con mouse y teclado, antes del bloque "Estudios y trabajo", el nivel por actividad y los plegados. Falta probarlos con clics reales y mostrárselo a alguien que no lo conozca.
+- **Revisión del mapa por el usuario:** el 05-11-26 confirmó que los clics funcionan y que la tabla de nivel de estudios está bien. Falta mostrárselo a alguien que no lo conozca.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
 
 ---
@@ -60,10 +60,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 1. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, confirmar el criterio de "menos de 10" y lo que el usuario pida.
 2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
 3. **Tabla Actividades:** decidir si se quita el % de los bloques regionales, porque está al límite de ancho.
-4. **Licencia del proyecto.**
-5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
-6. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-7. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+4. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
+5. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
+6. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
+7. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+8. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -122,7 +123,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔜 Próximo paso inmediato
 
-Probar con clics reales los últimos cambios y decidir los ajustes pendientes del mapa. Luego, agregar la licencia y decidir si se sube a GitHub.
+Elegir la licencia y repetir la prueba en clon limpio antes de publicar. Luego, agregar la licencia y decidir si se sube a GitHub.
 
 ---
 
