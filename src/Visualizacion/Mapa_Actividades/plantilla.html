@@ -81,8 +81,9 @@ svg{display:block;width:100%;height:auto}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 8px}
 .kpis[hidden]{display:none}
 .kpis-t{margin:0 0 8px}
-.kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px}
-.kpi b{display:block;font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+/* La cifra no se corta en dos líneas ("4 de cada / 10"): se achica con el ancho de la tarjeta. */
+.kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px;container-type:inline-size}
+.kpi b{display:block;font-size:min(26px,15cqi);line-height:1.15;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
 .kpi span{display:block}
 .kpi-t{font-weight:600;margin:2px 0}
 .kpi .nota{font-size:12.5px}
@@ -228,7 +229,7 @@ const relleno=d=>d.clase==null?"var(--sd)":`var(--c${d.clase})`;
 const ordenar=(a,b)=>(b.peso??-1)-(a.peso??-1);
 const nom=c=>DATOS.fichas[c]?.nombre??c;
 const CHILE=0;
-const RES=DATOS.resumen,POB=DATOS.poblacion,EST=DATOS.estudios;
+const RES=DATOS.resumen,POB=DATOS.poblacion,EST=DATOS.estudios,EDU=EST.educacion;
 const porCiiu=c=>DATOS.actividades.find(a=>a.ciiu===c);
 const nomReg=r=>esc(DATOS.regiones[r]);
 // Bajo 10 lleva dos decimales: en actividades pequeñas, con uno solo no se ve la diferencia entre la región y Chile.
@@ -280,12 +281,14 @@ function pintarResumen(){
  const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
  const rm=POB.regiones[13],sx=POB.sexo,cl=r=>RES.regiones[r].txt;
  const principal=document.getElementById("principal");principal.hidden=false;document.getElementById("kpis-t").hidden=false;document.getElementById("cabecera").classList.add("con-resumen");
+ const ed=extremosDesoc();
  const porTitulo=[...DATOS.actividades].sort((a,b)=>conTitulo(a.niveles)-conTitulo(b.niveles)),tMin=porTitulo[0],tMax=porTitulo[porTitulo.length-1];
  const todas=Object.entries(RES.regiones),patron=todas.filter(([,d])=>["B","A","O"].includes(d.ciiu)),brecha=sx.hombres.tasa_participacion-sx.mujeres.tasa_participacion;
  principal.innerHTML=[[`${num(rm.pct_lugar_trabajo,1)}%`,"de los ocupados está en la Metropolitana",`${num(rm.lugar_trabajo)} de ${num(ch.lugar_trabajo)}, según lugar de trabajo. Tiene más ocupados en ${RES.n_metropolitana} de ${DATOS.actividades.length} actividades.`],
   [`${patron.length} de ${todas.length}`,"regiones se especializan en minería, agricultura o administración pública","Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades."],
-  [`${num(EST.pct_con_titulo,1)}%`,"de los ocupados tiene título técnico o profesional",`Por actividad, de ${num(conTitulo(tMin.niveles),1)}% en ${esc(tMin.corto)} a ${num(conTitulo(tMax.niveles),1)}% en ${esc(tMax.corto)}, según lugar de trabajo.`],
-  [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",`${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres. El Censo no indica su causa.`]]
+  [deCada10(EST.pct_con_titulo),"ocupados tiene título técnico o profesional",`${num(EST.pct_con_titulo,1)}%. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
+  [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",`Con y sin título, ${ed.rango}. No indica causa: la edad también influye.`],
+  [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",`${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres; el Censo no indica su causa. Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`]]
   .map(([v,t,d])=>`<div class="kpi"><b>${v}</b><span class="kpi-t">${t}</span><span class="nota">${d}</span></div>`).join("");
  anotarMapa(NOTAS_MAPA=[[2,"izq","Norte","Minería",cl(2)],[7,"der","Centro-sur","Agricultura y pesca",cl(7)],[11,"der","Extremos","Administración pública",cl(11)]]);
  document.getElementById("lista").innerHTML=orden.map(([r,d])=>{const a=porCiiu(d.ciiu),v=a.regiones[r],ap=porCiiu(d.mas_personas),vm=ap.regiones[r];const valores=`Mayor CL: ${a.corto}, ${vp(v.ocupados,v.pct)}. Más ocupados: ${ap.corto}, ${vp(vm.ocupados,vm.pct)}. Total región: ${num(POB.regiones[r].lugar_trabajo)} (${num(POB.regiones[r].pct_lugar_trabajo,1)}%).`;return `<button data-r="${r}" class="fila-resumen" aria-pressed="false" title="${esc(valores)}" aria-label="${esc(nomReg(r)+". "+valores+" CL "+d.txt)}"><i class="franja${d.suave?" suave":""}" style="background:var(--k${RES.colores[d.ciiu]})"></i><span>${nomReg(r)}<small class="r-cl">${esc(a.corto)}</small><small>Más ocupados: ${esc(ap.corto)}</small></span><span class="v">CL ${d.txt}</span></button>`}).join("");
@@ -294,6 +297,14 @@ function pintarResumen(){
 }
 // % con título técnico o profesional, desde las personas y no desde los porcentajes ya redondeados.
 const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+filas[2][0]);
+// Relación entre las dos realidades, región por región: se escribe desde los datos para no afirmar más de lo que muestran.
+function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d.filter(([,v])=>v[0]<v[1]).length;
+ const [a,va]=d.reduce((m,x)=>x[1][0]<m[1][0]?x:m),[b,vb]=d.reduce((m,x)=>x[1][0]>m[1][0]?x:m);
+ return {menor,n:d.length,rango:`de ${num(va[0],1)}% frente a ${num(va[1],1)}% en ${nomReg(Number(a))} a ${num(vb[0],1)}% frente a ${num(vb[1],1)}% en ${nomReg(Number(b))}`}}
+function desocTitulo(){const e=extremosDesoc();
+ return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior: va ${e.rango}.`}
+// "4 de cada 10" se entiende más rápido que un porcentaje; la cifra exacta queda al lado.
+const deCada10=p=>`${Math.round(p/10)} de cada 10`;
 function vistaResumen(){
  const orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados);
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
@@ -315,14 +326,18 @@ function vistaResumen(){
  <div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:8px"><thead><tr><th rowspan="2">Actividad</th><th colspan="3" class="bloque ini">Chile</th><th rowspan="2" class="n bloque ini">Con título técnico o profesional</th><th colspan="3" class="bloque ini">Región con mayor CL</th></tr><tr><th class="n ini">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="ini">Región</th><th class="n">Ocupados</th><th class="n">CL</th></tr></thead><tbody>`+orden.map(a=>{const n=a.nacional,v=a.regiones[n.mas_peso.r];return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button>${a.alerta_fuente?' <span title="Censo y ENE difieren en el tamaño de esta actividad">⚠</span>':""}</td><td class="n ini">${vp(n.ocupados,a.pct_nacional)}</td><td class="n">${num(a.sexo.h)} (${num(a.sexo.pct_h,1)}%)</td><td class="n">${num(a.sexo.m)} (${num(a.sexo.pct_m,1)}%)</td><td class="n ini">${num(conTitulo(a.niveles),1)}%</td><td class="ini">${nomReg(n.mas_peso.r)}</td><td class="n">${vp(v.ocupados,v.pct)}</td><td class="n">${n.mas_peso.txt}</td></tr>`}).join("")+`</tbody></table></div>
  <p class="nota" style="margin:8px 0 0">⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>
  <p class="nota" style="margin:4px 0 0">Subestimadas por ocupados sin región de trabajo (${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>
- <hr class="separador"><h2>Estudios y trabajo</h2><div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${NIVELES.map(([k,t])=>{const x=EST.niveles[k];return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")}</tbody></table></div>
- <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: de ${num(EST.min.pct,1)}% en ${nomReg(EST.min.r)} a ${num(EST.max.pct,1)}% en ${nomReg(EST.max.r)}, y ${num(EST.sexo.mujeres,1)}% de las mujeres frente a ${num(EST.sexo.hombres,1)}% de los hombres.</p>
- <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
- <p style="margin:8px 0 0"><strong>Carreras afines:</strong> elige una actividad para ver sus carreras, con títulos, empleabilidad e ingresos. Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
  <hr class="separador"><h2>Situación laboral por región</h2><div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. Ocupados (lugar de trabajo) cuenta a quienes trabajan en la región, vivan o no en ella. En Chile suma menos que por residencia porque ${num(100*(ch.trabajan-ch.lugar_trabajo)/ch.trabajan,1)}% de los ocupados no tiene región de trabajo.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th><th class="n">Ocupados (residencia)</th><th class="n">Ocupados (lugar de trabajo)</th><th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th><th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>`+[["Chile",ch,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],POB.regiones[r],""])].map(([t,d,k])=>`<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.trabajan)} (${num(d.pct_trabajan,1)}%)</td><td class="n">${num(d.lugar_trabajo)}</td><td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td><td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+`</tbody></table></div>
- <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>`}
+ <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
+ <hr class="separador"><h2>Situación educacional por región</h2><div class="nota">Población de 15 años o más, según región de residencia y con nivel de estudios informado (se excluyen ${num(ch.total-EDU.chile.reduce((t,v)=>t+v,0))} sin nivel informado). Entre paréntesis, % de esa población.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th>${NIVELES.map(([,t])=>`<th class="n">${t}</th>`).join("")}<th class="n">Con título técnico o profesional</th></tr></thead><tbody>`+[["Chile",EDU.chile,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],EDU[r],""])].map(([t,v,k])=>{const tot=v[0]+v[1]+v[2];return `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(tot)}</td>${v.map(x=>`<td class="n">${num(x)} (${num(100*x/tot,1)}%)</td>`).join("")}<td class="n">${num(100*(v[0]+v[1])/tot,1)}%</td></tr>`}).join("")+`</tbody></table></div>
+ <div class="aviso">Incluye a jóvenes que aún estudian: el % con título depende de la edad de la población de cada región.</div>
+ <hr class="separador"><h2>Estudios y trabajo</h2><div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${NIVELES.map(([k,t])=>{const x=EST.niveles[k];return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")}</tbody></table></div>
+ <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
+ <p style="margin:8px 0 0">${desocTitulo()}</p>
+ <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
+ <p style="margin:8px 0 0"><strong>Carreras afines:</strong> elige una actividad para ver sus carreras, con títulos, empleabilidad e ingresos. Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>`}
 function pintar(){
  if(!act){pintarResumen();return}
  document.getElementById("t-mapa").textContent="CL por región";
