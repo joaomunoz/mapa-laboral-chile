@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el mapa se depuró con el criterio "mostrar solo lo necesario" y mejoró su navegación. Faltan licencia, repetir la prueba en clon limpio y decidir la publicación.
+> Se mantiene en ~98%: el mapa suma la situación educacional por región y dos hallazgos educacionales, y su resultado pasó a `docs/`. Faltan licencia, repetir la prueba en clon limpio y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 95% | 🟢 | Años de ingreso y edad (titulados de hasta 30 años) confirmados; percentiles descartados por no ser necesarios |
-| Mapa interactivo | 98% | 🟢 | Depurado y con navegación por enlace el 06-11-26; falta revisar la bajada animada en un celular real |
+| Mapa interactivo | 98% | 🟢 | Situación laboral y educacional por región, 5 hallazgos y navegación por enlace (06-11-26); falta revisar la bajada animada en un celular real |
 | Nota de lectura | 100% | 🟢 | `docs/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
@@ -61,7 +61,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
 3. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
 4. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
-5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
+5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y activar GitHub Pages desde `docs/` para ver el mapa sin descargarlo.
 6. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
 7. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
@@ -88,6 +88,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **Censo agregado en CSV:** 15,2 millones de personas pasan a 14.793 filas, sin perder totales, porque no usa factores de expansión. El parquet original queda en `Entrada/`.
 - **Cartografía en script propio:** `CENSO/obtener_cartografia.py` va separado de `obtener.py`, porque quien solo regenera el mapa no necesita los microdatos de personas. Baja el zip completo (795 MB) en vez de pedir por rangos solo la capa (89 MB): gasta más datos, pero requiere menos código para un paso poco frecuente.
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
+- **Código en `src/Visualizacion/`, resultado en `docs/` (06-11-26):** el mapa es el producto final, no una tabla intermedia, así que salió de `Salida/`, la convención de los scrapers. `docs/` es la carpeta que GitHub Pages puede publicar. Se descartaron `dist/` o `build/`, que suelen quedar fuera de git y Pages no publica, y solo renombrar `Salida/`, que dejaba el resultado dentro de `src/`.
+- **Dos realidades por región y su relación al final (06-11-26):** "Situación laboral por región" y "Situación educacional por región" describen cada lado con la misma base (15 años o más, residencia), y "Estudios y trabajo" cierra con la relación. El rango regional del % con título salió de "Estudios y trabajo" para no mostrar dos cifras por región con bases distintas (ocupados y población).
+- **"4 de cada 10" en el hallazgo educacional:** se entiende más rápido que 39,8%, que queda en la nota. Se dice "título técnico o profesional" y no "estudios superiores", porque el Censo cuenta el título completado, y no se llama coeficiente para no confundirlo con el CL. Las otras tarjetas mantienen su porcentaje, que no se redondea bien a "de cada 10".
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
 - **Color y lectura con el CL de 2 decimales que se muestra (06-11-26):** la tabla del Censo y el mapa redondean con la misma función de Python, así el color nunca contradice la cifra (La Araucanía en Agricultura, 1,5976, se lee 1,60 y va en el tramo de 1,6). Se descartó mostrar más decimales, una precisión que el dato no tiene: los ocupados sin región de trabajo mueven el CL más que eso. Cambiaron 6 de 336 tramos de color y 4 lecturas. Un control detiene la generación si color y lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.

@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 06-11-26 — Código del mapa en `src/Visualizacion/` y resultado en `docs/` (`add1fb5`; mapa regenerado idéntico salvo la ruta de la cabecera; 60/60 controles; 410 vistas sin errores) → log 06-11-26 15:37
+- 06-11-26 — Situación educacional por región y hallazgos "4 de cada 10" y "16 de 16 regiones" (`8087b9c`; 60/60 controles; 410 vistas sin errores; `docs/mapa.png` rehecha) → log 06-11-26 15:36
 - 06-11-26 — CL con 2 decimales para color y lectura, y captura del README rehecha (`crosswalk.py` del Censo, `generar_mapa.py`; 56/56 controles; 410 vistas sin errores; `docs/mapa.png`) → log 06-11-26 02:46
 - 06-11-26 — Navegación: el resultado queda a la vista, selector con nombres cortos, aviso al entrar por región, CL en palabras y botón "atrás" con enlace por vista (`plantilla.html`; recorrido de historial y enlaces directos probado en el navegador; 410 vistas sin errores) → log 06-11-26 00:47
 - 06-11-26 — Mapa depurado con el criterio "mostrar solo lo necesario": tabla de Actividades con % con título, hallazgo actividad-educación y 5 elementos quitados o plegados (`plantilla.html`, `generar_mapa.py`; 55/55 controles; % con título recalculado desde la fuente en las 20 actividades) → log 06-11-26 00:47
@@ -73,6 +75,16 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 06-11-26 15:37 — Código y resultado del mapa separados
+- **Contexto / Discusión:** el usuario observó que la carpeta de visualización debía tener una estructura más tradicional, porque no es un scraper. `Salida/` es la convención de los pasos que dejan tablas intermedias; el mapa es el producto final.
+- **Acción / Cambio realizado:** con `git mv`, `generar_mapa.py` y `plantilla.html` pasan a `src/Visualizacion/`, e `index.html` y `nota_de_lectura.md` a `docs/`, junto a `mapa.png`. Se quitó el nivel `Mapa_Actividades/`, porque hay una sola visualización. Se actualizaron las rutas del generador (`RUTA_SALIDA` en `docs/`), las cabeceras, el README (enlaces, comandos y Estructura) y `Estructura.md`. Se descartaron `dist/` y `build/`, y renombrar solo `Salida/`. Commit aparte del contenido, para que cada cambio se lea por separado.
+- **Estado:** verificado (mapa idéntico salvo las 2 líneas de la cabecera; 60/60 controles; 410 vistas sin errores a 500 y 1400 px; ningún otro script apuntaba a la ruta vieja).
+
+## 06-11-26 15:36 — Situación educacional por región y hallazgos educacionales
+- **Contexto / Discusión:** el usuario propuso una tabla "Situación educacional por región" para mostrar las dos realidades, laboral y educacional, con "Estudios y trabajo" al final. Antes se había descartado una columna de educación en la tabla laboral, porque duplicaba; una tabla propia no duplica. Después pidió hallazgos del lado educacional y expresar el % con título como "4 de cada 10".
+- **Acción / Cambio realizado:** nueva tabla con la población de 15 años o más por nivel, según residencia y con nivel informado (15.102.704; se excluyen 103.080): Chile 28,2% con título, de 21,1% en Maule a 32,9% en la Metropolitana, con aviso de edad. "Estudios y trabajo" pasa al final: sale el rango regional entre ocupados y entra "en las 16 regiones la desocupación es menor con título", escrita desde los datos. Hallazgos: "4 de cada 10" ocupados con título (1 de cada 10 en Hogares, 8 de cada 10 en Servicios profesionales), nueva tarjeta "16 de 16 regiones" (Aysén 4,2% y 6,2%; Biobío 9,1% y 11,1%) y título por sexo en la tarjeta de brecha (46,5% y 34,6%). Las cifras de las tarjetas se achican con su ancho para no cortarse en dos líneas. Descartados como hallazgo: 28,2% de la población y participación 85,1% frente a 50,9%, porque dependen mucho de la edad. Se actualizaron `generar_mapa.py` (4 controles nuevos, 1 retirado), `plantilla.html`, la nota de lectura, el README y `docs/mapa.png`.
+- **Estado:** verificado (60/60 controles; 410 vistas sin errores a 500 y 1400 px; tarjetas medidas sin desborde de 500 a 1600 px y revisadas a la vista).
 
 ## 06-11-26 02:46 — CL redondeado a 2 decimales y captura del README
 - **Contexto / Discusión:** La Araucanía en Agricultura (CL 1,5976) se mostraba con 3 decimales para no quedar en el tramo de 1,6, porque el color se decidía con el valor sin redondear. El usuario planteó que eso afecta la interpretación. Opción elegida: decidir color y lectura con la misma cifra de 2 decimales que se muestra.
