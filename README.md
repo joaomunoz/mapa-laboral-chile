@@ -8,9 +8,9 @@ La vista inicial resume la población y las 20 actividades. Al elegir una activi
 
 **Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 329 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
-![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos y la lista de regiones](docs/mapa.png)
+![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y la tabla de actividades](docs/mapa.png)
 
-*Vista inicial: principales hallazgos, mapa y regiones. Cada región tiene el color de la actividad con mayor CL, y un color más suave indica un CL menor a 1,6.*
+*Vista inicial: principales hallazgos, mapa, regiones y tabla de actividades con su % de ocupados con título. Cada región tiene el color de la actividad con mayor CL, y un color más suave indica un CL menor a 1,6.*
 
 **Principales hallazgos (Censo 2024):**
 
@@ -61,7 +61,7 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 - **Reproducibilidad:** en un clon limpio, el 03-11-26, la cadena completa generó un `index.html` idéntico byte a byte. Esa prueba es anterior a la última versión del mapa.
 - **Contra el dato oficial:** el procesamiento de ENE reproduce el Boletín INE n°336 (julio-septiembre de 2026), con una desviación máxima de 0,08%.
 - **Entre fuentes:** el CL del Censo y el de ENE tienen una correlación de 0,95 en las 209 combinaciones de región y actividad que ENE mide con fiabilidad.
-- **Coherencia del mapa:** color y cifra se calculan una sola vez, con el valor sin redondear. La generación se detiene si los datos dejan de respaldar el color, la lectura o las frases de la página.
+- **Coherencia del mapa:** el color y la lectura se deciden con el mismo CL de 2 decimales que se muestra. La generación se detiene si los datos dejan de respaldar el color, la lectura o las frases de la página.
 
 | Indicador | INE | Este proyecto | Desviación |
 |---|---:|---:|---:|

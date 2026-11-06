@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el mapa se depuró con el criterio "mostrar solo lo necesario" y mejoró su navegación. Faltan la captura del README, licencia, repetir la prueba en clon limpio y decidir la publicación.
+> Se mantiene en ~98%: el mapa se depuró con el criterio "mostrar solo lo necesario" y mejoró su navegación. Faltan licencia, repetir la prueba en clon limpio y decidir la publicación.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -48,7 +48,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 ## 🔶 En curso / parcial
 
 - **Criterio vigente, "mostrar solo lo necesario":** cada dato debe ayudar a responder cómo es la situación laboral y educacional de Chile, o la relación entre actividad y educación. Al revisar, se prefiere quitar antes que agregar.
-- **Pendientes menores de evaluaciones anteriores:** "CL 1,598" con 3 decimales, que parece un error; el título del mapa repite el segundo hallazgo; leyenda con tonos suaves y peso del negro en la barra de población.
+- **Pendientes menores de evaluaciones anteriores:** el título del mapa repite el segundo hallazgo; leyenda con tonos suaves y peso del negro en la barra de población.
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
 - **Revisión externa:** falta mostrarle el mapa a alguien que no lo conozca, y revisar en un celular real la bajada automática al resultado.
 - **Comparación Censo y ENE:** el patrón regional coincide (correlación 0,95 en las 209 combinaciones fiables en ENE; 0,94 en las 336), pero el tamaño difiere en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud, y también las tasas de desocupación. La causa no está comprobada; el mapa lo avisa.
@@ -59,12 +59,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 1. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, confirmar el criterio de "menos de 10" y lo que el usuario pida.
 2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
-3. **Actualizar `docs/mapa.png`:** la captura del README es anterior a los cambios de la vista inicial del 06-11-26.
-4. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
-5. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
-6. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
-7. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-8. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+3. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
+4. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
+5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y GitHub Pages para ver el mapa sin descargarlo.
+6. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+7. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -90,7 +89,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **Cartografía en script propio:** `CENSO/obtener_cartografia.py` va separado de `obtener.py`, porque quien solo regenera el mapa no necesita los microdatos de personas. Baja el zip completo (795 MB) en vez de pedir por rangos solo la capa (89 MB): gasta más datos, pero requiere menos código para un paso poco frecuente.
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
-- **Color y cifra se calculan en Python con el valor sin redondear:** si se redondea antes, un 1,2024 cae en el tramo equivocado. Un control detiene la generación si el color y la lectura se contradicen.
+- **Color y lectura con el CL de 2 decimales que se muestra (06-11-26):** la tabla del Censo y el mapa redondean con la misma función de Python, así el color nunca contradice la cifra (La Araucanía en Agricultura, 1,5976, se lee 1,60 y va en el tramo de 1,6). Se descartó mostrar más decimales, una precisión que el dato no tiene: los ocupados sin región de trabajo mueven el CL más que eso. Cambiaron 6 de 336 tramos de color y 4 lecturas. Un control detiene la generación si color y lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.
 - **Sexo en tabla aparte; género sin abrir:** `censo_por_sexo.csv` no altera la tabla validada. `div_genero` es sensible y está suprimido para 633.803 ocupados, así que solo aparece como nota nacional. Se descartó una tercera columna por actividad, porque no sería confiable.
 - **Cabecera con el nombre del proyecto y hallazgos aparte:** el título dice qué es la página, y los hallazgos van en indicadores y en el título del mapa, junto a su evidencia. Se descartó el título con el hallazgo, por pedido del usuario. Se usa "13 de 16 regiones" en vez de "13 de las otras 15", que confundía. Se descartó "cada región tiene su propia especialización", porque 16 regiones comparten 6 actividades. Esas afirmaciones están escritas a mano, y varios controles detienen la generación si los datos dejan de respaldarlas.
@@ -127,7 +126,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔜 Próximo paso inmediato
 
-Actualizar `docs/mapa.png` con la vista inicial actual. Luego elegir la licencia y repetir la prueba en clon limpio antes de publicar, y decidir si se sube a GitHub.
+Elegir la licencia y repetir la prueba en clon limpio antes de publicar, y decidir si se sube a GitHub.
 
 ---
 

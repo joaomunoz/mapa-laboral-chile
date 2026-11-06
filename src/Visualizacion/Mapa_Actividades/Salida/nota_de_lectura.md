@@ -46,7 +46,7 @@ La vista inicial resume la población, las 20 actividades y la actividad con may
 | **Poco fiable** | Dato de encuesta con coeficiente de variación entre 15 y 30: se muestra, pero debe leerse con cautela | ENE y CASEN |
 
 ## Lectura de colores
-**En el resumen,** cada color es la actividad con mayor CL en la región, no la de más ocupados. Cada tarjeta indica también la actividad con más ocupados de la región. Un color suave indica un CL menor a 1,6. Hoy son Biobío, Valparaíso y La Araucanía.
+**En el resumen,** cada color es la actividad con mayor CL en la región, no la de más ocupados. Cada tarjeta indica también la actividad con más ocupados de la región. Un color suave indica un CL menor a 1,6. Hoy son Biobío y Valparaíso.
 
 **Al elegir una actividad,** el mapa usa 7 tramos de CL. Los cortes son criterios de trabajo, no un estándar oficial.
 
@@ -62,7 +62,7 @@ La vista inicial resume la población, las 20 actividades y la actividad con may
 
 En modo oscuro se mantienen el azul y el rojo, pero los tramos más alejados de 1 se ven más claros.
 
-El CL se muestra con 2 decimales, o con más si hace falta para que calce con su color. La participación lleva 2 decimales bajo 10%, y 1 decimal desde ahí.
+El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican a esa misma cifra: La Araucanía en Agricultura y pesca (1,5976) se lee 1,60 y va en el tramo de 1,6 a 2,5. Más decimales serían una precisión que el dato no tiene, porque solo los ocupados sin región de trabajo ya mueven el CL más que eso. La participación lleva 2 decimales bajo 10%, y 1 decimal desde ahí.
 
 ## Qué no dice
 - **No mide demanda ni vacantes,** ni la probabilidad de encontrar trabajo.

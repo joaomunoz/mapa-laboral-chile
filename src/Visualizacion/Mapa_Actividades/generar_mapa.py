@@ -14,8 +14,9 @@ Decisiones:
   - Se omiten los territorios insulares lejanos (Rapa Nui, Juan Fernández): al incluirlos, el continente se vería
     diminuto. Sus datos siguen dentro de sus regiones.
   - Actividad U fuera de la lista: se conserva en la tabla, pero no aporta al mapa.
-  - El color y el texto de las veces se calculan aquí, una sola vez y con el valor sin redondear. Si se
-    redondea antes, un 1,2024 cae en el tramo equivocado, aunque su lectura diga concentra.
+  - El color se decide con el CL redondeado a 2 decimales, la misma cifra que se muestra (06-11-26). Antes se
+    usaba el valor completo y la cifra sumaba decimales para calzar (1,598), una precisión que el dato no tiene.
+    El CL se calcula completo y se redondea una sola vez, al final.
   - Los cortes 0,8 y 1,2 son los de la lectura de la tabla. Vienen de otro módulo, así que validar() detiene el
     proceso si el color y la lectura dejan de coincidir.
 """
@@ -63,7 +64,7 @@ CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
 CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
 TRAMOS = ["hasta 0,4", "0,4–0,6", "0,6–0,8", "0,8–1,2", "1,2–1,6", "1,6–2,5", "2,5 o más"]
 CLASE_NEUTRA = 3
-MAX_DECIMALES = 4
+DECIMALES_CL = 2
 NOMBRES_REGION = {
     1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
     9: "La Araucanía", 10: "Los Lagos", 11: "Aysén", 12: "Magallanes", 13: "Metropolitana", 14: "Los Ríos", 15: "Arica y Parinacota", 16: "Ñuble",
@@ -169,9 +170,10 @@ def construir_geometria() -> dict:
 
 
 def clase_color(peso: float) -> int | None:
-    """Tramo de color; usa las mismas comparaciones que la lectura. Vacío si no hay dato."""
+    """Tramo de color del CL publicado, con 2 decimales; usa las mismas comparaciones que la lectura. Vacío si no hay dato."""
     if pd.isna(peso):
         return None
+    peso = round(float(peso), DECIMALES_CL)
     if peso <= CORTES_AZUL[2]:
         return sum(peso > c for c in CORTES_AZUL[:2])
     if peso < CORTES_ROJO[0]:
@@ -180,13 +182,10 @@ def clase_color(peso: float) -> int | None:
 
 
 def texto_peso(peso: float) -> str:
-    """Muestra 2 decimales, o más si hace falta para que la cifra visible calce con el tramo de su color."""
+    """CL con 2 decimales: la misma cifra con la que se decide el color."""
     if pd.isna(peso):
         return "s/d"
-    for decimales in range(2, MAX_DECIMALES + 1):
-        if clase_color(round(peso, decimales)) == clase_color(peso):
-            break
-    return f"{peso:.{decimales}f}".replace(".", ",")
+    return f"{round(float(peso), DECIMALES_CL):.{DECIMALES_CL}f}".replace(".", ",")
 
 
 def redondear(valor: float, decimales: int = 2) -> float | None:
@@ -334,7 +333,7 @@ def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
     for r, g in con_lectura.groupby("codigo_region"):
         distintiva = g.loc[g["peso_relativo"].idxmax()]
         regiones[str(int(r))] = {"ciiu": distintiva["actividad_ciiu"], "peso": redondear(distintiva["peso_relativo"], 6), "txt": texto_peso(distintiva["peso_relativo"]),
-                                 "suave": bool(distintiva["peso_relativo"] < CORTES_ROJO[1])}
+                                 "suave": bool(round(distintiva["peso_relativo"], DECIMALES_CL) < CORTES_ROJO[1])}
     mas_empleo = censo.loc[censo.groupby("codigo_region")["ocupados"].idxmax()].set_index("codigo_region")["actividad_ciiu"]
     for r, ciiu in mas_empleo.items():
         regiones[str(int(r))]["mas_personas"] = ciiu
@@ -445,7 +444,8 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Resumen: Metropolitana en 18 de 20; excepciones en Maule y Antofagasta": datos["resumen"]["n_metropolitana"] == 18 and sorted(e["r"] for e in datos["resumen"]["excepciones"]) == [2, 7],
         "Resumen: Comercio emplea más en 12 de 16 regiones": datos["resumen"]["mayor_empleador"] == {"ciiu": "G", "n": 12},
         "Resumen: Minería y Agricultura son las más desiguales": [d["ciiu"] for d in datos["resumen"]["mas_desiguales"]] == ["B", "A"],
-        "Resumen: Valparaíso, Biobío y La Araucanía van en color suave": sorted(r for r, d in datos["resumen"]["regiones"].items() if d["suave"]) == ["5", "8", "9"],
+        "Resumen: Valparaíso y Biobío van en color suave; La Araucanía (1,60) ya no": sorted(r for r, d in datos["resumen"]["regiones"].items() if d["suave"]) == ["5", "8"],
+        "CL: todas las cifras con 2 decimales": all(len(d["peso_txt"].split(",")[1]) == 2 for d in celdas),
         "Población: 15,2 millones de 15 años o más, y suman sus cuatro grupos": pob["chile"]["total"] == 15_205_784 and pob["chile"]["trabajan"] + pob["chile"]["buscan"] + pob["chile"]["no_buscan"] + pob["chile"]["sin_dato"] == pob["chile"]["total"],
         "Población: las regiones suman el total de Chile": sum(d["total"] for d in pob["regiones"].values()) == pob["chile"]["total"] and len(pob["regiones"]) == 16,
         "Población: el % que trabaja va de Ñuble a Aysén": min(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "16" and max(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "11",

@@ -10,6 +10,9 @@ Decisiones (aprobadas el 03-11-26):
     ENE se conserva como contraste, sin mezclar sus cifras con las del censo.
   - Lectura por umbrales: sin error de muestreo no sirve la regla de ENE, que comparaba un rango con 1.
     concentra desde 1,2 veces y bajo_lo_nacional hasta 0,8. Son criterios de trabajo, no un estándar externo.
+  - Los umbrales se aplican al peso redondeado a 2 decimales, la cifra que se publica (06-11-26). Más precisión
+    sería falsa: solo los ocupados sin región de trabajo mueven el peso más que eso. Con el valor completo, un
+    0,8008 quedaba como similar aunque se lea 0,80. peso_relativo se guarda completo.
   - base_pequena bajo 60 personas: un peso relativo con tan pocas personas no describe a la región.
   - U queda fuera de la lista del mapa: son unas 2.800 personas, y hacía que la Metropolitana apareciera
     concentrando embajadas y organismos internacionales en lugar de Finanzas.
@@ -36,6 +39,7 @@ log = logging.getLogger(__name__)
 
 RUTA_SALIDA = Path(__file__).parent / "Salida" / "concentracion_region_actividad_censo.csv"
 UMBRAL_CONCENTRA, UMBRAL_BAJO, BASE_MINIMA = 1.2, 0.8, 60
+DECIMALES_PESO = 2   # Los umbrales se comparan con el peso publicado, no con el completo.
 RAZON_FUENTES = 1.3
 ACTIVIDADES_FUERA_DEL_MAPA = ["U"]
 OCUPADO = 1
@@ -55,7 +59,9 @@ def construir(censo: pd.DataFrame, actividades: pd.DataFrame, ene: pd.DataFrame)
     t["pct_en_region"] = 100 * t["ocupados"] / t.groupby("codigo_region")["ocupados"].transform("sum")
     t["pct_nacional"] = 100 * t.groupby("actividad_ciiu")["ocupados"].transform("sum") / t["ocupados"].sum()
     t["peso_relativo"] = t["pct_en_region"] / t["pct_nacional"]
-    t["lectura"] = np.select([t["ocupados"] < BASE_MINIMA, t["peso_relativo"] >= UMBRAL_CONCENTRA, t["peso_relativo"] <= UMBRAL_BAJO],
+    # round() de Python, el mismo que usa el mapa: np.round puede diferir en el último decimal.
+    publicado = t["peso_relativo"].map(lambda v: round(v, DECIMALES_PESO))
+    t["lectura"] = np.select([t["ocupados"] < BASE_MINIMA, publicado >= UMBRAL_CONCENTRA, publicado <= UMBRAL_BAJO],
                              ["base_pequena", "concentra", "bajo_lo_nacional"], "similar")
     t["pct_poblacion_15_mas"] = 100 * t["ocupados"] / t["codigo_region"].map(censo.groupby("codigo_region")["personas"].sum())
     con_actividad = ocupados.dropna(subset=["actividad_ciiu"])

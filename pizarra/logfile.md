@@ -4,6 +4,7 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 06-11-26 — CL con 2 decimales para color y lectura, y captura del README rehecha (`crosswalk.py` del Censo, `generar_mapa.py`; 56/56 controles; 410 vistas sin errores; `docs/mapa.png`) → log 06-11-26 02:46
 - 06-11-26 — Navegación: el resultado queda a la vista, selector con nombres cortos, aviso al entrar por región, CL en palabras y botón "atrás" con enlace por vista (`plantilla.html`; recorrido de historial y enlaces directos probado en el navegador; 410 vistas sin errores) → log 06-11-26 00:47
 - 06-11-26 — Mapa depurado con el criterio "mostrar solo lo necesario": tabla de Actividades con % con título, hallazgo actividad-educación y 5 elementos quitados o plegados (`plantilla.html`, `generar_mapa.py`; 55/55 controles; % con título recalculado desde la fuente en las 20 actividades) → log 06-11-26 00:47
 - 05-11-26 — Carreras afines agrupadas por nivel y ficha con títulos 2007-2025 y rango de empleabilidad (`carreras_por_actividad.csv` 33 columnas, 20/20 controles; mapa 56/56; 115 fichas sin valores vacíos) → log 06-11-26 00:46
@@ -72,6 +73,11 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 06-11-26 02:46 — CL redondeado a 2 decimales y captura del README
+- **Contexto / Discusión:** La Araucanía en Agricultura (CL 1,5976) se mostraba con 3 decimales para no quedar en el tramo de 1,6, porque el color se decidía con el valor sin redondear. El usuario planteó que eso afecta la interpretación. Opción elegida: decidir color y lectura con la misma cifra de 2 decimales que se muestra.
+- **Acción / Cambio realizado:** `Concentracion_Region_Actividad_Censo/crosswalk.py` calcula la lectura con `round(peso, 2)` (constante `DECIMALES_PESO`); el CL completo se sigue guardando. `generar_mapa.py` usa `DECIMALES_CL = 2` en color, texto y color suave, y suma el control "todos los CL con 2 decimales" (56/56). Cambian 6 de 336 tramos de color y 4 lecturas pasan de similar a bajo Chile (Antofagasta·Otros servicios, Metropolitana·Construcción, Los Lagos y Los Ríos·Serv. administrativos). La Araucanía deja de ir en color suave: quedan Biobío y Valparaíso. Se actualizaron `nota_de_lectura.md` y el README (coherencia del mapa, pie de la captura), y se rehízo `docs/mapa.png` (2800×2800, modo claro).
+- **Estado:** verificado (56/56 controles; 410 vistas sin errores a 500 y 1400 px; captura revisada visualmente).
 
 ## 06-11-26 00:47 — Mostrar solo lo necesario y navegación de usuario
 - **Contexto / Discusión:** el usuario fijó un criterio: el mapa responde "¿cómo es la situación laboral y educacional en Chile?", y su aporte es la relación entre actividad y educación; que un cálculo se pueda hacer no significa que haya que mostrarlo. Con ese criterio se descartó una tabla de percentiles de ingreso por tipo de institución y se revisó el mapa completo. Luego se hizo una navegación como usuario y una auditoría UX, con su lectura de las 5 W: responde qué y dónde; quién y cuándo en parte (sin edad; es una fotografía); por qué no, por diseño.
