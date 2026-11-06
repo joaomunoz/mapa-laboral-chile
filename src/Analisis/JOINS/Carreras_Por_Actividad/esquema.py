@@ -33,9 +33,12 @@ CARRERAS_POR_ACTIVIDAD = {
     "titulados_2025": "int64",            # Títulos de pregrado terminal entregados en 2025
     "titulados_2025_hombres": "int64",    # La diferencia con el total es la categoría no binaria o indefinida del SIES
     "titulados_2025_mujeres": "int64",
+    "titulados_2007_2025": "int64",       # Títulos de pregrado terminal 2007-2025: titulaciones, no personas que trabajan hoy
     "empleabilidad_1er_anio": "float64",
     "ingreso_medio_1er_anio": "float64",  # Vacío si MiFuturo no lo informa
     "ingreso_medio_5to_anio": "float64",
+    "empleabilidad_1er_anio_min": "float64",  # Entre instituciones; vacío con 1 o 2 instituciones
+    "empleabilidad_1er_anio_max": "float64",
     "n_instituciones": "int64",           # Instituciones que respaldan el dato de MiFuturo
     "pct_institucion_principal": "float64",  # % de títulos 2021-2023 de la institución más grande; vacío sin títulos
     "pct_no_trabajan": "float64",         # Vacío si la carrera no tiene titulados de 22 a 54 años en CASEN

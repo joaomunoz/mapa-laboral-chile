@@ -1,4 +1,4 @@
-(Estructura.md Actualizada el 05-11-26)
+(Estructura.md Actualizada el 06-11-26)
 
 # 📂 Estructura del Proyecto — Mapa Laboral de Chile
 
@@ -267,12 +267,12 @@
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/`**: Capa principal del mapa. `Salida/concentracion_region_actividad_censo.csv`, 336×17: ocupados, peso relativo, lectura, contraste con ENE y alertas.
 - **`src/Analisis/JOINS/Concentracion_Region_Actividad/`**: Misma medida con ENE, con rango y fiabilidad; sirve de contraste. `Salida/concentracion_region_actividad.csv`, 336×18.
 - **`src/Analisis/JOINS/Areas_Por_Actividad/`**: Áreas CINE por actividad, nacional, con CASEN. `Salida/areas_por_actividad.csv`, 210×15.
-- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras, 30 columnas, con títulos de 2025 por sexo; incluye respaldo por instituciones y titulados que no trabajan.
+- **`src/Analisis/JOINS/Carreras_Por_Actividad/`**: Carreras por actividad y afinidad, nacional, con datos de SIES y MiFuturo. `Salida/carreras_por_actividad.csv`, 2,162 filas, 189 carreras, 33 columnas, con títulos 2007-2025, títulos de 2025 por sexo y rango de empleabilidad entre instituciones (con 3 o más); incluye respaldo por instituciones y titulados que no trabajan, que el mapa ya no muestra.
 - **`src/Analisis/JOINS/Fuerza_Trabajo_Region_Nivel/`**: Ocupados y desocupados por región y nivel educativo, con ENE como contraste. `Salida/fuerza_trabajo_region_nivel.csv`, 48×12.
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 53 controles. Requiere `.venv` (geopandas y pyarrow).
-- **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar.
+- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 55 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar. Guarda cada vista en la dirección (`#actividad/región/carrera`), así que el botón "atrás" funciona y cada vista tiene enlace.
 - **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
 - **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.

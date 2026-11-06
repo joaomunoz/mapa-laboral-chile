@@ -1,9 +1,12 @@
-(logfile.md Actualizada el 05-11-26)
+(logfile.md Actualizada el 06-11-26)
 
 # 📜 Logfile — Bitácora de Sesiones, Cambios y Completados
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 06-11-26 — Navegación: el resultado queda a la vista, selector con nombres cortos, aviso al entrar por región, CL en palabras y botón "atrás" con enlace por vista (`plantilla.html`; recorrido de historial y enlaces directos probado en el navegador; 410 vistas sin errores) → log 06-11-26 00:47
+- 06-11-26 — Mapa depurado con el criterio "mostrar solo lo necesario": tabla de Actividades con % con título, hallazgo actividad-educación y 5 elementos quitados o plegados (`plantilla.html`, `generar_mapa.py`; 55/55 controles; % con título recalculado desde la fuente en las 20 actividades) → log 06-11-26 00:47
+- 05-11-26 — Carreras afines agrupadas por nivel y ficha con títulos 2007-2025 y rango de empleabilidad (`carreras_por_actividad.csv` 33 columnas, 20/20 controles; mapa 56/56; 115 fichas sin valores vacíos) → log 06-11-26 00:46
 - 05-11-26 — README reorganizado: resumen, objetivo, límites, metodología y fuentes (`README.md`) → log 05-11-26 01:08
 - 05-11-26 — Nivel de estudios por actividad y por sexo, en Chile y cada región (`generar_mapa.py`, `plantilla.html`; 53/53 controles; 340 combinaciones recorridas sin textos rotos) → log 05-11-26 00:11
 - 05-11-26 — Cabecera con el nombre del proyecto y resumen; "13 de 16" y actividad con más ocupados en las tarjetas (`plantilla.html`; datos idénticos) → log 05-11-26 00:11
@@ -69,6 +72,23 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 06-11-26 00:47 — Mostrar solo lo necesario y navegación de usuario
+- **Contexto / Discusión:** el usuario fijó un criterio: el mapa responde "¿cómo es la situación laboral y educacional en Chile?", y su aporte es la relación entre actividad y educación; que un cálculo se pueda hacer no significa que haya que mostrarlo. Con ese criterio se descartó una tabla de percentiles de ingreso por tipo de institución y se revisó el mapa completo. Luego se hizo una navegación como usuario y una auditoría UX, con su lectura de las 5 W: responde qué y dónde; quién y cuándo en parte (sin edad; es una fotografía); por qué no, por diseño.
+- **Acción / Cambio realizado:**
+  - Quitados: la línea de total en las cajas de regiones, las columnas "Región con más ocupados" de Actividades, "Ocupados esperados" y "Diferencia", la tabla "Más ocupados / Mayor CL" de cada actividad y "Titulados que no trabajan" de la ficha. "Población y fuerza de trabajo" quedó plegada, y su párrafo de identidad de género pasó al glosario.
+  - Agregados: columna "Con título técnico o profesional" en Actividades (de 9,9% en Hogares a 78,7% en Servicios profesionales; 39,6% en total por lugar de trabajo, frente a 39,8% por residencia) y el mismo rango en la tarjeta del 39,8%, en lugar de la desocupación por nivel, que ya estaba en "Estudios y trabajo".
+  - "Chile · Todas las actividades" subió antes de "Estudios y trabajo". "Situación laboral por región" conserva la columna de lugar de trabajo, con una nota que explica por qué suma menos (5,8% sin región de trabajo). Se descartó sumarle educación, porque duplicaría "Estudios y trabajo".
+  - Carreras afines: encabezados "De sus titulados que trabajan, % en esta actividad" y "Titulados que trabajan en la actividad", con nota de que son personas estimadas por la CASEN, no títulos del SIES.
+  - Navegación: bajar al detalle solo si quedó fuera de la vista; selector con nombres cortos; aviso cuando la vista es la actividad con mayor CL de la región; CL en palabras en la frase de lectura; la vista se guarda en la dirección y "atrás" funciona. README con enlace por vista y tamaño de 329 KB; nota de lectura con titulados de hasta 30 años en MiFuturo.
+  - Descartado: ícono de información, porque en celular no funciona al pasar el mouse y escondería la explicación; vista solo de región, porque repetiría datos.
+  - Medido para el usuario, sin mostrar en el mapa: 292.221 ocupados (3,5%) trabajan en otra región; Antofagasta recibe 81.840.
+- **Estado:** verificado (55/55 controles; 410 vistas a 500 y 1400 px sin errores ni desbordes; historial, enlaces directos y bajada automática probados en el navegador). Pendiente: revisar la bajada animada en un celular real; `docs/mapa.png` quedó desactualizada.
+
+## 06-11-26 00:46 — Carreras afines por nivel y ficha de carrera
+- **Contexto / Discusión:** carrera y actividad solo se cruzan en la CASEN, a nivel nacional; el Censo une actividad y nivel de título, sin carrera. El usuario pidió agrupar las carreras por nivel y, en la ficha, el total histórico de títulos y la empleabilidad promedio, porque varía por institución.
+- **Acción / Cambio realizado:** Carreras afines en una tabla, con una fila por nivel que muestra los ocupados de ese nivel (Censo, lugar de trabajo). Ficha con títulos 2007-2025 y empleabilidad con rango entre instituciones (solo con 3 o más). `crosswalk.py` y `esquema.py` suman `titulados_2007_2025` y el rango de empleabilidad. El rango de ingresos se retiró: MiFuturo publica ingresos por tipo de institución, no por institución, y el mínimo y el máximo eran iguales; fue un error propio, avisado al usuario. También: glosario plegado y valores centrados.
+- **Estado:** verificado (tabla de carreras 20/20 controles con columnas previas idénticas; mapa 56/56 en ese momento; 115 fichas sin valores vacíos).
 
 ## 05-11-26 01:08 — README por secciones y confirmación de clics
 - **Contexto / Discusión:** el usuario pidió que el README lleve resumen, objetivo, límites, metodología y fuentes. También confirmó que los clics funcionan y que la tabla "Nivel de estudios de los ocupados" está bien. Se propuso MIT para el código y CC BY 4.0 para el análisis; el usuario aún no decide.

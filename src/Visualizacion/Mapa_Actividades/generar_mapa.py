@@ -189,11 +189,6 @@ def texto_peso(peso: float) -> str:
     return f"{peso:.{decimales}f}".replace(".", ",")
 
 
-def personas_con_promedio(ocupados: int, peso: float) -> int | None:
-    """Cuántas personas habría si la región tuviera el promedio de Chile. Es una cuenta para comparar, no un dato medido ni una meta."""
-    return None if pd.isna(peso) or peso <= 0 else int(round(ocupados / peso))
-
-
 def redondear(valor: float, decimales: int = 2) -> float | None:
     return None if pd.isna(valor) else round(float(valor), decimales)
 
@@ -282,6 +277,12 @@ def agregar_nivel_por_actividad(actividades: list[dict], por_sexo: pd.DataFrame)
     return {"orden": ORDEN_NIVELES, "todas": [redondear(100 * total[n] / total.sum(), 1) for n in ORDEN_NIVELES]}
 
 
+def rango_ficha(f: pd.Series, columna: str, decimales: int) -> list | None:
+    """[mínimo, máximo] entre instituciones; None si la carrera tiene 1 o 2 y no hay rango. Solo existe para empleabilidad."""
+    lo, hi = f[f"{columna}_min"], f[f"{columna}_max"]
+    return None if pd.isna(lo) else [redondear(lo, decimales), redondear(hi, decimales)]
+
+
 def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     """Relación entre nivel de estudios y trabajo en Chile, según residencia y con nivel informado. Describe, no explica: la edad también influye."""
     suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum()
@@ -367,7 +368,7 @@ def construir_datos() -> dict:
         actividades.append({
             "ciiu": ciiu, "glosa": glosa, "corto": NOMBRES_CORTOS[ciiu], "pct_nacional": redondear(primero["pct_nacional"], 2), "pct_sin_region": redondear(primero["pct_sin_region_trabajo"], 1),
             "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total), "sexo": sexo_actividad[ciiu],
-            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 2), "peso": redondear(f["peso_relativo"], 6), "con_promedio": personas_con_promedio(f["ocupados"], f["peso_relativo"]), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
+            "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 2), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
                                                  "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
             "areas": [{"area": f["area_cine"], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1)} for _, f in a.iterrows()],
             "afines": [{"c": f["carrera_generica"], "pct": redondear(f["pct_en_carrera"], 1), "min": redondear(f["pct_en_carrera_min"], 1), "max": redondear(f["pct_en_carrera_max"], 1),
@@ -383,8 +384,8 @@ def construir_datos() -> dict:
         fichas[c] = {"nombre": nombre_legible(c), "nivel": f["nivel_titulo"], "area": f["area_cine"], "tit": int(f["titulados_2025"]), "tit_h": int(f["titulados_2025_hombres"]), "tit_m": int(f["titulados_2025_mujeres"]),
                      "pct_tit_h": redondear(100 * f["titulados_2025_hombres"] / f["titulados_2025"], 1) if f["titulados_2025"] else None, "pct_tit_m": redondear(100 * f["titulados_2025_mujeres"] / f["titulados_2025"], 1) if f["titulados_2025"] else None, "emp": redondear(f["empleabilidad_1er_anio"], 1),
                      "ing1": redondear(f["ingreso_medio_1er_anio"], 0), "ing5": redondear(f["ingreso_medio_5to_anio"], 0), "inst": int(f["n_instituciones"]),
-                     "alerta_inst": bool(f["alerta_pocas_instituciones"]), "no_trab": redondear(f["pct_no_trabajan"], 1) if f["fiabilidad_no_trabajan"] != "no_fiable" else None,
-                     "no_trab_n": int(round(f["titulados_no_trabajan"])) if f["fiabilidad_no_trabajan"] != "no_fiable" else None, "no_trab_poco": f["fiabilidad_no_trabajan"] == "poco_fiable", "pct_principal": redondear(f["pct_institucion_principal"], 0),
+                     "tit_hist": int(f["titulados_2007_2025"]), "emp_r": rango_ficha(f, "empleabilidad_1er_anio", 1),
+                     "alerta_inst": bool(f["alerta_pocas_instituciones"]), "pct_principal": redondear(f["pct_institucion_principal"], 0),
                      "actividades": v[["actividad_ciiu", "actividad_glosa", "pct_en_carrera"]].round(1).values.tolist()}
     niveles = pd.read_csv(RUTA_NIVELES, sep=";")
     por_region = {str(r): {f["nivel_titulo"]: {"trabajo": int(f["ocupados_trabajo"]), "desocupados": int(f["desocupados"]), "tasa": redondear(f["tasa_desocupacion"], 1),
@@ -435,6 +436,10 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),
         "Antofagasta en Minería: 101.929": next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["ocupados"] == 101_929,
         "Todas las carreras listadas tienen ficha": all(x["c"] in datos["fichas"] for a in datos["actividades"] for x in a["afines"] + a["indicios"]),
+        # La página agrupa las carreras por nivel: una carrera con otro nivel quedaría fuera de todos los grupos.
+        "Ficha: Psicología con 85.260 títulos 2007-2025 y empleabilidad de 43,7% a 89,7%": (datos["fichas"]["PSICOLOGIA"]["tit_hist"], datos["fichas"]["PSICOLOGIA"]["emp_r"]) == (85_260, [43.7, 89.7]),
+        "Ficha: sin rango cuando hay aviso de pocas instituciones": all(f["emp_r"] is None for f in datos["fichas"].values() if f["alerta_inst"]),
+        "Toda carrera listada es técnica o profesional": all(datos["fichas"][x["c"]]["nivel"] in ("Profesional", "Tecnico") for a in datos["actividades"] for x in a["afines"] + a["indicios"]),
         "Resumen: las 16 regiones tienen actividad distintiva y color": len(datos["resumen"]["regiones"]) == 16 and all(d["ciiu"] in COLOR_RESUMEN for d in datos["resumen"]["regiones"].values()),
         "Resumen: cada color se usa": {d["ciiu"] for d in datos["resumen"]["regiones"].values()} == set(COLOR_RESUMEN),
         "Resumen: Metropolitana en 18 de 20; excepciones en Maule y Antofagasta": datos["resumen"]["n_metropolitana"] == 18 and sorted(e["r"] for e in datos["resumen"]["excepciones"]) == [2, 7],
@@ -469,8 +474,8 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
         "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
-        "Con el promedio de Chile: Valparaíso en Artes 7.781 y Antofagasta en Minería 12.645": next(a for a in datos["actividades"] if a["ciiu"] == "R")["regiones"][5]["con_promedio"] == 7_781 and next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["con_promedio"] == 12_645,
-        "Coquimbo en Artes: 3.356 personas, 3.264 con el promedio y 1,03 veces": (lambda d: d["ocupados"] == 3_356 and d["con_promedio"] == 3_264 and d["peso_txt"] == "1,03")(next(a for a in datos["actividades"] if a["ciiu"] == "R")["regiones"][4]),
+        # La columna "Con título" se calcula en la página desde estas personas; aquí se fija contra la fuente.
+        "Con título por actividad: Servicios profesionales 78,7%, Hogares 9,9% y todas 39,6%": (lambda pct: (round(pct(next(a for a in datos["actividades"] if a["ciiu"] == "M")["niveles"]), 1), round(pct(next(a for a in datos["actividades"] if a["ciiu"] == "T")["niveles"]), 1), round(pct([[sum(a["niveles"][i][0] for a in datos["actividades"])] for i in range(3)]), 1)) == (78.7, 9.9, 39.6))(lambda f: 100 * (f[0][0] + f[1][0]) / (f[0][0] + f[1][0] + f[2][0])),
         "Base de la participación: Valparaíso 706.053 y Chile 7.395.105": datos["base_ocupados"]["regiones"]["5"] == 706_053 and datos["base_ocupados"]["chile"] == 7_395_105,
         "Cada participación se puede recalcular con ocupados y su base": all(abs(100 * d["ocupados"] / datos["base_ocupados"]["regiones"][str(r)] - d["pct"]) < 0.0051 for a in datos["actividades"] for r, d in a["regiones"].items()),
         "Población: Chile con tasa de desocupación 8,6%, participación 59,6% y 7.801.449 con lugar de trabajo": pob["chile"]["tasa_desocupacion"] == 8.6 and pob["chile"]["tasa_participacion"] == 59.6 and pob["chile"]["lugar_trabajo"] == 7_801_449,

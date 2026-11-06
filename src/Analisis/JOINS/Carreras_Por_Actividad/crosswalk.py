@@ -64,13 +64,28 @@ def promedio(grupo: pd.DataFrame, columna: str) -> float:
     return float(np.average(x[columna], weights=x["peso"])) if x["peso"].sum() > 0 else float(x[columna].mean())
 
 
+def rango(grupo: pd.DataFrame) -> dict:
+    """Mínimo y máximo de empleabilidad entre instituciones, para mostrar cuánto varía el promedio.
+
+    Solo empleabilidad: MiFuturo publica los ingresos por carrera y tipo de institución, no por institución
+    (ver Scrapers/Empleabilidad/obtener.py), así que su mínimo y máximo no medirían diferencias entre instituciones.
+
+    Con 1 o 2 instituciones queda vacío: la ficha ya avisa que el dato describe a esas instituciones, y dos
+    valores no son un rango. No se filtra por tamaño: al medirlo (05-11-26), solo 3 de 204 extremos de
+    empleabilidad venían de instituciones con menos de 30 títulos en 2021-2023.
+    """
+    x = grupo["empleabilidad_1er_anio"].dropna()
+    ok = len(x) > MAX_INSTITUCIONES_ALERTA
+    return {"empleabilidad_1er_anio_min": float(x.min()) if ok else np.nan, "empleabilidad_1er_anio_max": float(x.max()) if ok else np.nan}
+
+
 def resumir_carreras(mifuturo: pd.DataFrame, titulados: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     """Deja una fila por carrera con sus datos nacionales de MiFuturo y Titulados."""
     cohortes = titulados[titulados["anio"].between(*ANIOS_COHORTES)]
     pesos = (cohortes.groupby(["codigo_institucion", "carrera_generica"], as_index=False)["total_titulaciones"].sum()
              .rename(columns={"codigo_institucion": "id_institucion", "total_titulaciones": "peso"}))
     m = mifuturo.merge(pesos, on=["id_institucion", "carrera_generica"], how="left", validate="many_to_one").fillna({"peso": 0.0})
-    r = pd.DataFrame([{"carrera_generica": carrera, **{c: promedio(g, c) for c in COLUMNAS_MIFUTURO}} for carrera, g in m.groupby("carrera_generica")])
+    r = pd.DataFrame([{"carrera_generica": carrera, **{c: promedio(g, c) for c in COLUMNAS_MIFUTURO}, **rango(g)} for carrera, g in m.groupby("carrera_generica")])
     grupos = m.groupby("carrera_generica")["peso"]
     respaldo = pd.DataFrame({"n_instituciones": grupos.size(), "total": grupos.sum(), "mayor": grupos.max()})
     respaldo["pct_institucion_principal"] = 100 * respaldo["mayor"] / respaldo["total"].where(respaldo["total"] > 0)
@@ -80,6 +95,8 @@ def resumir_carreras(mifuturo: pd.DataFrame, titulados: pd.DataFrame) -> tuple[p
     columnas_titulos = {"total_titulaciones": "titulados_2025", "titulaciones_hombres": "titulados_2025_hombres", "titulaciones_mujeres": "titulados_2025_mujeres"}
     ultimo = titulados[titulados["anio"] == ANIO_TITULADOS].groupby("carrera_generica")[list(columnas_titulos)].sum().rename(columns=columnas_titulos)
     r = r.merge(ultimo, on="carrera_generica", how="left").fillna({c: 0 for c in columnas_titulos.values()})
+    historico = titulados.groupby("carrera_generica")["total_titulaciones"].sum().rename("titulados_2007_2025")
+    r = r.merge(historico, on="carrera_generica", how="left").fillna({"titulados_2007_2025": 0})
     return r, sin_peso
 
 
@@ -147,6 +164,9 @@ def validar(t: pd.DataFrame, carreras: pd.DataFrame, perfil: pd.DataFrame, sin_p
         "Medicina: 2.560 títulos": fila("MEDICINA")["titulados_2025"] == 2560,
         "Títulos por sexo: hombres y mujeres no superan el total": (t["titulados_2025_hombres"] + t["titulados_2025_mujeres"] <= t["titulados_2025"]).all(),
         "Enfermería: 845 hombres y 4.123 mujeres": (fila("ENFERMERIA")["titulados_2025_hombres"], fila("ENFERMERIA")["titulados_2025_mujeres"]) == (845, 4123),
+        "Títulos 2007-2025: incluyen los de 2025; Psicología 85.260": (t["titulados_2007_2025"] >= t["titulados_2025"]).all() and fila("PSICOLOGIA")["titulados_2007_2025"] == 85260,
+        "La empleabilidad promedio queda dentro de su rango entre instituciones": ((t["empleabilidad_1er_anio_min"] <= t["empleabilidad_1er_anio"] + 1e-9) & (t["empleabilidad_1er_anio"] <= t["empleabilidad_1er_anio_max"] + 1e-9) | t["empleabilidad_1er_anio_min"].isna()).all(),
+        "Rango solo con 3 o más instituciones: Psicología 43,7% a 89,7%": t.loc[t["alerta_pocas_instituciones"], "empleabilidad_1er_anio_min"].isna().all() and (round(fila("PSICOLOGIA")["empleabilidad_1er_anio_min"], 1), round(fila("PSICOLOGIA")["empleabilidad_1er_anio_max"], 1)) == (43.7, 89.7),
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)

@@ -2,10 +2,10 @@
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
 📁 Archivo: carreras_por_actividad.csv
 ============================================================
-🔹 Dimensiones: 2162 filas | 30 columnas
+🔹 Dimensiones: 2162 filas | 33 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
 🔹 Registros Duplicados Absolutos: 0 (0.00%)
-🔹 Memoria Total Estimada: 1.58 MB
+🔹 Memoria Total Estimada: 1.63 MB
 
 🔬 MATRIZ DE CALIDAD POR COLUMNA:
 -------------------------------------------------------------------------------------------------------------------
@@ -30,9 +30,12 @@ afinidad                       | object       | 0        | 0.00   % | 4        |
 titulados_2025                 | int64        | 0        | 0.00   % | 177      | 0               | 0.017    MB
 titulados_2025_hombres         | int64        | 0        | 0.00   % | 160      | 0               | 0.017    MB
 titulados_2025_mujeres         | int64        | 0        | 0.00   % | 162      | 0               | 0.017    MB
+titulados_2007_2025            | int64        | 0        | 0.00   % | 187      | 0               | 0.017    MB
 empleabilidad_1er_anio         | float64      | 0        | 0.00   % | 187      | 0               | 0.017    MB
 ingreso_medio_1er_anio         | float64      | 133      | 6.15   % | 162      | 0               | 0.017    MB
 ingreso_medio_5to_anio         | float64      | 133      | 6.15   % | 162      | 0               | 0.017    MB
+empleabilidad_1er_anio_min     | float64      | 388      | 17.95  % | 125      | 0               | 0.017    MB
+empleabilidad_1er_anio_max     | float64      | 388      | 17.95  % | 112      | 0               | 0.017    MB
 n_instituciones                | int64        | 0        | 0.00   % | 35       | 0               | 0.017    MB
 pct_institucion_principal      | float64      | 0        | 0.00   % | 152      | 0               | 0.017    MB
 pct_no_trabajan                | float64      | 1        | 0.05   % | 176      | 0               | 0.017    MB
@@ -44,7 +47,7 @@ alerta_pocas_instituciones     | bool         | 0        | 0.00   % | 2        |
 -------------------------------------------------------------------------------------------------------------------
 
 🧠 Clasificación Automática de Variables:
-   - Numéricas (21): ['actividad_caenes', 'pct_en_carrera', 'pct_en_carrera_min', 'pct_en_carrera_max', 'ocupados_titulados', 'indice_especializacion', 'n_carrera', 'n_celda', 'cv_pct', 'titulados_2025', 'titulados_2025_hombres', 'titulados_2025_mujeres', 'empleabilidad_1er_anio', 'ingreso_medio_1er_anio', 'ingreso_medio_5to_anio', 'n_instituciones', 'pct_institucion_principal', 'pct_no_trabajan', 'pct_no_trabajan_min', 'pct_no_trabajan_max', 'titulados_no_trabajan']
+   - Numéricas (24): ['actividad_caenes', 'pct_en_carrera', 'pct_en_carrera_min', 'pct_en_carrera_max', 'ocupados_titulados', 'indice_especializacion', 'n_carrera', 'n_celda', 'cv_pct', 'titulados_2025', 'titulados_2025_hombres', 'titulados_2025_mujeres', 'titulados_2007_2025', 'empleabilidad_1er_anio', 'ingreso_medio_1er_anio', 'ingreso_medio_5to_anio', 'empleabilidad_1er_anio_min', 'empleabilidad_1er_anio_max', 'n_instituciones', 'pct_institucion_principal', 'pct_no_trabajan', 'pct_no_trabajan_min', 'pct_no_trabajan_max', 'titulados_no_trabajan']
    - Categóricas/Texto (8): ['actividad_ciiu', 'actividad_glosa', 'carrera_generica', 'nivel_titulo', 'area_cine', 'fiabilidad', 'afinidad', 'fiabilidad_no_trabajan']
    - Fechas (0): []
 
@@ -56,5 +59,5 @@ alerta_pocas_instituciones     | bool         | 0        | 0.00   % | 2        |
 1754                16  ...                      False
 2058                19  ...                      False
 
-[5 rows x 30 columns]
+[5 rows x 33 columns]
 ============================================================

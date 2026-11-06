@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población y las 20 actividades. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 333 KB, sin servidor ni dependencias.
+**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 329 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos y la lista de regiones](docs/mapa.png)
 
@@ -16,7 +16,7 @@ La vista inicial resume la población y las 20 actividades. Al elegir una activi
 
 - **Concentración:** 42,1% de los ocupados trabaja en la Metropolitana.
 - **Especialización:** 13 de 16 regiones tienen su mayor CL en minería, agricultura o administración pública, aunque en 12 la actividad con más ocupados es Comercio.
-- **Estudios:** 39,8% de los ocupados tiene título técnico o profesional. La tasa de desocupación es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior.
+- **Estudios:** 39,8% de los ocupados tiene título técnico o profesional. Por actividad, va de 9,9% en Hogares como empleadores a 78,7% en Servicios profesionales. La tasa de desocupación es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior.
 - **Sexo:** la tasa de participación es 69,7% en hombres y 50,2% en mujeres.
 
 Estas diferencias son descriptivas: el mapa no les atribuye causas.
