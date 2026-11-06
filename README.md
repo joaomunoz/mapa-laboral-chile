@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población y las 20 actividades. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`index.html`](src/Visualizacion/Mapa_Actividades/Salida/index.html) y ábrelo en el navegador. Es un solo archivo de 332 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 332 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y la tabla de actividades](docs/mapa.png)
 
@@ -73,7 +73,7 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 | Ocupadas informales | 2.451.443 | 2.452.190 | +0,03% |
 | Tasa de desocupación | 9,8% | 9,80% | exacta |
 
-La explicación completa de cada dato está en la [nota de lectura](src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md).
+La explicación completa de cada dato está en la [nota de lectura](docs/nota_de_lectura.md).
 
 ## Fuentes
 
@@ -101,7 +101,7 @@ Los datos crudos no están en el repositorio porque pesan hasta 1,6 GB. Para reg
 
 ```bash
 .venv/bin/python -W ignore src/Scrapers/CENSO/obtener_cartografia.py
-.venv/bin/python -W ignore src/Visualizacion/Mapa_Actividades/generar_mapa.py
+.venv/bin/python -W ignore src/Visualizacion/generar_mapa.py
 ```
 
 **La cadena completa.** El procesamiento tarda unos 10 minutos con los datos ya descargados:
@@ -129,7 +129,7 @@ done
 
 # 4. Mapa
 $PY src/Scrapers/CENSO/obtener_cartografia.py
-$PY src/Visualizacion/Mapa_Actividades/generar_mapa.py
+$PY src/Visualizacion/generar_mapa.py
 ```
 
 Los pasos de `procesar.py` en adelante y `obtener_cartografia.py` se probaron en un clon limpio. Las descargas con `obtener.py` no se repitieron en esa prueba, y dependen de que los sitios oficiales mantengan sus páginas y enlaces.
@@ -142,7 +142,8 @@ src/Scrapers/                     Descarga y limpieza de cada fuente (Entrada/ �
 src/Analisis/Puentes_de_mapeo/    Cruces entre fuentes: actividades y carreras
 src/Analisis/Calculos_control/    Control de la tabla regional de ENE
 src/Analisis/JOINS/               Tablas que alimentan el mapa
-src/Visualizacion/Mapa_Actividades/  Generador, plantilla y mapa final
+src/Visualizacion/                Generador y plantilla del mapa
+docs/                             Mapa final, nota de lectura y captura
 pizarra/                          Estado, decisiones y bitácora del proyecto
 ```
 

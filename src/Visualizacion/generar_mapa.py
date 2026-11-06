@@ -1,11 +1,11 @@
 """
-<src/Visualizacion/Mapa_Actividades/generar_mapa.py>
+<src/Visualizacion/generar_mapa.py>
 
 Genera el mapa interactivo: una sola página HTML, sin servidor ni dependencias externas.
 
 Entradas: tablas de Analisis/JOINS y la capa regional de la cartografía del Censo 2024.
-Salida:   Salida/index.html
-Ejecutar: .venv/bin/python src/Visualizacion/Mapa_Actividades/generar_mapa.py (requiere geopandas y pyarrow)
+Salida:   docs/index.html, en la carpeta del resultado y no en src/: es lo que se publica
+Ejecutar: .venv/bin/python src/Visualizacion/generar_mapa.py (requiere geopandas y pyarrow)
 
 Decisiones:
   - Simplificación por cobertura: mantiene exactos los bordes compartidos; simplificar cada región por separado
@@ -38,7 +38,7 @@ import shapely
 log = logging.getLogger(__name__)
 
 DIR = Path(__file__).parent
-DIR_SRC = DIR.parents[1]
+DIR_SRC = DIR.parent
 DIR_JOINS = DIR_SRC / "Analisis" / "JOINS"
 RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "concentracion_region_actividad_censo.csv"
 RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
@@ -49,7 +49,7 @@ RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.cs
 RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
 RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
 RUTA_PLANTILLA = DIR / "plantilla.html"
-RUTA_SALIDA = DIR / "Salida" / "index.html"
+RUTA_SALIDA = DIR_SRC.parent / "docs" / "index.html"
 
 ANCHO_SVG = 250
 LATITUD_REFERENCIA = -36.0  # Mantiene una proporción razonable en un país tan largo.

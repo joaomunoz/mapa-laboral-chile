@@ -29,7 +29,9 @@
 │               ├── GLOSARIO_DE_TITULADO_2007_2025_E.md
 │               └── url
 ├── docs
-│   └── mapa.png
+│   ├── index.html
+│   ├── mapa.png
+│   └── nota_de_lectura.md
 ├── src
 │   ├── Analisis
 │   │   ├── Calculos_control
@@ -166,16 +168,12 @@
 │   │       ├── obtener.py
 │   │       └── procesar.py
 │   └── Visualizacion
-│       └── Mapa_Actividades
-│           ├── Salida
-│           │   ├── index.html
-│           │   └── nota_de_lectura.md
-│           ├── generar_mapa.py
-│           └── plantilla.html
+│       ├── generar_mapa.py
+│       └── plantilla.html
 ├── .gitignore
 └── README.md
 
-52 directories, 117 files
+50 directories, 117 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -184,6 +182,9 @@
 
 - **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
 - **`.claude/settings.json`**: Configuración local de Claude Code; sin versionar.
+- **`docs/`**: Resultado publicable, separado del código de `src/`; GitHub Pages puede servirlo tal cual.
+- **`docs/index.html`**: El mapa final, autónomo. Lo escribe `src/Visualizacion/generar_mapa.py`.
+- **`docs/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.
 - **`docs/mapa.png`**: Captura de la parte superior de la vista inicial del mapa (resumen, modo claro), que se muestra en el README.
 - **`.gitignore`**: Deja fuera `.venv/`, datos crudos y microdatos, que se regeneran.
 
@@ -272,7 +273,5 @@
 
 ### Visualización
 
-- **`src/Visualizacion/Mapa_Actividades/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 55 controles. Requiere `.venv` (geopandas y pyarrow).
-- **`src/Visualizacion/Mapa_Actividades/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar. Guarda cada vista en la dirección (`#actividad/región/carrera`), así que el botón "atrás" funciona y cada vista tiene enlace.
-- **`src/Visualizacion/Mapa_Actividades/Salida/index.html`**: El mapa final, autónomo.
-- **`src/Visualizacion/Mapa_Actividades/Salida/nota_de_lectura.md`**: Qué mide cada dato, qué no dice y sus límites.
+- **`src/Visualizacion/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 55 controles. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar. Guarda cada vista en la dirección (`#actividad/región/carrera`), así que el botón "atrás" funciona y cada vista tiene enlace.

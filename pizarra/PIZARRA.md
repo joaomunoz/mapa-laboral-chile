@@ -38,7 +38,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 95% | 🟢 | Años de ingreso y edad (titulados de hasta 30 años) confirmados; percentiles descartados por no ser necesarios |
 | Mapa interactivo | 98% | 🟢 | Depurado y con navegación por enlace el 06-11-26; falta revisar la bajada animada en un celular real |
-| Nota de lectura | 100% | 🟢 | `Salida/nota_de_lectura.md` |
+| Nota de lectura | 100% | 🟢 | `docs/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
 | Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
 | README y presentación | 90% | 🟡 | Resumen, objetivo, límites, metodología y fuentes; falta enlace para ver el mapa y licencia |
