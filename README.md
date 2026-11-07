@@ -50,9 +50,97 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 3. **Indicadores:** se calculan por región, actividad, sexo y nivel de estudios, y cada cifra conserva su fuente.
 4. **Mapa:** un script genera una sola página con los datos y los bordes oficiales simplificados.
 
+### Flujo de datos
+
+En la limpieza, cada fuente queda en una tabla. En el análisis se destacan solo las columnas clave de cada tabla.
+
+```mermaid
+flowchart TD
+  subgraph F["1. Fuentes"]
+    censo["Censo 2024 (INE)"]
+    ene["ENE (INE)"]
+    casen["CASEN 2024"]
+    sies["Titulados 2007-2025 (SIES)"]
+    mifuturo["MiFuturo"]
+  end
+
+  subgraph L["2. Limpieza · src/Scrapers/*/Salida"]
+    cp["censo_procesado<br>Personas de 15 años o más por región de residencia y de trabajo, situación laboral, actividad y nivel de estudios"]
+    cs["censo_por_sexo<br>Lo mismo, abierto por sexo"]
+    geo["Cartografía regional<br>Bordes de las 16 regiones"]
+    ep["ene_procesado<br>Microdatos de la ENE con su diseño muestral"]
+    kp["casen_procesado<br>Personas con su carrera declarada, su actividad y su diseño muestral"]
+    tp["titulados_procesado<br>Titulaciones por carrera, año y sexo"]
+    mp["empleabilidad_procesado<br>Empleabilidad e ingresos por carrera"]
+  end
+
+  subgraph P["3. Análisis: puentes entre fuentes · src/Analisis/Puentes_de_mapeo"]
+    p1["P1_puente_actividades<br>Une los códigos de actividad con la sección CIIU<br>actividad_caenes → actividad_ciiu"]
+    p5["P5_puente_carrera_casen<br>Lleva la carrera declarada en CASEN a la carrera del SIES<br>e6a → carrera_generica"]
+    p9["P9_perfil_laboral_carrera<br>Dónde trabajan los titulados de cada carrera<br>carrera_generica × actividad_ciiu: pct_en_carrera, indice_especializacion"]
+  end
+
+  subgraph J["4. Análisis: tablas del mapa · src/Analisis/JOINS"]
+    je["concentracion_region_actividad<br>CL según la ENE, como contraste<br>peso_relativo, fiabilidad"]
+    jc["concentracion_region_actividad_censo<br>Ocupados y CL por región y actividad<br>ocupados, pct_en_region, pct_nacional, peso_relativo (CL), ene_peso_relativo"]
+    jn["fuerza_trabajo_region_nivel<br>Situación laboral por región y nivel de estudios<br>ocupados_residencia, desocupados, fuera_fuerza_trabajo, tasa_desocupacion"]
+    ja["areas_por_actividad<br>Áreas de estudio de los titulados en cada actividad<br>area_cine, pct_en_actividad"]
+    jk["carreras_por_actividad<br>Carreras afines a cada actividad, con su ficha<br>carrera_generica, afinidad, titulados_2007_2025, empleabilidad_1er_anio, ingreso_medio_5to_anio"]
+  end
+
+  subgraph M["5. Mapa"]
+    gen["src/Visualizacion/generar_mapa.py + plantilla.html"]
+    out["docs/index.html"]
+  end
+
+  censo --> cp & cs & geo
+  ene --> ep
+  casen --> kp
+  sies --> tp
+  mifuturo --> mp
+
+  kp & tp --> p5
+  kp & p1 & p5 --> p9
+
+  ep & p1 --> je
+  cp & p1 & je --> jc
+  cp & ep --> jn
+  kp & p1 & p5 & tp --> ja
+  p9 & p5 & tp & mp & kp --> jk
+
+  jc & jn & ja & jk & cp & cs & geo --> gen
+  gen --> out
+```
+
+Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No aparecen las tablas que solo validan un paso: `ocupados_region_actividad`, que reproduce el boletín del INE, y `P6_control_no_asignados`, que compara a quienes P5 asigna y a quienes no.
+
+### Fórmulas
+
+**Parámetros**
+
+| Parámetro | Qué es | Chile |
+|---|---|---:|
+| Población de 15 años o más | Personas de 15 años o más, incluidas las sin dato de situación laboral | 15.205.784 |
+| Ocupados | Trabajaron al menos una hora en la semana de referencia. Se cuentan donde viven | 8.277.501 |
+| Desocupados | No trabajaron y buscaron trabajo | 777.920 |
+| Ocupados por lugar de trabajo | Ocupados contados en la región donde trabajan, con actividad informada | 7.395.105 |
+
+**Indicadores**
+
+| Indicador | Fórmula | Ejemplo (Censo 2024) |
+|---|---|---|
+| Tasa de desocupación | desocupados ÷ (ocupados + desocupados) | Chile: 777.920 ÷ 9.055.421 = **8,6%** |
+| Tasa de participación | (ocupados + desocupados) ÷ población de 15 años o más | Chile: 9.055.421 ÷ 15.205.784 = **59,6%** |
+| Tasa de ocupación | ocupados ÷ población de 15 años o más | Chile: 8.277.501 ÷ 15.205.784 = **54,4%** |
+| Participación | ocupados de la actividad ÷ ocupados de la región, por lugar de trabajo | Artes y deportes en Valparaíso: 10.007 ÷ 706.053 = **1,42%**; en Chile: 81.498 ÷ 7.395.105 = **1,10%** |
+| Coeficiente de localización (CL) | participación en la región ÷ participación en Chile | Valparaíso en Artes y deportes: 1,42% ÷ 1,10% = **1,29** |
+
+- **Un CL de 1,29** significa que la actividad pesa 29% más en Valparaíso que en Chile. No significa que sea la principal de la región: ahí Comercio tiene 124.015 ocupados.
+- **"Participación" y "tasa de participación" son distintas:** la primera es el peso de una actividad entre los ocupados; la segunda, la parte de la población que trabaja o busca trabajo.
+
 **Criterios principales** (son criterios de trabajo, no estándares oficiales):
 
-- **Coeficiente de localización (CL):** participación de la actividad en la región ÷ participación en Chile. Una región queda sobre Chile desde 1,2 y bajo Chile hasta 0,8. No se lee con menos de 60 personas.
+- **Lectura del CL:** una región queda sobre Chile desde 1,2 y bajo Chile hasta 0,8. No se lee con menos de 60 personas.
 - **Bases:** los ocupados se cuentan por lugar de trabajo para participación y CL, y por residencia para tasas de desocupación y participación. Por eso los totales de una región pueden diferir.
 - **Encuestas (ENE y CASEN):** un dato es fiable con n ≥ 60, gl ≥ 9 y CV ≤ 30, con errores calculados según el diseño muestral (linealización de Taylor).
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable. Si la muestra es insuficiente pero hay 10 casos o más, se muestra como posible vínculo.
