@@ -15,7 +15,7 @@ import re
 import pandas as pd
 import pyarrow.parquet as pq
 
-from config import CLASE_NEUTRA, COLOR_RESUMEN, DIFERENCIA_AREA_MAXIMA_PCT, DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT, NOMBRES_REGION, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO, POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, RUTA_PERSONAS
+from config import CLASE_NEUTRA, COLOR_RESUMEN, DIFERENCIA_AREA_MAXIMA_PCT, DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT, MINIMO_VISIBLE, NOMBRES_REGION, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO, POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, RUTA_PERSONAS
 from formato import de_cada_10
 from indicadores import clase_color
 
@@ -127,7 +127,8 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Nivel por actividad: hombres y mujeres suman el total cuando ambos se muestran": all(f[2] + f[3] == f[0] for a in datos["actividades"] for d in [a, *a["regiones"].values()] for f in d["niveles"] if f[2] is not None and f[3] is not None),
         "Nivel por actividad: 16 filas regionales con menos de 10, y ninguna nacional": sum(f[2] is None or f[3] is None for a in datos["actividades"] for d in a["regiones"].values() for f in d["niveles"]) == 16 and not any(f[2] is None or f[3] is None for a in datos["actividades"] for f in a["niveles"]),
         "Nivel por actividad: todas las actividades 27,3%, 12,3% y 60,4%": datos["perfil_estudios"]["todas"] == [27.3, 12.3, 60.4],
-        "Sexo por región: en cada celda, hombres y mujeres suman sus ocupados": all(d["h"] + d["m"] == d["ocupados"] for a in datos["actividades"] for d in a["regiones"].values()),
+        "Sexo por región: en cada celda, hombres y mujeres suman sus ocupados cuando ambos se muestran": all(d["h"] + d["m"] == d["ocupados"] for a in datos["actividades"] for d in a["regiones"].values() if d["h"] is not None and d["m"] is not None),
+        "Sexo por región: bajo 10 no se escribe la cifra ni su participación": all((d[s] is None) == (d["pct_" + s] is None) and (d[s] is None or d[s] >= MINIMO_VISIBLE) for a in datos["actividades"] for d in a["regiones"].values() for s in ("h", "m")),
         "Sexo por región: las bases suman la base de cada región y de Chile": all(v["h"] + v["m"] == datos["base_ocupados"]["regiones"][r] for r, v in datos["base_ocupados"]["sexo"]["regiones"].items()) and sum(datos["base_ocupados"]["sexo"]["chile"].values()) == datos["base_ocupados"]["chile"],
         "Sexo por región: Biobío en Salud 15.108 y 45.643; 4,91% y 17,22%": (lambda d: (d["h"], d["m"], d["pct_h"], d["pct_m"]) == (15_108, 45_643, 4.91, 17.22))(por_ciiu["Q"]["regiones"][8]),
         "Situación por sexo: cada región suma sus grupos": all(d["sexo"]["hombres"][k] + d["sexo"]["mujeres"][k] == d[k] for d in pob["regiones"].values() for k in ("total", "trabajan", "buscan", "no_buscan", "sin_dato")),

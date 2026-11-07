@@ -29,10 +29,10 @@ function vistaRegion(){
   `<tr><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>
  <tr><td>A. Total de ocupados (lugar de trabajo, con actividad informada)</td><td></td><td class="n ini">${num(BASE.regiones[reg])}</td><td class="n">${num(bs.h)}</td>`+
   `<td class="n">${num(bs.m)}</td><td class="n ini">${num(BASE.chile)}</td><td class="n">${num(BASE.sexo.chile.h)}</td><td class="n">${num(BASE.sexo.chile.m)}</td></tr>
- <tr><td>B. Ocupados en la actividad</td><td></td><td class="n ini">${num(d.ocupados)}</td><td class="n">${num(d.h)}${chica(d.h)}</td><td class="n">${num(d.m)}${chica(d.m)}</td><td class="n ini">${num(n.ocupados)}</td><td class="n">${num(act.sexo.h)}</td><td class="n">${num(act.sexo.m)}</td></tr>
- <tr><td>C. Participación</td><td>B ÷ A</td><td class="n ini">${part(d.pct)}</td><td class="n">${part(d.pct_h)}</td><td class="n">${part(d.pct_m)}</td><td class="n ini">${part(act.pct_nacional)}</td><td class="n">${part(act.sexo.part_h)}</td><td class="n">${part(act.sexo.part_m)}</td></tr>
+ <tr><td>B. Ocupados en la actividad</td><td></td><td class="n ini">${num(d.ocupados)}</td><td class="n">${celdaSexo(d.h)}</td><td class="n">${celdaSexo(d.m)}</td><td class="n ini">${num(n.ocupados)}</td><td class="n">${num(act.sexo.h)}</td><td class="n">${num(act.sexo.m)}</td></tr>
+ <tr><td>C. Participación</td><td>B ÷ A</td><td class="n ini">${part(d.pct)}</td><td class="n">${partSexo(d.pct_h)}</td><td class="n">${partSexo(d.pct_m)}</td><td class="n ini">${part(act.pct_nacional)}</td><td class="n">${part(act.sexo.part_h)}</td><td class="n">${part(act.sexo.part_m)}</td></tr>
  <tr class="total"><td>D. CL</td><td>C ÷ C de Chile</td><td class="n ini">${d.peso_txt}</td><td></td><td></td><td class="n ini">1,00</td><td></td><td></td></tr></tbody></table></div>
- ${d.h<CHICA||d.m<CHICA?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}
+ ${[d.h,d.m].some(v=>v!=null&&v<CHICA)?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}
  <p class="nota" style="margin:6px 0 0">Lectura: ${LECT[d.lectura]}.</p>`+avisos()+
   `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE 2025-2026: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
  if(otras.length)h+=`<h3>Otras actividades con CL de 1,2 o más</h3><table><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${

@@ -63,7 +63,11 @@ def sexo_por_actividad(por_sexo: pd.DataFrame) -> dict:
 
 
 def agregar_sexo_por_region(actividades: list[dict], por_sexo: pd.DataFrame) -> dict:
-    """Agrega ocupados por sexo a cada región y actividad, y devuelve las bases de la participación por sexo."""
+    """Agrega ocupados por sexo a cada región y actividad, y devuelve las bases de la participación por sexo.
+
+    Con menos de MINIMO_VISIBLE personas, ni la cifra ni su participación se escriben en la página, igual que en el perfil de estudios:
+    la participación sola permitiría recalcular la cifra.
+    """
     base = ocupados_con_region_y_actividad(por_sexo)
     por_region = base.groupby(["codigo_region_trabajo", "sexo"])["personas"].sum()
     por_celda = base.groupby(["codigo_region_trabajo", "actividad_ciiu", "sexo"])["personas"].sum()
@@ -71,8 +75,9 @@ def agregar_sexo_por_region(actividades: list[dict], por_sexo: pd.DataFrame) -> 
     for a in actividades:
         a["sexo"]["part_h"], a["sexo"]["part_m"] = redondear(100 * a["sexo"]["h"] / por_chile[HOMBRE], 2), redondear(100 * a["sexo"]["m"] / por_chile[MUJER], 2)
         for r, d in a["regiones"].items():
-            d["h"], d["m"] = int(por_celda.get((r, a["ciiu"], HOMBRE), 0)), int(por_celda.get((r, a["ciiu"], MUJER), 0))
-            d["pct_h"], d["pct_m"] = redondear(100 * d["h"] / por_region[(r, HOMBRE)], 2), redondear(100 * d["m"] / por_region[(r, MUJER)], 2)
+            for clave, sexo in (("h", HOMBRE), ("m", MUJER)):
+                v = int(por_celda.get((r, a["ciiu"], sexo), 0))
+                d[clave], d["pct_" + clave] = (v, redondear(100 * v / por_region[(r, sexo)], 2)) if v >= MINIMO_VISIBLE else (None, None)
     return {"chile": {"h": int(por_chile[HOMBRE]), "m": int(por_chile[MUJER])},
             "regiones": {str(int(r)): {"h": int(por_region[(r, HOMBRE)]), "m": int(por_region[(r, MUJER)])} for r in por_region.index.levels[0]}}
 

@@ -20,3 +20,6 @@ const deCada10=p=>`${Math.round(p/10)} de cada 10`;
 const CHICA=60;
 const chica=v=>v<CHICA?" *":"";
 const celdaNivel=(v,p)=>v==null?"menos de 10":`${num(v)} (${num(p,1)}%)${chica(v)}`;
+// Misma regla en el detalle de región: bajo 10 la cifra no viene en los datos, y su participación tampoco.
+const celdaSexo=v=>v==null?"menos de 10":num(v)+chica(v);
+const partSexo=p=>p==null?"–":part(p);
