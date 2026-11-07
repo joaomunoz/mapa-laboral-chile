@@ -1,7 +1,7 @@
 """
 <src/Visualizacion/datos.py>
 
-Arma el JSON que lee la página (DATOS en plantilla.html) a partir de las tablas y los cálculos de indicadores.py.
+Arma el JSON que lee la página (DATOS en web/js/datos.js) a partir de las tablas y los cálculos de indicadores.py.
 
 Decisiones:
   - Actividad U fuera de la lista: se conserva en la tabla, pero no aporta al mapa.

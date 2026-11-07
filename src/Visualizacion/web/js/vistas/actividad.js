@@ -1,0 +1,20 @@
+/*
+<src/Visualizacion/web/js/vistas/actividad.js>
+
+Vista de una actividad en Chile, con su perfil de estudios y avisos.
+*/
+// Perfil de cada actividad. Sin tasas: el Censo registra la actividad solo de quienes trabajan.
+function perfilEstudios(filas,lugar,rotulo,comparacion){
+ const hayChicas=filas.some(f=>f[2]!=null&&f[2]<CHICA||f[3]!=null&&f[3]<CHICA);
+ return `<h2>Nivel de estudios de los ocupados</h2><div class="nota">${esc(lugar)}. Según lugar de trabajo, con nivel informado. Entre paréntesis, % de cada columna. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${NIVELES.map(([,t],i)=>{const f=filas[i];return `<tr><td>${t}</td><td class="n">${num(f[0])} (${num(f[1],1)}%)</td><td class="n">${celdaNivel(f[2],f[4])}</td><td class="n">${celdaNivel(f[3],f[5])}</td><td class="n">${num(comparacion[i],1)}%</td></tr>`}).join("")}</tbody></table></div>${hayChicas?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}`}
+function avisos(){let h="";
+ if(act.alerta_fuente)h+=`<div class="aviso">Censo y ENE difieren en el tamaño de esta actividad: usa los ocupados solo como referencia.</div>`;
+ if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;
+ return h}
+function vistaChile(){const n=act.nacional;
+ return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
+ <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>
+ <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div></div>
+ ${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE 2025-2026: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
+ <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,"Todas las actividades",DATOS.perfil_estudios.todas)}`}

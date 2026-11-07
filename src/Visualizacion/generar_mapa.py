@@ -9,7 +9,7 @@ Ejecutar: .venv/bin/python src/Visualizacion/generar_mapa.py (requiere geopandas
 
 Este archivo solo ordena los pasos: cargar, armar datos y geometría, validar y escribir. Cada paso vive en su módulo:
   config.py      rutas y constantes
-  carga.py       lectura de las entradas y escritura de la página
+  carga.py       lectura de las entradas, unión de web/ (HTML, CSS y JS) y escritura de la página
   datos.py       JSON que lee la página
   indicadores.py cálculos: tramo del CL, resúmenes, sexo y nivel de estudios
   geometria.py   bordes de las regiones en SVG
@@ -24,7 +24,7 @@ import logging
 
 from config import RUTA_SALIDA
 from geometria import construir_geometria
-from carga import cargar_tablas, escribir_pagina, leer_plantilla, leer_regiones
+from carga import archivos_web_sin_listar, cargar_tablas, escribir_pagina, leer_codigo_js, leer_plantilla, leer_regiones
 from datos import construir_datos
 from controles import validar
 
@@ -40,6 +40,6 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     datos, geo = construir_datos(cargar_tablas()), construir_geometria(leer_regiones())
     html = armar_pagina(datos, geo)
-    validar(datos, geo, html)
+    validar(datos, geo, html, leer_codigo_js(), archivos_web_sin_listar())
     escribir_pagina(html)
     log.info("HTML generado: %s (%.0f KB, %d carreras)", RUTA_SALIDA, RUTA_SALIDA.stat().st_size / 1024, len(datos["fichas"]))

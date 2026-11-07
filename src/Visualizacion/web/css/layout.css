@@ -1,0 +1,32 @@
+/*
+<src/Visualizacion/web/css/layout.css>
+
+Distribución: grilla, cabecera en dos columnas, tamaño del mapa y pantallas angostas.
+Va al final porque sus reglas para pantallas angostas deben ganar sobre las de componentes.css.
+*/
+.envoltura{max-width:1240px;margin:0 auto}
+/* El mapa ocupa el alto de dos filas: a su derecha van las regiones en 2 filas de 8 y, debajo, el detalle con todo el ancho restante. */
+.grilla{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
+.tarjeta.mapa{grid-row:span 2}
+.mapa svg{max-width:215px;margin:12px auto 0}
+/* Las anotaciones usan el espacio vacío a los lados de Chile: por eso el SVG deja salir su contenido. */
+/* Chile mide unas 5 veces su ancho. El alto mínimo deja el mapa en unos 150 px de ancho, para que se lea y se pueda pulsar; en
+   ventanas bajas no cabe entero, así que el panel se fija recién cuando se ve su parte inferior y no deja el sur fuera de vista. */
+.mapa svg{overflow:visible;width:auto;height:max(760px,calc(100vh - 220px));max-height:1050px;max-width:100%}
+@media(min-width:1291px){.tarjeta.mapa{position:sticky;top:min(12px,calc(100vh - 1031px))}}
+/* Dos columnas para que el mapa suba sin quitar contenido. El selector queda siempre a la izquierda, para que no salte al
+   cambiar de vista. */
+@media(min-width:1000px){
+ .cabecera{display:grid;grid-template-columns:400px minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:32px;align-items:start}
+ .cabecera .filtro{grid-column:1;grid-row:1/span 2;margin:0}
+ .cabecera select{min-width:0;width:100%}
+ .cabecera .lectura{grid-column:2;grid-row:1;margin:0 0 8px}
+ .cabecera .cab-texto{grid-column:2;grid-row:2}
+ .con-resumen .filtro{grid-row:1}
+ .con-resumen .lectura{grid-column:1;grid-row:2;margin:12px 0 0;font-size:15px}
+ .con-resumen .cab-texto{grid-row:1/span 2}
+}
+@media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
+@media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:640px){table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}

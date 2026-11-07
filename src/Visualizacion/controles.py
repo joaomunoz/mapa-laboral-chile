@@ -10,6 +10,7 @@ datos cambian, el mapa no debe publicarse con frases que ya no son ciertas.
 from __future__ import annotations
 
 import logging
+import re
 
 import pandas as pd
 import pyarrow.parquet as pq
@@ -30,7 +31,40 @@ def totales_sexo_genero_correctos() -> bool:
     return d["sexo"].value_counts().to_dict() == POBLACION_POR_SEXO and genero[1] == OCUPADOS_DIVERSIDAD_GENERO and genero[-66] == OCUPADOS_GENERO_SUPRIMIDO
 
 
-def validar(datos: dict, geo: dict, html: str) -> None:
+def nombres_globales_js(codigo: str) -> list[str]:
+    """Nombres que un archivo JS define a nivel superior: function, const y let al inicio de línea, fuera de cualquier bloque."""
+    nombres = []
+    for linea in codigo.splitlines():
+        if linea.startswith("function "):
+            nombres.append(re.match(r"function (\w+)", linea).group(1))
+        if not linea.startswith(("const ", "let ")):
+            continue
+        # Separa sentencias por ";" y nombres por "," solo fuera de paréntesis, corchetes, llaves, textos y plantillas.
+        nivel, comilla, actual, sentencias, partes = 0, None, "", [], []
+        for c in linea:
+            if comilla:
+                comilla = None if c == comilla else comilla
+            elif c in "'\"`":
+                comilla = c
+            elif c in "([{":
+                nivel += 1
+            elif c in ")]}":
+                nivel -= 1
+            elif nivel == 0 and c in ",;":
+                partes.append(actual); actual = ""
+                if c == ";":
+                    sentencias.append(partes); partes = []
+                continue
+            actual += c
+        sentencias.append(partes + [actual])
+        for partes in sentencias:
+            if partes and re.match(r"\s*(const|let) ", partes[0]):
+                partes[0] = re.sub(r"\s*(const|let) ", "", partes[0], count=1)
+                nombres += [m.group(1) for x in partes if (m := re.match(r"\s*(\w+)\s*=", x))]
+    return nombres
+
+
+def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_listar: list[str]) -> None:
     celdas = [d for a in datos["actividades"] for d in a["regiones"].values() if d["clase"] is not None]
     lectura_esperada = lambda c: "bajo_lo_nacional" if c < CLASE_NEUTRA else "similar" if c == CLASE_NEUTRA else "concentra"
     con_base = [d for d in celdas if d["lectura"] != "base_pequena"]
@@ -107,7 +141,10 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Cada participación se puede recalcular con ocupados y su base": all(abs(100 * d["ocupados"] / datos["base_ocupados"]["regiones"][str(r)] - d["pct"]) < 0.0051 for a in datos["actividades"] for r, d in a["regiones"].items()),
         "Población: Chile con tasa de desocupación 8,6%, participación 59,6% y 7.801.449 con lugar de trabajo": pob["chile"]["tasa_desocupacion"] == 8.6 and pob["chile"]["tasa_participacion"] == 59.6 and pob["chile"]["lugar_trabajo"] == 7_801_449,
         "Población: ocupados por lugar de trabajo suman Chile; Antofagasta 372.015": sum(d["lugar_trabajo"] for d in pob["regiones"].values()) == pob["chile"]["lugar_trabajo"] and pob["regiones"]["2"]["lugar_trabajo"] == 372_015,
-        "La plantilla quedó completa": "__DATOS__" not in html and "__GEO__" not in html,
+        "La plantilla quedó completa": all(m not in html for m in ("__DATOS__", "__GEO__", "__ESTILOS__", "__CODIGO__")),
+        # Sin módulos, los archivos JS comparten un solo espacio de nombres: uno repetido pisaría al otro sin aviso.
+        "JS: ningún nombre global se define en dos archivos": len(todos := [n for c in codigo_js.values() for n in nombres_globales_js(c)]) == len(set(todos)) and len(todos) > 50,
+        "Web: todos los archivos de css/ y js/ están en la lista del generador": not sin_listar,
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)

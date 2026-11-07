@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+<src/Visualizacion/web/index.html>
+Estructura de la página. generar_mapa.py le agrega los estilos de css/, el código de js/ y los datos, y escribe docs/index.html.
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa Laboral de Chile</title>
+<style>
+__ESTILOS__</style>
+</head>
+<body>
+<div class="viz-root"><div class="envoltura">
+<h1>Mapa Laboral de Chile</h1>
+<p class="bajada">Situación laboral y educacional del país: dónde se concentra el trabajo, cómo varía por sexo y nivel de estudios, y qué carreras se vinculan con cada actividad. Censo 2024, INE.</p>
+<div class="cabecera" id="cabecera">
+<div class="filtro"><label for="actividad">Actividad</label><select id="actividad"></select></div>
+<p class="lectura" id="lectura" aria-live="polite"></p>
+<div class="cab-texto"><h2 class="kpis-t" id="kpis-t">Principales hallazgos</h2><div class="kpis" id="principal"></div>
+<p class="nota def-cl"><strong>CL</strong> (coeficiente de localización) = participación en la región ÷ participación en Chile.</p></div>
+</div>
+<div class="grilla">
+<section class="tarjeta mapa"><h2 id="t-mapa"></h2><div class="nota" id="n-mapa"></div>
+<div class="leyenda" id="leyenda"></div><div class="ejes" id="ejes"><span>Menor que en Chile</span><span>Mayor que en Chile</span></div><div id="mapa"></div></section>
+<section class="tarjeta"><h2>Regiones</h2><div class="nota" id="n-lista"></div><div class="lista" id="lista" style="margin-top:10px"></div></section>
+<section class="tarjeta detalle" id="detalle"></section>
+</div>
+<footer>
+<details class="glosario"><summary><strong>Glosario</strong></summary>
+<p><strong>Situación laboral</strong></p>
+<ul>
+<li><strong>Ocupados:</strong> Personas de 15 años o más que en la semana de referencia dedicaron al menos una hora a producir bienes o servicios por un pago o beneficio. Incluye a quienes tenían empleo, pero estaban de vacaciones o con licencia.</li>
+<li><strong>Desocupados:</strong> Personas de 15 años o más sin ocupación, y disponibles para trabajar o en busca de trabajo.</li>
+<li><strong>Fuera de la fuerza de trabajo:</strong> Ni ocupados ni desocupados; incluye, por ejemplo, a personas jubiladas o dedicadas a los quehaceres del hogar.</li>
+<li><strong>Sin dato:</strong> Personas de 15 años o más que no respondieron las preguntas sobre situación laboral.</li>
+<li><strong>Tasa de ocupación:</strong> Ocupados ÷ población de 15 años o más, incluidas las personas sin dato.</li>
+<li><strong>Tasa de desocupación:</strong> Desocupados ÷ (ocupados + desocupados).</li>
+<li><strong>Tasa de participación:</strong> (Ocupados + desocupados) ÷ población de 15 años o más, incluidas las personas sin dato. No confundir con participación.</li>
+</ul>
+<p><strong>Actividad y región</strong></p>
+<ul>
+<li><strong>Residencia y lugar de trabajo:</strong> Los ocupados se cuentan donde viven (tasas y situación laboral) o donde trabajan (participación y CL). Por eso los totales de una región difieren.</li>
+<li><strong>Participación:</strong> % de los ocupados de la región o de Chile, por lugar de trabajo y con actividad informada, que está en la actividad. Se muestra como ocupados (participación). No confundir con la tasa de participación.</li>
+<li><strong>Coeficiente de localización (CL):</strong> Participación en la región ÷ participación en Chile. 1 es igual que Chile; sobre 1, mayor. No indica que haya más ocupados.</li>
+<li><strong>Especialización:</strong> Actividad con mayor CL en una región. No es la actividad con más ocupados.</li>
+</ul>
+<p><strong>Estudios y carreras</strong></p>
+<ul>
+<li><strong>Profesional:</strong> Título profesional o grado completado, magíster o doctorado.</li>
+<li><strong>Técnico:</strong> Título técnico de nivel superior completado.</li>
+<li><strong>Sin título superior:</strong> Resto de las personas con nivel informado, incluidas quienes no completaron estudios superiores.</li>
+<li><strong>Títulos:</strong> Títulos técnicos de nivel superior y profesionales, sin postítulos ni posgrados: el total 2007-2025 y los de 2025. Son titulaciones, no personas ocupadas.</li>
+<li><strong>Carrera afín:</strong> Carrera con al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable. Dato nacional, de la encuesta CASEN.</li>
+<li><strong>Posible vínculo:</strong> Cumple los dos primeros umbrales de carrera afín, pero con muestra insuficiente y al menos 10 casos. No es un dato firme.</li>
+<li><strong>Empleabilidad al 1er año:</strong> % de titulados con ingresos iguales o superiores al sueldo mínimo.</li>
+<li><strong>Ingreso medio:</strong> Ingreso bruto mensual medio al 1er y al 5° año, en pesos de septiembre de 2025. Son generaciones distintas, no una evolución.</li>
+</ul>
+<p><strong>Otros</strong></p>
+<ul>
+<li><strong>Hombres y mujeres:</strong> Variable sexo del Censo, que solo registra esas dos categorías. En Actividades, el % es sobre los ocupados de cada actividad. La identidad de género se mide aparte y está suprimida para ${num(POB.genero_ocupados.suprimido)} ocupados, por lo que no se abre por actividad.</li>
+<li><strong>Poco fiable:</strong> Dato de encuesta con coeficiente de variación entre 15 y 30: se muestra, pero debe leerse con cautela.</li>
+</ul>
+</details>
+<p>El mapa no dibuja Rapa Nui ni Juan Fernández; sus datos están en Valparaíso.</p>
+<p><strong>Fuentes</strong></p>
+<ul>
+<li>Censo de Población y Vivienda 2024 y su cartografía (INE): <a href="https://censo2024.ine.gob.cl/resultados/" target="_blank" rel="noopener">censo2024.ine.gob.cl/resultados</a></li>
+<li>Encuesta Nacional de Empleo, diciembre de 2025 a septiembre de 2026 (INE): <a href="https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion" target="_blank" rel="noopener">ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion</a></li>
+<li>Encuesta CASEN 2024 (Ministerio de Desarrollo Social y Familia): <a href="https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024" target="_blank" rel="noopener">observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024</a></li>
+<li>Titulados 2007-2025, SIES (Ministerio de Educación): <a href="https://www.mifuturo.cl/bases-de-datos-titulados/" target="_blank" rel="noopener">mifuturo.cl/bases-de-datos-titulados</a></li>
+<li>Buscador de Empleabilidad e Ingresos, MiFuturo (Ministerio de Educación): <a href="https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/" target="_blank" rel="noopener">mifuturo.cl/buscador-de-empleabilidad-e-ingresos</a></li>
+</ul>
+</footer>
+</div>
+<div id="tip" role="status"></div>
+</div>
+<script>
+__CODIGO__</script>
+</body></html>

@@ -89,7 +89,7 @@ flowchart TD
   end
 
   subgraph M["5. Mapa"]
-    gen["src/Visualizacion/generar_mapa.py + plantilla.html"]
+    gen["src/Visualizacion/generar_mapa.py + web/ (HTML, CSS y JS)"]
     out["docs/index.html"]
   end
 
@@ -230,7 +230,7 @@ src/Scrapers/                     Descarga y limpieza de cada fuente (Entrada/ �
 src/Analisis/Puentes_de_mapeo/    Cruces entre fuentes: actividades y carreras
 src/Analisis/Calculos_control/    Control de la tabla regional de ENE
 src/Analisis/JOINS/               Tablas que alimentan el mapa
-src/Visualizacion/                Generador y plantilla del mapa
+src/Visualizacion/                Generador del mapa (Python) y su página en web/ (HTML, CSS y JS)
 docs/                             Mapa final, nota de lectura y captura
 pizarra/                          Estado, decisiones y bitácora del proyecto
 ```

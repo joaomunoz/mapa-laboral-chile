@@ -20,7 +20,14 @@ RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_proces
 RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.csv"
 RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
 RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
-RUTA_PLANTILLA = DIR / "plantilla.html"
+DIR_WEB = DIR / "web"
+RUTA_PLANTILLA = DIR_WEB / "index.html"
+# El mapa se abre con doble clic (file://), donde el navegador no carga módulos JS: el generador une estos archivos en
+# un solo <style> y un solo <script>. El orden importa: en CSS, layout.css va al final para que sus reglas de pantallas
+# angostas ganen; en JS, datos.js va primero y main.js al final, cuando todo lo demás ya está definido.
+ARCHIVOS_CSS = ["css/base.css", "css/componentes.css", "css/layout.css"]
+ARCHIVOS_JS = ["js/datos.js", "js/formato.js", "js/mapa.js", "js/vistas/resumen.js", "js/vistas/actividad.js", "js/vistas/region.js",
+               "js/vistas/carreras.js", "js/navegacion.js", "js/main.js"]
 RUTA_SALIDA = DIR_SRC.parent / "docs" / "index.html"
 
 ANCHO_SVG = 250

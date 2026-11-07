@@ -1,0 +1,94 @@
+/*
+<src/Visualizacion/web/css/componentes.css>
+
+Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes, tablas, avisos, ficha y pie.
+*/
+.bajada{color:var(--t2);margin:0 0 18px;max-width:120ch}
+.filtro{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.lectura{font-size:16px;margin:12px 0 16px;max-width:88ch}
+.lectura strong{font-weight:650}
+.lista{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
+.tarjeta{background:var(--sup);border:1px solid var(--linea);border-radius:10px;padding:16px}
+.region{stroke:var(--sup);stroke-width:.7;cursor:pointer;outline:none;transition:opacity .1s}
+.region:hover{stroke:var(--t1);stroke-width:1.2}
+.region:focus-visible{stroke:var(--acento);stroke-width:2}
+.contorno{fill:none;stroke:var(--t1);stroke-width:1.8;pointer-events:none}
+.leyenda{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:10px}
+.leyenda i{display:block;height:10px;border-radius:2px}
+.leyenda span{display:block;font-size:12px;line-height:1.2;color:var(--t2);text-align:center;margin-top:3px;font-variant-numeric:tabular-nums}
+.ejes[hidden]{display:none}
+.ejes{display:flex;justify-content:space-between;font-size:12.5px;color:var(--t2);margin-top:4px}
+.lista button{all:unset;display:flex;flex-direction:column;gap:3px;min-width:0;padding:6px 5px;border:1px solid var(--linea);border-radius:6px;cursor:pointer;box-sizing:border-box;font-size:13.5px;overflow-wrap:break-word}
+/* El color va en una franja y no junto al texto, porque en 8 columnas cada letra de ancho cuenta. */
+.franja{display:block;height:4px;border-radius:2px;margin-bottom:2px}
+.franja.suave{opacity:.45}
+.lista button:hover{background:var(--linea)}
+.lista button:focus-visible{outline:2px solid var(--acento)}
+.lista button[aria-pressed=true]{background:var(--linea);font-weight:650}
+.lista button.chile{grid-column:1/-1}
+.barra{display:block;height:8px;position:relative;background:transparent;border-left:1px solid var(--eje)}
+.barra i{display:block;height:100%;border-radius:0 3px 3px 0;min-width:2px}
+.lista .v{font-variant-numeric:tabular-nums;font-weight:600}
+/* En el resumen, el nombre de la actividad no cabe junto a la región: va debajo, con su color al lado. */
+.lista small{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;line-height:1.25;margin-top:2px;color:var(--t2);font-weight:400}
+.muestra{display:inline-block;flex:none;width:12px;height:12px;margin-top:1px;border-radius:3px}
+.muestra.suave{opacity:.45}
+.leyenda-cat{display:grid;gap:4px;margin-top:10px;font-size:13px;color:var(--t2)}
+.leyenda-cat div{display:flex;align-items:center;gap:6px}
+.volver{display:inline-block;margin-bottom:10px;font-size:13.5px}
+/* En pantallas angostas, la tabla de 6 columnas se desplaza por dentro para no ensanchar toda la página. */
+.tabla-ancha{overflow-x:auto}
+/* Actividades tiene 9 columnas: con menos relleno cabe en el panel junto al mapa, sin desplazarse. */
+.tabla-compacta th,.tabla-compacta td{padding-left:3px;padding-right:3px;font-size:12.5px}
+/* La línea separa bloques con su propio título; gris y no roja, porque el rojo se leería como alerta y la tabla ya usa ⚠. */
+.tabla-compacta .bloque{text-align:center}
+.tabla-compacta .ini{border-left:2px solid var(--t2);padding-left:6px}
+/* Partes de un todo: la barra usa tonos propios para no confundirse con los colores de actividad ni con el rojo y azul del mapa. */
+.barra-poblacion{display:flex;gap:2px;height:14px;margin:10px 0 4px}
+.barra-poblacion i{display:block;min-width:2px;border-radius:2px}
+.s-trabajan{background:var(--acento)}.s-buscan{background:var(--t1)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:var(--eje);box-shadow:inset 0 0 0 1px var(--sd)}
+.celda-muestra{display:flex;align-items:center;gap:6px}
+.total td{font-weight:650}
+/* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 8px}
+.kpis[hidden]{display:none}
+.kpis-t{margin:0 0 8px}
+/* La cifra no se corta en dos líneas ("4 de cada / 10"): se achica con el ancho de la tarjeta. */
+.kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px;container-type:inline-size}
+.kpi b{display:block;font-size:min(26px,15cqi);line-height:1.15;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.kpi span{display:block}
+.kpi-t{font-weight:600;margin:2px 0}
+.kpi .nota{font-size:12.5px}
+.leyenda-cat{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:12.5px}
+.leyenda-cat>div:last-child{grid-column:1/-1}
+.anotacion{pointer-events:none;fill:var(--t1)}
+.anotacion .a-t{font-weight:700}
+.anotacion .a-d{fill:var(--t2)}
+.anotacion line{stroke:var(--t2)}
+.def-cl{margin:0 0 16px}
+/* Compensa el mapa: la superficie no dice cuántas personas trabajan en cada región. */
+/* Sin esta línea, el color se lee como "de esto vive la región": Valparaíso se ve como Artes, aunque Comercio tiene 12 veces sus ocupados. */
+#lista .r-cl{font-weight:600;color:var(--t1)}
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:10px}
+.dato b{display:block;font-size:22px;font-weight:650;letter-spacing:-.01em}
+.dato span{color:var(--t2);font-size:13.5px}
+.aviso{background:var(--aviso-fondo);border-radius:6px;padding:8px 10px;margin-top:10px;font-size:13.5px;color:var(--t1)}
+.aviso::before{content:"⚠ ";color:var(--t1)}
+.separador{border:0;border-top:1px solid var(--linea);margin:16px 0}
+/* Fila que abre cada nivel en Carreras afines: separa los grupos sin crear otra tabla, para que las columnas sigan alineadas. */
+tbody tr.grupo td{padding-top:12px;font-weight:600;border-bottom:1px solid var(--eje)}
+tbody tr.grupo td .nota{font-weight:400}
+.enlace{all:unset;color:var(--acento);cursor:pointer;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:2px}
+.enlace:hover,.enlace:focus-visible{text-decoration-color:currentColor}
+.etiqueta{display:inline-block;font-size:12px;color:var(--t2);border:1px solid var(--eje);border-radius:4px;padding:0 4px;margin-left:4px;white-space:nowrap}
+.fichero{margin-top:12px;border:1px solid var(--eje);border-radius:8px;padding:12px}
+.cerrar{all:unset;float:right;cursor:pointer;color:var(--t2);padding:0 4px}
+.cerrar:focus-visible{outline:2px solid var(--acento)}
+#tip{position:fixed;pointer-events:none;background:var(--t1);color:var(--sup);padding:6px 9px;border-radius:6px;font-size:12.5px;display:none;z-index:9;max-width:240px}
+footer{color:var(--t2);font-size:13.5px;margin-top:18px;max-width:100ch}
+footer p{margin:6px 0}
+footer ul{margin:4px 0;padding-left:18px}
+footer li{margin:3px 0}
+/* El glosario es material de consulta: va plegado para no alargar la página. */
+.glosario summary{cursor:pointer;margin:6px 0}
+footer a{color:var(--acento);overflow-wrap:anywhere}
