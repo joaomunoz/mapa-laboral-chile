@@ -1,9 +1,12 @@
-(logfile.md Actualizada el 06-11-26)
+(logfile.md Actualizada el 07-11-26)
 
 # 📜 Logfile — Bitácora de Sesiones, Cambios y Completados
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 07-11-26 — Corregido el motivo de los excluidos en la situación educacional (`b2dbd42`; 61/61 controles; 410 vistas sin errores en 1400 y 420 px; resto de los datos idéntico) → log 07-11-26 02:32
+- 07-11-26 — README con fórmulas y flujo de datos (`796b36c`; cifras de los ejemplos tomadas del mapa y de las tablas) → log 07-11-26 02:31
+- 07-11-26 — Repositorio remoto privado en GitHub (`joaomunoz/mapa-laboral-chile`; `main` y `indice-cupos` subidos, mismo commit que el local) → log 07-11-26 02:30
 - 06-11-26 — Código del mapa en `src/Visualizacion/` y resultado en `docs/` (`add1fb5`; mapa regenerado idéntico salvo la ruta de la cabecera; 60/60 controles; 410 vistas sin errores) → log 06-11-26 15:37
 - 06-11-26 — Situación educacional por región y hallazgos "4 de cada 10" y "16 de 16 regiones" (`8087b9c`; 60/60 controles; 410 vistas sin errores; `docs/mapa.png` rehecha) → log 06-11-26 15:36
 - 06-11-26 — CL con 2 decimales para color y lectura, y captura del README rehecha (`crosswalk.py` del Censo, `generar_mapa.py`; 56/56 controles; 410 vistas sin errores; `docs/mapa.png`) → log 06-11-26 02:46
@@ -75,6 +78,26 @@
 ---
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
+
+## 07-11-26 02:33 — Propuesta de reorganización de `src/Visualizacion/`
+- **Contexto / Discusión:** el usuario pidió una estructura tradicional (main, core, models, services, utils), porque el código concentra todo y es poco estable. `generar_mapa.py` (514 líneas) mezcla configuración, lectura, geometría, cálculo, armado del JSON, 60 controles y escritura; `plantilla.html` mezcla CSS (143 líneas), HTML y JS (240 líneas, hasta 1.127 caracteres por línea).
+- **Acción / Cambio realizado:** solo propuesta, sin tocar archivos. Python: `generar_mapa.py` como punto de entrada y `config.py`, `carga.py`, `indicadores.py`, `geometria.py`, `esquema.py`, `controles.py` y `formato.py`. Frontend: `web/index.html`, `css/` (base, layout, componentes) y `js/` (datos, formato, mapa, `vistas/` con resumen, actividad, región y carreras, navegación y `main.js`). El generador une CSS y JS, porque los módulos JS no cargan desde `file://`; un control evitaría nombres repetidos entre archivos. Se descartó la plantilla tradicional literal y un empaquetador JS. Luego, `/code-review` sobre `src/Visualizacion` dio 10 hallazgos (ver la entrada de 02:32).
+- **Estado:** pendiente de aprobación.
+
+## 07-11-26 02:32 — Revisión de código y corrección de los excluidos educacionales
+- **Contexto / Discusión:** `/code-review` encontró 2 errores visibles en el mapa: la nota de "Situación educacional por región" atribuía las 103.080 personas excluidas a falta de nivel, pero 5.923 tienen nivel y no tienen situación laboral; y la columna "15 años o más" repetía el encabezado de la tabla laboral con otra cifra. Esto corrige lo registrado el 06-11-26 15:36. Otros 8 hallazgos son latentes o de mantenimiento.
+- **Acción / Cambio realizado:** `generar_mapa.py` calcula los excluidos por motivo (97.157 sin nivel y 5.923 sin situación laboral) y suma un control: con la tabla deben dar los 15.205.784. La nota del mapa los informa por separado y la columna pasa a "Con nivel informado". `docs/nota_de_lectura.md` alineada. Commit `b2dbd42`, subido a GitHub.
+- **Estado:** verificado (61/61 controles; 410 vistas sin errores en 1400 y 420 px; fuera del campo nuevo, los datos son idénticos al commit anterior).
+
+## 07-11-26 02:31 — Fórmulas y flujo de datos en el README
+- **Contexto / Discusión:** el usuario pidió explicar mejor los conceptos con fórmulas, con sus parámetros y ejemplos, y un diagrama del flujo con las columnas de las tablas. Se acordó describir cada tabla y destacar solo las columnas clave en la etapa de análisis.
+- **Acción / Cambio realizado:** en Metodología, "Flujo de datos" (Mermaid: fuentes, limpieza, puentes, tablas del mapa y mapa, con las flechas según lo que lee cada script) y "Fórmulas" (4 parámetros con su cifra de Chile y 5 indicadores con ejemplo: tasas de Chile y CL de Valparaíso en Artes y deportes, 1,42% ÷ 1,10% = 1,29). La viñeta del CL quedó solo con sus cortes. Commit `796b36c`, subido a GitHub.
+- **Estado:** verificado en cifras; pendiente revisar en GitHub que el diagrama se dibuje, porque no se pudo probar localmente.
+
+## 07-11-26 02:30 — Repositorio remoto en GitHub
+- **Contexto / Discusión:** el usuario pidió crear el repositorio remoto. No hay `gh` ni llave SSH, así que entregó un token. Sin confirmación de la visibilidad, se creó privado.
+- **Acción / Cambio realizado:** creado `joaomunoz/mapa-laboral-chile` (privado) por la API, con `origin` sin credenciales; subidos `main` y la etiqueta `indice-cupos`. Se recomendó revocar el token e instalar `gh`.
+- **Estado:** verificado (`git ls-remote`: `main` en el mismo commit que el local).
 
 ## 06-11-26 15:37 — Código y resultado del mapa separados
 - **Contexto / Discusión:** el usuario observó que la carpeta de visualización debía tener una estructura más tradicional, porque no es un scraper. `Salida/` es la convención de los pasos que dejan tablas intermedias; el mapa es el producto final.

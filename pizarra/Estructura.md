@@ -1,4 +1,4 @@
-(Estructura.md Actualizada el 06-11-26)
+(Estructura.md Actualizada el 07-11-26)
 
 # 📂 Estructura del Proyecto — Mapa Laboral de Chile
 
@@ -180,7 +180,7 @@
 
 ### Raíz
 
-- **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo.
+- **`README.md`**: Presentación del proyecto para portafolio: qué muestra, fuentes, validación, límites y cómo reproducirlo. En Metodología incluye el flujo de datos (diagrama Mermaid con las columnas clave del análisis) y las fórmulas de los indicadores con ejemplos.
 - **`.claude/settings.json`**: Configuración local de Claude Code; sin versionar.
 - **`docs/`**: Resultado publicable, separado del código de `src/`; GitHub Pages puede servirlo tal cual.
 - **`docs/index.html`**: El mapa final, autónomo. Lo escribe `src/Visualizacion/generar_mapa.py`.

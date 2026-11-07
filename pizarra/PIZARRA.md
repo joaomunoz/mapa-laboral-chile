@@ -1,10 +1,10 @@
-(PIZARRA.md Actualizada el 06-11-26)
+(PIZARRA.md Actualizada el 07-11-26)
 
 # 🧙 PIZARRA — Mapa Laboral de Chile
 
 > Tablero vivo del proyecto. Bitácora ejecutiva para entender rápidamente el estado actual y los siguientes pasos.
 
-**Contexto activo:** rama `main`, solo local, sin repositorio remoto. `.venv/` para leer parquet y generar el mapa. Carpeta renombrada a `Mapa_Laboral_Chile`. En claude-mem, el historial previo sigue bajo el proyecto `Proyecto Probabilidad_carreras`.
+**Contexto activo:** rama `main`, con remoto privado en GitHub (`joaomunoz/mapa-laboral-chile`, 07-11-26). `gh` no está instalado: los push se hicieron con un token pegado en el chat, que conviene revocar. `.venv/` para leer parquet y generar el mapa. Carpeta renombrada a `Mapa_Laboral_Chile`. En claude-mem, el historial previo sigue bajo el proyecto `Proyecto Probabilidad_carreras`.
 
 ---
 
@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el mapa suma la situación educacional por región y dos hallazgos educacionales, y su resultado pasó a `docs/`. Faltan licencia, repetir la prueba en clon limpio y decidir la publicación.
+> Se mantiene en ~98%: el proyecto ya está en GitHub (privado), el README suma fórmulas y flujo de datos, y se corrigieron 2 errores de texto del mapa detectados en la revisión de código. Faltan la reorganización de `src/Visualizacion/`, la licencia, repetir la prueba en clon limpio y decidir si se publica.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,16 +37,19 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 95% | 🟢 | Años de ingreso y edad (titulados de hasta 30 años) confirmados; percentiles descartados por no ser necesarios |
+| Código del mapa | 80% | 🟡 | `generar_mapa.py` (514 líneas) y `plantilla.html` concentran todo; reorganización propuesta y revisión de código con 8 hallazgos pendientes (07-11-26) |
 | Mapa interactivo | 98% | 🟢 | Situación laboral y educacional por región, 5 hallazgos y navegación por enlace (06-11-26); falta revisar la bajada animada en un celular real |
 | Nota de lectura | 100% | 🟢 | `docs/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
-| Git | 90% | 🟡 | Historial local; falta decidir si se sube a GitHub |
-| README y presentación | 90% | 🟡 | Resumen, objetivo, límites, metodología y fuentes; falta enlace para ver el mapa y licencia |
+| Git | 95% | 🟢 | Remoto privado en GitHub con `main` y la etiqueta `indice-cupos` (07-11-26); falta decidir si pasa a público |
+| README y presentación | 95% | 🟢 | Suma fórmulas con ejemplos y flujo de datos en Mermaid (07-11-26); falta licencia y enlace a GitHub Pages |
 
 ---
 
 ## 🔶 En curso / parcial
 
+- **Reorganización de `src/Visualizacion/` (propuesta, sin aplicar):** Python por responsabilidad (`generar_mapa.py` solo coordina; `config.py`, `carga.py`, `indicadores.py`, `geometria.py`, `esquema.py`, `controles.py`, `formato.py`) y frontend en `web/` (`index.html`, `css/` con 3 archivos, `js/` con datos, formato, mapa, vistas, navegación y `main.js`). El generador junta CSS y JS en un solo `docs/index.html`, porque los módulos JS no cargan desde `file://`. Orden: separar sin cambiar nada (mapa idéntico byte a byte), luego cortar las líneas largas del JS (prueba de 410 vistas), y al final `esquema.py` con el contrato del JSON.
+- **Hallazgos de la revisión de código (07-11-26):** corregidos el 1 y el 2. Quedan latentes, sin efecto en las cifras actuales: área medida antes de simplificar (3), "Región con mayor CL" sin excluir base pequeña (4), redondeo de "de cada 10" distinto en JS y Python (5), vista inicial en blanco si no hay actividades subestimadas (6), región sin polígonos (7), JSON sin escapar (8) y código repetido (10). Los 3, 4, 5, 7 y 10 entran en la reorganización. **Decisión del usuario:** el 9, aplicar "menos de 10" también a las cifras por sexo del detalle de región.
 - **Criterio vigente, "mostrar solo lo necesario":** cada dato debe ayudar a responder cómo es la situación laboral y educacional de Chile, o la relación entre actividad y educación. Al revisar, se prefiere quitar antes que agregar.
 - **Pendientes menores de evaluaciones anteriores:** el título del mapa repite el segundo hallazgo; leyenda con tonos suaves y peso del negro en la barra de población.
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
@@ -57,13 +60,14 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, confirmar el criterio de "menos de 10" y lo que el usuario pida.
-2. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
-3. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
-4. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
-5. **Subir a GitHub,** si el usuario lo decide: elegir público o privado, y activar GitHub Pages desde `docs/` para ver el mapa sin descargarlo.
-6. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
-7. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
+1. **Reorganizar `src/Visualizacion/`** según la propuesta de "En curso", con los hallazgos latentes de la revisión de código.
+2. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, criterio de "menos de 10" (hallazgo 9) y lo que el usuario pida.
+3. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
+4. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
+5. **Repetir la prueba en clon limpio:** la última es del 03-11-26, anterior a la versión actual.
+6. **Publicar,** si el usuario lo decide: pasar el repositorio a público y activar GitHub Pages desde `docs/`. Antes, revocar el token usado e instalar `gh`.
+7. **Opcional, selector de cantidad o peso:** en pausa, porque la vista nacional ya muestra ambas lecturas.
+8. **Ajustes menores:** `ARAUCANIA` en `regiones_sede`, Programas de Formación Pedagógica fuera de P9.
 
 ---
 
@@ -89,8 +93,11 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **Cartografía en script propio:** `CENSO/obtener_cartografia.py` va separado de `obtener.py`, porque quien solo regenera el mapa no necesita los microdatos de personas. Baja el zip completo (795 MB) en vez de pedir por rangos solo la capa (89 MB): gasta más datos, pero requiere menos código para un paso poco frecuente.
 - **Mapa autónomo:** una sola página HTML, sin servidor ni dependencias, con bordes oficiales simplificados por cobertura. Rapa Nui y Juan Fernández no se dibujan.
 - **Código en `src/Visualizacion/`, resultado en `docs/` (06-11-26):** el mapa es el producto final, no una tabla intermedia, así que salió de `Salida/`, la convención de los scrapers. `docs/` es la carpeta que GitHub Pages puede publicar. Se descartaron `dist/` o `build/`, que suelen quedar fuera de git y Pages no publica, y solo renombrar `Salida/`, que dejaba el resultado dentro de `src/`.
-- **Dos realidades por región y su relación al final (06-11-26):** "Situación laboral por región" y "Situación educacional por región" describen cada lado con la misma base (15 años o más, residencia), y "Estudios y trabajo" cierra con la relación. El rango regional del % con título salió de "Estudios y trabajo" para no mostrar dos cifras por región con bases distintas (ocupados y población).
+- **Dos realidades por región y su relación al final (06-11-26):** "Situación laboral por región" y "Situación educacional por región" describen cada lado con la población de 15 años o más por residencia; la educacional excluye a quienes no tienen nivel (97.157) o situación laboral (5.923), y lo dice por separado (07-11-26), y "Estudios y trabajo" cierra con la relación. El rango regional del % con título salió de "Estudios y trabajo" para no mostrar dos cifras por región con bases distintas (ocupados y población).
 - **"4 de cada 10" en el hallazgo educacional:** se entiende más rápido que 39,8%, que queda en la nota. Se dice "título técnico o profesional" y no "estudios superiores", porque el Censo cuenta el título completado, y no se llama coeficiente para no confundirlo con el CL. Las otras tarjetas mantienen su porcentaje, que no se redondea bien a "de cada 10".
+- **Repositorio remoto privado primero (07-11-26):** se creó privado porque un repositorio público no se puede retirar de índices y copias. Pasar a público es un paso, cuando se decidan licencia y publicación. El token no quedó guardado en `.git/config`: el remoto usa la dirección sin credenciales.
+- **Fórmulas y flujo de datos en el README (07-11-26):** parámetros con su cifra de Chile e indicadores con fórmula y ejemplo real, para entender el mapa sin abrir la nota de lectura. El flujo va en Mermaid, que GitHub dibuja y se versiona como texto; se descartó una imagen, que se desactualiza sin aviso. En la limpieza cada tabla lleva una descripción, y en el análisis, solo sus columnas clave; la lista completa queda en cada `_inspeccion.txt`.
+- **Estructura propuesta del código del mapa (07-11-26):** se adapta la idea main/core/models/services/utils a un proceso por lotes, siguiendo la convención de `src/Scrapers/` (`obtener`, `procesar`, `esquema`, `comun`). Se descartó copiarla al pie de la letra, porque "services" y "models" quedarían vacíos sin pedidos ni datos persistentes, y un empaquetador JS (esbuild o Vite), que sumaría Node por unas 900 líneas. Sin aplicar.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
 - **Color y lectura con el CL de 2 decimales que se muestra (06-11-26):** la tabla del Censo y el mapa redondean con la misma función de Python, así el color nunca contradice la cifra (La Araucanía en Agricultura, 1,5976, se lee 1,60 y va en el tramo de 1,6). Se descartó mostrar más decimales, una precisión que el dato no tiene: los ocupados sin región de trabajo mueven el CL más que eso. Cambiaron 6 de 336 tramos de color y 4 lecturas. Un control detiene la generación si color y lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.
@@ -129,7 +136,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔜 Próximo paso inmediato
 
-Elegir la licencia y repetir la prueba en clon limpio antes de publicar, y decidir si se sube a GitHub.
+Aprobar la reorganización de `src/Visualizacion/` y empezar por separar `config.py`, `controles.py` y `formato.py`, con el mapa idéntico byte a byte. Decidir el hallazgo 9 ("menos de 10"). Revisar en GitHub que el diagrama de flujo se dibuje bien.
 
 ---
 
