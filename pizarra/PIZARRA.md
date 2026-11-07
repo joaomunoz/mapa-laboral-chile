@@ -28,7 +28,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 📊 Avance general estimado: ~98%
 
-> Se mantiene en ~98%: el proyecto ya está en GitHub (privado), el README suma fórmulas y flujo de datos, y se corrigieron 2 errores de texto del mapa detectados en la revisión de código. Faltan la reorganización de `src/Visualizacion/`, la licencia, repetir la prueba en clon limpio y decidir si se publica.
+> Se mantiene en ~98%: el código del mapa quedó reorganizado en módulos Python y en HTML, CSS y JS separados, con 9 de los 10 hallazgos de la revisión corregidos y el mapa idéntico. Faltan el hallazgo 9, la licencia, repetir la prueba en clon limpio y decidir si se publica.
 
 | Área | Avance | Estado | Notas |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 | Puentes `src/Analisis/` | 100% | 🟢 | P1, P5 y P9 alimentan el mapa; P6 es control de sesgo |
 | Tablas del mapa | 100% | 🟢 | Censo, áreas, carreras y situación por nivel; ENE como contraste |
 | Revisión de MiFuturo | 95% | 🟢 | Años de ingreso y edad (titulados de hasta 30 años) confirmados; percentiles descartados por no ser necesarios |
-| Código del mapa | 80% | 🟡 | `generar_mapa.py` (514 líneas) y `plantilla.html` concentran todo; reorganización propuesta y revisión de código con 8 hallazgos pendientes (07-11-26) |
+| Código del mapa | 95% | 🟢 | Reorganizado en 8 módulos Python y `web/` con HTML, 3 CSS y 9 JS; 64 controles; 9 de 10 hallazgos corregidos (07-11-26). Opcional: `esquema.py` |
 | Mapa interactivo | 98% | 🟢 | Situación laboral y educacional por región, 5 hallazgos y navegación por enlace (06-11-26); falta revisar la bajada animada en un celular real |
 | Nota de lectura | 100% | 🟢 | `docs/nota_de_lectura.md` |
 | Saneamiento | 100% | 🟢 | Lo retirado salió del proyecto; queda en la etiqueta `indice-cupos` |
@@ -48,8 +48,8 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔶 En curso / parcial
 
-- **Reorganización de `src/Visualizacion/` (propuesta, sin aplicar):** Python por responsabilidad (`generar_mapa.py` solo coordina; `config.py`, `carga.py`, `indicadores.py`, `geometria.py`, `esquema.py`, `controles.py`, `formato.py`) y frontend en `web/` (`index.html`, `css/` con 3 archivos, `js/` con datos, formato, mapa, vistas, navegación y `main.js`). El generador junta CSS y JS en un solo `docs/index.html`, porque los módulos JS no cargan desde `file://`. Orden: separar sin cambiar nada (mapa idéntico byte a byte), luego cortar las líneas largas del JS (prueba de 410 vistas), y al final `esquema.py` con el contrato del JSON.
-- **Hallazgos de la revisión de código (07-11-26):** corregidos el 1 y el 2. Quedan latentes, sin efecto en las cifras actuales: área medida antes de simplificar (3), "Región con mayor CL" sin excluir base pequeña (4), redondeo de "de cada 10" distinto en JS y Python (5), vista inicial en blanco si no hay actividades subestimadas (6), región sin polígonos (7), JSON sin escapar (8) y código repetido (10). Los 3, 4, 5, 7 y 10 entran en la reorganización. **Decisión del usuario:** el 9, aplicar "menos de 10" también a las cifras por sexo del detalle de región.
+- **Hallazgo 9 de la revisión de código (decisión del usuario):** aplicar o no "menos de 10" también a las cifras por sexo del detalle de región. Los otros 9 hallazgos están corregidos.
+- **Límite del área simplificada en 1% (por confirmar):** la simplificación cambia el área hasta 0,71% (Valparaíso); el control de 0,5% quedó para la reconstrucción, que cambia 0,07%.
 - **Criterio vigente, "mostrar solo lo necesario":** cada dato debe ayudar a responder cómo es la situación laboral y educacional de Chile, o la relación entre actividad y educación. Al revisar, se prefiere quitar antes que agregar.
 - **Pendientes menores de evaluaciones anteriores:** el título del mapa repite el segundo hallazgo; leyenda con tonos suaves y peso del negro en la barra de población.
 - **Dos decisiones del usuario:** mostrar valores o solo porcentajes en los títulos por sexo, porque restando se deduce la categoría no binaria o indefinida; y cómo mostrar ocupados en la tabla regional de nivel por sexo, donde la tasa usa residencia.
@@ -60,7 +60,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## ⏳ Pendiente — Roadmap
 
-1. **Reorganizar `src/Visualizacion/`** según la propuesta de "En curso", con los hallazgos latentes de la revisión de código.
+1. **Opcional, `esquema.py`:** el contrato del JSON entre Python y JavaScript, para que un campo renombrado falle al generar y no en el navegador.
 2. **Terminar la revisión del mapa:** cabecera entre 1000 y 1100 px, espacio vacío bajo 1290 px, título del mapa en tres líneas, criterio de "menos de 10" (hallazgo 9) y lo que el usuario pida.
 3. **Fórmula oficial de las tasas:** confirmar si el INE incluye a las personas sin dato (ocupación 54,4% o 54,8%; también afecta a participación).
 4. **Licencia del proyecto:** propuesta MIT para el código y CC BY 4.0 para el análisis, sin decidir. Revisar que las condiciones de las fuentes permitan redistribuir las tablas derivadas.
@@ -97,7 +97,9 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 - **"4 de cada 10" en el hallazgo educacional:** se entiende más rápido que 39,8%, que queda en la nota. Se dice "título técnico o profesional" y no "estudios superiores", porque el Censo cuenta el título completado, y no se llama coeficiente para no confundirlo con el CL. Las otras tarjetas mantienen su porcentaje, que no se redondea bien a "de cada 10".
 - **Repositorio remoto privado primero (07-11-26):** se creó privado porque un repositorio público no se puede retirar de índices y copias. Pasar a público es un paso, cuando se decidan licencia y publicación. El token no quedó guardado en `.git/config`: el remoto usa la dirección sin credenciales.
 - **Fórmulas y flujo de datos en el README (07-11-26):** parámetros con su cifra de Chile e indicadores con fórmula y ejemplo real, para entender el mapa sin abrir la nota de lectura. El flujo va en Mermaid, que GitHub dibuja y se versiona como texto; se descartó una imagen, que se desactualiza sin aviso. En la limpieza cada tabla lleva una descripción, y en el análisis, solo sus columnas clave; la lista completa queda en cada `_inspeccion.txt`.
-- **Estructura propuesta del código del mapa (07-11-26):** se adapta la idea main/core/models/services/utils a un proceso por lotes, siguiendo la convención de `src/Scrapers/` (`obtener`, `procesar`, `esquema`, `comun`). Se descartó copiarla al pie de la letra, porque "services" y "models" quedarían vacíos sin pedidos ni datos persistentes, y un empaquetador JS (esbuild o Vite), que sumaría Node por unas 900 líneas. Sin aplicar.
+- **Estructura del código del mapa (07-11-26, aplicada):** se adapta la idea main/core/models/services/utils a un proceso por lotes, siguiendo la convención de `src/Scrapers/`: `generar_mapa.py` solo coordina, y `config`, `carga`, `geometria`, `indicadores`, `datos`, `formato` y `controles` tienen una responsabilidad cada uno. Se descartó copiarla al pie de la letra, porque "services" y "models" quedarían vacíos sin pedidos ni datos persistentes, y un empaquetador JS (esbuild o Vite), que sumaría Node por unas 900 líneas.
+- **Frontend en `web/` unido en una sola página (07-11-26):** el mapa se abre desde `file://`, donde los módulos JS no cargan, así que el generador junta los CSS y JS en un `<style>` y un `<script>`, en el orden fijo de `config.py`. Dos controles evitan los errores que esto permite: un nombre global definido en dos archivos y un archivo nuevo que no está en la lista. Cada paso se verificó con el mapa idéntico byte a byte o, al separar archivos, con HTML y estilos calculados iguales en 15 vistas, 4 anchos y ambos modos.
+- **Datos escapados al insertarlos (07-11-26):** el JSON va dentro de `<script>` con `<` escapado, porque un texto de las fuentes con `</script>` cerraría el código antes de tiempo.
 - **Escala de color fija:** rojo más que el país, azul menos, gris similar; se compara entre actividades.
 - **Color y lectura con el CL de 2 decimales que se muestra (06-11-26):** la tabla del Censo y el mapa redondean con la misma función de Python, así el color nunca contradice la cifra (La Araucanía en Agricultura, 1,5976, se lee 1,60 y va en el tramo de 1,6). Se descartó mostrar más decimales, una precisión que el dato no tiene: los ocupados sin región de trabajo mueven el CL más que eso. Cambiaron 6 de 336 tramos de color y 4 lecturas. Un control detiene la generación si color y lectura se contradicen.
 - **Lenguaje técnico con valores absolutos:** términos estándar (CL, ocupados, tasas), con glosario al pie y formato `valor (n%)`. Se descartó "peso" y explicar cada cifra en frases, porque generaba más texto y ocultaba los valores que originan el CL.
@@ -136,7 +138,7 @@ Proyecto de portafolio: un **mapa interactivo de Chile** para quien quiere conoc
 
 ## 🔜 Próximo paso inmediato
 
-Aprobar la reorganización de `src/Visualizacion/` y empezar por separar `config.py`, `controles.py` y `formato.py`, con el mapa idéntico byte a byte. Decidir el hallazgo 9 ("menos de 10"). Revisar en GitHub que el diagrama de flujo se dibuje bien.
+Decidir el hallazgo 9 ("menos de 10") y confirmar el límite de 1% del área simplificada. Revisar en GitHub que el diagrama de flujo se dibuje bien. Después, la licencia y la prueba en clon limpio.
 
 ---
 

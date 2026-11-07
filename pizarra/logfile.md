@@ -4,6 +4,8 @@
 
 ## ✅ Completado (Hitos y Logros Consolidados)
 <!-- Índice de hitos, lo más nuevo arriba. Una línea por hito; el detalle vive solo en la entrada del log. -->
+- 07-11-26 — Código del mapa reorganizado en módulos Python y en HTML, CSS y JS (`bf0b476`, `a5ca579`, `0ba6b89`, `9069bb2`; mapa idéntico byte a byte o con HTML y estilos iguales en 15 vistas, 4 anchos y ambos modos; 410 vistas sin errores) → log 07-11-26 13:15
+- 07-11-26 — 7 hallazgos latentes de la revisión de código corregidos (`2ce3b18`, `1de27be`; 64/64 controles; 410 vistas sin errores) → log 07-11-26 13:14
 - 07-11-26 — Corregido el motivo de los excluidos en la situación educacional (`b2dbd42`; 61/61 controles; 410 vistas sin errores en 1400 y 420 px; resto de los datos idéntico) → log 07-11-26 02:32
 - 07-11-26 — README con fórmulas y flujo de datos (`796b36c`; cifras de los ejemplos tomadas del mapa y de las tablas) → log 07-11-26 02:31
 - 07-11-26 — Repositorio remoto privado en GitHub (`joaomunoz/mapa-laboral-chile`; `main` y `indice-cupos` subidos, mismo commit que el local) → log 07-11-26 02:30
@@ -79,10 +81,20 @@
 
 <!-- Entradas del log: lo más nuevo arriba, inmediatamente debajo de esta línea. -->
 
+## 07-11-26 13:15 — Reorganización del código del mapa
+- **Contexto / Discusión:** se aplicó la propuesta de las 02:33 en tres pasos, con commit y push en cada uno, para que cada cambio se pueda verificar por separado.
+- **Acción / Cambio realizado:** paso 1 (`bf0b476`), `config.py`, `formato.py`, `controles.py` e `indicadores.py`, que evita una importación circular. Paso 2, en dos commits: `a5ca579` solo mueve código a `carga.py`, `geometria.py` y `datos.py`, y `2ce3b18` corrige hallazgos (entrada de 13:14). Paso 3 (`0ba6b89`), `plantilla.html` pasa a `web/` con `index.html`, 3 CSS y 9 JS; el generador los une en orden fijo y quita la cabecera de cada archivo; dos controles nuevos: nombres globales repetidos y archivos fuera de la lista. Luego (`9069bb2`) se cortaron las 32 líneas de JS de más de 300 caracteres, solo en puntos que no cambian el HTML. `generar_mapa.py` pasó de 514 a 52 líneas. Se descartó crear `esquema.py` en esta etapa, porque es opcional.
+- **Estado:** verificado (pasos 1 y 2a, mapa idéntico byte a byte; paso 3 y corte de líneas, HTML y estilos calculados iguales en 15 vistas, anchos 1400, 1100, 950 y 420 y modo claro y oscuro; 410 vistas sin errores; los 56 nombres globales del JS son los mismos).
+
+## 07-11-26 13:14 — Hallazgos latentes de la revisión de código
+- **Contexto / Discusión:** de los 8 hallazgos pendientes de la revisión, 7 no cambiaban las cifras actuales, pero podían fallar con datos nuevos. El 9 ("menos de 10" en las cifras por sexo) queda para el usuario.
+- **Acción / Cambio realizado:** `2ce3b18`: el área se controla en la reconstrucción (0,5%) y también tras simplificar (1%, porque Valparaíso cambia 0,71%) (3); "Región con mayor CL" excluye regiones con base pequeña (4); "de cada 10" redondea igual en Python y JS (5); una región sin polígonos da un error claro (7); la base de ocupados con región y actividad se calcula en una sola función (10). `1de27be`: la vista inicial ya no queda en blanco si ninguna actividad está subestimada (6), y los datos se escapan dentro de `<script>` (8).
+- **Estado:** verificado (64/64 controles; 410 vistas sin errores; cifras actuales sin cambios). El límite de 1% falta que el usuario lo confirme.
+
 ## 07-11-26 02:33 — Propuesta de reorganización de `src/Visualizacion/`
 - **Contexto / Discusión:** el usuario pidió una estructura tradicional (main, core, models, services, utils), porque el código concentra todo y es poco estable. `generar_mapa.py` (514 líneas) mezcla configuración, lectura, geometría, cálculo, armado del JSON, 60 controles y escritura; `plantilla.html` mezcla CSS (143 líneas), HTML y JS (240 líneas, hasta 1.127 caracteres por línea).
 - **Acción / Cambio realizado:** solo propuesta, sin tocar archivos. Python: `generar_mapa.py` como punto de entrada y `config.py`, `carga.py`, `indicadores.py`, `geometria.py`, `esquema.py`, `controles.py` y `formato.py`. Frontend: `web/index.html`, `css/` (base, layout, componentes) y `js/` (datos, formato, mapa, `vistas/` con resumen, actividad, región y carreras, navegación y `main.js`). El generador une CSS y JS, porque los módulos JS no cargan desde `file://`; un control evitaría nombres repetidos entre archivos. Se descartó la plantilla tradicional literal y un empaquetador JS. Luego, `/code-review` sobre `src/Visualizacion` dio 10 hallazgos (ver la entrada de 02:32).
-- **Estado:** pendiente de aprobación.
+- **Estado:** verificado (aprobada y aplicada; ver la entrada de 13:15).
 
 ## 07-11-26 02:32 — Revisión de código y corrección de los excluidos educacionales
 - **Contexto / Discusión:** `/code-review` encontró 2 errores visibles en el mapa: la nota de "Situación educacional por región" atribuía las 103.080 personas excluidas a falta de nivel, pero 5.923 tienen nivel y no tienen situación laboral; y la columna "15 años o más" repetía el encabezado de la tabla laboral con otra cifra. Esto corrige lo registrado el 06-11-26 15:36. Otros 8 hallazgos son latentes o de mantenimiento.

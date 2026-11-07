@@ -168,12 +168,35 @@
 │   │       ├── obtener.py
 │   │       └── procesar.py
 │   └── Visualizacion
+│       ├── web
+│       │   ├── css
+│       │   │   ├── base.css
+│       │   │   ├── componentes.css
+│       │   │   └── layout.css
+│       │   ├── js
+│       │   │   ├── vistas
+│       │   │   │   ├── actividad.js
+│       │   │   │   ├── carreras.js
+│       │   │   │   ├── region.js
+│       │   │   │   └── resumen.js
+│       │   │   ├── datos.js
+│       │   │   ├── formato.js
+│       │   │   ├── main.js
+│       │   │   ├── mapa.js
+│       │   │   └── navegacion.js
+│       │   └── index.html
+│       ├── carga.py
+│       ├── config.py
+│       ├── controles.py
+│       ├── datos.py
+│       ├── formato.py
 │       ├── generar_mapa.py
-│       └── plantilla.html
+│       ├── geometria.py
+│       └── indicadores.py
 ├── .gitignore
 └── README.md
 
-50 directories, 117 files
+54 directories, 136 files
 ```
 
 ## 📝 Descripción de Componentes
@@ -273,5 +296,15 @@
 
 ### Visualización
 
-- **`src/Visualizacion/generar_mapa.py`**: Lee las tablas y la cartografía, simplifica los bordes, calcula el resumen de todas las actividades, la situación de la población y la apertura por sexo en Chile, regiones, actividades y niveles, y escribe la página; 55 controles. Requiere `.venv` (geopandas y pyarrow).
-- **`src/Visualizacion/plantilla.html`**: Diseño e interacción del mapa; recibe los datos al generar. Guarda cada vista en la dirección (`#actividad/región/carrera`), así que el botón "atrás" funciona y cada vista tiene enlace.
+- **`src/Visualizacion/generar_mapa.py`**: Punto de entrada: carga las tablas, arma los datos y la geometría, inserta ambos en la página, corre los controles y escribe `docs/index.html`. Requiere `.venv` (geopandas y pyarrow).
+- **`src/Visualizacion/config.py`**: Rutas, constantes y la lista ordenada de archivos CSS y JS que se unen en la página.
+- **`src/Visualizacion/carga.py`**: Lee las tablas del análisis, la cartografía y los archivos de `web/`, y escribe la página final.
+- **`src/Visualizacion/geometria.py`**: Simplifica los bordes de las regiones y mide cuánto cambia el área.
+- **`src/Visualizacion/indicadores.py`**: Cálculos del mapa: CL y su color, resumen de todas las actividades, población, sexo y nivel de estudios.
+- **`src/Visualizacion/datos.py`**: Arma el JSON que recibe la página.
+- **`src/Visualizacion/formato.py`**: Nombres legibles, redondeo y textos de cifras.
+- **`src/Visualizacion/controles.py`**: 64 controles que detienen la generación si los datos, el texto o el código de la página dejan de cuadrar.
+- **`src/Visualizacion/web/index.html`**: Estructura de la página, con los marcadores donde el generador pone los estilos y el código.
+- **`src/Visualizacion/web/css/*.css`**: Estilos: `base` (colores y tipografía), `componentes` (tablas, tarjetas, fichas) y `layout` (disposición y anchos de pantalla), en ese orden.
+- **`src/Visualizacion/web/js/*.js`**: `datos` (datos insertados y estado), `formato`, `mapa` (mapa, leyenda, lista y cabecera), `navegacion` (vista en la dirección `#actividad/región/carrera`, así que el botón "atrás" funciona y cada vista tiene enlace) y `main` (arranque, al final).
+- **`src/Visualizacion/web/js/vistas/*.js`**: Una vista por archivo: resumen de Chile, actividad, región y carreras con su ficha.
