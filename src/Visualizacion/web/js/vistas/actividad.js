@@ -7,7 +7,11 @@ Vista de una actividad en Chile, con su perfil de estudios y avisos.
 function perfilEstudios(filas,lugar,rotulo,comparacion){
  const hayChicas=filas.some(f=>f[2]!=null&&f[2]<CHICA||f[3]!=null&&f[3]<CHICA);
  return `<h2>Nivel de estudios de los ocupados</h2><div class="nota">${esc(lugar)}. Según lugar de trabajo, con nivel informado. Entre paréntesis, % de cada columna. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${NIVELES.map(([,t],i)=>{const f=filas[i];return `<tr><td>${t}</td><td class="n">${num(f[0])} (${num(f[1],1)}%)</td><td class="n">${celdaNivel(f[2],f[4])}</td><td class="n">${celdaNivel(f[3],f[5])}</td><td class="n">${num(comparacion[i],1)}%</td></tr>`}).join("")}</tbody></table></div>${hayChicas?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}`}
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${
+  NIVELES.map(([,t],i)=>{const f=filas[i];
+   return `<tr><td>${t}</td><td class="n">${num(f[0])} (${num(f[1],1)}%)</td><td class="n">${celdaNivel(f[2],f[4])}</td>`+
+    `<td class="n">${celdaNivel(f[3],f[5])}</td><td class="n">${num(comparacion[i],1)}%</td></tr>`}).join("")
+ }</tbody></table></div>${hayChicas?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}`}
 function avisos(){let h="";
  if(act.alerta_fuente)h+=`<div class="aviso">Censo y ENE difieren en el tamaño de esta actividad: usa los ocupados solo como referencia.</div>`;
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;
