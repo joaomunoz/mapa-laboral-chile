@@ -290,7 +290,7 @@ def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     por_nivel = {n: {"ocupados": int(f["ocupados_residencia"]), "pct": redondear(100 * f["ocupados_residencia"] / total, 1),
                      "tasa_desocupacion": redondear(100 * f["desocupados"] / (f["ocupados_residencia"] + f["desocupados"]), 1),
                      "tasa_participacion": redondear(100 * (f["ocupados_residencia"] + f["desocupados"]) / f.sum(), 1)} for n, f in suma.iterrows()}
-    # Situación educacional: toda la población de 15 años o más con nivel informado, la misma base de la situación laboral por región.
+    # Situación educacional: población de 15 años o más con nivel y situación laboral informados, la misma base de "Estudios y trabajo".
     poblacion = niveles.assign(personas=niveles[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum(axis=1))
     personas = poblacion.pivot_table(index="codigo_region", columns="nivel_titulo", values="personas", aggfunc="sum")[ORDEN_NIVELES]
     educacion = {str(r): [int(v) for v in f] for r, f in personas.iterrows()}
@@ -407,7 +407,12 @@ def construir_datos() -> dict:
             d["sexo"] = nivel_sexo_region[r][n]
     for n, d in niveles_chile.items():
         d["sexo"] = nivel_sexo_chile[n]
-    return {"actividades": actividades, "fichas": fichas, "estudios": resumen_estudios(niveles, nivel_sexo_chile), "perfil_estudios": perfil_estudios,
+    estudios = resumen_estudios(niveles, nivel_sexo_chile)
+    # La tabla educacional exige nivel y situación laboral: la página informa por separado a quienes les falta cada uno.
+    sin_nivel = procesado["nivel_titulo"].isna()
+    estudios["excluidos"] = {"sin_nivel": int(procesado.loc[sin_nivel, "personas"].sum()),
+                             "sin_situacion": int(procesado.loc[~sin_nivel & procesado["sit_fuerza_trabajo"].isna(), "personas"].sum())}
+    return {"actividades": actividades, "fichas": fichas, "estudios": estudios, "perfil_estudios": perfil_estudios,
             # Solo el total de las carreras del mapa: por carrera son 1 o 2 personas, y no se abre.
             "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados}
 
@@ -470,6 +475,8 @@ def validar(datos: dict, geo: dict, html: str) -> None:
         "Estudios: mujeres 46,5% y hombres 34,6% de los ocupados con título": datos["estudios"]["sexo"] == {"hombres": 34.6, "mujeres": 46.5},
         "Educación por región: suma 15.102.704 y va de Maule (21,1%) a la Metropolitana (32,9%)": (lambda e: sum(e["chile"]) == 15_102_704 and sum(sum(v) for r, v in e.items() if r != "chile") == sum(e["chile"])
             and sorted((round(100 * (v[0] + v[1]) / sum(v), 1), int(r)) for r, v in e.items() if r != "chile")[::15] == [(21.1, 7), (32.9, 13)])(datos["estudios"]["educacion"]),
+        "Educación por región: se excluyen 97.157 sin nivel y 5.923 sin situación laboral, y con la tabla suman los 15 años o más":
+            datos["estudios"]["excluidos"] == {"sin_nivel": 97_157, "sin_situacion": 5_923} and sum(datos["estudios"]["educacion"]["chile"]) + sum(datos["estudios"]["excluidos"].values()) == pob["chile"]["total"],
         "Educación por región: Chile 28,2% con título": (lambda c: round(100 * (c[0] + c[1]) / sum(c), 1) == 28.2)(datos["estudios"]["educacion"]["chile"]),
         "Hallazgos: 4 de cada 10 ocupados con título; 1 de cada 10 en Hogares y 8 de cada 10 en Servicios profesionales": (lambda p: round(datos["estudios"]["pct_con_titulo"] / 10) == 4 and (round(min(p) / 10), round(max(p) / 10)) == (1, 8))(
             [100 * (a["niveles"][0][0] + a["niveles"][1][0]) / sum(f[0] for f in a["niveles"]) for a in datos["actividades"]]),
