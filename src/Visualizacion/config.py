@@ -29,6 +29,8 @@ LONGITUD_MINIMA_CONTINENTE = -76.0
 TOLERANCIA_GRADOS = 0.035
 GRILLA_GRADOS = 0.01
 DIFERENCIA_AREA_MAXIMA_PCT = 0.5
+# Simplificar cambia más el área que reconstruir los bordes: 0,71% en Valparaíso y 0,52% en Los Lagos (07-11-26).
+DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT = 1.0
 AREA_MINIMA_PX = 3.0
 OCUPADO = 1
 AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]

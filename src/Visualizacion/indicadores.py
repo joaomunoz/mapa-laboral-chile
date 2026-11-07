@@ -36,9 +36,19 @@ def clase_color(peso: float) -> int | None:
     return CLASE_NEUTRA + 1 + sum(peso >= c for c in CORTES_ROJO[1:])
 
 
+def ocupados_con_region_y_actividad(por_sexo: pd.DataFrame) -> pd.DataFrame:
+    """Base de la participación por sexo: ocupados con región de trabajo y actividad. Una sola definición para todas las vistas."""
+    return por_sexo[(por_sexo["sit_fuerza_trabajo"] == OCUPADO) & por_sexo["codigo_region_trabajo"].notna() & por_sexo["actividad_ciiu"].notna()]
+
+
 def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dict:
     """Totales del país para una actividad; total_censo incluye a quienes no tienen región de trabajo."""
-    con_personas, con_peso = g.loc[g["ocupados"].idxmax()], g.loc[g["peso_relativo"].idxmax()]
+    # El mayor CL se busca sin bases pequeñas, igual que en resumen_general: si no, la tabla destacaría una región que
+    # el resto del mapa descarta. Si todas son pequeñas, se usan todas para no dejar la actividad sin región.
+    con_lectura = g[g["lectura"] != "base_pequena"]
+    if con_lectura.empty:
+        con_lectura = g
+    con_personas, con_peso = g.loc[g["ocupados"].idxmax()], con_lectura.loc[con_lectura["peso_relativo"].idxmax()]
     return {"ocupados": int(g["ocupados"].sum()), "censo_total": total_censo, "ene_ocupados": int(round(g["ene_ocupados"].sum())),
             "ene_pct": redondear(100 * g["ene_ocupados"].sum() / ene_total, 1), "conc": int((g["lectura"] == "concentra").sum()),
             "mas_personas": {"r": int(con_personas["codigo_region"]), "n": int(con_personas["ocupados"]), "pct": redondear(100 * con_personas["ocupados"] / g["ocupados"].sum(), 1)},
@@ -47,14 +57,14 @@ def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dic
 
 def sexo_por_actividad(por_sexo: pd.DataFrame) -> dict:
     """Ocupados por sexo en cada actividad, con la misma base que el mapa: lugar de trabajo y actividad informados."""
-    base = por_sexo[(por_sexo["sit_fuerza_trabajo"] == OCUPADO) & por_sexo["codigo_region_trabajo"].notna() & por_sexo["actividad_ciiu"].notna()]
+    base = ocupados_con_region_y_actividad(por_sexo)
     tabla = base.pivot_table(index="actividad_ciiu", columns="sexo", values="personas", aggfunc="sum", fill_value=0)
     return {c: {"h": int(f[HOMBRE]), "m": int(f[MUJER]), "pct_h": redondear(100 * f[HOMBRE] / (f[HOMBRE] + f[MUJER]), 1), "pct_m": redondear(100 * f[MUJER] / (f[HOMBRE] + f[MUJER]), 1)} for c, f in tabla.iterrows()}
 
 
 def agregar_sexo_por_region(actividades: list[dict], por_sexo: pd.DataFrame) -> dict:
     """Agrega ocupados por sexo a cada región y actividad, y devuelve las bases de la participación por sexo."""
-    base = por_sexo[(por_sexo["sit_fuerza_trabajo"] == OCUPADO) & por_sexo["codigo_region_trabajo"].notna() & por_sexo["actividad_ciiu"].notna()]
+    base = ocupados_con_region_y_actividad(por_sexo)
     por_region = base.groupby(["codigo_region_trabajo", "sexo"])["personas"].sum()
     por_celda = base.groupby(["codigo_region_trabajo", "actividad_ciiu", "sexo"])["personas"].sum()
     por_chile = base.groupby("sexo")["personas"].sum()
@@ -94,7 +104,8 @@ def agregar_nivel_por_actividad(actividades: list[dict], por_sexo: pd.DataFrame)
     Cada nivel va como [total, %, hombres, mujeres, % hombres, % mujeres], en el orden de ORDEN_NIVELES, porque son 960 celdas dentro de la página.
     Con menos de MINIMO_VISIBLE personas, el valor del sexo no se escribe en la página.
     """
-    base = por_sexo[(por_sexo["sit_fuerza_trabajo"] == OCUPADO) & por_sexo["codigo_region_trabajo"].notna() & por_sexo["actividad_ciiu"].notna() & por_sexo["nivel_titulo"].notna()]
+    base = ocupados_con_region_y_actividad(por_sexo)
+    base = base[base["nivel_titulo"].notna()]
     base = base[base["actividad_ciiu"].isin([a["ciiu"] for a in actividades])]
 
     def perfil(g: pd.DataFrame) -> list:
@@ -178,8 +189,8 @@ def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
     """Panorama de todas las actividades. Una región se distingue por lo que más pesa ahí, sin contar bases pequeñas."""
     pct_por_actividad = censo.drop_duplicates("actividad_ciiu")["pct_nacional"]
     # El orden de mayor a menor se decide con el peso sin redondear, igual que el color.
-    peso_maximo = censo[censo["lectura"] != "base_pequena"].groupby("actividad_ciiu")["peso_relativo"].max().sort_values(ascending=False)
     con_lectura = censo[censo["lectura"] != "base_pequena"]
+    peso_maximo = con_lectura.groupby("actividad_ciiu")["peso_relativo"].max().sort_values(ascending=False)
     regiones = {}
     for r, g in con_lectura.groupby("codigo_region"):
         distintiva = g.loc[g["peso_relativo"].idxmax()]

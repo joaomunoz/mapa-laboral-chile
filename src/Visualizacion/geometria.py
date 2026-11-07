@@ -50,13 +50,18 @@ def construir_geometria(g: gpd.GeoDataFrame) -> dict:
     """Devuelve los trazados SVG de cada región, el tamaño del lienzo y los controles de la geometría."""
     cobertura = reconstruir_cobertura(g.geometry.values)
     simplificadas = shapely.coverage_simplify(cobertura, TOLERANCIA_GRADOS)
-    diferencia_area = float(np.abs(100 * (shapely.area(cobertura) / shapely.area(g.geometry.values) - 1)).max())
+    area_original = shapely.area(g.geometry.values)
+    diferencia_area = float(np.abs(100 * (shapely.area(cobertura) / area_original - 1)).max())
+    # La que se publica es la simplificada: el control debe medirla a ella, no solo a la reconstruida.
+    diferencia_simplificada = float(np.abs(100 * (shapely.area(simplificadas) / area_original - 1)).max())
     geometria_valida = bool(shapely.coverage_is_valid(cobertura) and shapely.coverage_is_valid(simplificadas) and shapely.is_valid(simplificadas).all())
     cos_lat = math.cos(math.radians(LATITUD_REFERENCIA))
     partes = {}
     limites = []
     for region, geom in zip(g["COD_REGION"].astype(int), simplificadas):
         poligonos = [p for p in shapely.get_parts(geom) if p.geom_type == "Polygon" and p.centroid.x > LONGITUD_MINIMA_CONTINENTE]
+        if not poligonos:
+            raise ValueError(f"La región {region} quedó sin polígonos continentales al simplificar: revisa GRILLA_GRADOS, TOLERANCIA_GRADOS o la capa regional")
         partes[region] = poligonos
         limites.extend(p.bounds for p in poligonos)
     b = np.array(limites)
@@ -68,4 +73,5 @@ def construir_geometria(g: gpd.GeoDataFrame) -> dict:
         area_minima = AREA_MINIMA_PX / (escala ** 2 * cos_lat)
         elegidos = [p for p in poligonos if p.area >= area_minima] or [max(poligonos, key=lambda p: p.area)]
         trazados[int(region)] = "".join(a_svg(np.asarray(p.exterior.coords), x0, y1, escala, cos_lat) for p in elegidos)
-    return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados, "geometria_valida": geometria_valida, "diferencia_area_pct": diferencia_area}
+    return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados, "geometria_valida": geometria_valida, "diferencia_area_pct": diferencia_area,
+            "diferencia_simplificada_pct": diferencia_simplificada}

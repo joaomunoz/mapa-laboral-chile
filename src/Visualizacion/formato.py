@@ -6,6 +6,7 @@ Cómo se escriben las cifras y los nombres en la página. Solo cambia lo que se 
 
 from __future__ import annotations
 
+import math
 import re
 
 import pandas as pd
@@ -48,6 +49,11 @@ def texto_peso(peso: float) -> str:
     if pd.isna(peso):
         return "s/d"
     return f"{round(float(peso), DECIMALES_CL):.{DECIMALES_CL}f}".replace(".", ",")
+
+
+def de_cada_10(pct: float) -> int:
+    """Personas de cada 10, redondeando ,5 hacia arriba como Math.round en la página; round() de Python lo lleva al par."""
+    return math.floor(pct / 10 + 0.5)
 
 
 def redondear(valor: float, decimales: int = 2) -> float | None:
