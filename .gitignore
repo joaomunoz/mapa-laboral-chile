@@ -14,3 +14,6 @@ src/Scrapers/*/Entrada/
 src/Scrapers/Titulados/Salida/titulados_procesado.csv
 src/Scrapers/ENE/Salida/ene_procesado.csv
 src/Scrapers/CASEN/Salida/casen_procesado.csv
+
+# Bitácora de trabajo: se versiona en su propio repositorio local, no en GitHub
+pizarra/
