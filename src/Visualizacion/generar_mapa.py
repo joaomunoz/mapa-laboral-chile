@@ -7,6 +7,10 @@ Entradas: tablas de Analisis/JOINS y la capa regional de la cartografía del Cen
 Salida:   docs/index.html, en la carpeta del resultado y no en src/: es lo que se publica
 Ejecutar: .venv/bin/python src/Visualizacion/generar_mapa.py (requiere geopandas y pyarrow)
 
+Este archivo arma los datos y la geometría y escribe la página. Lo demás está en módulos vecinos:
+  config.py (rutas y constantes), formato.py (cómo se escriben cifras y nombres),
+  indicadores.py (cálculos) y controles.py (controles que detienen la generación).
+
 Decisiones:
   - Simplificación por cobertura: mantiene exactos los bordes compartidos; simplificar cada región por separado
     abriría huecos entre ellas. Exige bordes que calcen entre regiones, y la capa oficial no los trae: por eso se
@@ -17,7 +21,7 @@ Decisiones:
   - El color se decide con el CL redondeado a 2 decimales, la misma cifra que se muestra (06-11-26). Antes se
     usaba el valor completo y la cifra sumaba decimales para calzar (1,598), una precisión que el dato no tiene.
     El CL se calcula completo y se redondea una sola vez, al final.
-  - Los cortes 0,8 y 1,2 son los de la lectura de la tabla. Vienen de otro módulo, así que validar() detiene el
+  - Los cortes 0,8 y 1,2 son los de la lectura de la tabla. Vienen de otro módulo, así que controles.py detiene el
     proceso si el color y la lectura dejan de coincidir.
 """
 
@@ -26,99 +30,25 @@ from __future__ import annotations
 import json
 import logging
 import math
-import re
-from pathlib import Path
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-import pyarrow.parquet as pq
 import shapely
 
+from config import (
+    AFINIDADES_VISIBLES, ANCHO_SVG, AREA_MINIMA_PX, COLOR_RESUMEN, CORTES_ROJO, DECIMALES_CL, DESOCUPADO,
+    FUERA_FUERZA_TRABAJO, GRILLA_GRADOS, HOMBRE, LATITUD_REFERENCIA, LONGITUD_MINIMA_CONTINENTE, MINIMO_VISIBLE,
+    MUJER, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO,
+    ORDEN_NIVELES, ORDEN_NORTE_SUR, POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, REGION_METROPOLITANA, RUTA_AREAS,
+    RUTA_CARRERAS, RUTA_CENSO, RUTA_CENSO_PROCESADO, RUTA_CENSO_SEXO, RUTA_NIVELES, RUTA_PLANTILLA, RUTA_REGIONES,
+    RUTA_SALIDA, TOLERANCIA_GRADOS, TRAMOS,
+)
+from formato import nombre_legible, redondear, texto_peso
+from indicadores import clase_color
+from controles import validar
+
 log = logging.getLogger(__name__)
-
-DIR = Path(__file__).parent
-DIR_SRC = DIR.parent
-DIR_JOINS = DIR_SRC / "Analisis" / "JOINS"
-RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "concentracion_region_actividad_censo.csv"
-RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
-RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
-RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
-RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
-RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.csv"
-RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
-RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
-RUTA_PLANTILLA = DIR / "plantilla.html"
-RUTA_SALIDA = DIR_SRC.parent / "docs" / "index.html"
-
-ANCHO_SVG = 250
-LATITUD_REFERENCIA = -36.0  # Mantiene una proporción razonable en un país tan largo.
-LONGITUD_MINIMA_CONTINENTE = -76.0
-TOLERANCIA_GRADOS = 0.035
-GRILLA_GRADOS = 0.01
-DIFERENCIA_AREA_MAXIMA_PCT = 0.5
-AREA_MINIMA_PX = 3.0
-OCUPADO = 1
-AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]
-CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
-CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
-TRAMOS = ["hasta 0,4", "0,4–0,6", "0,6–0,8", "0,8–1,2", "1,2–1,6", "1,6–2,5", "2,5 o más"]
-CLASE_NEUTRA = 3
-DECIMALES_CL = 2
-NOMBRES_REGION = {
-    1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
-    9: "La Araucanía", 10: "Los Lagos", 11: "Aysén", 12: "Magallanes", 13: "Metropolitana", 14: "Los Ríos", 15: "Arica y Parinacota", 16: "Ñuble",
-}
-NOMBRES_CORTOS = {
-    "A": "Agricultura y pesca", "B": "Minería", "C": "Industria manufacturera", "D": "Electricidad y gas", "E": "Agua y residuos", "F": "Construcción", "G": "Comercio",
-    "H": "Transporte", "I": "Alojamiento y comida", "J": "Información y comunicaciones", "K": "Finanzas y seguros", "L": "Inmobiliarias", "M": "Servicios profesionales",
-    "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud", "R": "Artes y deportes", "S": "Otros servicios", "T": "Hogares como empleadores",
-}
-# Índice de color de cada actividad que distingue a alguna región. Sigue a la actividad, no a su orden, y se eligió con
-# validate_palette.js para que las actividades de regiones vecinas se distingan, también con daltonismo (ΔE 8,4 o más).
-COLOR_RESUMEN = {"B": 0, "A": 1, "O": 2, "C": 3, "R": 4, "K": 5}
-REGION_METROPOLITANA = 13
-# Filas de personas_censo2024.parquet. Va como constante porque censo_procesado.csv solo trae 15 años o más, y regenerar
-# el mapa no debe exigir los microdatos; validar() la compara con el archivo cuando está disponible.
-POBLACION_TOTAL_CENSO = 18_480_432
-HOMBRE, MUJER = 1, 2
-ORDEN_NIVELES = ["Profesional", "Tecnico", "Sin_titulo"]
-MINIMO_VISIBLE = 10
-POBLACION_POR_SEXO = {HOMBRE: 8_967_033, MUJER: 9_513_399}
-# Solo dos totales nacionales para la nota: el género es dato sensible y está suprimido en parte de las comunas, así que no
-# se guarda en ninguna tabla ni se abre por actividad. validar() los compara con los microdatos cuando están disponibles.
-OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO = 38_491, 633_803
-DESOCUPADO, FUERA_FUERZA_TRABAJO = 2, 3
-ORDEN_NORTE_SUR = [15, 1, 2, 3, 4, 5, 13, 6, 7, 16, 8, 9, 14, 10, 11, 12]
-TILDES = {
-    "Ingenieria": "Ingeniería", "Tecnico": "Técnico", "Tecnica": "Técnica", "Pedagogia": "Pedagogía", "Educacion": "Educación", "Administracion": "Administración",
-    "Computacion": "Computación", "Informatica": "Informática", "Mecanica": "Mecánica", "Quimica": "Química", "Electronica": "Electrónica",
-    "Electrica": "Eléctrica", "Electrico": "Eléctrico", "Agricola": "Agrícola", "Biotecnologia": "Biotecnología", "Geologia": "Geología", "Metalurgia": "Metalurgia",
-    "Metalurgica": "Metalúrgica", "Logistica": "Logística", "Psicologia": "Psicología", "Odontologia": "Odontología", "Tecnologia": "Tecnología", "Medica": "Médica",
-    "Dietetica": "Dietética", "Nutricion": "Nutrición", "Kinesiologia": "Kinesiología", "Fonoaudiologia": "Fonoaudiología", "Podologia": "Podología", "Clinico": "Clínico",
-    "Radiologia": "Radiología", "Enfermeria": "Enfermería", "Automatizacion": "Automatización", "Instrumentacion": "Instrumentación", "Construccion": "Construcción",
-    "Prevencion": "Prevención", "Gastronomia": "Gastronomía", "Gastronomica": "Gastronómica", "Turistica": "Turística", "Hoteleria": "Hotelería", "Produccion": "Producción",
-    "Comunicacion": "Comunicación", "Diseno": "Diseño", "Grafico": "Gráfico", "Juridico": "Jurídico", "Publica": "Pública", "Fisica": "Física", "Matematicas": "Matemáticas",
-    "Biologia": "Biología", "Sociologia": "Sociología", "Musica": "Música", "Geomineria": "Geominería", "Mineria": "Minería", "Topografia": "Topografía", "Telematica": "Telemática",
-    "Biomedica": "Biomédica", "Tecnicas": "Técnicas", "Analisis": "Análisis", "Parvulos": "Párvulos", "Peluqueria": "Peluquería", "Estetica": "Estética", "Linguistica": "Lingüística",
-    "Economia": "Economía", "Geografia": "Geografía", "Traduccion": "Traducción", "Interpretacion": "Interpretación", "Telecomunicaciones": "Telecomunicaciones",
-    "Agronomia": "Agronomía", "Comun": "Común", "Electromecanica": "Electromecánica", "Recreacion": "Recreación", "Preparacion": "Preparación", "Y/O": "y/o",
-    "Transito": "Tránsito", "Maritima": "Marítima", "Pesquera": "Pesquera", "Acuicola": "Acuícola", "Forestal": "Forestal", "Veterinaria": "Veterinaria", "Sanitaria": "Sanitaria",
-}
-MINUSCULAS = {"En", "De", "Del", "La", "Las", "Los", "Y", "E", "O", "A", "Con", "Para", "Al"}
-
-
-def nombre_legible(texto: str) -> str:
-    """Las carreras genéricas vienen en mayúsculas y sin tildes; esto solo afecta a lo que se muestra."""
-    palabras = re.sub(r"\s+", " ", texto.title()).split(" ")
-    salida = []
-    for i, p in enumerate(palabras):
-        limpia = p.strip(",()")
-        nueva = TILDES.get(limpia, limpia)
-        if i > 0 and nueva in MINUSCULAS:
-            nueva = nueva.lower()
-        salida.append(p.replace(limpia, nueva))
-    return " ".join(salida)
 
 
 def a_svg(coordenadas: np.ndarray, x0: float, y1: float, escala: float, cos_lat: float) -> str:
@@ -167,29 +97,6 @@ def construir_geometria() -> dict:
         elegidos = [p for p in poligonos if p.area >= area_minima] or [max(poligonos, key=lambda p: p.area)]
         trazados[int(region)] = "".join(a_svg(np.asarray(p.exterior.coords), x0, y1, escala, cos_lat) for p in elegidos)
     return {"ancho": ANCHO_SVG, "alto": round(alto, 1), "trazados": trazados, "geometria_valida": geometria_valida, "diferencia_area_pct": diferencia_area}
-
-
-def clase_color(peso: float) -> int | None:
-    """Tramo de color del CL publicado, con 2 decimales; usa las mismas comparaciones que la lectura. Vacío si no hay dato."""
-    if pd.isna(peso):
-        return None
-    peso = round(float(peso), DECIMALES_CL)
-    if peso <= CORTES_AZUL[2]:
-        return sum(peso > c for c in CORTES_AZUL[:2])
-    if peso < CORTES_ROJO[0]:
-        return CLASE_NEUTRA
-    return CLASE_NEUTRA + 1 + sum(peso >= c for c in CORTES_ROJO[1:])
-
-
-def texto_peso(peso: float) -> str:
-    """CL con 2 decimales: la misma cifra con la que se decide el color."""
-    if pd.isna(peso):
-        return "s/d"
-    return f"{round(float(peso), DECIMALES_CL):.{DECIMALES_CL}f}".replace(".", ",")
-
-
-def redondear(valor: float, decimales: int = 2) -> float | None:
-    return None if pd.isna(valor) else round(float(valor), decimales)
 
 
 def resumen_nacional(g: pd.DataFrame, total_censo: int, ene_total: float) -> dict:
@@ -415,100 +322,6 @@ def construir_datos() -> dict:
     return {"actividades": actividades, "fichas": fichas, "estudios": estudios, "perfil_estudios": perfil_estudios,
             # Solo el total de las carreras del mapa: por carrera son 1 o 2 personas, y no se abre.
             "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados}
-
-
-def totales_sexo_genero_correctos() -> bool:
-    """Compara las constantes con los microdatos; regenerar el mapa no los exige, así que sin ellos no hay nada que comparar."""
-    if not RUTA_PERSONAS.exists():
-        return True
-    d = pd.read_parquet(RUTA_PERSONAS, columns=["sexo", "div_genero", "sit_fuerza_trabajo"])
-    genero = d.loc[d["sit_fuerza_trabajo"] == OCUPADO, "div_genero"].value_counts()
-    return d["sexo"].value_counts().to_dict() == POBLACION_POR_SEXO and genero[1] == OCUPADOS_DIVERSIDAD_GENERO and genero[-66] == OCUPADOS_GENERO_SUPRIMIDO
-
-
-def validar(datos: dict, geo: dict, html: str) -> None:
-    celdas = [d for a in datos["actividades"] for d in a["regiones"].values() if d["clase"] is not None]
-    lectura_esperada = lambda c: "bajo_lo_nacional" if c < CLASE_NEUTRA else "similar" if c == CLASE_NEUTRA else "concentra"
-    con_base = [d for d in celdas if d["lectura"] != "base_pequena"]
-    texto_calza = lambda d: clase_color(float(d["peso_txt"].replace(",", "."))) == d["clase"]
-    sin_dato = sum(d["clase"] is None for a in datos["actividades"] for d in a["regiones"].values())
-    pob = datos["poblacion"]
-    controles = {
-        "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
-        "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
-        "20 actividades en la lista": len(datos["actividades"]) == 20 and "U" not in [a["ciiu"] for a in datos["actividades"]],
-        "Bordes válidos antes y después de simplificar": geo["geometria_valida"],
-        "El área de cada región cambia menos de 0,5%": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
-        "Minería en Chile: 268.491 con región y 275.517 en total": next(a for a in datos["actividades"] if a["ciiu"] == "B")["nacional"]["ocupados"] == 268_491 and next(a for a in datos["actividades"] if a["ciiu"] == "B")["nacional"]["censo_total"] == 275_517,
-        "Salud: más personas en la Metropolitana y más peso en Biobío": next(a for a in datos["actividades"] if a["ciiu"] == "Q")["nacional"]["mas_personas"]["r"] == 13 and next(a for a in datos["actividades"] if a["ciiu"] == "Q")["nacional"]["mas_peso"]["r"] == 8,
-        "Profesionales desocupados en Chile: 153.695": datos["niveles_chile"]["Profesional"]["desocupados"] == 153_695,
-        "Las 16 regiones tienen sus 3 niveles": len(datos["niveles"]) == 16 and all(len(n) == 3 for n in datos["niveles"].values()),
-        "16 regiones con trazado": sorted(geo["trazados"]) == sorted(NOMBRES_REGION),
-        "Cada actividad tiene las 16 regiones": all(len(a["regiones"]) == 16 for a in datos["actividades"]),
-        "Antofagasta en Minería: 101.929": next(a for a in datos["actividades"] if a["ciiu"] == "B")["regiones"][2]["ocupados"] == 101_929,
-        "Todas las carreras listadas tienen ficha": all(x["c"] in datos["fichas"] for a in datos["actividades"] for x in a["afines"] + a["indicios"]),
-        # La página agrupa las carreras por nivel: una carrera con otro nivel quedaría fuera de todos los grupos.
-        "Ficha: Psicología con 85.260 títulos 2007-2025 y empleabilidad de 43,7% a 89,7%": (datos["fichas"]["PSICOLOGIA"]["tit_hist"], datos["fichas"]["PSICOLOGIA"]["emp_r"]) == (85_260, [43.7, 89.7]),
-        "Ficha: sin rango cuando hay aviso de pocas instituciones": all(f["emp_r"] is None for f in datos["fichas"].values() if f["alerta_inst"]),
-        "Toda carrera listada es técnica o profesional": all(datos["fichas"][x["c"]]["nivel"] in ("Profesional", "Tecnico") for a in datos["actividades"] for x in a["afines"] + a["indicios"]),
-        "Resumen: las 16 regiones tienen actividad distintiva y color": len(datos["resumen"]["regiones"]) == 16 and all(d["ciiu"] in COLOR_RESUMEN for d in datos["resumen"]["regiones"].values()),
-        "Resumen: cada color se usa": {d["ciiu"] for d in datos["resumen"]["regiones"].values()} == set(COLOR_RESUMEN),
-        "Resumen: Metropolitana en 18 de 20; excepciones en Maule y Antofagasta": datos["resumen"]["n_metropolitana"] == 18 and sorted(e["r"] for e in datos["resumen"]["excepciones"]) == [2, 7],
-        "Resumen: Comercio emplea más en 12 de 16 regiones": datos["resumen"]["mayor_empleador"] == {"ciiu": "G", "n": 12},
-        "Resumen: Minería y Agricultura son las más desiguales": [d["ciiu"] for d in datos["resumen"]["mas_desiguales"]] == ["B", "A"],
-        "Resumen: Valparaíso y Biobío van en color suave; La Araucanía (1,60) ya no": sorted(r for r, d in datos["resumen"]["regiones"].items() if d["suave"]) == ["5", "8"],
-        "CL: todas las cifras con 2 decimales": all(len(d["peso_txt"].split(",")[1]) == 2 for d in celdas),
-        "Población: 15,2 millones de 15 años o más, y suman sus cuatro grupos": pob["chile"]["total"] == 15_205_784 and pob["chile"]["trabajan"] + pob["chile"]["buscan"] + pob["chile"]["no_buscan"] + pob["chile"]["sin_dato"] == pob["chile"]["total"],
-        "Población: las regiones suman el total de Chile": sum(d["total"] for d in pob["regiones"].values()) == pob["chile"]["total"] and len(pob["regiones"]) == 16,
-        "Población: el % que trabaja va de Ñuble a Aysén": min(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "16" and max(pob["regiones"], key=lambda r: pob["regiones"][r]["pct_trabajan"]) == "11",
-        # Los indicadores, el título del mapa y sus anotaciones llevan estas afirmaciones escritas a mano: si los datos cambian, la generación se detiene.
-        "Indicadores: la Metropolitana reúne 42,1% de los ocupados": pob["regiones"]["13"]["pct_lugar_trabajo"] == 42.1 and pob["regiones"]["13"]["lugar_trabajo"] == 3_286_880,
-        "Mapa: 13 de 16 regiones tienen su mayor CL en Minería, Agricultura o Adm. pública": sum(d["ciiu"] in "BAO" for d in datos["resumen"]["regiones"].values()) == 13 and len(datos["resumen"]["regiones"]) == 16,
-        "Indicadores: brecha de participación de 19,5 puntos": round(pob["sexo"]["hombres"]["tasa_participacion"] - pob["sexo"]["mujeres"]["tasa_participacion"], 1) == 19.5,
-        "Anotaciones: Minería en el norte, Agricultura en el centro-sur y Adm. pública en los extremos": {c: sorted(int(r) for r, d in datos["resumen"]["regiones"].items() if d["ciiu"] == c) for c in "BAO"} == {"B": [1, 2, 3, 4], "A": [6, 7, 9, 10, 14, 16], "O": [11, 12, 15]},
-        "Anotaciones: Antofagasta, Maule y Aysén son el mayor CL de sus grupos": all(max((d["peso"], int(r)) for r, d in datos["resumen"]["regiones"].items() if d["ciiu"] == c)[1] == m for c, m in (("B", 2), ("A", 7), ("O", 11))),
-        "Sexo: hombres y mujeres suman cada grupo de la población de Chile": all(pob["sexo"]["hombres"][k] + pob["sexo"]["mujeres"][k] == v for k, v in (("poblacion_total", pob["poblacion_total"]), ("menores_15", pob["menores_15"]), ("total", pob["chile"]["total"]), ("trabajan", pob["chile"]["trabajan"]), ("buscan", pob["chile"]["buscan"]), ("no_buscan", pob["chile"]["no_buscan"]), ("sin_dato", pob["chile"]["sin_dato"]))),
-        "Sexo: en cada actividad, hombres y mujeres suman sus ocupados": all(a["sexo"]["h"] + a["sexo"]["m"] == a["nacional"]["ocupados"] for a in datos["actividades"]),
-        "Sexo: Comercio 665.041 y 646.953; Construcción 496.948 y 46.279": (lambda c, f: (c["h"], c["m"], f["h"], f["m"]) == (665_041, 646_953, 496_948, 46_279))(next(a for a in datos["actividades"] if a["ciiu"] == "G")["sexo"], next(a for a in datos["actividades"] if a["ciiu"] == "F")["sexo"]),
-        "Estudios: 39,8% de los ocupados con título; desocupación 6,3%, 7,8% y 9,7%": (lambda e: e["pct_con_titulo"] == 39.8 and (e["niveles"]["Profesional"]["tasa_desocupacion"], e["niveles"]["Tecnico"]["tasa_desocupacion"], e["niveles"]["Sin_titulo"]["tasa_desocupacion"]) == (6.3, 7.8, 9.7))(datos["estudios"]),
-        "Estudios: los niveles suman el total y su tasa coincide con la tabla regional": sum(d["ocupados"] for d in datos["estudios"]["niveles"].values()) == datos["estudios"]["total"] and all(datos["estudios"]["niveles"][n]["tasa_desocupacion"] == d["tasa"] for n, d in datos["niveles_chile"].items()),
-        "Estudios: mujeres 46,5% y hombres 34,6% de los ocupados con título": datos["estudios"]["sexo"] == {"hombres": 34.6, "mujeres": 46.5},
-        "Educación por región: suma 15.102.704 y va de Maule (21,1%) a la Metropolitana (32,9%)": (lambda e: sum(e["chile"]) == 15_102_704 and sum(sum(v) for r, v in e.items() if r != "chile") == sum(e["chile"])
-            and sorted((round(100 * (v[0] + v[1]) / sum(v), 1), int(r)) for r, v in e.items() if r != "chile")[::15] == [(21.1, 7), (32.9, 13)])(datos["estudios"]["educacion"]),
-        "Educación por región: se excluyen 97.157 sin nivel y 5.923 sin situación laboral, y con la tabla suman los 15 años o más":
-            datos["estudios"]["excluidos"] == {"sin_nivel": 97_157, "sin_situacion": 5_923} and sum(datos["estudios"]["educacion"]["chile"]) + sum(datos["estudios"]["excluidos"].values()) == pob["chile"]["total"],
-        "Educación por región: Chile 28,2% con título": (lambda c: round(100 * (c[0] + c[1]) / sum(c), 1) == 28.2)(datos["estudios"]["educacion"]["chile"]),
-        "Hallazgos: 4 de cada 10 ocupados con título; 1 de cada 10 en Hogares y 8 de cada 10 en Servicios profesionales": (lambda p: round(datos["estudios"]["pct_con_titulo"] / 10) == 4 and (round(min(p) / 10), round(max(p) / 10)) == (1, 8))(
-            [100 * (a["niveles"][0][0] + a["niveles"][1][0]) / sum(f[0] for f in a["niveles"]) for a in datos["actividades"]]),
-        "Desocupación menor con título en las 16 regiones: de Aysén (4,2% y 6,2%) a Biobío (9,1% y 11,1%)": (lambda d: len(d) == 16 and all(c < t for c, t in d.values()) and d["11"] == [4.2, 6.2] and d["8"] == [9.1, 11.1]
-            and min(d, key=lambda r: d[r][0]) == "11" and max(d, key=lambda r: d[r][0]) == "8")(datos["estudios"]["desocupacion_titulo"]),
-        "Nivel por actividad: Minería en Chile 82.082 profesionales; Antofagasta 28.576": (lambda a: a["niveles"][0] == [82_082, 30.6, 61_954, 20_128, 27.3, 48.7] and a["regiones"][2]["niveles"][0] == [28_576, 28.0, 21_907, 6_669, 25.3, 43.3])(next(a for a in datos["actividades"] if a["ciiu"] == "B")),
-        "Nivel por actividad: solo faltan 2.757 ocupados sin nivel informado": sum(d["ocupados"] for a in datos["actividades"] for d in a["regiones"].values()) - sum(f[0] for a in datos["actividades"] for d in a["regiones"].values() for f in d["niveles"]) == 2_757,
-        "Nivel por actividad: hombres y mujeres suman el total cuando ambos se muestran": all(f[2] + f[3] == f[0] for a in datos["actividades"] for d in [a, *a["regiones"].values()] for f in d["niveles"] if f[2] is not None and f[3] is not None),
-        "Nivel por actividad: 16 filas regionales con menos de 10, y ninguna nacional": sum(f[2] is None or f[3] is None for a in datos["actividades"] for d in a["regiones"].values() for f in d["niveles"]) == 16 and not any(f[2] is None or f[3] is None for a in datos["actividades"] for f in a["niveles"]),
-        "Nivel por actividad: todas las actividades 27,3%, 12,3% y 60,4%": datos["perfil_estudios"]["todas"] == [27.3, 12.3, 60.4],
-        "Sexo por región: en cada celda, hombres y mujeres suman sus ocupados": all(d["h"] + d["m"] == d["ocupados"] for a in datos["actividades"] for d in a["regiones"].values()),
-        "Sexo por región: las bases suman la base de cada región y de Chile": all(v["h"] + v["m"] == datos["base_ocupados"]["regiones"][r] for r, v in datos["base_ocupados"]["sexo"]["regiones"].items()) and sum(datos["base_ocupados"]["sexo"]["chile"].values()) == datos["base_ocupados"]["chile"],
-        "Sexo por región: Biobío en Salud 15.108 y 45.643; 4,91% y 17,22%": (lambda d: (d["h"], d["m"], d["pct_h"], d["pct_m"]) == (15_108, 45_643, 4.91, 17.22))(next(a for a in datos["actividades"] if a["ciiu"] == "Q")["regiones"][8]),
-        "Situación por sexo: cada región suma sus grupos": all(d["sexo"]["hombres"][k] + d["sexo"]["mujeres"][k] == d[k] for d in pob["regiones"].values() for k in ("total", "trabajan", "buscan", "no_buscan", "sin_dato")),
-        "Nivel por sexo: suma los ocupados y desocupados de cada región y de Chile": all(d["sexo"]["oh"] + d["sexo"]["om"] == d["trabajo"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for g in datos["niveles"].values() for d in g.values()) and all(d["sexo"]["oh"] + d["sexo"]["om"] == d["ocupados"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for d in datos["niveles_chile"].values()),
-        "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
-        "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
-        "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
-        # La columna "Con título" se calcula en la página desde estas personas; aquí se fija contra la fuente.
-        "Con título por actividad: Servicios profesionales 78,7%, Hogares 9,9% y todas 39,6%": (lambda pct: (round(pct(next(a for a in datos["actividades"] if a["ciiu"] == "M")["niveles"]), 1), round(pct(next(a for a in datos["actividades"] if a["ciiu"] == "T")["niveles"]), 1), round(pct([[sum(a["niveles"][i][0] for a in datos["actividades"])] for i in range(3)]), 1)) == (78.7, 9.9, 39.6))(lambda f: 100 * (f[0][0] + f[1][0]) / (f[0][0] + f[1][0] + f[2][0])),
-        "Base de la participación: Valparaíso 706.053 y Chile 7.395.105": datos["base_ocupados"]["regiones"]["5"] == 706_053 and datos["base_ocupados"]["chile"] == 7_395_105,
-        "Cada participación se puede recalcular con ocupados y su base": all(abs(100 * d["ocupados"] / datos["base_ocupados"]["regiones"][str(r)] - d["pct"]) < 0.0051 for a in datos["actividades"] for r, d in a["regiones"].items()),
-        "Población: Chile con tasa de desocupación 8,6%, participación 59,6% y 7.801.449 con lugar de trabajo": pob["chile"]["tasa_desocupacion"] == 8.6 and pob["chile"]["tasa_participacion"] == 59.6 and pob["chile"]["lugar_trabajo"] == 7_801_449,
-        "Población: ocupados por lugar de trabajo suman Chile; Antofagasta 372.015": sum(d["lugar_trabajo"] for d in pob["regiones"].values()) == pob["chile"]["lugar_trabajo"] and pob["regiones"]["2"]["lugar_trabajo"] == 372_015,
-        "La plantilla quedó completa": "__DATOS__" not in html and "__GEO__" not in html,
-    }
-    for nombre, ok in controles.items():
-        log.info("  [%s] %s", "✓" if ok else "✗", nombre)
-    log.info("  [i] Celdas sin dato: %d; mayor cambio de área: %.3f%%", sin_dato, geo["diferencia_area_pct"])
-    fallidos = [n for n, ok in controles.items() if not ok]
-    if fallidos:
-        raise ValueError(f"Validaciones fallidas: {fallidos}")
 
 
 if __name__ == "__main__":

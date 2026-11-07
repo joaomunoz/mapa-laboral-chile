@@ -1,0 +1,64 @@
+"""
+<src/Visualizacion/config.py>
+
+Rutas y constantes del mapa: entradas, cortes del CL, nombres, colores y totales de referencia.
+
+Están juntas para que un cambio de criterio (un corte, un nombre, una ruta) se haga en un solo lugar.
+Los totales de referencia los comprueba controles.py contra los microdatos cuando están disponibles.
+"""
+
+from pathlib import Path
+
+DIR = Path(__file__).parent
+DIR_SRC = DIR.parent
+DIR_JOINS = DIR_SRC / "Analisis" / "JOINS"
+RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "concentracion_region_actividad_censo.csv"
+RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
+RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
+RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
+RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
+RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.csv"
+RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"
+RUTA_REGIONES = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "cartografia" / "Cartografia_censo2024_Pais_Regional.parquet"
+RUTA_PLANTILLA = DIR / "plantilla.html"
+RUTA_SALIDA = DIR_SRC.parent / "docs" / "index.html"
+
+ANCHO_SVG = 250
+LATITUD_REFERENCIA = -36.0  # Mantiene una proporción razonable en un país tan largo.
+LONGITUD_MINIMA_CONTINENTE = -76.0
+TOLERANCIA_GRADOS = 0.035
+GRILLA_GRADOS = 0.01
+DIFERENCIA_AREA_MAXIMA_PCT = 0.5
+AREA_MINIMA_PX = 3.0
+OCUPADO = 1
+AFINIDADES_VISIBLES = ["afin", "indicio_sin_muestra"]
+CORTES_AZUL = [0.4, 0.6, 0.8]    # Inclusivos: 0,8 ya es bajo lo nacional.
+CORTES_ROJO = [1.2, 1.6, 2.5]    # Inclusivos: 1,2 ya concentra.
+TRAMOS = ["hasta 0,4", "0,4–0,6", "0,6–0,8", "0,8–1,2", "1,2–1,6", "1,6–2,5", "2,5 o más"]
+CLASE_NEUTRA = 3
+DECIMALES_CL = 2
+NOMBRES_REGION = {
+    1: "Tarapacá", 2: "Antofagasta", 3: "Atacama", 4: "Coquimbo", 5: "Valparaíso", 6: "O'Higgins", 7: "Maule", 8: "Biobío",
+    9: "La Araucanía", 10: "Los Lagos", 11: "Aysén", 12: "Magallanes", 13: "Metropolitana", 14: "Los Ríos", 15: "Arica y Parinacota", 16: "Ñuble",
+}
+NOMBRES_CORTOS = {
+    "A": "Agricultura y pesca", "B": "Minería", "C": "Industria manufacturera", "D": "Electricidad y gas", "E": "Agua y residuos", "F": "Construcción", "G": "Comercio",
+    "H": "Transporte", "I": "Alojamiento y comida", "J": "Información y comunicaciones", "K": "Finanzas y seguros", "L": "Inmobiliarias", "M": "Servicios profesionales",
+    "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud", "R": "Artes y deportes", "S": "Otros servicios", "T": "Hogares como empleadores",
+}
+# Índice de color de cada actividad que distingue a alguna región. Sigue a la actividad, no a su orden, y se eligió con
+# validate_palette.js para que las actividades de regiones vecinas se distingan, también con daltonismo (ΔE 8,4 o más).
+COLOR_RESUMEN = {"B": 0, "A": 1, "O": 2, "C": 3, "R": 4, "K": 5}
+REGION_METROPOLITANA = 13
+# Filas de personas_censo2024.parquet. Va como constante porque censo_procesado.csv solo trae 15 años o más, y regenerar
+# el mapa no debe exigir los microdatos; validar() la compara con el archivo cuando está disponible.
+POBLACION_TOTAL_CENSO = 18_480_432
+HOMBRE, MUJER = 1, 2
+ORDEN_NIVELES = ["Profesional", "Tecnico", "Sin_titulo"]
+MINIMO_VISIBLE = 10
+POBLACION_POR_SEXO = {HOMBRE: 8_967_033, MUJER: 9_513_399}
+# Solo dos totales nacionales para la nota: el género es dato sensible y está suprimido en parte de las comunas, así que no
+# se guarda en ninguna tabla ni se abre por actividad. validar() los compara con los microdatos cuando están disponibles.
+OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO = 38_491, 633_803
+DESOCUPADO, FUERA_FUERZA_TRABAJO = 2, 3
+ORDEN_NORTE_SUR = [15, 1, 2, 3, 4, 5, 13, 6, 7, 16, 8, 9, 14, 10, 11, 12]
