@@ -31,9 +31,16 @@ from controles import validar
 log = logging.getLogger(__name__)
 
 
+def json_en_script(valor: object) -> str:
+    """JSON que se puede poner dentro de <script>: un texto con "</script>" lo cerraría antes de tiempo, así que "<" va escapado."""
+    return json.dumps(valor, ensure_ascii=False).replace("<", "\\u003c")
+
+
 def armar_pagina(datos: dict, geo: dict) -> str:
     geometria = {k: geo[k] for k in ("ancho", "alto", "trazados")}
-    return leer_plantilla().replace("__DATOS__", json.dumps(datos, ensure_ascii=False)).replace("__GEO__", json.dumps(geometria))
+    # Cada marcador se reemplaza una sola vez, y la geometría primero: solo trae números y trazados, así que no puede
+    # contener "__DATOS__". Al revés, un texto de los datos con "__GEO__" recibiría la geometría.
+    return leer_plantilla().replace("__GEO__", json_en_script(geometria), 1).replace("__DATOS__", json_en_script(datos), 1)
 
 
 if __name__ == "__main__":
