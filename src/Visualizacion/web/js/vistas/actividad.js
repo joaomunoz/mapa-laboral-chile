@@ -18,7 +18,8 @@ function avisos(){let h="";
  return h}
 // Una línea de la ENE, aparte de las cifras del Censo; solo si la muestra la sostiene.
 function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return "";
- return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${num(f.inf,1)}% de sus ocupados es informal (Chile: ${num(FOR.chile.inf,1)}%)${f.ind==null?"":` y ${num(f.ind,1)}% es independiente`}.</p>`}
+ return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${enMiles(f.inf[0])} de sus ocupados son informales (${num(f.inf[1],1)}%) y ${enMiles(f.for[0])} formales (${num(f.for[1],1)}%); `+
+  `en Chile, ${num(FOR.chile.inf[1],1)}% y ${num(FOR.chile.for[1],1)}%.${f.ind==null?"":` ${enMiles(f.ind[0])} son independientes (${num(f.ind[1],1)}%).`}</p>`}
 function vistaChile(){const n=act.nacional;
  return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
  <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>

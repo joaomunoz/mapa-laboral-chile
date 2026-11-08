@@ -57,23 +57,27 @@ function extremos(valor){const r=DATOS.orden.map(k=>[k,valor(k)]).sort((a,b)=>a[
 const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 const pctTitulo=v=>100*(v[0]+v[1])/(v[0]+v[1]+v[2]);
 // Formalidad según ENE: dos ejes y no tres grupos, porque un independiente puede ser formal o informal.
-function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r=>FOR.regiones[r].inf);
- const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${["af","ai","xf","xi","fam"].map(x=>`<td class="n">${num(d[x],1)}%</td>`).join("")}<td class="n">${num(d.inf,1)}%</td></tr>`;
- return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.inf,1)}% trabaja en la informalidad; con título profesional, ${num(n.Profesional.inf,1)}%`,true)}
- <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. `+
+function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r=>FOR.regiones[r].inf[1]);
+ const celda=v=>`<td class="n">${v?vmil(v):"—"}</td>`;
+ const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${["af","ai","xf","xi","fam","for","inf"].map(x=>celda(d[x])).join("")}</tr>`;
+ const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
+ return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% trabaja en la informalidad; con título profesional, ${num(n.Profesional.inf[1],1)}%`,true)}
+ <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia, en miles (es una estimación con muestra). `+
   `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
- <p style="margin:8px 0 0">En Chile, ${num(c.inf,1)}% de los ocupados es informal. Los independientes son ${num(c.ind,1)}%: `+
-  `${num(c.xi,1)}% informales y ${num(c.xf,1)}% formales. La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel</th><th colspan="2" class="bloque ini">Asalariado</th><th colspan="2" class="bloque ini">Independiente</th>`+
-  `<th rowspan="2" class="n bloque ini">Familiar no remunerado</th><th rowspan="2" class="n bloque ini">Informal en total</th></tr>`+
-  `<tr><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
+ <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
+  `Los independientes son ${enMiles(c.ind[0])} (${num(c.ind[1],1)}%): ${num(c.xi[1],1)}% informales y ${num(c.xf[1],1)}% formales. `+
+  `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel<br><span class="nota">miles (%)</span></th><th colspan="2" class="bloque ini">Asalariado</th><th colspan="2" class="bloque ini">Independiente</th>`+
+  `<th rowspan="2" class="n bloque ini">Familiar no remunerado</th><th colspan="2" class="bloque ini">En total</th></tr>`+
+  `<tr><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
   fila("Chile",c,"total")+NIVELES.map(([k,t])=>fila(t,n[k],"")).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">% de los ocupados de cada fila; las cinco primeras columnas suman 100. Estas diferencias no indican causa: la edad, por ejemplo, también influye.</p>
+ <p class="nota" style="margin:6px 0 0">Miles de ocupados (% de cada fila). Las cinco primeras columnas suman 100, y también formal e informal en total; el familiar no remunerado siempre es informal.${
+  sinFam.length?` Familiar no remunerado sin dato (—) en ${sinFam.join(" y ")}: son menos de 60 personas en la muestra.`:""} Estas diferencias no indican causa: la edad, por ejemplo, también influye.</p>
  <details><summary>Ver por región</summary>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región<br><span class="nota">miles (%)</span></th><th class="n">Formal</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
   [["Chile",c,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],FOR.regiones[r],""])].map(([t,d,k])=>
-   `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.inf,1)}%</td><td class="n">${num(d.ind,1)}%</td></tr>`).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">Por región no se separan las cuatro casillas: en las regiones chicas quedarían con poca muestra.</p></details>`}
+   `<tr class="${k}"><td>${esc(t)}</td>${celda(d.for)}${celda(d.inf)}${celda(d.ind)}</tr>`).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:6px 0 0">Miles de ocupados (% de la región); formal e informal suman 100. Por región no se separan las cuatro casillas: en las regiones chicas quedarían con poca muestra.</p></details>`}
 function vistaResumen(){
  const orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados);
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;

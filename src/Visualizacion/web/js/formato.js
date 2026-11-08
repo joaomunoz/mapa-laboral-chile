@@ -12,6 +12,9 @@ const nomReg=r=>esc(DATOS.regiones[r]);
 const part=p=>num(p,p!=null&&p<10?2:1)+"%";
 // Formato único: ocupados por lugar de trabajo y, entre paréntesis, su participación.
 const vp=(v,p)=>`${num(v)} (${part(p)})`;
+// Cifras de la ENE en miles: es una estimación con muestra, y la unidad aparentaría una exactitud que no tiene.
+const vmil=([m,p])=>`${num(m)} (${num(p,1)}%)`;  // En tablas: el encabezado dice que son miles
+const enMiles=m=>m>=1000?`${num(m/1000,1)} millones`:`${num(m)} mil`;
 const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+" y "+x[x.length-1];
 // % con título técnico o profesional, desde las personas y no desde los porcentajes ya redondeados.
 const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+filas[2][0]);

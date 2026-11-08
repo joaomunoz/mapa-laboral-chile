@@ -232,18 +232,28 @@ def evolucion_desocupacion(t: pd.DataFrame) -> dict:
 def formalidad(t: pd.DataFrame) -> dict:
     """Asalariado o independiente, y formal o informal, según ENE de marzo a julio de 2026.
 
-    Chile y los niveles llevan el reparto completo; regiones y actividades solo informalidad e independientes, porque
-    las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Cada cifra de una actividad se
-    escribe solo si es fiable: sin informalidad fiable la actividad no aparece, y sin independientes fiables va None.
+    Cada cifra va como [miles de ocupados, %]. Miles y no unidades: la ENE estima con una muestra, y escribir la
+    unidad haría parecer exacta una cifra que no lo es. Formal es el complemento de informal, para que el lector vea
+    las dos partes que suman 100; su % se calcula desde el % informal ya redondeado, así la suma da 100 exacto.
+    Chile y los niveles llevan el reparto completo; regiones y actividades solo formal, informal e independientes,
+    porque las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Familiar no remunerado
+    va None donde no es fiable, y cada cifra de una actividad se escribe solo si es fiable.
     """
-    reparto = lambda f: {"af": redondear(f["pct_asalariado_formal"], 1), "ai": redondear(f["pct_asalariado_informal"], 1),
-                         "xf": redondear(f["pct_independiente_formal"], 1), "xi": redondear(f["pct_independiente_informal"], 1),
-                         "fam": redondear(f["pct_familiar"], 1), "inf": redondear(f["tasa_informalidad"], 1), "ind": redondear(f["pct_independientes"], 1)}
-    breve = lambda f: {"inf": redondear(f["tasa_informalidad"], 1), "ind": redondear(f["pct_independientes"], 1)}
+    def par(f, pct):
+        return [int(redondear(f["ocupados"] * pct / 100 / 1000, 0)), redondear(pct, 1)]
+
+    def base(f):
+        inf = redondear(f["tasa_informalidad"], 1)
+        return {"ocup": int(redondear(f["ocupados"] / 1000, 0)), "inf": par(f, f["tasa_informalidad"]),
+                "for": [int(redondear(f["ocupados"] * (100 - f["tasa_informalidad"]) / 100 / 1000, 0)), redondear(100 - inf, 1)],
+                "ind": par(f, f["pct_independientes"]) if f["fiabilidad_independientes"] == "fiable" else None}
+
+    def reparto(f):
+        return {**base(f), "af": par(f, f["pct_asalariado_formal"]), "ai": par(f, f["pct_asalariado_informal"]),
+                "xf": par(f, f["pct_independiente_formal"]), "xi": par(f, f["pct_independiente_informal"]),
+                "fam": par(f, f["pct_familiar"]) if f["fiabilidad_familiar"] == "fiable" else None}
     por = lambda a: t[t["ambito"] == a]
     return {"chile": reparto(por("chile").iloc[0]),
             "niveles": {f["nivel_titulo"]: reparto(f) for _, f in por("nivel").iterrows()},
-            "regiones": {str(int(f["codigo_region"])): breve(f) for _, f in por("region").iterrows()},
-            "actividades": {f["actividad_ciiu"]: {"inf": redondear(f["tasa_informalidad"], 1),
-                                                  "ind": redondear(f["pct_independientes"], 1) if f["fiabilidad_independientes"] == "fiable" else None}
-                            for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"}}
+            "regiones": {str(int(f["codigo_region"])): base(f) for _, f in por("region").iterrows()},
+            "actividades": {f["actividad_ciiu"]: base(f) for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"}}
