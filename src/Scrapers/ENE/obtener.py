@@ -328,10 +328,12 @@ def obtener_ene(anio: int = ANIO_OBJETIVO) -> list[Path]:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    rutas = obtener_ene()
+    # Año como argumento (python obtener.py 2024): el contraste con el Censo usa 2024 y el resto, 2026.
+    anio = int(sys.argv[1]) if len(sys.argv) > 1 else ANIO_OBJETIVO
+    rutas = obtener_ene(anio)
 
-    print(f"\n=== ENE INE — Microdescarga {ANIO_OBJETIVO} ===")
-    print(f"Archivos en Entrada/{ANIO_OBJETIVO}/:")
+    print(f"\n=== ENE INE — Microdescarga {anio} ===")
+    print(f"Archivos en Entrada/{anio}/:")
     total_mb = 0
     for ruta in sorted(rutas):
         peso_mb = ruta.stat().st_size / (1024 * 1024)

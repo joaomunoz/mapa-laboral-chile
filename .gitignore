@@ -13,6 +13,7 @@ src/Scrapers/*/Entrada/
 # Microdatos procesados: se regeneran con procesar.py y son demasiado grandes para git
 src/Scrapers/Titulados/Salida/titulados_procesado.csv
 src/Scrapers/ENE/Salida/ene_procesado.csv
+src/Scrapers/ENE/Salida/ene_procesado_2024.csv
 src/Scrapers/CASEN/Salida/casen_procesado.csv
 
 # Bitácora de trabajo: se versiona en su propio repositorio local, no en GitHub

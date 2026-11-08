@@ -1,15 +1,23 @@
 """
 <src/Scrapers/ENE/esquema.py>
 
-Definición del esquema oficial de ENE 2026 — Single Source of Truth.
+Definición del esquema oficial de la ENE — Single Source of Truth.
 
-Define la ÚNICA tabla de salida del procesamiento:
+Define el esquema único de las tablas de salida del procesamiento, una por año:
 
-  ESQUEMA_ENE
-    Salida: Salida/ene_procesado.csv  (30 columnas)
+  ESQUEMA_ENE  (30 columnas, mismo esquema en todos los años)
     Granularidad: 1 fila por ENTREVISTA única = (idrph, ano_encuesta, mes_encuesta).
-    Contenido: microdatos (NO agregados) de las 8 bases mensuales 2026 unificadas,
+    Contenido: microdatos (NO agregados) de los trimestres móviles del año unificados,
                con clave de período `mes` para análisis por mes/region.
+
+    año   salida                          archivos   meses               filas
+    2026  Salida/ene_procesado.csv        8          2025-12 … 2026-09   324,054
+    2024  Salida/ene_procesado_2024.csv   12         2023-12 … 2025-01   454,968
+
+  Una tabla por año (y no una columna de año) para que las tablas que leen 2026 no
+  cambien y cada año se valide contra su propio boletín. Lo que cambia entre años vive
+  en procesar.PERIODOS. Las cifras de esta cabecera se midieron en 2026 salvo que se
+  indique otra cosa.
 
 CONTEXTO METODOLÓGICO (clave para no malinterpretar la tabla):
   * Los 8 archivos CSV de Entrada/2026/ son TRIMESTRES MÓVILES SOLAPADOS:
@@ -59,6 +67,16 @@ VALIDACIÓN CONTRA EL DATO OFICIAL (Boletín INE n°336, 29-10-2026, JAS 2026):
     tasa de ocupación          55.5%           55.53%        exacta
   → la unificación + deduplicación + política central reproducen la estadística
     oficial; procesar.py ejecuta este chequeo como validación 9.
+
+  2024 (Boletín INE n°310, 29-08-2024, MJJ 2024):
+    fuerza de trabajo    10,137,870       10,144,438         0.06%
+    ocupadas              9,257,480        9,264,269         0.07%
+    desocupadas             880,390          880,170        -0.03%
+    inactivas             6,244,247        6,251,897         0.12%
+    tasa desocupación          8.7%            8.68%        exacta
+    ocupadas informales: NO se valida. El boletín dice 2,556,530 (27.6%), pero el
+    archivo publicado por el INE, leído directo con sus propios pesos, da 2,444,745
+    (26.4%) con las ocupadas exactas. Causa no comprobada (decidido el 08-11-26).
 
 PESO EXPANSIVO:
   `fact_cal` = factor calibrado (Censo 2017), único factor vigente desde NDE 2019,
@@ -117,12 +135,12 @@ NIVEL EDUCATIVO Y TITULACIÓN (decisión 01-11-26, verificado en los 8 CSV crudo
 from __future__ import annotations
 
 # ---------------------------------------------------------------------------
-# 1. ESQUEMA DE SALIDA — orden canónico de columnas de ene_procesado.csv
+# 1. ESQUEMA DE SALIDA — orden canónico de columnas de ene_procesado*.csv (todos los años)
 # ---------------------------------------------------------------------------
 ESQUEMA_ENE: dict[str, str] = {
     # --- A. Clave de la entrevista y período (4) ---------------------------
     "idrph": "int64",            # Identificador único de persona (libro de códigos)
-    "ano_encuesta": "int64",     # Año de la entrevista (2025 solo para dic-2025)
+    "ano_encuesta": "int64",     # Año de la entrevista (en 2026, 2025 solo para dic-2025)
     "mes_encuesta": "int64",     # Mes de la entrevista (1-12)
     "mes": "object",             # DERIVADA: período "AAAA-MM" (ej. "2026-03") = clave de análisis temporal
 
@@ -206,15 +224,16 @@ SENTINELAS_CINE11_2D: list[str] = ["98", "99"]
 VALIDACIONES: list[str] = [
     "1. dtype de cada columna == ESQUEMA_ENE[col] tras reindex(columns=ESQUEMA_ENE)",
     "2. (idrph, ano_encuesta, mes_encuesta) es única → 0 duplicados",
-    "3. len(filas) == 324,054 entrevistas únicas (782,303 crudas - 458,249 duplicadas)",
-    "4. mes ∈ {2025-12} ∪ {2026-01 … 2026-09} (10 meses) y coincide con ano/mes_encuesta",
+    "3. len(filas) == filas_esperadas del año (2026: 324,054 de 782,303 crudas; 2024: 454,968 de 1,173,237)",
+    "4. mes cubre los meses del año (2026: 2025-12…2026-09; 2024: 2023-12…2025-01) y coincide con ano/mes_encuesta",
     "5. codigo_region ∈ 1..16 sin nulos; nombre_region coincide con comun.REGIONES",
     "6. fact_cal > 0 sin nulos",
     "7. sin valores sentinelas residuales en las columnas de SENTINELAS",
     "8. activ=1 ⟹ b1 no nulo salvo b1=999 original (control de cobertura ocupados)",
-    "9. Trimestre móvil 2026-07..09 reproduce el Boletín INE n°336: ocupadas,",
-    "    fuerza de trabajo, desocupadas, inactivas e informales con desviación ≤0.5%,",
-    "    y tasa de desocupación = 9.8% (recetas §7 del libro de códigos: cae_especifico)",
+    "9. El trimestre del boletín de cada año lo reproduce (2026: JAS, n°336; 2024: MJJ, n°310):",
+    "    ocupadas, fuerza de trabajo, desocupadas, inactivas e informales (2024 sin informales)",
+    "    con desviación ≤0.5%, y tasa de desocupación ±0.1 pp (recetas §7: cae_especifico).",
+    "    Si no lo reproduce, procesar.py no escribe la salida de ese año.",
     "10. Cohortes disjuntas: 0% de idrph compartidos entre meses consecutivos",
     "     (consistente con la cadencia de entrevista cada 3 meses)",
     "NOTA: para NIVELES se agrupan 3 meses consecutivos (o mes ×3); ver PANEL Y ESCALA.",

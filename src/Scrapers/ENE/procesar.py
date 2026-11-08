@@ -1,11 +1,15 @@
 """
 <src/Scrapers/ENE/procesar.py>
 
-Módulo de procesamiento de ENE 2026 (Encuesta Nacional de Empleo, INE).
+Módulo de procesamiento de ENE (Encuesta Nacional de Empleo, INE), por año: 2026 por defecto, o 2024
+con `python procesar.py 2024`.
 
-Entrada:  Entrada/2026/ene-2026-{01..08}-*.csv   (8 trimestres móviles, sep=";", 782,303 filas crudas)
-Salida:   Salida/ene_procesado.csv               (1 fila por entrevista única, 30 columnas,
-                                                   ~324,054 filas esperadas)
+2026: Entrada/2026/ene-2026-{01..08}-*.csv (8 trimestres móviles, 782,303 filas crudas)
+      → Salida/ene_procesado.csv (324,054 entrevistas únicas, 30 columnas).
+2024: Entrada/2024/ene-2024-{01..12}-*.csv (12 trimestres móviles)
+      → Salida/ene_procesado_2024.csv (mismas 30 columnas). Sirve para contrastar el Censo en sus mismos
+      meses (marzo a julio de 2024) y para medir el cambio entre 2024 y 2026 con la misma encuesta.
+      2026 conserva su nombre de salida para no cambiar las tablas que ya lo leen.
 
 CONTEXTO (ver esquema.py): los 8 archivos son trimestres móviles SOLAPADOS
 (archivo K = meses {K-1, K, K+1}; K=1 incluye dic-2025). Una misma entrevista
@@ -65,65 +69,94 @@ log = logging.getLogger(__name__)
 # --------------------------------------------------------------------------- #
 # Configuración
 # --------------------------------------------------------------------------- #
-DIR_ENTRADA = Path(__file__).parent / "Entrada" / "2026"
-DIR_SALIDA = Path(__file__).parent / "Salida"
+DIR_ENE = Path(__file__).parent
+DIR_SALIDA = DIR_ENE / "Salida"
 
 SEPARADOR_ENTRADA = ";"
 SEPARADOR_SALIDA = ";"
-NOMBRE_SALIDA = "ene_procesado.csv"
 
-# Filas únicas esperadas tras deduplicar (verificado empíricamente: 782,303 crudas).
-FILAS_ESPERADAS = 324_054
+ANIO_POR_DEFECTO = 2026
 
-# Cifras oficiales INE, Boletín Estadístico n°336 (29-10-2026),
-# trimestre móvil julio-septiembre 2026 → validación 9 (niveles) y tasas.
-INE_JAS_2026 = {
-    "fuerza_trabajo": 10_282_718,
-    "ocupadas": 9_274_742,
-    "desocupadas": 1_007_976,
-    "inactivas": 6_416_440,
-    "ocupadas_informales": 2_451_443,
-    "tasa_desocupacion": 9.8,
+# Lo único que cambia entre años. Cada año se valida contra un boletín INE de uno de sus trimestres:
+# si el procesamiento no reproduce la cifra oficial, ese año no se usa.
+PERIODOS = {
+    2026: {
+        "archivos": 8,  # dic-2025 a sep-2026
+        "salida": "ene_procesado.csv",
+        "filas_esperadas": 324_054,  # 782,303 crudas
+        "boletin": "Boletín INE n°336 (29-10-2026), julio-septiembre 2026",
+        "meses_boletin": ["2026-07", "2026-08", "2026-09"],
+        "cifras_boletin": {
+            "fuerza_trabajo": 10_282_718,
+            "ocupadas": 9_274_742,
+            "desocupadas": 1_007_976,
+            "inactivas": 6_416_440,
+            "ocupadas_informales": 2_451_443,
+            "tasa_desocupacion": 9.8,
+        },
+    },
+    2024: {
+        "archivos": 12,  # dic-2023 a ene-2025
+        "salida": "ene_procesado_2024.csv",
+        "filas_esperadas": 454_968,  # 1,173,237 crudas
+        "boletin": "Boletín INE n°310 (29-08-2024), mayo-julio 2024",
+        "meses_boletin": ["2024-05", "2024-06", "2024-07"],
+        "cifras_boletin": {
+            "fuerza_trabajo": 10_137_870,
+            "ocupadas": 9_257_480,
+            "desocupadas": 880_390,
+            "inactivas": 6_244_247,
+            # Ocupadas informales no se valida (decidido el 08-11-26): el boletín dice 2.556.530 (27,6%),
+            # pero el microdato del INE, leído directo con sus propios pesos, da 2.444.745 (26,4%), y esos
+            # mismos pesos sí reproducen exacto las ocupadas. La diferencia está en ocup_form del archivo
+            # publicado y su causa no está comprobada. La informalidad de 2024 no se compara con el boletín.
+            "tasa_desocupacion": 8.7,
+        },
+    },
 }
-# Trimestre móvil de referencia de la validación.
-MESES_JAS_2026 = ["2026-07", "2026-08", "2026-09"]
 
 # Región (código INE, Anexo 1) → nombre oficial → normalizado para cruces.
 
 # --------------------------------------------------------------------------- #
 # Carga
 # --------------------------------------------------------------------------- #
-def mes_central_de_archivo(nombre: str) -> int:
-    """Extrae el mes_central (1-8) del nombre ene-2026-K-*.csv."""
-    m = re.search(r"ene-2026-(\d{2})-", nombre)
+def mes_central_de_archivo(nombre: str, anio: int) -> int:
+    """Extrae el mes_central K del nombre ene-AAAA-K-*.csv."""
+    m = re.search(rf"ene-{anio}-(\d{{2}})-", nombre)
     if not m:
         raise ValueError(f"Nombre de archivo ENE inesperado: {nombre}")
     return int(m.group(1))
 
 
-def k_central_de_mes(mes: int) -> int:
+def k_central_de_mes(ano: int, mes: int, anio: int, n_archivos: int) -> int:
     """
-    Archivo cuyo mes_central coincide con el mes de la entrevista (política "central"):
-      meses 1..8 → archivo = mes; mes 12 → archivo 1 (trimestre dic-ene-feb);
-      mes 9 → archivo 8 (trimestre ago-sep, mes 9 es borde superior).
+    Archivo cuyo mes_central coincide con el mes de la entrevista (política "central").
+    Los meses de borde no tienen archivo central y toman el más cercano: diciembre del año anterior
+    va al archivo 1 y el mes siguiente al último archivo, a ese último (en 2026, septiembre → 8).
     """
-    if 1 <= mes <= 8:
-        return mes
-    return 1 if mes == 12 else 8
+    posicion = (ano - anio) * 12 + mes
+    return min(max(posicion, 1), n_archivos)
 
 
-def cargar_entradas() -> pd.DataFrame:
-    """Lee los 8 trimestres móviles de Entrada/2026/ con proyección de columnas."""
-    archivos = sorted(DIR_ENTRADA.glob("ene-2026-*.csv"))
-    if len(archivos) != 8:
+def meses_esperados(anio: int, n_archivos: int) -> list[str]:
+    """Meses que cubren los archivos: desde diciembre del año anterior hasta el mes siguiente al último central."""
+    return [f"{anio - 1 + (p + 11) // 12}-{(p + 11) % 12 + 1:02d}" for p in range(0, n_archivos + 2)]
+
+
+def cargar_entradas(anio: int) -> pd.DataFrame:
+    """Lee los trimestres móviles de Entrada/AAAA/ con proyección de columnas."""
+    dir_entrada = DIR_ENE / "Entrada" / str(anio)
+    n_archivos = PERIODOS[anio]["archivos"]
+    archivos = sorted(dir_entrada.glob(f"ene-{anio}-*.csv"))
+    if len(archivos) != n_archivos:
         raise FileNotFoundError(
-            f"Se esperaban 8 archivos en {DIR_ENTRADA} y hay {len(archivos)}. "
-            "Ejecutar primero obtener.py."
+            f"Se esperaban {n_archivos} archivos en {dir_entrada} y hay {len(archivos)}. "
+            f"Ejecutar primero obtener.py {anio}."
         )
 
     partes: list[pd.DataFrame] = []
     for ruta in archivos:
-        k = mes_central_de_archivo(ruta.name)
+        k = mes_central_de_archivo(ruta.name, anio)
         # dtype=str: preserva "01" de cine11_2d y la coma decimal de fact_cal.
         df = pd.read_csv(
             ruta,
@@ -150,7 +183,7 @@ def cargar_entradas() -> pd.DataFrame:
 # --------------------------------------------------------------------------- #
 # Unificación: deduplicación con política de peso "central"
 # --------------------------------------------------------------------------- #
-def unificar(big: pd.DataFrame) -> pd.DataFrame:
+def unificar(big: pd.DataFrame, anio: int) -> pd.DataFrame:
     """
     Deduplica por (idrph, ano_encuesta, mes_encuesta) conservando la fila del
     archivo cuyo mes_central coincide con mes_encuesta (política "central").
@@ -164,7 +197,11 @@ def unificar(big: pd.DataFrame) -> pd.DataFrame:
     big["mes_encuesta"] = pd.to_numeric(big["mes_encuesta"], errors="coerce").astype("Int64")
 
     # prioridad 0 = archivo central (se prefiere); 1 = otro archivo (fallback).
-    k_central = big["mes_encuesta"].astype(int).map(k_central_de_mes)
+    n_archivos = PERIODOS[anio]["archivos"]
+    k_central = pd.Series(
+        [k_central_de_mes(a, m, anio, n_archivos) for a, m in zip(big["ano_encuesta"], big["mes_encuesta"])],
+        index=big.index,
+    )
     big["_prioridad"] = (big["archivo_k"] != k_central).astype("int8")
 
     # Orden estable: clave, luego central antes que no-central, luego menor archivo_k.
@@ -255,8 +292,9 @@ def preparar(df: pd.DataFrame) -> pd.DataFrame:
 # --------------------------------------------------------------------------- #
 # Validaciones (esquema.VALIDACIONES 1-9)
 # --------------------------------------------------------------------------- #
-def validar(df: pd.DataFrame, crudas: int) -> None:
-    """Ejecuta las 10 reglas de validación del esquema."""
+def validar(df: pd.DataFrame, crudas: int, anio: int) -> bool:
+    """Ejecuta las 10 reglas de validación del esquema. Devuelve False si falla la reproducción del boletín INE."""
+    periodo = PERIODOS[anio]
     total = len(df)
     log.info("=== Validaciones ENE (%d filas) ===", total)
 
@@ -274,16 +312,19 @@ def validar(df: pd.DataFrame, crudas: int) -> None:
              "✓" if dup == 0 else "✗", dup)
 
     # 3. Conteo de entrevistas únicas
-    ok = total == FILAS_ESPERADAS
-    log.info("  [%s] 3. Filas == %s esperadas        : %d (crudas %d)",
-             "✓" if ok else "✗", f"{FILAS_ESPERADAS:,}", total, crudas)
+    esperadas = periodo["filas_esperadas"]
+    if esperadas is None:
+        log.info("  [i] 3. Filas (sin cifra fijada aún)   : %d (crudas %d)", total, crudas)
+    else:
+        log.info("  [%s] 3. Filas == %s esperadas        : %d (crudas %d)",
+                 "✓" if total == esperadas else "✗", f"{esperadas:,}", total, crudas)
 
     # 4. Períodos cubiertos
     meses = sorted(df["mes"].unique())
-    esperados = ["2025-12"] + [f"2026-{m:02d}" for m in range(1, 10)]
+    esperados = meses_esperados(anio, periodo["archivos"])
     ok = meses == esperados
-    log.info("  [%s] 4. Períodos 2025-12..2026-09        : %s",
-             "✓" if ok else "✗", f"{len(meses)} meses" if ok else meses)
+    log.info("  [%s] 4. Períodos %s..%s        : %s",
+             "✓" if ok else "✗", esperados[0], esperados[-1], f"{len(meses)} meses" if ok else meses)
     inconsistentes = int((df["mes"] != df["ano_encuesta"].astype(str) + "-"
                           + df["mes_encuesta"].astype(int).astype(str).str.zfill(2)).sum())
     log.info("  [%s] 4b. mes coherente con ano/mes_enc. : %d discordancias",
@@ -320,12 +361,13 @@ def validar(df: pd.DataFrame, crudas: int) -> None:
     log.info("  [%s] 8. Ocupados con CIUO-08 (b1)        : %.1f%% (%d/%d sin dato)",
              "✓", 100 * (n_ocup - sin_b1) / n_ocup if n_ocup else 0.0, sin_b1, n_ocup)
 
-    # 9. Reproducción del Boletín INE n°336 (trimestre móvil JAS 2026).
+    # 9. Reproducción del boletín INE del año (ver PERIODOS).
     #    Recetas §7 del libro de códigos: cae_especifico 1-7 ocupados, 8-9
     #    desocupados, 1-9 fuerza de trabajo, ≥10 inactivos; informal = ocup_form 2.
     #    IMPORTANTE: los niveles se evalúan sobre TRES meses consecutivos
     #    (fact_cal está calibrado al trimestre móvil, ver esquema.py).
-    jas = df[df["mes"].isin(MESES_JAS_2026)]
+    oficial = periodo["cifras_boletin"]
+    jas = df[df["mes"].isin(periodo["meses_boletin"])]
     w = jas["fact_cal"]
     cae = jas["cae_especifico"]
     niveles = {
@@ -337,18 +379,18 @@ def validar(df: pd.DataFrame, crudas: int) -> None:
     }
     desvs = {
         k: 100 * (niveles[k] - v) / v
-        for k, v in INE_JAS_2026.items() if k in niveles
+        for k, v in oficial.items() if k in niveles
     }
     max_desv = max(abs(d) for d in desvs.values())
-    log.info("  [%s] 9. Niveles vs Boletín INE n°336 (JAS 2026) : desv. máx %.2f%%",
-             "✓" if max_desv <= 0.5 else "✗", max_desv)
+    log.info("  [%s] 9. Niveles vs %s : desv. máx %.2f%%",
+             "✓" if max_desv <= 0.5 else "✗", periodo["boletin"], max_desv)
     for k, d in desvs.items():
         log.info("       %-22s oficial %12s | nuestro %12s (%+.2f%%)",
-                 k, f"{INE_JAS_2026[k]:,}", f"{int(round(niveles[k])):,}", d)
+                 k, f"{oficial[k]:,}", f"{int(round(niveles[k])):,}", d)
     tasa = 100 * niveles["desocupadas"] / niveles["fuerza_trabajo"]
-    ok_tasa = abs(tasa - INE_JAS_2026["tasa_desocupacion"]) <= 0.1
-    log.info("  [%s] 9b. Tasa desocupación JAS 2026            : %.2f%% (oficial %.1f%%)",
-             "✓" if ok_tasa else "✗", tasa, INE_JAS_2026["tasa_desocupacion"])
+    ok_tasa = abs(tasa - oficial["tasa_desocupacion"]) <= 0.1
+    log.info("  [%s] 9b. Tasa de desocupación                  : %.2f%% (oficial %.1f%%)",
+             "✓" if ok_tasa else "✗", tasa, oficial["tasa_desocupacion"])
 
     # 10. Cohortes disjuntas: ninguna persona en dos meses consecutivos
     #     (consistente con la entrevista cada 3 meses).
@@ -375,29 +417,32 @@ def validar(df: pd.DataFrame, crudas: int) -> None:
         pct = 100 * n / total
         flag = "🟢" if pct >= 99 else ("🟡" if pct >= 60 else "⚪")
         log.info("    %s %-24s %6.1f%%", flag, col, pct)
+    return max_desv <= 0.5 and ok_tasa
 
 
 # --------------------------------------------------------------------------- #
 # Orquestador
 # --------------------------------------------------------------------------- #
-def procesar_ene() -> Path:
-    """Pipeline completo de unificación y procesamiento de ENE 2026."""
-    big = cargar_entradas()
+def procesar_ene(anio: int = ANIO_POR_DEFECTO) -> Path:
+    """Pipeline completo de unificación y procesamiento de la ENE de un año."""
+    big = cargar_entradas(anio)
     crudas = len(big)
 
     # 1. Unificación con deduplicación y política de peso "central"
-    uniq = unificar(big)
+    uniq = unificar(big, anio)
     del big  # libera las 782K filas crudas
 
     # 2. Tipos, derivadas, sentinelas y tipado estricto
     df = preparar(uniq)
 
     # 3. Validaciones
-    validar(df, crudas=crudas)
+    # Un año que no reproduce su boletín no se escribe: las tablas lo usarían como si fuera oficial.
+    if not validar(df, crudas=crudas, anio=anio):
+        raise ValueError(f"ENE {anio} no reproduce el {PERIODOS[anio]['boletin']}; no se escribe la salida.")
 
     # 4. Exportación
     DIR_SALIDA.mkdir(parents=True, exist_ok=True)
-    ruta = DIR_SALIDA / NOMBRE_SALIDA
+    ruta = DIR_SALIDA / PERIODOS[anio]["salida"]
     df.to_csv(ruta, sep=SEPARADOR_SALIDA, index=False, encoding="utf-8")
     peso_mb = ruta.stat().st_size / (1024 * 1024)
     log.info("CSV generado: %s (%d filas, %d columnas, %.2f MB)",
@@ -407,24 +452,27 @@ def procesar_ene() -> Path:
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-    ruta = procesar_ene()
+    anio = int(sys.argv[1]) if len(sys.argv) > 1 else ANIO_POR_DEFECTO
+    ruta = procesar_ene(anio)
 
     ene = pd.read_csv(ruta, sep=SEPARADOR_SALIDA)
+    periodo = PERIODOS[anio]
 
-    print("\n=== ENE 2026 — Procesado ===")
+    print(f"\n=== ENE {anio} — Procesado ===")
     print(f"Salida : {ruta} ({len(ene):,} filas × {len(ene.columns)} cols)")
     print(f"Períodos: {ene['mes'].min()} … {ene['mes'].max()} ({ene['mes'].nunique()} meses)")
     print(f"Regiones cubiertas : {ene['codigo_region'].nunique()}/16")
     print("Nota: fact_cal está calibrado POR TRIMESTRE (3 meses = población);")
     print("      niveles → agrupar 3 meses consecutivos (o mes ×3); tasas → cualquier corte.")
 
-    jas = ene[ene["mes"].isin(MESES_JAS_2026)]
+    jas = ene[ene["mes"].isin(periodo["meses_boletin"])]
     w, cae = jas["fact_cal"], jas["cae_especifico"]
-    print(f"\nValidación vs Boletín INE n°336 (JAS 2026):")
-    print(f"  Ocupadas        : {int(w[cae.between(1,7)].sum()):>12,}  (INE 9,274,742)")
-    print(f"  Fuerza de trabajo: {int(w[cae.between(1,9)].sum()):>11,}  (INE 10,282,718)")
-    print(f"  Desocupadas     : {int(w[cae.between(8,9)].sum()):>12,}  (INE 1,007,976)")
-    print(f"  Tasa desocup.   : {100*w[cae.between(8,9)].sum()/w[cae.between(1,9)].sum():>11.2f}%  (INE 9.8%)")
+    oficial = periodo["cifras_boletin"]
+    print(f"\nValidación vs {periodo['boletin']}:")
+    print(f"  Ocupadas        : {int(w[cae.between(1,7)].sum()):>12,}  (INE {oficial['ocupadas']:,})")
+    print(f"  Fuerza de trabajo: {int(w[cae.between(1,9)].sum()):>11,}  (INE {oficial['fuerza_trabajo']:,})")
+    print(f"  Desocupadas     : {int(w[cae.between(8,9)].sum()):>12,}  (INE {oficial['desocupadas']:,})")
+    print(f"  Tasa desocup.   : {100*w[cae.between(8,9)].sum()/w[cae.between(1,9)].sum():>11.2f}%  (INE {oficial['tasa_desocupacion']}%)")
     print(f"Grupos ocupación CIUO-08 (b1): {ene['b1'].nunique()} | entrevistas únicas: {ene['idrph'].nunique():,}")
 
     # Reporte de inspección estándar del proyecto sobre la salida generada
