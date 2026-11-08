@@ -72,6 +72,7 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
     sin_dato = sum(d["clase"] is None for a in datos["actividades"] for d in a["regiones"].values())
     pob = datos["poblacion"]
     por_ciiu = {a["ciiu"]: a for a in datos["actividades"]}
+    evo_filas = [datos["evolucion"]["chile"], *datos["evolucion"]["niveles"].values(), *datos["evolucion"]["regiones"].values()]
     controles = {
         "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
         "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
@@ -142,6 +143,10 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Cada participación se puede recalcular con ocupados y su base": all(abs(100 * d["ocupados"] / datos["base_ocupados"]["regiones"][str(r)] - d["pct"]) < 0.0051 for a in datos["actividades"] for r, d in a["regiones"].items()),
         "Población: Chile con tasa de desocupación 8,6%, participación 59,6% y 7.801.449 con lugar de trabajo": pob["chile"]["tasa_desocupacion"] == 8.6 and pob["chile"]["tasa_participacion"] == 59.6 and pob["chile"]["lugar_trabajo"] == 7_801_449,
         "Población: ocupados por lugar de trabajo suman Chile; Antofagasta 372.015": sum(d["lugar_trabajo"] for d in pob["regiones"].values()) == pob["chile"]["lugar_trabajo"] and pob["regiones"]["2"]["lugar_trabajo"] == 372_015,
+        "Evolución: Chile 8,6% en 2024 y 9,5% en 2026, sube; 16 regiones y 3 niveles": (lambda e: (e["chile"]["t24"], e["chile"]["t26"], e["chile"]["lect"]) == (8.6, 9.5, "sube") and len(e["regiones"]) == 16 and len(e["niveles"]) == 3)(datos["evolucion"]),
+        "Evolución: sube o baja solo si el rango publicado queda a un lado del cero": all(d["lect"] == ("sube" if d["min"] > 0 else "baja" if d["max"] < 0 else "sin_cambio_claro") for d in evo_filas),
+        "Evolución: el cambio publicado es la resta de las tasas y cae en su rango": all(d["dif"] == round(d["t26"] - d["t24"], 1) and d["min"] <= d["dif"] <= d["max"] for d in evo_filas),
+        "Evolución: suben Arica y Parinacota, Tarapacá, Valparaíso, Biobío y Los Lagos; ninguna baja": sorted(int(r) for r, d in datos["evolucion"]["regiones"].items() if d["lect"] == "sube") == [1, 5, 8, 10, 15] and not any(d["lect"] == "baja" for d in evo_filas),
         "La plantilla quedó completa": all(m not in html for m in ("__DATOS__", "__GEO__", "__ESTILOS__", "__CODIGO__")),
         # Sin módulos, los archivos JS comparten un solo espacio de nombres: uno repetido pisaría al otro sin aviso.
         "JS: ningún nombre global se define en dos archivos": len(todos := [n for c in codigo_js.values() for n in nombres_globales_js(c)]) == len(set(todos)) and len(todos) > 50,

@@ -40,7 +40,7 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 - **Sexo y género:** el Censo registra el sexo solo como hombre o mujer. La identidad de género se mide aparte, desde los 18 años, y está suprimida para 633.803 ocupados, por lo que no se abre por actividad.
 - **Censo y ENE difieren** en tamaño de seis actividades, también con los mismos meses. La causa no está comprobada. En desempleo difieren poco (profesionales: 6,3% y 6,9%).
 - **Región de trabajo:** 5,8% de los ocupados del Censo no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción y Electricidad aparecen bajo su tamaño.
-- **Sin evolución en el tiempo:** el mapa usa un solo censo. Los ingresos de MiFuturo tampoco muestran una evolución, porque el 1er y el 5° año vienen de generaciones distintas.
+- **Evolución solo de la desocupación:** el mapa usa un solo censo. El cambio de la desocupación entre 2024 y 2026 se mide con la ENE, en los mismos meses. Los ingresos de MiFuturo no muestran una evolución, porque el 1er y el 5° año vienen de generaciones distintas.
 - **Rapa Nui y Juan Fernández no se dibujan,** pero sus datos siguen en Valparaíso.
 
 ## Metodología
@@ -68,7 +68,7 @@ flowchart TD
     cp["censo_procesado<br>Personas de 15 años o más por región de residencia y de trabajo, situación laboral, actividad y nivel de estudios"]
     cs["censo_por_sexo<br>Lo mismo, abierto por sexo"]
     geo["Cartografía regional<br>Bordes de las 16 regiones"]
-    ep["ene_procesado<br>Microdatos de la ENE con su diseño muestral"]
+    ep["ene_procesado y ene_procesado_2024<br>Microdatos de la ENE de 2026 y de 2024, con su diseño muestral"]
     kp["casen_procesado<br>Personas con su carrera declarada, su actividad y su diseño muestral"]
     tp["titulados_procesado<br>Titulaciones por carrera, año y sexo"]
     mp["empleabilidad_procesado<br>Empleabilidad e ingresos por carrera"]
@@ -84,6 +84,7 @@ flowchart TD
     je["concentracion_region_actividad<br>CL según la ENE, como contraste<br>peso_relativo, fiabilidad"]
     jc["concentracion_region_actividad_censo<br>Ocupados y CL por región y actividad<br>ocupados, pct_en_region, pct_nacional, peso_relativo (CL), ene_peso_relativo"]
     jn["fuerza_trabajo_region_nivel<br>Situación laboral por región y nivel de estudios<br>ocupados_residencia, desocupados, fuera_fuerza_trabajo, tasa_desocupacion"]
+    jv["evolucion_desocupacion<br>Cambio de la desocupación entre 2024 y 2026, según ENE<br>tasa_2024, tasa_2026, diferencia_pp, lectura"]
     ja["areas_por_actividad<br>Áreas de estudio de los titulados en cada actividad<br>area_cine, pct_en_actividad"]
     jk["carreras_por_actividad<br>Carreras afines a cada actividad, con su ficha<br>carrera_generica, afinidad, titulados_2007_2025, empleabilidad_1er_anio, ingreso_medio_5to_anio"]
   end
@@ -105,10 +106,11 @@ flowchart TD
   ep & p1 --> je
   cp & p1 & je --> jc
   cp & ep --> jn
+  ep --> jv
   kp & p1 & p5 & tp --> ja
   p9 & p5 & tp & mp & kp --> jk
 
-  jc & jn & ja & jk & cp & cs & geo --> gen
+  jc & jn & jv & ja & jk & cp & cs & geo --> gen
   gen --> out
 ```
 
@@ -168,7 +170,7 @@ La explicación completa de cada dato está en la [nota de lectura](docs/nota_de
 | Fuente | Institución | Aporta | Alcance |
 |---|---|---|---|
 | [Censo 2024](https://censo2024.ine.gob.cl/resultados/) | INE | Capa principal: ocupados por actividad, región, sexo y nivel de estudios (15,2 millones de personas de 15 años o más) | Regional |
-| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion), mar. a jul. 2024 | INE | Contraste del Censo en sus mismos meses; sus cifras no se mezclan con las de él | Regional |
+| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion), mar. a jul. de 2024 y de 2026 | INE | Contraste del Censo en sus mismos meses, y el cambio de la desocupación entre 2024 y 2026; sus cifras no se mezclan con las del Censo | Regional |
 | [CASEN 2024](https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024) | Ministerio de Desarrollo Social y Familia | Único vínculo entre carrera y actividad económica | Nacional |
 | [Titulados 2007-2025 (SIES)](https://www.mifuturo.cl/bases-de-datos-titulados/) | Mineduc | Títulos por carrera y sexo | Nacional |
 | [Buscador de Empleabilidad e Ingresos (MiFuturo)](https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/) | Mineduc | Empleabilidad e ingresos por carrera | Nacional |
@@ -214,7 +216,7 @@ done
 
 # 3. Tablas del mapa, en este orden
 $PY src/Analisis/Calculos_control/ocupados_region_actividad/crosswalk.py
-for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel; do
+for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Evolucion_Desocupacion; do
   $PY src/Analisis/JOINS/$t/crosswalk.py
 done
 

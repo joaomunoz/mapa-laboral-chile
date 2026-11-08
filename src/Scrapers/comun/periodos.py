@@ -22,3 +22,9 @@ TEXTO_CONTRASTE = "marzo a julio de 2024"
 # Cuadre con INE: el trimestre de ese periodo que reproduce ENE/procesar.py (Boletín INE n°310, 29-08-2024).
 MESES_BOLETIN_CONTRASTE = ["2024-05", "2024-06", "2024-07"]
 OCUPADOS_INE_CONTRASTE = 9_257_480
+
+# Evolución (fase 4, 08-11-26): la misma ventana de meses en 2026, para medir el cambio ENE contra ENE sin que
+# influya la estacionalidad. Es la última ventana completa de marzo a julio que tiene la ENE procesada.
+RUTA_ENE_ACTUAL = Path(__file__).resolve().parents[1] / "ENE" / "Salida" / "ene_procesado.csv"
+MESES_ACTUAL = ["2026-03", "2026-04", "2026-05", "2026-06", "2026-07"]
+TEXTO_ACTUAL = "marzo a julio de 2026"

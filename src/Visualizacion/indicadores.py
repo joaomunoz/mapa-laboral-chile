@@ -1,8 +1,8 @@
 """
 <src/Visualizacion/indicadores.py>
 
-Cálculos del mapa a partir de las tablas: tramo de color del CL, resúmenes de Chile y de cada región, y cifras por
-sexo y nivel de estudios.
+Cálculos del mapa a partir de las tablas: tramo de color del CL, resúmenes de Chile y de cada región, cifras por
+sexo y nivel de estudios, y la evolución de la desocupación según ENE.
 
 Decisiones:
   - El color se decide con el CL redondeado a 2 decimales, la misma cifra que se muestra (06-11-26). Antes se
@@ -10,6 +10,9 @@ Decisiones:
     El CL se calcula completo y se redondea una sola vez, al final.
   - Los cortes 0,8 y 1,2 son los de la lectura de la tabla. Vienen de otro módulo, así que controles.py detiene el
     proceso si el color y la lectura dejan de coincidir.
+  - Evolución (08-11-26): el cambio que se publica es la resta de las dos tasas ya redondeadas, para que quien lee
+    pueda comprobarla (técnicos: 7,7% y 8,7% dan +1,0, aunque sin redondear sea +0,9). El rango y la lectura
+    vienen de la tabla, calculados con los valores completos.
 """
 
 from __future__ import annotations
@@ -212,3 +215,15 @@ def resumen_general(censo: pd.DataFrame, actividades: list[dict]) -> dict:
             "mas_desiguales": [{"ciiu": c, "r": por_actividad[c]["nacional"]["mas_peso"]["r"], "txt": por_actividad[c]["nacional"]["mas_peso"]["txt"]} for c in peso_maximo.index[:2]],
             "repartidas": [a["ciiu"] for a in actividades if a["nacional"]["conc"] == 0], "corte_suave": texto_peso(CORTES_ROJO[1]).replace(",60", ",6"),
             "mayor_empleador": {"ciiu": mayor_empleador.index[0], "n": int(mayor_empleador.iloc[0])}, "colores": COLOR_RESUMEN, "regiones": regiones}
+
+
+def evolucion_desocupacion(t: pd.DataFrame) -> dict:
+    """Desocupación según ENE en marzo a julio de 2024 y de 2026: Chile, por nivel de título y por región."""
+    def fila(f: pd.Series) -> dict:
+        t24, t26 = redondear(f["tasa_2024"], 1), redondear(f["tasa_2026"], 1)
+        return {"t24": t24, "t26": t26, "dif": redondear(t26 - t24, 1), "min": redondear(f["diferencia_min"], 1),
+                "max": redondear(f["diferencia_max"], 1), "lect": f["lectura"]}
+    chile = t[t["codigo_region"].isna()]
+    return {"chile": fila(chile[chile["nivel_titulo"] == "Todos"].iloc[0]),
+            "niveles": {f["nivel_titulo"]: fila(f) for _, f in chile[chile["nivel_titulo"] != "Todos"].iterrows()},
+            "regiones": {str(int(f["codigo_region"])): fila(f) for _, f in t[t["codigo_region"].notna()].iterrows()}}

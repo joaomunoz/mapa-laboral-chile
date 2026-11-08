@@ -9,6 +9,37 @@ function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d
  return {menor,n:d.length,rango:`de ${num(va[0],1)}% frente a ${num(va[1],1)}% en ${nomReg(Number(a))} a ${num(vb[0],1)}% frente a ${num(vb[1],1)}% en ${nomReg(Number(b))}`}}
 function desocTitulo(){const e=extremosDesoc();
  return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior: va ${e.rango}.`}
+// Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
+// entero queda a un lado del cero.
+const LECT_EVO={sube:"Sube",baja:"Baja",sin_cambio_claro:"Sin cambio claro"};
+const NIVEL_EVO={Profesional:"profesionales",Tecnico:"técnicos",Sin_titulo:"sin título superior"};
+const ppTxt=v=>(v>0?"+":v<0?"−":"")+num(Math.abs(v),1);
+function frasesEvolucion(){const c=EVO.chile,niv=Object.entries(EVO.niveles),regs=Object.entries(EVO.regiones);
+ const chile=c.lect==="sin_cambio_claro"?`La tasa de desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, sin un cambio claro.`
+  :`La tasa de desocupación ${c.lect==="sube"?"subió":"bajó"} de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026 (${ppTxt(c.dif)} pp).`;
+ const grupo=(l,v)=>{const x=niv.filter(([,d])=>d.lect===l);return x.length?`${v} en ${lista(x.map(([k,d])=>`${NIVEL_EVO[k]} (${ppTxt(d.dif)} pp)`))}.`:""};
+ const quietos=niv.filter(([,d])=>d.lect==="sin_cambio_claro");
+ const niveles=[grupo("sube","Subió"),grupo("baja","Bajó"),quietos.length?`En ${lista(quietos.map(([k])=>NIVEL_EVO[k]))} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+ const porLect=l=>regs.filter(([,d])=>d.lect===l).sort((a,b)=>b[1].dif-a[1].dif).map(([r])=>nomReg(r));
+ const sube=porLect("sube"),baja=porLect("baja"),resto=regs.length-sube.length-baja.length;
+ const regiones=[sube.length?`Subió en ${sube.length} ${sube.length===1?"región":"regiones"}: ${lista(sube)}.`:"",
+  baja.length?`Bajó en ${baja.length} ${baja.length===1?"región":"regiones"}: ${lista(baja)}.`:"",
+  resto?`En ${sube.length||baja.length?"las otras ":"las "}${resto} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+ return {chile,niveles,regiones}}
+function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
+ const filas=Object.entries(EVO.regiones).sort((a,b)=>b[1].dif-a[1].dif||a[0]-b[0]);
+ const tr=(t,d,k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
+  `<td class="n">${ppTxt(d.dif)} pp</td><td class="n">${ppTxt(d.min)} a ${ppTxt(d.max)}</td><td>${LECT_EVO[d.lect]}</td></tr>`;
+ return `<hr class="separador"><h2>Cómo cambió la desocupación</h2><div class="nota">Encuesta Nacional de Empleo (INE), marzo a julio de 2024 y de 2026. `+
+  `Son los mismos meses en ambos años, para que no cuente la estacionalidad, y es otra fuente que el Censo: sus cifras no se mezclan.</div>
+ <p style="margin:8px 0 0">${f.chile} ${f.niveles}</p>
+ <p style="margin:8px 0 0">${f.regiones}</p>
+ <details><summary>Ver por región</summary>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">2024</th><th class="n">2026</th><th class="n">Cambio</th>`+
+  `<th class="n">Rango del cambio (95%)</th><th>Lectura</th></tr></thead><tbody>`+
+  tr("Chile",c,"total")+filas.map(([r,d])=>tr(nomReg(r),d,"")).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:6px 0 0">Tasa según región de residencia. "Sin cambio claro": el rango del cambio incluye el cero, así que la diferencia cabe en el margen de error. `+
+  `Por región no se separa por nivel de estudios: la ENE no tiene muestra suficiente.</p></details>`}
 function vistaResumen(){
  const orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados);
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
@@ -73,4 +104,5 @@ function vistaResumen(){
  <p style="margin:8px 0 0">${desocTitulo()}</p>
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
  <p style="margin:8px 0 0"><strong>Carreras afines:</strong> elige una actividad para ver sus carreras, con títulos, empleabilidad e ingresos. `+
-  `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>`}
+  `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
+ ${evolucionHtml()}`}

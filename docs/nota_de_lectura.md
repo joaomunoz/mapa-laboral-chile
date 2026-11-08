@@ -1,7 +1,7 @@
 # Nota de lectura: Mapa Laboral de Chile
 
 ## Qué muestra
-La vista inicial resume la población, las 20 actividades, la actividad con mayor coeficiente de localización (CL) en cada región, y la situación laboral y educacional de cada región. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
+La vista inicial resume la población, las 20 actividades, la actividad con mayor coeficiente de localización (CL) en cada región, la situación laboral y educacional de cada región, y cómo cambió la desocupación entre 2024 y 2026. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
 
 ## Glosario
 
@@ -13,7 +13,7 @@ La vista inicial resume la población, las 20 actividades, la actividad con mayo
 | **Fuera de la fuerza de trabajo** | Ni ocupados ni desocupados; incluye, por ejemplo, a personas jubiladas o dedicadas a los quehaceres del hogar | Censo 2024 |
 | **Sin dato** | Personas de 15 años o más que no respondieron las preguntas sobre situación laboral | Censo 2024 |
 | **Tasa de ocupación** | Ocupados ÷ población de 15 años o más, incluidas las personas sin dato | Censo 2024 |
-| **Tasa de desocupación** | Desocupados ÷ (ocupados + desocupados) | Censo 2024; ENE como contraste |
+| **Tasa de desocupación** | Desocupados ÷ (ocupados + desocupados) | Censo 2024; ENE como contraste y para su cambio en el tiempo |
 | **Tasa de participación** | (Ocupados + desocupados) ÷ población de 15 años o más, incluidas las personas sin dato. No confundir con participación | Censo 2024 |
 
 ### Actividad y región
@@ -76,6 +76,7 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
 - **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta en ese indicador.
 - **Los ingresos no muestran una evolución:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
+- **El cambio en la desocupación no indica causa,** y solo se mide para la tasa de desocupación.
 
 ## Criterios y límites
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable (n ≥ 60, gl ≥ 9, CV ≤ 30). Es un criterio de trabajo. Con CV entre 15 y 30, el mapa la marca como "poco fiable".
@@ -84,12 +85,13 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Región de trabajo:** 5,8% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
 - **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La diferencia sigue al comparar los mismos meses, así que no se debe a la fecha. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
 - **La tasa de desocupación difiere poco:** con los mismos meses, en profesionales es 6,3% en el Censo y 6,9% en ENE; en técnicos, 7,8% y 7,7%. Puede influir la forma de preguntar, sin comprobar.
+- **Cómo cambió la desocupación:** se mide ENE contra ENE, en marzo a julio de 2024 y de 2026, para que no cuente la estacionalidad. Nunca se resta el Censo de la ENE: son fuentes distintas. "Sube" o "baja" solo si el rango del cambio (95%) queda entero a un lado del cero; si lo incluye, el mapa dice "sin cambio claro". El cambio que se muestra es la resta de las dos tasas redondeadas. Por región no se separa por nivel de estudios: la ENE no tiene muestra suficiente.
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.
 - **Mapa:** no se dibujan Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.
 
 ## Fuentes
 - Censo de Población y Vivienda 2024 y su cartografía (INE): https://censo2024.ine.gob.cl/resultados/
-- Encuesta Nacional de Empleo, marzo a julio de 2024, los meses del Censo (INE): https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion
+- Encuesta Nacional de Empleo, marzo a julio de 2024 (los meses del Censo) y de 2026 (INE): https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion
 - Encuesta CASEN 2024 (Ministerio de Desarrollo Social y Familia): https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024
 - Titulados 2007-2025, SIES (Ministerio de Educación): https://www.mifuturo.cl/bases-de-datos-titulados/
 - Buscador de Empleabilidad e Ingresos, MiFuturo (Ministerio de Educación): https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/
