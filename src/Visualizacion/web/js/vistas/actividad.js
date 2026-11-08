@@ -16,9 +16,12 @@ function avisos(){let h="";
  if(act.alerta_fuente)h+=`<div class="aviso">Censo y ENE difieren en el tamaño de esta actividad: usa los ocupados solo como referencia.</div>`;
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;
  return h}
+// Una línea de la ENE, aparte de las cifras del Censo; solo si la muestra la sostiene.
+function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return "";
+ return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${num(f.inf,1)}% de sus ocupados es informal (Chile: ${num(FOR.chile.inf,1)}%)${f.ind==null?"":` y ${num(f.ind,1)}% es independiente`}.</p>`}
 function vistaChile(){const n=act.nacional;
  return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
  <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>
  <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div></div>
- ${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE de ${PER.ene_contraste}, los meses del Censo: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
+ ${informalidadActividad()}${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE de ${PER.ene_contraste}, los meses del Censo: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
  <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,"Todas las actividades",DATOS.perfil_estudios.todas)}`}

@@ -13,18 +13,19 @@ from pathlib import Path
 DIR = Path(__file__).parent
 DIR_SRC = DIR.parent
 sys.path.append(str(DIR_SRC / "Scrapers"))  # Al final: no debe tapar los módulos de Visualizacion.
-from comun.periodos import TEXTO_CONTRASTE, TEXTO_EVOLUCION  # noqa: E402
+from comun.periodos import TEXTO_ACTUAL, TEXTO_CONTRASTE, TEXTO_EVOLUCION  # noqa: E402
 DIR_JOINS = DIR_SRC / "Analisis" / "JOINS"
 RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "concentracion_region_actividad_censo.csv"
 RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
 RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
 RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
 RUTA_EVOLUCION = DIR_JOINS / "Evolucion_Desocupacion" / "Salida" / "evolucion_desocupacion.csv"
+RUTA_FORMALIDAD = DIR_JOINS / "Formalidad_Ocupados" / "Salida" / "formalidad_ocupados.csv"
 
 # Periodo de cada fuente que la página nombra (08-11-26): cada cifra declara su periodo, y lo toma de aquí. Los de la
 # ENE se arman desde los meses que usan las tablas (comun/periodos.py), así que no pueden quedar distintos.
 # CASEN: fechas de su trabajo de campo, según el Ministerio de Desarrollo Social y Familia.
-PERIODOS = {"ene_contraste": TEXTO_CONTRASTE, "ene_evolucion": TEXTO_EVOLUCION, "casen": "noviembre de 2024 a febrero de 2025"}
+PERIODOS = {"ene_contraste": TEXTO_CONTRASTE, "ene_evolucion": TEXTO_EVOLUCION, "ene_actual": TEXTO_ACTUAL, "casen": "noviembre de 2024 a febrero de 2025"}
 RUTA_CENSO_PROCESADO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_procesado.csv"
 RUTA_CENSO_SEXO = DIR_SRC / "Scrapers" / "CENSO" / "Salida" / "censo_por_sexo.csv"
 RUTA_PERSONAS = DIR_SRC / "Scrapers" / "CENSO" / "Entrada" / "personas_censo2024.parquet"

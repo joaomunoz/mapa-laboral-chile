@@ -2,11 +2,11 @@
 
 ## Resumen
 
-Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dónde se concentra cada actividad económica, cómo varía el trabajo por sexo y nivel de estudios, y qué carreras se vinculan con cada actividad.
+Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dónde se concentra cada actividad económica, cómo varía el trabajo por sexo y nivel de estudios, cuánto trabajo es informal o independiente, y qué carreras se vinculan con cada actividad.
 
-La vista inicial resume la población y las 20 actividades. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
+La vista inicial resume la población, las 20 actividades y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 332 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 347 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y la tabla de actividades](docs/mapa.png)
 
@@ -19,6 +19,12 @@ La vista inicial resume la población y las 20 actividades. Al elegir una activi
 - **Estudios:** 4 de cada 10 ocupados (39,8%) tiene título técnico o profesional. Por actividad, va de 1 de cada 10 en Hogares como empleadores (9,9%) a 8 de cada 10 en Servicios profesionales (78,7%).
 - **Estudios y trabajo:** en las 16 regiones, la tasa de desocupación es menor con título técnico o profesional que sin título superior. En Chile es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior.
 - **Sexo:** la tasa de participación es 69,7% en hombres y 50,2% en mujeres. Entre los ocupados, tiene título 46,5% de las mujeres y 34,6% de los hombres.
+
+**Según la ENE (marzo a julio de 2026):**
+
+- **Formalidad:** 26,6% de los ocupados es informal. Sin título superior, 36,0%; con título técnico, 17,1%; con título profesional, 12,3%. Por región, va de 21,8% en Antofagasta a 35,6% en La Araucanía.
+- **Independientes:** son 24,1% de los ocupados: 13,8% informales y 10,4% formales.
+- **Desocupación:** subió de 8,6% en 2024 a 9,5% en 2026, con los mismos meses.
 
 Estas diferencias son descriptivas: el mapa no les atribuye causas.
 
@@ -41,6 +47,7 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 - **Censo y ENE difieren** en tamaño de seis actividades, también con los mismos meses. La causa no está comprobada. En desempleo difieren poco (profesionales: 6,3% y 6,9%).
 - **Región de trabajo:** 5,8% de los ocupados del Censo no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción y Electricidad aparecen bajo su tamaño.
 - **Evolución solo de la desocupación:** el mapa usa un solo censo. El cambio de la desocupación entre 2024 y 2026 se mide con la ENE, en los mismos meses. Los ingresos de MiFuturo no muestran una evolución, porque el 1er y el 5° año vienen de generaciones distintas.
+- **Formalidad solo de 2026 y solo con la ENE:** el Censo no mide formalidad, y las ocupadas informales de la ENE 2024 no reproducen el boletín del INE, así que no hay evolución de la informalidad. Por actividad se muestra solo donde la muestra la sostiene.
 - **Rapa Nui y Juan Fernández no se dibujan,** pero sus datos siguen en Valparaíso.
 
 ## Metodología
@@ -84,6 +91,7 @@ flowchart TD
     je["concentracion_region_actividad<br>CL según la ENE, como contraste<br>peso_relativo, fiabilidad"]
     jc["concentracion_region_actividad_censo<br>Ocupados y CL por región y actividad<br>ocupados, pct_en_region, pct_nacional, peso_relativo (CL), ene_peso_relativo"]
     jn["fuerza_trabajo_region_nivel<br>Situación laboral por región y nivel de estudios<br>ocupados_residencia, desocupados, fuera_fuerza_trabajo, tasa_desocupacion"]
+    jf["formalidad_ocupados<br>Asalariado o independiente, y formal o informal, según ENE 2026<br>tasa_informalidad, pct_independientes, fiabilidad_informalidad"]
     jv["evolucion_desocupacion<br>Cambio de la desocupación entre 2024 y 2026, según ENE<br>tasa_2024, tasa_2026, diferencia_pp, lectura"]
     ja["areas_por_actividad<br>Áreas de estudio de los titulados en cada actividad<br>area_cine, pct_en_actividad"]
     jk["carreras_por_actividad<br>Carreras afines a cada actividad, con su ficha<br>carrera_generica, afinidad, titulados_2007_2025, empleabilidad_1er_anio, ingreso_medio_5to_anio"]
@@ -107,10 +115,11 @@ flowchart TD
   cp & p1 & je --> jc
   cp & ep --> jn
   ep --> jv
+  ep & p1 --> jf
   kp & p1 & p5 & tp --> ja
   p9 & p5 & tp & mp & kp --> jk
 
-  jc & jn & jv & ja & jk & cp & cs & geo --> gen
+  jc & jn & jv & jf & ja & jk & cp & cs & geo --> gen
   gen --> out
 ```
 
@@ -216,7 +225,7 @@ done
 
 # 3. Tablas del mapa, en este orden
 $PY src/Analisis/Calculos_control/ocupados_region_actividad/crosswalk.py
-for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Evolucion_Desocupacion; do
+for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Evolucion_Desocupacion Formalidad_Ocupados; do
   $PY src/Analisis/JOINS/$t/crosswalk.py
 done
 

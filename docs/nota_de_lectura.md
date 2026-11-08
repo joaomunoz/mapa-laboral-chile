@@ -14,6 +14,9 @@ La vista inicial resume la población, las 20 actividades, la actividad con mayo
 | **Sin dato** | Personas de 15 años o más que no respondieron las preguntas sobre situación laboral | Censo 2024 |
 | **Tasa de ocupación** | Ocupados ÷ población de 15 años o más, incluidas las personas sin dato | Censo 2024 |
 | **Tasa de desocupación** | Desocupados ÷ (ocupados + desocupados) | Censo 2024; ENE como contraste y para su cambio en el tiempo |
+| **Informal** | Según el INE: un asalariado es informal si no tiene cotización de salud y pensión por su trabajo; un independiente, si su negocio no está registrado en el SII. El familiar no remunerado es siempre informal | ENE 2026 |
+| **Independiente** | Empleador o trabajador por cuenta propia. Puede ser formal o informal: es un tipo de trabajo, no una condición | ENE 2026 |
+| **Asalariado** | Trabaja para un empleador: sector privado, público o servicio doméstico | ENE 2026 |
 | **Tasa de participación** | (Ocupados + desocupados) ÷ población de 15 años o más, incluidas las personas sin dato. No confundir con participación | Censo 2024 |
 
 ### Actividad y región
@@ -76,6 +79,7 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
 - **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta en ese indicador.
 - **Los ingresos no muestran una evolución:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
+- **La formalidad no tiene evolución:** solo se mide en 2026, porque las cifras de informalidad de la ENE 2024 no cuadran con el boletín del INE.
 - **El cambio en la desocupación no indica causa,** y solo se mide para la tasa de desocupación.
 
 ## Criterios y límites
@@ -86,6 +90,7 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La diferencia sigue al comparar los mismos meses, así que no se debe a la fecha. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
 - **La tasa de desocupación difiere poco:** con los mismos meses, en profesionales es 6,3% en el Censo y 6,9% en ENE; en técnicos, 7,8% y 7,7%. Puede influir la forma de preguntar, sin comprobar.
 - **Cómo cambió la desocupación:** se mide ENE contra ENE, en marzo a julio de 2024 y de 2026, para que no cuente la estacionalidad. Nunca se resta el Censo de la ENE: son fuentes distintas. "Sube" o "baja" solo si el rango del cambio (95%) queda entero a un lado del cero; si lo incluye, el mapa dice "sin cambio claro". El cambio que se muestra es la resta de las dos tasas redondeadas. Por región no se separa por nivel de estudios: la ENE no tiene muestra suficiente.
+- **Formalidad:** ENE de marzo a julio de 2026, la misma ventana que el cambio de la desocupación. Se muestra en dos ejes, asalariado o independiente y formal o informal, porque un independiente puede ser formal o informal. Chile y los niveles de título llevan el reparto completo; las regiones, solo informalidad e independientes, porque las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Cada cifra por actividad se muestra solo si es fiable (n ≥ 60, gl ≥ 9, CV ≤ 15): la informalidad en 15 actividades y los independientes en 12 de ellas.
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.
 - **Mapa:** no se dibujan Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.
 
@@ -97,6 +102,7 @@ Cada fuente mide un momento distinto. El mapa no mezcla sus cifras: cada una se 
 | Censo 2024 | Marzo a julio de 2024. Pregunta por la "semana pasada" | La capa principal: ocupados, CL, tasas y nivel de estudios |
 | ENE | Marzo a julio de 2024, los mismos meses del Censo | Contraste del Censo |
 | ENE | Marzo a julio de 2024 y de 2026 | Cómo cambió la desocupación |
+| ENE | Marzo a julio de 2026 | Formalidad e independientes |
 | CASEN 2024 | Noviembre de 2024 a febrero de 2025 | Carreras afines y áreas de estudio, dato nacional |
 | SIES | Años académicos 2007 a 2025. Cada uno va de marzo a febrero, así que 2025 termina en febrero de 2026 | Títulos de la ficha |
 | MiFuturo | Empleo e ingresos de 2022 a 2024. Al 1er año, titulados de 2021 a 2023; al 5° año, de 2017 a 2019. Pesos de septiembre de 2025 | Empleabilidad e ingresos de la ficha |

@@ -227,3 +227,23 @@ def evolucion_desocupacion(t: pd.DataFrame) -> dict:
     return {"chile": fila(chile[chile["nivel_titulo"] == "Todos"].iloc[0]),
             "niveles": {f["nivel_titulo"]: fila(f) for _, f in chile[chile["nivel_titulo"] != "Todos"].iterrows()},
             "regiones": {str(int(f["codigo_region"])): fila(f) for _, f in t[t["codigo_region"].notna()].iterrows()}}
+
+
+def formalidad(t: pd.DataFrame) -> dict:
+    """Asalariado o independiente, y formal o informal, según ENE de marzo a julio de 2026.
+
+    Chile y los niveles llevan el reparto completo; regiones y actividades solo informalidad e independientes, porque
+    las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Cada cifra de una actividad se
+    escribe solo si es fiable: sin informalidad fiable la actividad no aparece, y sin independientes fiables va None.
+    """
+    reparto = lambda f: {"af": redondear(f["pct_asalariado_formal"], 1), "ai": redondear(f["pct_asalariado_informal"], 1),
+                         "xf": redondear(f["pct_independiente_formal"], 1), "xi": redondear(f["pct_independiente_informal"], 1),
+                         "fam": redondear(f["pct_familiar"], 1), "inf": redondear(f["tasa_informalidad"], 1), "ind": redondear(f["pct_independientes"], 1)}
+    breve = lambda f: {"inf": redondear(f["tasa_informalidad"], 1), "ind": redondear(f["pct_independientes"], 1)}
+    por = lambda a: t[t["ambito"] == a]
+    return {"chile": reparto(por("chile").iloc[0]),
+            "niveles": {f["nivel_titulo"]: reparto(f) for _, f in por("nivel").iterrows()},
+            "regiones": {str(int(f["codigo_region"])): breve(f) for _, f in por("region").iterrows()},
+            "actividades": {f["actividad_ciiu"]: {"inf": redondear(f["tasa_informalidad"], 1),
+                                                  "ind": redondear(f["pct_independientes"], 1) if f["fiabilidad_independientes"] == "fiable" else None}
+                            for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"}}

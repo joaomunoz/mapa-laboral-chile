@@ -92,3 +92,15 @@ footer li{margin:3px 0}
 /* El glosario es material de consulta: va plegado para no alargar la página. */
 .glosario summary{cursor:pointer;margin:6px 0}
 footer a{color:var(--acento);overflow-wrap:anywhere}
+/* Resumen: índice de secciones agrupado por fuente, tema en pequeño sobre el título con el hallazgo, y bandas que separan
+   el Censo de la ENE para que sus cifras no se lean como una sola fuente. */
+.indice{display:flex;flex-wrap:wrap;gap:6px 18px;margin:10px 0 4px}
+.indice-grupo{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.indice-fuente{font-size:12.5px;color:var(--t2)}
+.indice button{all:unset;cursor:pointer;font-size:13px;color:var(--acento);border:1px solid var(--linea);border-radius:999px;padding:3px 10px}
+.indice button:hover{background:var(--linea)}
+.indice button:focus-visible{outline:2px solid var(--acento)}
+.banda{margin:14px 0 10px;padding:5px 10px;border-left:3px solid var(--eje);background:var(--plano);font-size:13px;font-weight:600;color:var(--t2)}
+.sec-cab{scroll-margin-top:12px;outline:none}
+.tema{margin:0;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--t2)}
+.invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
