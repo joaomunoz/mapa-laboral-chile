@@ -18,6 +18,8 @@ Decisiones (aprobadas el 08-11-26):
 
 Varianza: linealización de Taylor con estrato y conglomerado, usando todo el diseño (igual que Evolucion_Desocupacion).
 Fiabilidad de cada cifra medida sobre su numerador: n >= 60, gl >= 9 y CV <= 30 (poco fiable si CV > 15).
+Familiar no remunerado lleva su propia fiabilidad (08-11-26): es la casilla más chica del reparto, y el mapa la muestra
+solo donde es fiable. Las otras cuatro casillas se controlan en Chile y los niveles, que es donde el mapa las muestra.
 """
 
 from __future__ import annotations
@@ -77,6 +79,10 @@ def preparar(ene: pd.DataFrame, puente: pd.DataFrame) -> pd.DataFrame:
     o["tipo"] = o["categoria_ocupacion"].map(TIPO_POR_CISE)
     o["informal"] = o["ocup_form"] == INFORMAL
     o["independiente"] = o["tipo"] == "independiente"
+    o["familiar"] = o["tipo"] == "familiar"
+    for tipo in ("asalariado", "independiente"):
+        for condicion, codigo in (("formal", FORMAL), ("informal", INFORMAL)):
+            o[f"{tipo}_{condicion}"] = (o["tipo"] == tipo) & (o["ocup_form"] == codigo)
     o["nivel_titulo"] = o["cine11_1d"].map(lambda c: NIVEL_POR_CINE.get(int(c), "Sin_titulo") if pd.notna(c) else None)
     return o.merge(puente, how="left", left_on="r_p_rev4cl_caenes", right_on="actividad_caenes")
 
@@ -86,12 +92,13 @@ def medir(celda: pd.DataFrame, dis: pd.DataFrame) -> dict:
     reparto = lambda tipo, formal: 100 * peso[(celda["tipo"] == tipo) & (celda["ocup_form"] == formal)].sum() / peso.sum()
     tasa, cv_t, f_t = proporcion(celda, "informal", dis)
     ind, cv_i, f_i = proporcion(celda, "independiente", dis)
+    _, cv_f, f_f = proporcion(celda, "familiar", dis)
     return {"ocupados": int(round(peso.sum() * FACTOR)), "n_ocupados": celda["idrph"].nunique(),
             "pct_asalariado_formal": reparto("asalariado", FORMAL), "pct_asalariado_informal": reparto("asalariado", INFORMAL),
             "pct_independiente_formal": reparto("independiente", FORMAL), "pct_independiente_informal": reparto("independiente", INFORMAL),
             "pct_familiar": 100 * peso[celda["tipo"] == "familiar"].sum() / peso.sum(),
             "tasa_informalidad": tasa, "cv_informalidad": cv_t, "pct_independientes": ind, "cv_independientes": cv_i,
-            "fiabilidad_informalidad": f_t, "fiabilidad_independientes": f_i}
+            "cv_familiar": cv_f, "fiabilidad_informalidad": f_t, "fiabilidad_independientes": f_i, "fiabilidad_familiar": f_f}
 
 
 def construir(ene: pd.DataFrame, puente: pd.DataFrame) -> pd.DataFrame:
@@ -106,7 +113,15 @@ def construir(ene: pd.DataFrame, puente: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(filas)[list(FORMALIDAD_OCUPADOS)].astype(FORMALIDAD_OCUPADOS)
 
 
-def validar(t: pd.DataFrame, ene: pd.DataFrame) -> None:
+def casillas_fiables(ene: pd.DataFrame, puente: pd.DataFrame) -> bool:
+    """Las cuatro casillas asalariado o independiente por formal o informal son fiables en Chile y en cada nivel."""
+    dis, o = diseno(ene), preparar(ene, puente)
+    celdas = [o] + [o[o["nivel_titulo"] == n] for n in NIVELES]
+    return all(proporcion(c, f"{tipo}_{cond}", dis)[2] == "fiable" for c in celdas
+               for tipo in ("asalariado", "independiente") for cond in ("formal", "informal"))
+
+
+def validar(t: pd.DataFrame, ene: pd.DataFrame, casillas_ok: bool) -> None:
     """Detiene el proceso si la tabla no cuadra consigo misma o con su periodo."""
     chile = t[t["ambito"] == "chile"].iloc[0]
     sin_rama = int(round(ene.loc[ene["cae_especifico"].between(1, 7) & ene["r_p_rev4cl_caenes"].isna(), "fact_cal"].sum() * FACTOR))
@@ -123,12 +138,15 @@ def validar(t: pd.DataFrame, ene: pd.DataFrame) -> None:
         "Las actividades y los sin rama suman Chile (±21 por redondeo)": abs(t.loc[t["ambito"] == "actividad", "ocupados"].sum() + sin_rama - chile["ocupados"]) <= N_ACTIVIDADES,
         f"Chile: {INFORMALIDAD_CHILE}% de informalidad": round(chile["tasa_informalidad"], 1) == INFORMALIDAD_CHILE,
         "Chile, niveles y regiones: ambas cifras fiables": (t.loc[t["ambito"].isin(["chile", "nivel", "region"]), ["fiabilidad_informalidad", "fiabilidad_independientes"]] == "fiable").all().all(),
+        "Chile y niveles: las cuatro casillas asalariado o independiente por formal o informal son fiables": casillas_ok,
+        "Familiar fiable en Chile": chile["fiabilidad_familiar"] == "fiable",
         "El factor coincide con el del contraste (mismo largo de ventana)": FACTOR == FACTOR_CONTRASTE,
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)
     act = t[t["ambito"] == "actividad"]
     log.info("  [i] Ocupados sin rama: %s", f"{sin_rama:,}")
+    log.info("  [i] Familiar fiable en: %s", t.loc[t["fiabilidad_familiar"] == "fiable", "nombre"].tolist())
     for col in ("fiabilidad_informalidad", "fiabilidad_independientes"):
         log.info("  [i] %s en actividades: %s; no fiables: %s", col, act[col].value_counts().to_dict(), act.loc[act[col] != "fiable", "actividad_ciiu"].tolist())
     fallidos = [n for n, ok in controles.items() if not ok]
@@ -139,8 +157,9 @@ def validar(t: pd.DataFrame, ene: pd.DataFrame) -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     ene = obtener.cargar_ene()
-    tabla = construir(ene, obtener.cargar_puente())
-    validar(tabla, ene)
+    puente = obtener.cargar_puente()
+    tabla = construir(ene, puente)
+    validar(tabla, ene, casillas_fiables(ene, puente))
     RUTA_SALIDA.parent.mkdir(exist_ok=True)
     tabla.to_csv(RUTA_SALIDA, sep=";", index=False, encoding="utf-8")
     log.info("CSV generado: %s (%d filas)", RUTA_SALIDA.name, len(tabla))

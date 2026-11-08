@@ -26,8 +26,10 @@ FORMALIDAD_OCUPADOS = {
     "cv_informalidad": "float64",
     "pct_independientes": "float64",        # Empleador o cuenta propia
     "cv_independientes": "float64",
+    "cv_familiar": "float64",               # Pocas personas: se mide para no mostrarla donde la muestra no alcanza
     # Una por cifra (decisión 08-11-26): con una sola, donde casi no hay independientes (Administración pública,
     # Hogares) la informalidad quedaba no fiable aunque su muestra la sostiene.
     "fiabilidad_informalidad": "object",    # fiable, poco_fiable o no_fiable
     "fiabilidad_independientes": "object",
+    "fiabilidad_familiar": "object",        # Agregada el 08-11-26: en Profesional y Técnico hay menos de 60 personas
 }

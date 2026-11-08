@@ -2,7 +2,7 @@
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
 📁 Archivo: formalidad_ocupados.csv
 ============================================================
-🔹 Dimensiones: 41 filas | 18 columnas
+🔹 Dimensiones: 41 filas | 20 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
 🔹 Registros Duplicados Absolutos: 0 (0.00%)
 🔹 Memoria Total Estimada: 0.02 MB
@@ -27,22 +27,24 @@ tasa_informalidad              | float64      | 0        | 0.00   % | 41       |
 cv_informalidad                | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
 pct_independientes             | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
 cv_independientes              | float64      | 1        | 2.44   % | 40       | 0               | 0.000    MB
+cv_familiar                    | float64      | 6        | 14.63  % | 35       | 0               | 0.000    MB
 fiabilidad_informalidad        | object       | 0        | 0.00   % | 3        | 0               | 0.002    MB
 fiabilidad_independientes      | object       | 0        | 0.00   % | 3        | 0               | 0.002    MB
+fiabilidad_familiar            | object       | 0        | 0.00   % | 3        | 0               | 0.002    MB
 -------------------------------------------------------------------------------------------------------------------
 
 🧠 Clasificación Automática de Variables:
-   - Numéricas (12): ['codigo_region', 'ocupados', 'n_ocupados', 'pct_asalariado_formal', 'pct_asalariado_informal', 'pct_independiente_formal', 'pct_independiente_informal', 'pct_familiar', 'tasa_informalidad', 'cv_informalidad', 'pct_independientes', 'cv_independientes']
-   - Categóricas/Texto (6): ['ambito', 'nivel_titulo', 'actividad_ciiu', 'nombre', 'fiabilidad_informalidad', 'fiabilidad_independientes']
+   - Numéricas (13): ['codigo_region', 'ocupados', 'n_ocupados', 'pct_asalariado_formal', 'pct_asalariado_informal', 'pct_independiente_formal', 'pct_independiente_informal', 'pct_familiar', 'tasa_informalidad', 'cv_informalidad', 'pct_independientes', 'cv_independientes', 'cv_familiar']
+   - Categóricas/Texto (7): ['ambito', 'nivel_titulo', 'actividad_ciiu', 'nombre', 'fiabilidad_informalidad', 'fiabilidad_independientes', 'fiabilidad_familiar']
    - Fechas (0): []
 
 🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
-       ambito  codigo_region  ... fiabilidad_informalidad fiabilidad_independientes
-24  actividad           <NA>  ...                  fiable               poco_fiable
-13     region             10  ...                  fiable                    fiable
-8      region              5  ...                  fiable                    fiable
-25  actividad           <NA>  ...                  fiable                    fiable
-4      region              1  ...                  fiable                    fiable
+       ambito  codigo_region  ... fiabilidad_independientes fiabilidad_familiar
+24  actividad           <NA>  ...               poco_fiable           no_fiable
+13     region             10  ...                    fiable           no_fiable
+8      region              5  ...                    fiable           no_fiable
+25  actividad           <NA>  ...                    fiable           no_fiable
+4      region              1  ...                    fiable           no_fiable
 
-[5 rows x 18 columns]
+[5 rows x 20 columns]
 ============================================================
