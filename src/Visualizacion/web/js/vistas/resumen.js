@@ -30,7 +30,7 @@ function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
  const filas=Object.entries(EVO.regiones).sort((a,b)=>b[1].dif-a[1].dif||a[0]-b[0]);
  const tr=(t,d,k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
   `<td class="n">${ppTxt(d.dif)} pp</td><td class="n">${ppTxt(d.min)} a ${ppTxt(d.max)}</td><td>${LECT_EVO[d.lect]}</td></tr>`;
- return `<hr class="separador"><h2>Cómo cambió la desocupación</h2><div class="nota">Encuesta Nacional de Empleo (INE), marzo a julio de 2024 y de 2026. `+
+ return `<hr class="separador"><h2>Cómo cambió la desocupación</h2><div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_evolucion}. `+
   `Son los mismos meses en ambos años, para que no cuente la estacionalidad, y es otra fuente que el Censo: sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">${f.chile} ${f.niveles}</p>
  <p style="margin:8px 0 0">${f.regiones}</p>

@@ -89,6 +89,18 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.
 - **Mapa:** no se dibujan Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.
 
+## Periodos de las fuentes
+Cada fuente mide un momento distinto. El mapa no mezcla sus cifras: cada una se muestra con su fuente.
+
+| Fuente | Periodo | Qué aporta |
+|---|---|---|
+| Censo 2024 | Marzo a julio de 2024. Pregunta por la "semana pasada" | La capa principal: ocupados, CL, tasas y nivel de estudios |
+| ENE | Marzo a julio de 2024, los mismos meses del Censo | Contraste del Censo |
+| ENE | Marzo a julio de 2024 y de 2026 | Cómo cambió la desocupación |
+| CASEN 2024 | Noviembre de 2024 a febrero de 2025 | Carreras afines y áreas de estudio, dato nacional |
+| SIES | Años académicos 2007 a 2025. Cada uno va de marzo a febrero, así que 2025 termina en febrero de 2026 | Títulos de la ficha |
+| MiFuturo | Empleo e ingresos de 2022 a 2024. Al 1er año, titulados de 2021 a 2023; al 5° año, de 2017 a 2019. Pesos de septiembre de 2025 | Empleabilidad e ingresos de la ficha |
+
 ## Fuentes
 - Censo de Población y Vivienda 2024 y su cartografía (INE): https://censo2024.ine.gob.cl/resultados/
 - Encuesta Nacional de Empleo, marzo a julio de 2024 (los meses del Censo) y de 2026 (INE): https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion

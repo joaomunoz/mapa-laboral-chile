@@ -34,7 +34,7 @@ function vistaRegion(){
  <tr class="total"><td>D. CL</td><td>C ÷ C de Chile</td><td class="n ini">${d.peso_txt}</td><td></td><td></td><td class="n ini">1,00</td><td></td><td></td></tr></tbody></table></div>
  ${[d.h,d.m].some(v=>v!=null&&v<CHICA)?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}
  <p class="nota" style="margin:6px 0 0">Lectura: ${LECT[d.lectura]}.</p>`+avisos()+
-  `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de marzo a julio de 2024: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
+  `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de ${PER.ene_contraste}: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
  if(otras.length)h+=`<h3>Otras actividades con CL de 1,2 o más</h3><table><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
   otras.slice(0,5).map(a=>{const v=a.regiones[reg];
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
@@ -47,7 +47,7 @@ function vistaRegion(){
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
   `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
   `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
- h+=`<details style="margin-top:14px"><summary>Toda la región, por nivel de estudios</summary><div class="nota" style="margin-top:6px">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Desocupados según residencia.</div>
+ h+=`<details style="margin-top:14px"><summary>Toda la región, por nivel de estudios</summary><div class="nota" style="margin-top:6px">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Desocupados según residencia. Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</div>
  <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados (lugar de trabajo)</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
   `<th class="n">Tasa en Chile</th><th class="n">Tasa en ENE</th></tr></thead><tbody>`+
   NIVELES.map(([k,t])=>{const x=DATOS.niveles[reg][k];

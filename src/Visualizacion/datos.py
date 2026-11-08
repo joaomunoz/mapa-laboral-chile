@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from config import AFINIDADES_VISIBLES, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, TRAMOS
+from config import AFINIDADES_VISIBLES, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, PERIODOS, TRAMOS
 from formato import nombre_legible, redondear, texto_peso
 from indicadores import (
     agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, rango_ficha, resumen_estudios,
@@ -81,4 +81,4 @@ def construir_datos(tablas: dict[str, pd.DataFrame]) -> dict:
     return {"actividades": actividades, "fichas": fichas, "estudios": estudios, "perfil_estudios": perfil_estudios,
             # Solo el total de las carreras del mapa: por carrera son 1 o 2 personas, y no se abre.
             "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados,
-            "evolucion": evolucion_desocupacion(tablas["evolucion"])}
+            "evolucion": evolucion_desocupacion(tablas["evolucion"]), "periodos": PERIODOS}

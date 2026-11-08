@@ -10,7 +10,7 @@ const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",
 function bloqueCarreras(){
  const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
  let h=`<hr class="separador"><h2>Carreras afines</h2><div class="nota">Agrupadas por nivel del título. `+
-  `Las carreras son un dato nacional (CASEN)${reg==null?"":` y no indican titulados en ${lugar}`}. Los titulados son personas estimadas por la CASEN, no títulos del SIES. `+
+  `Las carreras son un dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":` y no indican titulados en ${lugar}`}. Los titulados son personas estimadas por la CASEN, no títulos del SIES. `+
   `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
  if(act.afines.length){
   h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados que trabajan, % en esta actividad</th>`+
@@ -27,7 +27,7 @@ function bloqueCarreras(){
   h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos, con muestra insuficiente (${act.indicios.length})</summary>${
    por.map(([t,cs])=>`<p style="margin:6px 0 0"><strong>${t}:</strong> ${cs.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</p>`).join("")
   }</details>`}
- if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
  return h}
 // El promedio esconde cuánto pesa la institución: en 79 de 115 carreras la más alta y la más baja se separan
 // 20 puntos o más de empleabilidad. Con 1 o 2 instituciones no hay rango y basta el aviso de pocas instituciones.
@@ -43,6 +43,6 @@ function fichaHtml(c){const f=DATOS.fichas[c];
  <p class="nota" style="margin:10px 0 0">*Titulados con ingresos iguales o superiores al sueldo mínimo. `+
   `La empleabilidad es el promedio de ${f.inst===1?"1 institución":f.inst+" instituciones"}, ponderado por sus títulos de 2021-2023${f.emp_r?"; el rango va de la institución más baja a la más alta":""}. `+
   `Los ingresos se publican por tipo de institución (universidad, IP o CFT), no por institución. `+
-  `Ingresos brutos mensuales, en pesos de septiembre de 2025; el 1er y el 5° año son generaciones distintas (2021-2023 y 2017-2019), no una evolución. Fuente: MiFuturo.<br>`+
-  `**Titulaciones, no personas: una persona puede tener más de un título. El total 2007-2025 incluye a quienes hoy no trabajan, migraron o se jubilaron. Fuente: SIES. `+
+  `Empleo e ingresos medidos de 2022 a 2024. Ingresos brutos mensuales, en pesos de septiembre de 2025; el 1er y el 5° año son generaciones distintas (2021-2023 y 2017-2019), no una evolución. Fuente: MiFuturo.<br>`+
+  `**Titulaciones, no personas: una persona puede tener más de un título. El total 2007-2025 incluye a quienes hoy no trabajan, migraron o se jubilaron. Son años académicos: 2025 va de marzo de 2025 a febrero de 2026. Fuente: SIES. `+
   `El registro incluye ${num(DATOS.titulos_nb)} titulaciones no binarias o indefinidas en las carreras de este mapa, que no se abren por carrera.</p></div>`}

@@ -167,13 +167,13 @@ La explicación completa de cada dato está en la [nota de lectura](docs/nota_de
 
 ## Fuentes
 
-| Fuente | Institución | Aporta | Alcance |
-|---|---|---|---|
-| [Censo 2024](https://censo2024.ine.gob.cl/resultados/) | INE | Capa principal: ocupados por actividad, región, sexo y nivel de estudios (15,2 millones de personas de 15 años o más) | Regional |
-| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion), mar. a jul. de 2024 y de 2026 | INE | Contraste del Censo en sus mismos meses, y el cambio de la desocupación entre 2024 y 2026; sus cifras no se mezclan con las del Censo | Regional |
-| [CASEN 2024](https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024) | Ministerio de Desarrollo Social y Familia | Único vínculo entre carrera y actividad económica | Nacional |
-| [Titulados 2007-2025 (SIES)](https://www.mifuturo.cl/bases-de-datos-titulados/) | Mineduc | Títulos por carrera y sexo | Nacional |
-| [Buscador de Empleabilidad e Ingresos (MiFuturo)](https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/) | Mineduc | Empleabilidad e ingresos por carrera | Nacional |
+| Fuente | Institución | Periodo | Aporta | Alcance |
+|---|---|---|---|---|
+| [Censo 2024](https://censo2024.ine.gob.cl/resultados/) | INE | Mar. a jul. de 2024 | Capa principal: ocupados por actividad, región, sexo y nivel de estudios (15,2 millones de personas de 15 años o más) | Regional |
+| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion) | INE | Mar. a jul. de 2024 y de 2026 | Contraste del Censo en sus mismos meses, y el cambio de la desocupación entre 2024 y 2026; sus cifras no se mezclan con las del Censo | Regional |
+| [CASEN 2024](https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024) | Ministerio de Desarrollo Social y Familia | Nov. de 2024 a feb. de 2025 | Único vínculo entre carrera y actividad económica | Nacional |
+| [Titulados 2007-2025 (SIES)](https://www.mifuturo.cl/bases-de-datos-titulados/) | Mineduc | Años académicos 2007 a 2025, de marzo a febrero | Títulos por carrera y sexo | Nacional |
+| [Buscador de Empleabilidad e Ingresos (MiFuturo)](https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/) | Mineduc | Empleo e ingresos de 2022 a 2024, en pesos de sept. de 2025 | Empleabilidad e ingresos por carrera | Nacional |
 
 ## Cómo reproducirlo
 
@@ -237,10 +237,9 @@ src/Analisis/Calculos_control/    Control de la tabla regional de ENE
 src/Analisis/JOINS/               Tablas que alimentan el mapa
 src/Visualizacion/                Generador del mapa (Python) y su página en web/ (HTML, CSS y JS)
 docs/                             Mapa final, nota de lectura y captura
-pizarra/                          Estado, decisiones y bitácora del proyecto
 ```
 
-Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scrapers/comun/inspect_data.py`. El detalle de cada archivo está en [`pizarra/Estructura.md`](pizarra/Estructura.md).
+Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scrapers/comun/inspect_data.py`. Los periodos de la ENE que usan las tablas se definen en `src/Scrapers/comun/periodos.py`.
 
 **Tecnologías:** Python, pandas, GeoPandas, Shapely, requests y BeautifulSoup para los datos. HTML, CSS, JavaScript y SVG para el mapa, sin bibliotecas externas.
 

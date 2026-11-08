@@ -147,6 +147,9 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Evolución: sube o baja solo si el rango publicado queda a un lado del cero": all(d["lect"] == ("sube" if d["min"] > 0 else "baja" if d["max"] < 0 else "sin_cambio_claro") for d in evo_filas),
         "Evolución: el cambio publicado es la resta de las tasas y cae en su rango": all(d["dif"] == round(d["t26"] - d["t24"], 1) and d["min"] <= d["dif"] <= d["max"] for d in evo_filas),
         "Evolución: suben Arica y Parinacota, Tarapacá, Valparaíso, Biobío y Los Lagos; ninguna baja": sorted(int(r) for r, d in datos["evolucion"]["regiones"].items() if d["lect"] == "sube") == [1, 5, 8, 10, 15] and not any(d["lect"] == "baja" for d in evo_filas),
+        # El periodo de la ENE lo escribe la página desde DATOS.periodos: escrito a mano, quedaría atrás al cambiar los meses.
+        "Periodos: ningún JS escribe a mano los meses de la ENE": not any(re.search(r"(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) a \w+ de 20\d\d", c) for c in codigo_js.values()),
+        "Periodos: la página no nombra el periodo de ENE que ya no se usa": "2025-2026" not in html and "diciembre de 2025" not in html,
         "La plantilla quedó completa": all(m not in html for m in ("__DATOS__", "__GEO__", "__ESTILOS__", "__CODIGO__")),
         # Sin módulos, los archivos JS comparten un solo espacio de nombres: uno repetido pisaría al otro sin aviso.
         "JS: ningún nombre global se define en dos archivos": len(todos := [n for c in codigo_js.values() for n in nombres_globales_js(c)]) == len(set(todos)) and len(todos) > 50,
