@@ -10,7 +10,7 @@ La vista inicial resume la población, las 20 actividades y la formalidad del tr
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y la tabla de actividades](docs/mapa.png)
 
-*Vista inicial: principales hallazgos, mapa, regiones y tabla de actividades con su % de ocupados con título. Cada región tiene el color de la actividad con mayor CL, y un color más suave indica un CL menor a 1,6.*
+*Vista inicial: principales hallazgos, mapa, regiones y el resumen con su índice por fuente, donde cada sección se titula con su hallazgo. Cada región tiene el color de la actividad con mayor CL, y un color más suave indica un CL menor a 1,6.*
 
 **Principales hallazgos (Censo 2024):**
 
