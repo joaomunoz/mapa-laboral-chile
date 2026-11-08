@@ -1,0 +1,48 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: formalidad_ocupados.csv
+============================================================
+🔹 Dimensiones: 41 filas | 18 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.02 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+ambito                         | object       | 0        | 0.00   % | 4        | 0               | 0.002    MB
+codigo_region                  | Int64        | 25       | 60.98  % | 16       | 0               | 0.000    MB
+nivel_titulo                   | object       | 0        | 0.00   % | 4        | 0               | 0.002    MB
+actividad_ciiu                 | object       | 20       | 48.78  % | 21       | 0               | 0.002    MB
+nombre                         | object       | 0        | 0.00   % | 41       | 0               | 0.004    MB
+ocupados                       | int64        | 0        | 0.00   % | 41       | 0               | 0.000    MB
+n_ocupados                     | int64        | 0        | 0.00   % | 41       | 0               | 0.000    MB
+pct_asalariado_formal          | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
+pct_asalariado_informal        | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
+pct_independiente_formal       | float64      | 0        | 0.00   % | 40       | 0               | 0.000    MB
+pct_independiente_informal     | float64      | 0        | 0.00   % | 40       | 0               | 0.000    MB
+pct_familiar                   | float64      | 0        | 0.00   % | 36       | 0               | 0.000    MB
+tasa_informalidad              | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
+cv_informalidad                | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
+pct_independientes             | float64      | 0        | 0.00   % | 41       | 0               | 0.000    MB
+cv_independientes              | float64      | 1        | 2.44   % | 40       | 0               | 0.000    MB
+fiabilidad_informalidad        | object       | 0        | 0.00   % | 3        | 0               | 0.002    MB
+fiabilidad_independientes      | object       | 0        | 0.00   % | 3        | 0               | 0.002    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (12): ['codigo_region', 'ocupados', 'n_ocupados', 'pct_asalariado_formal', 'pct_asalariado_informal', 'pct_independiente_formal', 'pct_independiente_informal', 'pct_familiar', 'tasa_informalidad', 'cv_informalidad', 'pct_independientes', 'cv_independientes']
+   - Categóricas/Texto (6): ['ambito', 'nivel_titulo', 'actividad_ciiu', 'nombre', 'fiabilidad_informalidad', 'fiabilidad_independientes']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+       ambito  codigo_region  ... fiabilidad_informalidad fiabilidad_independientes
+24  actividad           <NA>  ...                  fiable               poco_fiable
+13     region             10  ...                  fiable                    fiable
+8      region              5  ...                  fiable                    fiable
+25  actividad           <NA>  ...                  fiable                    fiable
+4      region              1  ...                  fiable                    fiable
+
+[5 rows x 18 columns]
+============================================================
