@@ -1,13 +1,16 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad/crosswalk.py>
 
-Mide qué actividades económicas concentra cada región, con su margen de error. Es la capa principal del mapa.
+Mide qué actividades económicas concentra cada región con ENE, con su margen de error. Es el contraste de la
+tabla del censo (Concentracion_Region_Actividad_Censo), que es la capa principal del mapa.
 
 Salida: Salida/concentracion_region_actividad.csv
 
 Decisiones (aprobadas el 02-11-26):
   - Todos los ocupados: describen mejor la economía regional y dan más casos que usar solo titulados.
-  - 10 meses de ENE: dan más casos y suavizan la estacionalidad. El cuadre con INE se hace sobre JAS 2026.
+  - Periodo (08-11-26): los meses del censo, marzo a julio de 2024 (comun/periodos.py), para que la diferencia
+    entre fuentes no se deba a la fecha. Antes usaba 10 meses de 2025-2026. El cuadre con INE se hace sobre
+    mayo a julio de 2024.
   - Quien no informa región de trabajo o actividad queda fuera: asignarle una región sería un supuesto, y
     así la tabla coincide con la de control.
 
@@ -27,17 +30,15 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
+from comun.periodos import FACTOR_CONTRASTE, MESES_BOLETIN_CONTRASTE, OCUPADOS_INE_CONTRASTE  # noqa: E402
 from esquema import CONCENTRACION_REGION_ACTIVIDAD  # noqa: E402
 import obtener  # noqa: E402
 
 log = logging.getLogger(__name__)
 
 RUTA_SALIDA = Path(__file__).parent / "Salida" / "concentracion_region_actividad.csv"
-FACTOR_10_MESES = 3 / 10
 N_MINIMO, GL_MINIMO, CV_MAXIMO, CV_POCO_FIABLE = 60, 9, 30, 15
 Z_95 = 1.96
-MESES_JAS = ["2026-07", "2026-08", "2026-09"]
-OCUPADOS_INE_JAS = 9_274_742  # Boletín INE n°336, 29-10-2026
 TOLERANCIA_INE = 0.001
 COBERTURA_MINIMA = 0.99
 N_REGIONES, N_ACTIVIDADES = 16, 21
@@ -75,7 +76,7 @@ def construir(ene: pd.DataFrame, actividades: pd.DataFrame) -> pd.DataFrame:
     o = ene[ene["cae_especifico"].between(1, 7)].dropna(subset=["codigo_region_trabajo", "r_p_rev4cl_caenes"]).copy()
     o["codigo_region"] = o["codigo_region_trabajo"].astype(int)
     o["actividad_caenes"] = o["r_p_rev4cl_caenes"].astype(int)
-    o["peso"] = o["fact_cal"] * FACTOR_10_MESES
+    o["peso"] = o["fact_cal"] * FACTOR_CONTRASTE
     pct_nacional = 100 * o.groupby("actividad_caenes")["peso"].sum() / o["peso"].sum()
 
     filas = []
@@ -111,17 +112,17 @@ def construir(ene: pd.DataFrame, actividades: pd.DataFrame) -> pd.DataFrame:
 
 def validar(t: pd.DataFrame, ene: pd.DataFrame, control: pd.DataFrame) -> None:
     """Detiene el proceso si la tabla no cuadra con INE ni con la tabla de control."""
-    jas = ene[ene["mes"].isin(MESES_JAS) & ene["cae_especifico"].between(1, 7)]
-    jas_validos = jas.dropna(subset=["codigo_region_trabajo", "r_p_rev4cl_caenes"])
-    total_jas, validos_jas = jas["fact_cal"].sum(), jas_validos["fact_cal"].sum()
+    trim = ene[ene["mes"].isin(MESES_BOLETIN_CONTRASTE) & ene["cae_especifico"].between(1, 7)]
+    trim_validos = trim.dropna(subset=["codigo_region_trabajo", "r_p_rev4cl_caenes"])
+    total_trim, validos_trim = trim["fact_cal"].sum(), trim_validos["fact_cal"].sum()
     comparacion = t[t["n_personas"] > 0].merge(control, on=["codigo_region", "actividad_caenes"], how="outer", suffixes=("", "_control"), indicator=True)
     con_casos = t[t["n_personas"] > 0]
     lecturas_ok = (t.loc[t["fiabilidad"] == "no_fiable", "lectura"] == "sin_muestra").all() and (t.loc[t["fiabilidad"] != "no_fiable", "lectura"] != "sin_muestra").all()
     controles = {
         "336 filas con clave única": len(t) == N_REGIONES * N_ACTIVIDADES and not t.duplicated(["codigo_region", "actividad_caenes"]).any(),
         "Actividades y regiones con nombre": t[["nombre_region", "actividad_ciiu", "actividad_glosa"]].notna().all().all(),
-        "Ocupados JAS cuadran con INE (desv. < 0,1%)": abs(total_jas / OCUPADOS_INE_JAS - 1) < TOLERANCIA_INE,
-        "Región y actividad cubren al menos 99% de JAS": validos_jas / total_jas >= COBERTURA_MINIMA,
+        "Ocupados de mayo a julio de 2024 cuadran con INE (desv. < 0,1%)": abs(total_trim / OCUPADOS_INE_CONTRASTE - 1) < TOLERANCIA_INE,
+        "Región y actividad cubren al menos 99% del trimestre": validos_trim / total_trim >= COBERTURA_MINIMA,
         "pct_en_region suma 100 en cada región": np.isclose(t.groupby("codigo_region")["pct_en_region"].sum(), 100).all(),
         "pct_nacional suma 100 por región": np.isclose(t.groupby("codigo_region")["pct_nacional"].sum(), 100).all(),
         "El valor queda dentro de su rango": ((con_casos["pct_min"] <= con_casos["pct_en_region"]) & (con_casos["pct_en_region"] <= con_casos["pct_max"])).all(),
@@ -130,8 +131,8 @@ def validar(t: pd.DataFrame, ene: pd.DataFrame, control: pd.DataFrame) -> None:
     }
     for nombre, ok in controles.items():
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)
-    log.info("  [i] JAS: %.0f ocupados frente a %d de INE (%.3f%%); con región y actividad %.0f (%.2f%%)",
-             total_jas, OCUPADOS_INE_JAS, 100 * (total_jas / OCUPADOS_INE_JAS - 1), validos_jas, 100 * validos_jas / total_jas)
+    log.info("  [i] Mayo a julio de 2024: %.0f ocupados frente a %d de INE (%.3f%%); con región y actividad %.0f (%.2f%%)",
+             total_trim, OCUPADOS_INE_CONTRASTE, 100 * (total_trim / OCUPADOS_INE_CONTRASTE - 1), validos_trim, 100 * validos_trim / total_trim)
     log.info("  [i] Lectura: %s", t["lectura"].value_counts().to_dict())
     log.info("  [i] Sin casos en la encuesta: %d", (t["n_personas"] == 0).sum())
     fallidos = [n for n, ok in controles.items() if not ok]

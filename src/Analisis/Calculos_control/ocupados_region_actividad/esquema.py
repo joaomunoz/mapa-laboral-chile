@@ -16,7 +16,7 @@ OCUPADOS_REGION_ACTIVIDAD = {
     "actividad_caenes": "int64",
     "actividad_ciiu": "object",
     "actividad_glosa": "object",
-    "ocupados": "float64",          # Promedio trimestral (10 meses × 3/10)
+    "ocupados": "float64",          # Promedio trimestral (marzo a julio de 2024 × 3/5)
     "n_personas": "int64",          # idrph únicos
     "gl": "int64",
     "fiable_n_gl": "bool",          # n >= 60 y gl >= 9

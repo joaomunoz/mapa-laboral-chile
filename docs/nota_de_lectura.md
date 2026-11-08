@@ -82,14 +82,14 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Posible vínculo:** cumple los dos primeros umbrales con muestra insuficiente, y al menos 10 casos. No es un dato firme.
 - **Carreras por nivel:** las carreras afines se agrupan en título profesional y técnico. Junto a cada nivel van los ocupados de la actividad con ese nivel en el lugar elegido (Censo). El Censo no registra la carrera, así que esos ocupados no son titulados de las carreras listadas. Las carreras afines no describen a quienes no tienen título superior.
 - **Región de trabajo:** 5,8% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.
-- **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
-- **También difieren en la tasa de desocupación:** en profesionales, 6,3% y 8,1%; en técnicos, 7,8% y 8,5%. Influyen la fecha y quizá la forma de preguntar, sin comprobar.
+- **Censo y ENE difieren en tamaño** en Minería, Electricidad, Serv. administrativos, Adm. pública, Enseñanza y Salud. El mapa lo avisa en cada caso. La diferencia sigue al comparar los mismos meses, así que no se debe a la fecha. La causa no está comprobada; en Minería, una posibilidad es cómo se clasifica a los contratistas.
+- **La tasa de desocupación difiere poco:** con los mismos meses, en profesionales es 6,3% en el Censo y 6,9% en ENE; en técnicos, 7,8% y 7,7%. Puede influir la forma de preguntar, sin comprobar.
 - **Pocas instituciones:** con 1 o 2 instituciones, el dato de MiFuturo describe más a ellas que a la carrera.
 - **Mapa:** no se dibujan Rapa Nui ni Juan Fernández, pero sus datos siguen en Valparaíso.
 
 ## Fuentes
 - Censo de Población y Vivienda 2024 y su cartografía (INE): https://censo2024.ine.gob.cl/resultados/
-- Encuesta Nacional de Empleo, diciembre de 2025 a septiembre de 2026 (INE): https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion
+- Encuesta Nacional de Empleo, marzo a julio de 2024, los meses del Censo (INE): https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion
 - Encuesta CASEN 2024 (Ministerio de Desarrollo Social y Familia): https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024
 - Titulados 2007-2025, SIES (Ministerio de Educación): https://www.mifuturo.cl/bases-de-datos-titulados/
 - Buscador de Empleabilidad e Ingresos, MiFuturo (Ministerio de Educación): https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/

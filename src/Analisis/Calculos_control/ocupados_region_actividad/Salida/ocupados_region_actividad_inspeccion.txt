@@ -17,9 +17,9 @@ nombre_region                  | object       | 0        | 0.00   % | 16       |
 actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.005    MB
 actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.031    MB
 actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.077    MB
-ocupados                       | float64      | 0        | 0.00   % | 613      | 0               | 0.005    MB
-n_personas                     | int64        | 0        | 0.00   % | 374      | 0               | 0.005    MB
-gl                             | int64        | 0        | 0.00   % | 284      | 0               | 0.005    MB
+ocupados                       | float64      | 0        | 0.00   % | 609      | 0               | 0.005    MB
+n_personas                     | int64        | 0        | 0.00   % | 316      | 0               | 0.005    MB
+gl                             | int64        | 0        | 0.00   % | 233      | 0               | 0.005    MB
 fiable_n_gl                    | bool         | 0        | 0.00   % | 2        | 0               | 0.001    MB
 pct_en_region                  | float64      | 0        | 0.00   % | 650      | 0               | 0.005    MB
 pct_nacional                   | float64      | 0        | 0.00   % | 42       | 0               | 0.005    MB
@@ -33,11 +33,11 @@ peso_relativo                  | float64      | 0        | 0.00   % | 650      |
 
 🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
     base_region  codigo_region  ... pct_nacional  peso_relativo
-637     trabajo             16  ...     6.728697       0.811042
-220  residencia             11  ...     3.444946       0.460337
-428     trabajo              6  ...     9.201091       1.071209
-326     trabajo              1  ...     1.669301       3.324617
-72   residencia              4  ...     4.190941       0.929027
+637     trabajo             16  ...     6.629673       0.749934
+220  residencia             11  ...     1.121076       0.708845
+428     trabajo              6  ...     1.541620       1.261929
+326     trabajo              1  ...     1.541620       3.421607
+72   residencia              4  ...     0.904782       0.938457
 
 [5 rows x 13 columns]
 ============================================================

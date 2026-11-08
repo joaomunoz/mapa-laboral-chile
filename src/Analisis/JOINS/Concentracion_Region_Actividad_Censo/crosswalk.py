@@ -1,7 +1,8 @@
 """
 <src/Analisis/JOINS/Concentracion_Region_Actividad_Censo/crosswalk.py>
 
-Mide qué actividades concentra cada región con el Censo 2024, y la contrasta con ENE.
+Mide qué actividades concentra cada región con el Censo 2024, y la contrasta con ENE de los mismos meses del
+censo, marzo a julio de 2024 (comun/periodos.py; hasta el 08-11-26 era ENE 2025-2026).
 
 Salida: Salida/concentracion_region_actividad_censo.csv
 
@@ -18,7 +19,11 @@ Decisiones (aprobadas el 03-11-26):
     concentrando embajadas y organismos internacionales en lugar de Finanzas.
   - Alerta: el peso nacional de algunas actividades difiere mucho entre fuentes. En Minería, el censo calza con
     las mediciones de alcance amplio y ENE queda por debajo, quizá por cómo clasifica a los contratistas.
-    La causa no está comprobada.
+    La causa no está comprobada. Con los mismos meses del censo la diferencia sigue (08-11-26): Minería pesa
+    3,63% en el censo y 1,54% en ENE de marzo a julio de 2024 (1,67% en ENE 2025-2026), así que la fecha no la
+    explica. Las seis actividades con alerta son las mismas con ambos periodos.
+  - U también queda con alerta desde el 08-11-26 (0,04% en el censo y 0,02% en ENE). No cambia el mapa: U no
+    se muestra.
 """
 
 from __future__ import annotations
@@ -44,7 +49,7 @@ RAZON_FUENTES = 1.3
 ACTIVIDADES_FUERA_DEL_MAPA = ["U"]
 OCUPADO = 1
 N_REGIONES, N_ACTIVIDADES = 16, 21
-ACTIVIDADES_CON_ALERTA = {"B", "D", "N", "O", "P", "Q"}
+ACTIVIDADES_CON_ALERTA = {"B", "D", "N", "O", "P", "Q", "U"}
 OCUPADOS_VALIDOS_ESPERADOS = 7_395_105  # Medido en la auditoría de censo_procesado.csv
 
 
@@ -87,7 +92,7 @@ def validar(t: pd.DataFrame, censo: pd.DataFrame) -> None:
         "pct_en_region suma 100 en cada región": np.isclose(t.groupby("codigo_region")["pct_en_region"].sum(), 100).all(),
         "pct_nacional suma 100 en cada región": np.isclose(t.groupby("codigo_region")["pct_nacional"].sum(), 100).all(),
         "Contraste con ENE completo": t["ene_ocupados"].notna().all() and t["ene_lectura"].notna().all(),
-        "Alertas: B, D, N, O, P y Q": con_alerta == ACTIVIDADES_CON_ALERTA,
+        "Alertas: B, D, N, O, P, Q y U": con_alerta == ACTIVIDADES_CON_ALERTA,
         "Solo U queda fuera de la lista del mapa": set(t.loc[~t["mostrar_en_mapa"], "actividad_ciiu"]) == set(ACTIVIDADES_FUERA_DEL_MAPA),
         "Antofagasta en Minería: 101.929 ocupados": fila["ocupados"] == 101_929 and fila["lectura"] == "concentra",
     }

@@ -38,7 +38,7 @@ Se eligió mostrar menos, pero medido. El trabajo retirado sigue disponible en l
 - **Las carreras son un dato nacional:** no indican cuántos titulados de una carrera hay en una región. La región de los títulos en el SIES es la sede, no el trabajo.
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
 - **Sexo y género:** el Censo registra el sexo solo como hombre o mujer. La identidad de género se mide aparte, desde los 18 años, y está suprimida para 633.803 ocupados, por lo que no se abre por actividad.
-- **Censo y ENE difieren** en tamaño de seis actividades y en desempleo (profesionales: 6,3% y 8,1%). La causa no está comprobada.
+- **Censo y ENE difieren** en tamaño de seis actividades, también con los mismos meses. La causa no está comprobada. En desempleo difieren poco (profesionales: 6,3% y 6,9%).
 - **Región de trabajo:** 5,8% de los ocupados del Censo no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción y Electricidad aparecen bajo su tamaño.
 - **Sin evolución en el tiempo:** el mapa usa un solo censo. Los ingresos de MiFuturo tampoco muestran una evolución, porque el 1er y el 5° año vienen de generaciones distintas.
 - **Rapa Nui y Juan Fernández no se dibujan,** pero sus datos siguen en Valparaíso.
@@ -148,8 +148,8 @@ Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No 
 **Validación:** cada paso se detiene si falla uno de sus controles.
 
 - **Reproducibilidad:** en un clon limpio, el 03-11-26, la cadena completa generó un `index.html` idéntico byte a byte. Esa prueba es anterior a la última versión del mapa.
-- **Contra el dato oficial:** el procesamiento de ENE reproduce el Boletín INE n°336 (julio-septiembre de 2026), con una desviación máxima de 0,08%.
-- **Entre fuentes:** el CL del Censo y el de ENE tienen una correlación de 0,95 en las 209 combinaciones de región y actividad que ENE mide con fiabilidad.
+- **Contra el dato oficial:** el procesamiento de ENE reproduce el Boletín INE n°336 (julio-septiembre de 2026) con una desviación máxima de 0,08%, y el n°310 (mayo-julio de 2024) con 0,12%. En 2024, la cifra de ocupados informales del boletín no calza con el microdato publicado y no se valida.
+- **Entre fuentes:** con los mismos meses, el CL del Censo y el de ENE tienen una correlación de 0,97 en las 187 combinaciones de región y actividad que ENE mide con fiabilidad.
 - **Coherencia del mapa:** el color y la lectura se deciden con el mismo CL de 2 decimales que se muestra. La generación se detiene si los datos dejan de respaldar el color, la lectura o las frases de la página.
 
 | Indicador | INE | Este proyecto | Desviación |
@@ -168,7 +168,7 @@ La explicación completa de cada dato está en la [nota de lectura](docs/nota_de
 | Fuente | Institución | Aporta | Alcance |
 |---|---|---|---|
 | [Censo 2024](https://censo2024.ine.gob.cl/resultados/) | INE | Capa principal: ocupados por actividad, región, sexo y nivel de estudios (15,2 millones de personas de 15 años o más) | Regional |
-| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion), dic. 2025 a sep. 2026 | INE | Contraste del Censo; sus cifras no se mezclan con las de él | Regional |
+| [Encuesta Nacional de Empleo (ENE)](https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/ocupacion-y-desocupacion), mar. a jul. 2024 | INE | Contraste del Censo en sus mismos meses; sus cifras no se mezclan con las de él | Regional |
 | [CASEN 2024](https://observatorio.ministeriodesarrollosocial.gob.cl/encuesta-casen-2024) | Ministerio de Desarrollo Social y Familia | Único vínculo entre carrera y actividad económica | Nacional |
 | [Titulados 2007-2025 (SIES)](https://www.mifuturo.cl/bases-de-datos-titulados/) | Mineduc | Títulos por carrera y sexo | Nacional |
 | [Buscador de Empleabilidad e Ingresos (MiFuturo)](https://www.mifuturo.cl/buscador-de-empleabilidad-e-ingresos/) | Mineduc | Empleabilidad e ingresos por carrera | Nacional |
@@ -203,6 +203,9 @@ for f in Titulados Empleabilidad ENE CASEN CENSO; do
   $PY src/Scrapers/$f/obtener.py
   $PY src/Scrapers/$f/procesar.py
 done
+# ENE 2024: los meses del Censo, para el contraste
+$PY src/Scrapers/ENE/obtener.py 2024
+$PY src/Scrapers/ENE/procesar.py 2024
 
 # 2. Puentes entre fuentes
 for p in P1_puente_actividades P5_puente_carrera_casen P6_control_no_asignados P9_perfil_laboral_carrera; do

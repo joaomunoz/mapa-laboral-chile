@@ -7,8 +7,13 @@ Salida: Salida/fuerza_trabajo_region_nivel.csv
 
 Decisiones (aprobadas el 03-11-26):
   - Censo como dato principal: tiene base en todas las regiones y niveles.
-  - ENE como contraste: da tasas más altas (profesionales 8,1% frente a 6,3%). Puede influir la fecha y la forma de
-    preguntar, sin comprobar. Las cifras no se mezclan.
+  - ENE como contraste, sin mezclar las cifras. Desde el 08-11-26 usa los mismos meses del censo, marzo a julio
+    de 2024 (comun/periodos.py). Con ENE 2025-2026 las tasas nacionales eran más altas que en el censo
+    (profesionales 8,1% frente a 6,3%; técnicos 8,5% frente a 7,8%). Con los mismos meses quedan más cerca:
+    profesionales 6,9%, técnicos 7,7% y sin título 9,5% frente a 9,7%. Lo que queda puede deberse a la forma de
+    preguntar, sin comprobar.
+  - Costo de usar 5 meses en lugar de 10: hay menos casos, y menos regiones tienen un contraste fiable
+    (profesionales 5 de 16, antes 11; técnicos 3, antes 6). El mapa muestra solo las fiables.
   - Fiabilidad de ENE medida sobre los desocupados, porque de ellos depende la tasa: n >= 60, gl >= 9 y CV <= 30.
   - Nivel en ENE: cine11_1d 3 es técnico; 4, 5 y 6 son profesional, igual que nivel_titulo del censo.
 
@@ -26,6 +31,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
+from comun.periodos import FACTOR_CONTRASTE  # noqa: E402
 from esquema import FUERZA_TRABAJO_REGION_NIVEL  # noqa: E402
 import obtener  # noqa: E402
 
@@ -36,7 +42,6 @@ OCUPADO, DESOCUPADO, FUERA = 1, 2, 3
 NIVELES = ["Profesional", "Tecnico", "Sin_titulo"]
 NIVEL_POR_CINE = {3: "Tecnico", 4: "Profesional", 5: "Profesional", 6: "Profesional"}
 N_REGIONES = 16
-FACTOR_10_MESES = 3 / 10
 N_MINIMO, GL_MINIMO, CV_MAXIMO, CV_POCO_FIABLE = 60, 9, 30, 15
 # Diccionario de personas del manual de microdatos Censo 2024, menos quienes no informan nivel educativo.
 OCUPADOS_MANUAL, DESOCUPADOS_MANUAL = 8_277_501, 777_920
@@ -89,7 +94,7 @@ def tabla_ene(ene: pd.DataFrame) -> pd.DataFrame:
     diseno = diseno.assign(n_conglomerados=diseno.groupby("estrato")["conglomerado"].transform("size"))
     e = ene[ene["cae_especifico"].between(1, 9) & ene["cine11_1d"].notna()].copy()
     e["nivel_titulo"] = e["cine11_1d"].astype(int).map(NIVEL_POR_CINE).fillna("Sin_titulo")
-    e["peso"] = e["fact_cal"] * FACTOR_10_MESES
+    e["peso"] = e["fact_cal"] * FACTOR_CONTRASTE
     # Cuenta a todos, sin filtro de fiabilidad: a nivel nacional hay muestra de sobra.
     nacional = e.assign(desocupado=e["cae_especifico"].isin([8, 9]) * e["peso"]).groupby("nivel_titulo")[["desocupado", "peso"]].sum()
     tasa_nacional = 100 * nacional["desocupado"] / nacional["peso"]
@@ -116,7 +121,7 @@ def validar(t: pd.DataFrame, censo: pd.DataFrame) -> None:
         "Profesionales y técnicos desocupados como en la medición previa": nivel("Profesional") == DESOCUPADOS_PROFESIONALES and nivel("Tecnico") == DESOCUPADOS_TECNICOS,
         "Ocupados con región de trabajo no superan a los ocupados": t["ocupados_trabajo"].sum() <= t["ocupados_residencia"].sum(),
         "Tasas entre 0 y 100": t["tasa_desocupacion"].between(0, 100).all() and t["ene_tasa_desocupacion"].between(0, 100).all(),
-        "Tasa nacional de ENE: profesionales 8,1 y técnicos 8,5": np.isclose(t.loc[t["nivel_titulo"] == "Profesional", "ene_tasa_nacional_nivel"].iloc[0], 8.1, atol=0.05) and np.isclose(t.loc[t["nivel_titulo"] == "Tecnico", "ene_tasa_nacional_nivel"].iloc[0], 8.5, atol=0.05),
+        "Tasa nacional de ENE: profesionales 6,9 y técnicos 7,7": np.isclose(t.loc[t["nivel_titulo"] == "Profesional", "ene_tasa_nacional_nivel"].iloc[0], 6.9, atol=0.05) and np.isclose(t.loc[t["nivel_titulo"] == "Tecnico", "ene_tasa_nacional_nivel"].iloc[0], 7.7, atol=0.05),
         "Contraste con ENE completo": t["ene_fiabilidad"].notna().all(),
         "Aysén, técnicos: 372 desocupados": region_nivel.loc[(11, "Tecnico"), "desocupados"] == 372,
     }

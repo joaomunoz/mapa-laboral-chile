@@ -5,8 +5,11 @@ Calcula cuántos ocupados tiene cada actividad en cada región, con todos los ni
 
 Salida: Salida/ocupados_region_actividad.csv, con dos versiones: por residencia y por región de trabajo
 
-Por qué todos y no solo titulados: la celda típica con 10 meses tiene 167 personas frente a 45
-de titulados, y mide igual de bien el peso dla actividad (idea del usuario, 02-11-26). Con ella, el
+Periodo: los meses del contraste con el censo, marzo a julio de 2024 (comun/periodos.py). Hasta el 08-11-26
+usaba 10 meses de 2025-2026.
+
+Por qué todos y no solo titulados: con 10 meses la celda típica tiene 167 personas frente a 45
+de titulados, y mide igual de bien el peso de la actividad (idea del usuario, 02-11-26). Con ella, el
 reparto carrera × actividad mejoró en la prueba de región oculta. Sirve de
 control para Concentracion_Region_Actividad.
 """
@@ -20,12 +23,13 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
+from comun.periodos import FACTOR_CONTRASTE  # noqa: E402
 import obtener  # noqa: E402
 from esquema import OCUPADOS_REGION_ACTIVIDAD  # noqa: E402
 
 log = logging.getLogger(__name__)
 RUTA = Path(__file__).parent / "Salida" / "ocupados_region_actividad.csv"
-FACTOR_10_MESES, N_MINIMO, GL_MINIMO = 3 / 10, 60, 9
+N_MINIMO, GL_MINIMO = 60, 9
 
 
 def por_base(o: pd.DataFrame, base: str, col: str) -> pd.DataFrame:
@@ -33,7 +37,7 @@ def por_base(o: pd.DataFrame, base: str, col: str) -> pd.DataFrame:
     x = o.dropna(subset=[col]).assign(codigo_region=lambda d: d[col].astype(int))
     t = x.groupby(["codigo_region", "actividad_caenes"], as_index=False).agg(
         suma=("fact_cal", "sum"), n_personas=("idrph", "nunique"), psu=("conglomerado", "nunique"), h=("estrato", "nunique"))
-    t["ocupados"] = t["suma"] * FACTOR_10_MESES
+    t["ocupados"] = t["suma"] * FACTOR_CONTRASTE
     t["gl"] = t["psu"] - t["h"]
     t["fiable_n_gl"] = (t["n_personas"] >= N_MINIMO) & (t["gl"] >= GL_MINIMO)
     t["pct_en_region"] = 100 * t["ocupados"] / t.groupby("codigo_region")["ocupados"].transform("sum")
