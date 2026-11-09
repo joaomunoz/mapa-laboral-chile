@@ -9,10 +9,10 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa Laboral de Chile</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#1baf7a;--recibe:#0081a8;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#1baf7a;--recibe:#0081a8;--ed-pro:#08724d;--ed-tec:#8a8a1a;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#117350;--recibe:#1a9cc4;--entrega:#c9673a;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#117350;--recibe:#1a9cc4;--ed-pro:#1aab78;--ed-tec:#7a7a10;--entrega:#c9673a;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -206,6 +206,11 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .tr-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px)}.tr-barra{margin:0 4em 0 1em}
 .tr-barra{position:relative;height:16px}.tr-barra i{position:absolute;top:0;bottom:0}.tr-barra i.recibe{border-radius:0 4px 4px 0}.tr-barra i.entrega{border-radius:4px 0 0 4px}
 .tr-barra b{position:absolute;top:-3px;bottom:-3px;border-left:1px solid var(--t1)}
+/* Educación por región: profesional y técnico apilados; el técnico se ubica tras el profesional con 2 px de separación. */
+.ed-fila{grid-template-columns:minmax(0,11rem) minmax(0,420px) 7em}.ed-barra i{position:absolute;top:0;bottom:0}.ed-barra i.ed-pro{border-radius:0}.ed-barra i.ed-tec{border-radius:0 4px 4px 0}
+.ed-pro{background:var(--ed-pro)}.ed-tec{background:var(--ed-tec)}.gs-leyenda i.ed-pro,.gs-leyenda i.ed-tec{border-radius:2px}
+.ed-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ed-fila:hover .cl-valor,.ed-fila:focus-visible .cl-valor{background:var(--plano)}
+.ed-barra i.ed-pro,.cl-total .ed-barra i.ed-pro{background:var(--ed-pro)}.ed-barra i.ed-tec,.cl-total .ed-barra i.ed-tec{background:var(--ed-tec)}
 .envoltura{max-width:1240px;margin:0 auto}
 /* El mapa ocupa el alto de dos filas: a su derecha van las regiones en 2 filas de 8 y, debajo, el detalle con todo el ancho restante. */
 .grilla{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
@@ -231,7 +236,7 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 @media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:640px){.tr-fila{grid-template-columns:minmax(0,1fr)}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.ed-fila{grid-template-columns:minmax(0,1fr) 5.4em;row-gap:2px}.ed-fila .cl-nombre{grid-column:1/-1}.ed-fila .gs-num{grid-column:2}.ed-fila.gs-cab{display:grid}.ed-fila.gs-cab .cl-nombre,.ed-fila.gs-cab span:nth-child(2){display:none}.tr-fila{grid-template-columns:minmax(0,1fr)}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -605,6 +610,24 @@ function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,
   filas.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada uno que vive en ella, comparado con Chile (0 = igual que Chile). `+
   `Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada.</p>`}
+// Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
+// % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
+// Se descartaron las barras 100%: sin título ocupa 67% a 79% de cada barra y la diferencia entre regiones (12 puntos)
+// quedaba apretada en un costado. El profesional va primero porque solo el primer tramo comparte la base: es donde
+// está casi toda la diferencia (13,4% a 23,1%); el técnico varía poco (7,3% a 12,3%).
+function graficoEducacion(){const ch=EDU.chile,tope=Math.ceil(Math.max(...DATOS.orden.map(r=>pctTitulo(EDU[r])))/5)*5,pos=x=>100*x/tope;
+ const filas=DATOS.orden.map(r=>[r,EDU[r]]).sort((a,b)=>pctTitulo(b[1])-pctTitulo(a[1])||a[0]-b[0]);
+ const fila=(t,v,clase,attr)=>{const tot=v[0]+v[1]+v[2],pc=x=>100*x/tot,tag=attr?"button":"div";
+  const partes=[`${num(pctTitulo(v),1)}% con título técnico o profesional`,...NIVELES.map(([,n],i)=>`${n.toLowerCase()}: ${num(v[i])} (${num(pc(v[i]),1)}%)`)];
+  return `<${tag} class="cl-fila ed-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${t}</span><span class="cl-barra ed-barra" aria-hidden="true"><i class="ed-pro" style="width:${pos(pc(v[0]))}%"></i>`+
+   `<i class="ed-tec" style="left:calc(${pos(pc(v[0]))}% + 2px);width:calc(${pos(pc(v[1]))}% - 2px)"></i><b style="left:${pos(pctTitulo(ch))}%"></b>`+
+   `<span class="cl-valor" style="left:calc(${pos(pctTitulo(v))}% + 6px)">${num(pctTitulo(v),1)}%</span></span><span class="gs-num">${num(pc(v[2]),1)}%</span></${tag}>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Población con título técnico o profesional</strong></span>`+
+  `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>Chile (${num(pctTitulo(ch),1)}%)</span></figcaption>`+
+  `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
+  fila("Chile",ch," cl-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -694,13 +717,15 @@ function vistaResumen(){
   `</tbody></table></div></details>
  <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
  ${encabezado("sec-edu","Educación por región",`Con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
+ ${graficoEducacion()}
+ <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia, con nivel de estudios y situación laboral informados. `+
   `Se excluyen ${num(EST.excluidos.sin_nivel)} sin nivel informado y ${num(EST.excluidos.sin_situacion)} sin situación laboral. Entre paréntesis, % de esa población.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Con nivel informado</th>${NIVELES.map(([,t])=>`<th class="n">${t}</th>`).join("")}`+
   `<th class="n">Con título técnico o profesional</th></tr></thead><tbody>`+
   [["Chile",EDU.chile,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],EDU[r],""])].map(([t,v,k])=>{const tot=v[0]+v[1]+v[2];
    return `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(tot)}</td>${v.map(x=>`<td class="n">${num(x)} (${num(100*x/tot,1)}%)</td>`).join("")}`+
-    `<td class="n">${num(pctTitulo(v),1)}%</td></tr>`}).join("")+`</tbody></table></div>
+    `<td class="n">${num(pctTitulo(v),1)}%</td></tr>`}).join("")+`</tbody></table></div></details>
  <div class="aviso">Incluye a jóvenes que aún estudian: el % con título depende de la edad de la población de cada región.</div>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>

@@ -188,6 +188,24 @@ function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,
   filas.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada uno que vive en ella, comparado con Chile (0 = igual que Chile). `+
   `Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada.</p>`}
+// Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
+// % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
+// Se descartaron las barras 100%: sin título ocupa 67% a 79% de cada barra y la diferencia entre regiones (12 puntos)
+// quedaba apretada en un costado. El profesional va primero porque solo el primer tramo comparte la base: es donde
+// está casi toda la diferencia (13,4% a 23,1%); el técnico varía poco (7,3% a 12,3%).
+function graficoEducacion(){const ch=EDU.chile,tope=Math.ceil(Math.max(...DATOS.orden.map(r=>pctTitulo(EDU[r])))/5)*5,pos=x=>100*x/tope;
+ const filas=DATOS.orden.map(r=>[r,EDU[r]]).sort((a,b)=>pctTitulo(b[1])-pctTitulo(a[1])||a[0]-b[0]);
+ const fila=(t,v,clase,attr)=>{const tot=v[0]+v[1]+v[2],pc=x=>100*x/tot,tag=attr?"button":"div";
+  const partes=[`${num(pctTitulo(v),1)}% con título técnico o profesional`,...NIVELES.map(([,n],i)=>`${n.toLowerCase()}: ${num(v[i])} (${num(pc(v[i]),1)}%)`)];
+  return `<${tag} class="cl-fila ed-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${t}</span><span class="cl-barra ed-barra" aria-hidden="true"><i class="ed-pro" style="width:${pos(pc(v[0]))}%"></i>`+
+   `<i class="ed-tec" style="left:calc(${pos(pc(v[0]))}% + 2px);width:calc(${pos(pc(v[1]))}% - 2px)"></i><b style="left:${pos(pctTitulo(ch))}%"></b>`+
+   `<span class="cl-valor" style="left:calc(${pos(pctTitulo(v))}% + 6px)">${num(pctTitulo(v),1)}%</span></span><span class="gs-num">${num(pc(v[2]),1)}%</span></${tag}>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Población con título técnico o profesional</strong></span>`+
+  `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>Chile (${num(pctTitulo(ch),1)}%)</span></figcaption>`+
+  `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
+  fila("Chile",ch," cl-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -277,13 +295,15 @@ function vistaResumen(){
   `</tbody></table></div></details>
  <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
  ${encabezado("sec-edu","Educación por región",`Con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
+ ${graficoEducacion()}
+ <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia, con nivel de estudios y situación laboral informados. `+
   `Se excluyen ${num(EST.excluidos.sin_nivel)} sin nivel informado y ${num(EST.excluidos.sin_situacion)} sin situación laboral. Entre paréntesis, % de esa población.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Con nivel informado</th>${NIVELES.map(([,t])=>`<th class="n">${t}</th>`).join("")}`+
   `<th class="n">Con título técnico o profesional</th></tr></thead><tbody>`+
   [["Chile",EDU.chile,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],EDU[r],""])].map(([t,v,k])=>{const tot=v[0]+v[1]+v[2];
    return `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(tot)}</td>${v.map(x=>`<td class="n">${num(x)} (${num(100*x/tot,1)}%)</td>`).join("")}`+
-    `<td class="n">${num(pctTitulo(v),1)}%</td></tr>`}).join("")+`</tbody></table></div>
+    `<td class="n">${num(pctTitulo(v),1)}%</td></tr>`}).join("")+`</tbody></table></div></details>
  <div class="aviso">Incluye a jóvenes que aún estudian: el % con título depende de la edad de la población de cada región.</div>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>

@@ -173,3 +173,8 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .tr-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px)}.tr-barra{margin:0 4em 0 1em}
 .tr-barra{position:relative;height:16px}.tr-barra i{position:absolute;top:0;bottom:0}.tr-barra i.recibe{border-radius:0 4px 4px 0}.tr-barra i.entrega{border-radius:4px 0 0 4px}
 .tr-barra b{position:absolute;top:-3px;bottom:-3px;border-left:1px solid var(--t1)}
+/* Educación por región: profesional y técnico apilados; el técnico se ubica tras el profesional con 2 px de separación. */
+.ed-fila{grid-template-columns:minmax(0,11rem) minmax(0,420px) 7em}.ed-barra i{position:absolute;top:0;bottom:0}.ed-barra i.ed-pro{border-radius:0}.ed-barra i.ed-tec{border-radius:0 4px 4px 0}
+.ed-pro{background:var(--ed-pro)}.ed-tec{background:var(--ed-tec)}.gs-leyenda i.ed-pro,.gs-leyenda i.ed-tec{border-radius:2px}
+.ed-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ed-fila:hover .cl-valor,.ed-fila:focus-visible .cl-valor{background:var(--plano)}
+.ed-barra i.ed-pro,.cl-total .ed-barra i.ed-pro{background:var(--ed-pro)}.ed-barra i.ed-tec,.cl-total .ed-barra i.ed-tec{background:var(--ed-tec)}
