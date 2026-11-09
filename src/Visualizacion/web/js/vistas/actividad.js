@@ -23,6 +23,9 @@ function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return 
 function vistaChile(){const n=act.nacional;
  return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
  <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>
- <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div></div>
+ <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div>`+
+  // Las cantidades por sexo viven aquí: el gráfico del resumen las muestra solo al pasar el mouse.
+  `<div class="dato"><b>${num(act.sexo.m)} (${num(act.sexo.pct_m,1)}%)</b><span>mujeres</span></div>`+
+  `<div class="dato"><b>${num(act.sexo.h)} (${num(act.sexo.pct_h,1)}%)</b><span>hombres</span></div></div>
  ${informalidadActividad()}${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE de ${PER.ene_contraste}, los meses del Censo: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
  <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,"Todas las actividades",DATOS.perfil_estudios.todas)}`}

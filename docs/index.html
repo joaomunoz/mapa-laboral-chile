@@ -9,10 +9,10 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa Laboral de Chile</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -135,8 +135,33 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .indice button:focus-visible{outline:2px solid var(--acento)}
 .banda{margin:14px 0 10px;padding:5px 10px;border-left:3px solid var(--eje);background:var(--plano);font-size:13px;font-weight:600;color:var(--t2)}
 .sec-cab{scroll-margin-top:12px;outline:none}
-.sec-cab h2{font-size:18px;font-weight:700;line-height:1.3}
-.tema{margin:0;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--t2)}
+.sec-cab h2{font-size:20px;font-weight:800;line-height:1.3}
+/* Gráfico de hombres y mujeres por actividad: azul y rosado validados para daltonismo y contraste en ambos modos.
+   Cada barra es un botón: abre la actividad, igual que la tabla. */
+.graf-sexo{margin:10px 0 4px}
+.gs-leyenda{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--t2);margin-bottom:6px}
+.gs-leyenda i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.gs-leyenda .ref{display:inline-block;width:0;height:12px;border-left:2px dashed var(--t1);margin-right:5px;vertical-align:-2px}
+/* La barra tiene tope de ancho: más larga cuesta comparar a la vista. */
+.gs-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,13rem) 3.4em minmax(0,420px) 3.4em auto;justify-content:start;align-items:center;gap:6px;width:100%;padding:2px 4px;border-radius:4px;cursor:pointer;font-size:13px}
+/* Las cifras de título y ocupados quedan aparte de la barra, para que no se lean como parte del reparto por sexo. */
+.gs-extra{display:grid;grid-template-columns:5.6em 9.6em;gap:6px;margin-left:14px}.gs-num{text-align:right;font-variant-numeric:tabular-nums;color:var(--t1)}.gs-et{display:none}
+.gs-cab{cursor:default;align-items:end;font-size:12px;color:var(--t2);padding-bottom:4px}.gs-cab:hover{background:none}.gs-cab .gs-nombre,.gs-cab .gs-num{color:var(--t2)}
+.gs-fila:hover,.gs-fila:focus-visible{background:var(--plano)}.gs-fila:focus-visible{outline:2px solid var(--acento)}
+.gs-nombre{color:var(--acento);overflow-wrap:anywhere}
+.gs-pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--t1)}.gs-pct.h{text-align:left}
+.gs-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px;cursor:default}.gs-total .gs-nombre{color:var(--t1)}
+.gs-barra{position:relative;display:flex;gap:2px;height:16px}
+.gs-barra i{display:block;height:100%}.gs-barra .m{background:var(--muj);border-radius:4px 0 0 4px}.gs-barra .h{background:var(--hom);border-radius:0 4px 4px 0}
+/* Mismo rojo que el mapa usa para "concentra": el CL se lee igual en el gráfico y en el mapa. */
+.graf-cl{margin:14px 0 4px}
+.cl-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,20rem) minmax(0,420px);justify-content:start;align-items:center;gap:6px;width:100%;padding:2px 4px;border-radius:4px;cursor:pointer;font-size:13px}
+.cl-fila:hover,.cl-fila:focus-visible{background:var(--plano)}.cl-fila:focus-visible{outline:2px solid var(--acento)}
+.cl-nombre{color:var(--acento);overflow-wrap:anywhere}.cl-reg{color:var(--t2)}.cl-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px;cursor:default}.cl-total .cl-nombre{color:var(--t1)}.cl-total .cl-barra i{background:var(--t2)}.cl-alerta{color:var(--t1)}.cl-valor{position:absolute;top:50%;transform:translateY(-50%);font-variant-numeric:tabular-nums;color:var(--t1);white-space:nowrap}
+.cl-barra{position:relative;height:16px;margin-right:3.2em}.cl-barra i{display:block;height:100%;background:var(--cl);border-radius:0 4px 4px 0}
+.cl-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
+.gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
+.tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
 .envoltura{max-width:1240px;margin:0 auto}
 /* El mapa ocupa el alto de dos filas: a su derecha van las regiones en 2 filas de 8 y, debajo, el detalle con todo el ancho restante. */
@@ -163,7 +188,7 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 @media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:640px){table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.cl-fila{grid-template-columns:minmax(0,1fr);row-gap:2px;padding:4px}.cl-nombre{grid-column:1/-1}.gs-extra{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:2px 14px;margin-left:0}.gs-num{text-align:left}.gs-et{display:inline;color:var(--t2)}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -427,11 +452,54 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
   [["Chile",c,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],FOR.regiones[r],""])].map(([t,d,k])=>
    `<tr class="${k}"><td>${esc(t)}</td>${celda(d.for)}${celda(d.inf)}${celda(d.ind)}</tr>`).join("")+`</tbody></table></div>
  <p class="nota" style="margin:6px 0 0">Miles de ocupados (% de la región); formal e informal suman 100. Por región no se separan las cuatro casillas: en las regiones chicas quedarían con poca muestra.</p></details>`}
+// Hombres y mujeres por actividad, en barras que suman 100% ordenadas por % de mujeres: el largo de cada barra es el
+// reparto, no el tamaño, para que Comercio no aplaste al resto. Arriba, todas las actividades juntas, que es también
+// la línea punteada: se usa la misma base que las barras (7,4 millones), para que la fila de arriba sea su suma.
+function graficoSexo(){
+ const tot=DATOS.actividades.reduce((s,a)=>({h:s.h+a.sexo.h,m:s.m+a.sexo.m}),{h:0,m:0}),n=tot.h+tot.m;
+ const niveles=NIVELES.map((_,i)=>[DATOS.actividades.reduce((t,a)=>t+a.niveles[i][0],0)]);
+ const todas={corto:"Todas las actividades",niveles,nacional:{ocupados:n},pct_nacional:100,sexo:{h:tot.h,m:tot.m,pct_h:100*tot.h/n,pct_m:100*tot.m/n}};
+ const ch=POB.chile.trabajan,mCh=POB.sexo.mujeres.trabajan;
+ // El total va primero en el globo: las dos partes se entienden mejor sabiendo a qué suman.
+ const fila=(a,clase,attr)=>{const s=a.sexo,tit=`${num(conTitulo(a.niveles),1)}%`,ocu=vp(a.nacional.ocupados,a.pct_nacional);
+  const partes=[`${num(a.nacional.ocupados)} ocupados`,`${num(s.m)} mujeres (${num(s.pct_m,1)}%)`,`${num(s.h)} hombres (${num(s.pct_h,1)}%)`,`${tit} con título técnico o profesional`];
+  const etiqueta=`${esc(a.corto)}: ${partes.join(", ")}`,globo=`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`,tag=attr?"button":"div";
+  return `<${tag} class="gs-fila${clase}" ${attr} data-tip="${globo.replace(/"/g,"&quot;")}" aria-label="${etiqueta}"${attr?"":' role="img" tabindex="0"'}><span class="gs-nombre">${esc(a.corto)}</span>`+
+   `<span class="gs-pct">${num(s.pct_m,1)}%</span><span class="gs-barra" aria-hidden="true"><i class="m" style="flex:${s.pct_m} 0 0"></i><i class="h" style="flex:${s.pct_h} 0 0"></i>`+
+   `<b style="left:${todas.sexo.pct_m}%"></b></span><span class="gs-pct h">${num(s.pct_h,1)}%</span>`+
+   // En celular las dos cifras bajan a una línea propia y llevan su rótulo, porque ahí no se ve el encabezado.
+   `<span class="gs-extra"><span class="gs-num gs-tit"><span class="gs-et">Con título </span>${tit}</span><span class="gs-num"><span class="gs-et">Ocupados </span>${ocu}</span></span></${tag}>`};
+ return `<figure class="graf-sexo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><i style="background:var(--muj)"></i>Mujeres</span>`+
+  `<span><i style="background:var(--hom)"></i>Hombres</span><span><span class="ref"></span>Todas las actividades</span></figcaption>`+
+  `<div class="gs-fila gs-cab" aria-hidden="true"><span class="gs-nombre">Actividad</span><span></span><span></span><span></span>`+
+  `<span class="gs-extra"><span class="gs-num gs-tit">Con título técnico o profesional</span><span class="gs-num">Ocupados (participación)</span></span></div>`+
+  fila(todas," gs-total","")+[...DATOS.actividades].sort((a,b)=>b.sexo.pct_m-a.sexo.pct_m).map(a=>fila(a,"",`data-a="${a.ciiu}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">Mujeres y hombres: % sobre los ocupados de cada actividad, según lugar de trabajo; con todos los ocupados, incluidos ${num(ch-n)} sin región de trabajo o actividad, `+
+  `${num(100*mCh/ch,1)}% son mujeres. Con título: % de los ocupados con nivel informado (el ${num(EST.pct_con_titulo,1)}% de los hallazgos cuenta por residencia).</p>`}
+// Barras horizontales: lo que se lee es cada actividad con su región y su CL, no cuántas caen en un tramo.
+function graficoCL(){
+ const filas=DATOS.actividades.map(a=>({a,r:a.nacional.mas_peso.r,v:a.regiones[a.nacional.mas_peso.r]})).sort((x,y)=>y.v.peso-x.v.peso);
+ // Escala desde 0 hasta el entero sobre el mayor CL: una barra desde 0 no exagera las diferencias.
+ const tope=Math.ceil(filas[0].v.peso),pos=x=>100*x/tope;
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Región donde más pesa cada actividad</strong></span>`+
+  `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span></figcaption>`+
+  // Fila de referencia: en Chile toda actividad tiene CL 1, porque Chile es la base con que se compara cada región.
+  `<div class="cl-fila cl-total" role="img" tabindex="0" aria-label="Chile: CL 1 en todas las actividades, es la base de comparación" `+
+  `data-tip="<strong>Chile</strong><br>CL 1 en todas las actividades:<br>es la base con que se compara cada región"><span class="cl-nombre">Chile <span class="cl-reg">· todas las actividades</span></span>`+
+  `<span class="cl-barra" aria-hidden="true"><i style="width:${pos(1)}%"></i><b style="left:${pos(1)}%"></b><span class="cl-valor" style="left:calc(${pos(1)}% + 6px)">1,00</span></span></div>`+
+  filas.map(({a,r,v})=>{const partes=[`${nomReg(r)}: CL ${v.peso_txt}`,`pesa ${v.peso_txt} veces su peso en Chile`,`${num(v.ocupados)} ocupados (${part(v.pct)} de los ocupados de la región)`];
+   // El símbolo solo no se lee en voz alta: el aviso va también en palabras en el globo y la descripción.
+   if(a.alerta_fuente)partes.push("⚠ Censo y ENE difieren en el tamaño de esta actividad");
+   return `<button class="cl-fila" data-a="${a.ciiu}" data-tip="${`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(a.corto)}, ${partes.join(", ")}">`+
+    `<span class="cl-nombre">${esc(a.corto)}${a.alerta_fuente?' <span class="cl-alerta">⚠</span>':""} <span class="cl-reg">· ${nomReg(r)}</span></span>`+
+    `<span class="cl-barra" aria-hidden="true"><i style="width:${pos(v.peso)}%"></i><b style="left:${pos(1)}%"></b>`+
+    // La cifra va pegada al extremo de su barra: en una columna aparte quedaba lejos de las barras cortas.
+    `<span class="cl-valor" style="left:calc(${pos(v.peso)}% + 6px)">${v.peso_txt}</span></span></button>`}).join("")+
+  `</figure><p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. `+
+  `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>`}
 function vistaResumen(){
- const orden=[...DATOS.actividades].sort((a,b)=>b.nacional.ocupados-a.nacional.ocupados);
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
- const totalNiveles=NIVELES.map((_,i)=>[DATOS.actividades.reduce((t,a)=>t+a.niveles[i][0],0)]);
  const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
  const corto=c=>esc(porCiiu(c).corto),me=RES.mayor_empleador,[d1,d2]=RES.mas_desiguales;
  const [desMin,desMax]=extremos(r=>POB.regiones[r].tasa_desocupacion),[titMin,titMax]=extremos(r=>pctTitulo(EDU[r])),e=extremosDesoc();
@@ -453,20 +521,11 @@ function vistaResumen(){
  <div class="aviso">Estar fuera de la fuerza de trabajo no equivale a desempleo. El Censo registra la actividad solo de los ocupados.</div></details>
  ${encabezado("sec-act","Actividades",`${corto(me.ciiu)} es la que más emplea en ${me.n} de 16 regiones; las más concentradas son ${corto(d1.ciiu)}, seguida de ${corto(d2.ciiu)}`)}
  <div class="nota">Ocupados (participación), según lugar de trabajo. `+
-  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales. `+
-  `Hombres y mujeres: % sobre los ocupados de la actividad. Con título: % de sus ocupados con nivel informado; `+
-  `en todas las actividades, ${num(conTitulo(totalNiveles),1)}% (el ${num(EST.pct_con_titulo,1)}% de los hallazgos cuenta por residencia).</div>
+  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales.</div>
+ ${graficoSexo()}
  <p class="invita"><strong>Elige una actividad</strong> para ver en qué regiones se concentra y sus carreras afines, con títulos, empleabilidad e ingresos. `+
   `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
- <div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:8px"><thead><tr><th rowspan="2">Actividad</th><th colspan="3" class="bloque ini">Chile</th>`+
-  `<th rowspan="2" class="n bloque ini">Con título técnico o profesional</th><th colspan="3" class="bloque ini">Región con mayor CL</th></tr>`+
-  `<tr><th class="n ini">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="ini">Región</th><th class="n">Ocupados</th><th class="n">CL</th></tr></thead><tbody>`+
-  orden.map(a=>{const n=a.nacional,v=a.regiones[n.mas_peso.r];
-   return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button>${a.alerta_fuente?' <span title="Censo y ENE difieren en el tamaño de esta actividad">⚠</span>':""}</td>`+
-    `<td class="n ini">${vp(n.ocupados,a.pct_nacional)}</td><td class="n">${num(a.sexo.h)} (${num(a.sexo.pct_h,1)}%)</td><td class="n">${num(a.sexo.m)} (${num(a.sexo.pct_m,1)}%)</td>`+
-    `<td class="n ini">${num(conTitulo(a.niveles),1)}%</td><td class="ini">${nomReg(n.mas_peso.r)}</td><td class="n">${vp(v.ocupados,v.pct)}</td><td class="n">${n.mas_peso.txt}</td></tr>`}).join("")+
-  `</tbody></table></div>
- <p class="nota" style="margin:8px 0 0">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>
+ ${graficoCL()}
  ${sinRegion.length?`<p class="nota" style="margin:4px 0 0">Subestimadas por ocupados sin región de trabajo `+
   `(${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>`:""}
  ${encabezado("sec-lab","Trabajo por región",`La desocupación va de ${num(desMin[1],1)}% en ${enReg(desMin[0])} a ${num(desMax[1],1)}% en ${enReg(desMax[0])}`)}
@@ -523,7 +582,10 @@ function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return 
 function vistaChile(){const n=act.nacional;
  return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
  <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>
- <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div></div>
+ <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div>`+
+  // Las cantidades por sexo viven aquí: el gráfico del resumen las muestra solo al pasar el mouse.
+  `<div class="dato"><b>${num(act.sexo.m)} (${num(act.sexo.pct_m,1)}%)</b><span>mujeres</span></div>`+
+  `<div class="dato"><b>${num(act.sexo.h)} (${num(act.sexo.pct_h,1)}%)</b><span>hombres</span></div></div>
  ${informalidadActividad()}${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE de ${PER.ene_contraste}, los meses del Censo: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
  <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,"Todas las actividades",DATOS.perfil_estudios.todas)}`}
 // La tasa siempre usa residencia, aunque los ocupados de la región se muestren por lugar de trabajo.
@@ -638,6 +700,8 @@ function leerVista(){const [c,r,f]=location.hash.slice(1).split("/");
  sel.value=act?act.ciiu:""}
 function detalle(){
  guardarVista();
+ // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
+ document.getElementById("tip").style.display="none";
  let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
  if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;
@@ -645,6 +709,9 @@ function detalle(){
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
+ // Texto emergente del gráfico de hombres y mujeres, con el mismo globo que el mapa.
+ e.querySelectorAll("[data-tip]").forEach(b=>{b.onmousemove=ev=>{tip.innerHTML=b.dataset.tip;tip.style.display="block";
+  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"}});
  // El índice mueve el foco a la sección, para que el teclado y el lector de pantalla sigan desde ahí.
  e.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>{const s=document.getElementById(b.dataset.ir);
   s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});s.focus({preventScroll:true})});

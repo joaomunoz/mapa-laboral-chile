@@ -102,6 +102,31 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .indice button:focus-visible{outline:2px solid var(--acento)}
 .banda{margin:14px 0 10px;padding:5px 10px;border-left:3px solid var(--eje);background:var(--plano);font-size:13px;font-weight:600;color:var(--t2)}
 .sec-cab{scroll-margin-top:12px;outline:none}
-.sec-cab h2{font-size:18px;font-weight:700;line-height:1.3}
-.tema{margin:0;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--t2)}
+.sec-cab h2{font-size:20px;font-weight:800;line-height:1.3}
+/* Gráfico de hombres y mujeres por actividad: azul y rosado validados para daltonismo y contraste en ambos modos.
+   Cada barra es un botón: abre la actividad, igual que la tabla. */
+.graf-sexo{margin:10px 0 4px}
+.gs-leyenda{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--t2);margin-bottom:6px}
+.gs-leyenda i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.gs-leyenda .ref{display:inline-block;width:0;height:12px;border-left:2px dashed var(--t1);margin-right:5px;vertical-align:-2px}
+/* La barra tiene tope de ancho: más larga cuesta comparar a la vista. */
+.gs-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,13rem) 3.4em minmax(0,420px) 3.4em auto;justify-content:start;align-items:center;gap:6px;width:100%;padding:2px 4px;border-radius:4px;cursor:pointer;font-size:13px}
+/* Las cifras de título y ocupados quedan aparte de la barra, para que no se lean como parte del reparto por sexo. */
+.gs-extra{display:grid;grid-template-columns:5.6em 9.6em;gap:6px;margin-left:14px}.gs-num{text-align:right;font-variant-numeric:tabular-nums;color:var(--t1)}.gs-et{display:none}
+.gs-cab{cursor:default;align-items:end;font-size:12px;color:var(--t2);padding-bottom:4px}.gs-cab:hover{background:none}.gs-cab .gs-nombre,.gs-cab .gs-num{color:var(--t2)}
+.gs-fila:hover,.gs-fila:focus-visible{background:var(--plano)}.gs-fila:focus-visible{outline:2px solid var(--acento)}
+.gs-nombre{color:var(--acento);overflow-wrap:anywhere}
+.gs-pct{text-align:right;font-variant-numeric:tabular-nums;color:var(--t1)}.gs-pct.h{text-align:left}
+.gs-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px;cursor:default}.gs-total .gs-nombre{color:var(--t1)}
+.gs-barra{position:relative;display:flex;gap:2px;height:16px}
+.gs-barra i{display:block;height:100%}.gs-barra .m{background:var(--muj);border-radius:4px 0 0 4px}.gs-barra .h{background:var(--hom);border-radius:0 4px 4px 0}
+/* Mismo rojo que el mapa usa para "concentra": el CL se lee igual en el gráfico y en el mapa. */
+.graf-cl{margin:14px 0 4px}
+.cl-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,20rem) minmax(0,420px);justify-content:start;align-items:center;gap:6px;width:100%;padding:2px 4px;border-radius:4px;cursor:pointer;font-size:13px}
+.cl-fila:hover,.cl-fila:focus-visible{background:var(--plano)}.cl-fila:focus-visible{outline:2px solid var(--acento)}
+.cl-nombre{color:var(--acento);overflow-wrap:anywhere}.cl-reg{color:var(--t2)}.cl-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px;cursor:default}.cl-total .cl-nombre{color:var(--t1)}.cl-total .cl-barra i{background:var(--t2)}.cl-alerta{color:var(--t1)}.cl-valor{position:absolute;top:50%;transform:translateY(-50%);font-variant-numeric:tabular-nums;color:var(--t1);white-space:nowrap}
+.cl-barra{position:relative;height:16px;margin-right:3.2em}.cl-barra i{display:block;height:100%;background:var(--cl);border-radius:0 4px 4px 0}
+.cl-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
+.gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
+.tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}

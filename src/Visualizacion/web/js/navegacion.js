@@ -19,6 +19,8 @@ function leerVista(){const [c,r,f]=location.hash.slice(1).split("/");
  sel.value=act?act.ciiu:""}
 function detalle(){
  guardarVista();
+ // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
+ document.getElementById("tip").style.display="none";
  let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
  if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;
@@ -26,6 +28,9 @@ function detalle(){
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
+ // Texto emergente del gráfico de hombres y mujeres, con el mismo globo que el mapa.
+ e.querySelectorAll("[data-tip]").forEach(b=>{b.onmousemove=ev=>{tip.innerHTML=b.dataset.tip;tip.style.display="block";
+  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"}});
  // El índice mueve el foco a la sección, para que el teclado y el lector de pantalla sigan desde ahí.
  e.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>{const s=document.getElementById(b.dataset.ir);
   s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});s.focus({preventScroll:true})});
