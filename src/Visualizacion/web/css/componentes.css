@@ -178,3 +178,24 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .ed-pro{background:var(--ed-pro)}.ed-tec{background:var(--ed-tec)}.gs-leyenda i.ed-pro,.gs-leyenda i.ed-tec{border-radius:2px}
 .ed-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ed-fila:hover .cl-valor,.ed-fila:focus-visible .cl-valor{background:var(--plano)}
 .ed-barra i.ed-pro,.cl-total .ed-barra i.ed-pro{background:var(--ed-pro)}.ed-barra i.ed-tec,.cl-total .ed-barra i.ed-tec{background:var(--ed-tec)}
+/* Formalidad: dos paneles con la misma escala (barras 100%), informal en color y formal en gris. */
+.fo-paneles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px}.fo-titulo{margin:4px 0 4px;font-size:13px;font-weight:700;color:var(--t1)}
+.fo-fila{display:grid;grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) 5.6em;align-items:center;gap:6px;padding:2px 4px;border-radius:4px;font-size:13px}
+.fo-fila:hover,.fo-fila:focus-visible{background:var(--plano)}.fo-fila:focus-visible{outline:2px solid var(--acento)}.fo-fila.cl-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}
+.fo-nombre{color:var(--t1);overflow-wrap:anywhere}.fo-miles{text-align:right;font-variant-numeric:tabular-nums;color:var(--t2);font-weight:400}
+.fo-barra{display:flex;gap:2px;height:20px}.fo-barra i{display:flex;align-items:center;padding-left:5px;font-style:normal;font-size:12px;font-weight:400;font-variant-numeric:tabular-nums;color:#0b0b0b;white-space:nowrap;border-radius:2px}
+.fo-inf{background:var(--fo-inf)}.fo-for{background:var(--fo-for)}.fo-barra i.fo-for{color:var(--fo-for-txt)}.gs-leyenda i.fo-inf,.gs-leyenda i.fo-for{border-radius:2px}
+
+.gs-cab .cl-nombre{color:var(--t2)}
+.fo-miles{white-space:nowrap}.fo-fila{grid-template-columns:minmax(0,8.5rem) minmax(0,1fr) 6.6em}
+/* Regiones: la línea de la informalidad de Chile cruza cada barra; las regiones son enlaces. */
+.fo-paneles{grid-template-columns:repeat(3,minmax(0,1fr))}.fo-panel .fo-fila{grid-template-columns:minmax(0,7rem) minmax(0,1fr) 6.6em}
+.fo-ref{position:relative;display:block}.fo-ref b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
+.fo-reg{grid-template-columns:minmax(0,11rem) minmax(0,520px) 7.6em}button.fo-fila{font:inherit;color:inherit;background:none;border:0;text-align:left;width:100%;cursor:pointer}button.fo-fila .fo-nombre{color:var(--acento)}
+.fo-reg.gs-cab{font-size:12px;color:var(--t2)}.fo-reg.gs-cab .fo-nombre,.fo-reg.gs-cab .fo-miles{color:var(--t2)}
+/* Los tres grupos van uno bajo otro: en tres columnas, cada barra quedaba de unos 80 px. La cifra formal va al final de
+   su tramo, lejos de la línea de Chile, que cruza cerca del límite entre informal y formal. */
+.fo-paneles{grid-template-columns:minmax(0,1fr)}.fo-panel .fo-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px) 7.6em}
+.fo-barra i.fo-for{justify-content:flex-end;padding:0 5px 0 0}
+.gs-cab .fo-miles{white-space:normal}
+.pct-bajo{color:var(--t2);font-size:12px;font-weight:400}

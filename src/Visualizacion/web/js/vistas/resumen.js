@@ -83,28 +83,74 @@ function extremos(valor){const r=DATOS.orden.map(k=>[k,valor(k)]).sort((a,b)=>a[
 // "en la Metropolitana": el nombre corto de la región no lleva artículo.
 const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 const pctTitulo=v=>100*(v[0]+v[1])/(v[0]+v[1]+v[2]);
+// Una barra formal/informal: lo informal va primero, para que comparta la base y se compare entre filas, y ambas partes
+// llevan su color y su %, porque son las dos mitades que se leen (solo el informal dejaba la otra mitad sin cifra).
+// Bajo 9% la cifra no cabe en el tramo y queda en el globo.
+const barraFormal=(inf,form)=>`<span class="fo-barra" aria-hidden="true"><i class="fo-inf" style="flex:${inf} 0 0">${inf>=9?`${num(inf,1)}%`:""}</i>`+
+ `<i class="fo-for" style="flex:${form} 0 0">${form>=9?`${num(form,1)}%`:""}</i></span>`;
+const leyendaFormal=`<span><i class="fo-inf"></i>Informal</span><span><i class="fo-for"></i>Formal</span>`;
+// Formalidad por nivel: tres gráficos con la misma escala. "Todos los ocupados" lleva las cifras del título (incluye al
+// familiar no remunerado, siempre informal); "Asalariados" e "Independientes" miden la informalidad dentro de cada
+// grupo, que el reparto sobre el total no deja ver: 69,2% de los independientes sin título es informal, frente a 22,6%
+// de los profesionales. Cuántos son va al lado: los asalariados son tres veces los independientes.
+// Se descartaron las barras divergentes con el reparto completo: mostraban cuánto pesa cada grupo, no qué tan informal es.
+function graficoFormalidadNivel(){const filas=[["Chile",FOR.chile," cl-total"],...NIVELES.map(([k,t])=>[t,FOR.niveles[k],""])];
+ const grupos=[["Todos los ocupados","ocupados",d=>[d.ocup,d.inf[1],d.for[1]]],
+  ["Asalariados","asalariados",d=>[d.asa[0],d.asa[1],100-d.asa[1]]],["Independientes","independientes",d=>[d.inx[0],d.inx[1],100-d.inx[1]]]];
+ const panel=([titulo,grupo,valor])=>`<div class="fo-panel"><p class="fo-titulo">${titulo}</p>`+filas.map(([t,d,clase])=>{const [miles,inf,form]=valor(d);
+  const partes=[`${num(miles)} ${grupo}`,`${num(inf,1)}% informal`,`${num(form,1)}% formal`];
+  return `<div class="fo-fila${clase}" role="img" tabindex="0" data-tip="${`<strong>${titulo}, ${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${titulo}, ${t}: ${partes.join(", ")}">`+
+   `<span class="fo-nombre">${t}</span>${barraFormal(inf,form)}<span class="fo-miles">${enMiles(miles)}</span></div>`}).join("")+`</div>`;
+ return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por nivel de estudios, Chile</strong></span>${leyendaFormal}</figcaption>`+
+  `<div class="fo-paneles">${grupos.map(panel).join("")}</div></figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los ocupados, de los asalariados y de los independientes de cada nivel; a la derecha, cuántos son. `+
+  `Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal.</p>`}
+// Formalidad por región: barras formal/informal como las de los niveles, de mayor a menor informalidad, con Chile
+// primero y una línea en su informalidad; el % de independientes va como cifra. No se pinta énfasis sobre o bajo Chile:
+// no hay margen de error por región y una diferencia de uno o dos puntos puede deberse a la muestra.
+function graficoFormalidadRegion(){const c=FOR.chile,tasa=d=>d.inf[1];
+ const filas=DATOS.orden.map(r=>[r,FOR.regiones[r]]).sort((a,b)=>tasa(b[1])-tasa(a[1])||a[0]-b[0]);
+ const fila=(t,d,clase,attr)=>{const partes=[`informal: ${num(d.inf[0])} (${num(d.inf[1],1)}%)`,`formal: ${num(d.for[0])} (${num(d.for[1],1)}%)`,`independientes: ${num(d.ind[0])} (${num(d.ind[1],1)}%)`],tag=attr?"button":"div";
+  return `<${tag} class="fo-fila fo-reg${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="fo-nombre">${t}</span><span class="fo-ref">${barraFormal(d.inf[1],d.for[1])}<b style="left:${tasa(c)}%"></b></span><span class="fo-miles">${num(d.ind[1],1)}%</span></${tag}>`};
+ return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por región</strong></span>${leyendaFormal}`+
+  `<span><span class="ref"></span>Chile: ${num(tasa(c),1)}% informal, ${num(c.for[1],1)}% formal</span></figcaption>`+
+  `<div class="fo-fila fo-reg gs-cab" aria-hidden="true"><span class="fo-nombre">Región</span><span>% de los ocupados</span><span class="fo-miles">Indepen&shy;dientes</span></div>`+
+  fila("Chile",c," cl-total","")+filas.map(([r,d])=>fila(nomReg(r),d,"",`data-r="${r}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los ocupados de la región, según residencia; a la derecha, el % de independientes, formales e informales. `+
+  `Son estimaciones con muestra: una diferencia de uno o dos puntos entre regiones puede deberse a ella.</p>`}
 // Formalidad según ENE: dos ejes y no tres grupos, porque un independiente puede ser formal o informal.
 function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r=>FOR.regiones[r].inf[1]);
  const celda=v=>`<td class="n">${v?vmil(v):"—"}</td>`;
- const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${["af","ai","xf","xi","fam","for","inf"].map(x=>celda(d[x])).join("")}</tr>`;
+ // Con cifras completas, la tabla por nivel (7 columnas) no cabía en pantalla: el % va bajo cada cifra.
+ const celda2=v=>`<td class="n">${v?`${num(v[0])}<br><span class="pct-bajo">${num(v[1],1)}%</span>`:"—"}</td>`;
+ const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${["af","ai","xf","xi","fam","for","inf"].map(x=>celda2(d[x])).join("")}</tr>`;
  const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
- return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% trabaja en la informalidad; con título profesional, ${num(n.Profesional.inf[1],1)}%`,true)}
- <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia, en miles (es una estimación con muestra). `+
+ return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
+ <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
   `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
-  `Los independientes son ${enMiles(c.ind[0])} (${num(c.ind[1],1)}%): ${num(c.xi[1],1)}% informales y ${num(c.xf[1],1)}% formales. `+
+  `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
   `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel<br><span class="nota">miles (%)</span></th><th colspan="2" class="bloque ini">Asalariado</th><th colspan="2" class="bloque ini">Independiente</th>`+
+ ${graficoFormalidadNivel()}
+ ${graficoFormalidadRegion()}
+ <details><summary>Ver cifras</summary>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel<br><span class="nota">ocupados (%)</span></th><th colspan="2" class="bloque ini">Asalariado</th><th colspan="2" class="bloque ini">Independiente</th>`+
   `<th rowspan="2" class="n bloque ini">Familiar no remunerado</th><th colspan="2" class="bloque ini">En total</th></tr>`+
   `<tr><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
   fila("Chile",c,"total")+NIVELES.map(([k,t])=>fila(t,n[k],"")).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">Miles de ocupados (% de cada fila). Las cinco primeras columnas suman 100, y también formal e informal en total; el familiar no remunerado siempre es informal.${
-  sinFam.length?` Familiar no remunerado sin dato (—) en ${sinFam.join(" y ")}: son menos de 60 personas en la muestra.`:""} Estas diferencias no indican causa: la edad, por ejemplo, también influye.</p>
- <details><summary>Ver por región</summary>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región<br><span class="nota">miles (%)</span></th><th class="n">Formal</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
+ <p class="nota" style="margin:6px 0 0">Ocupados estimados (% de cada fila). Formal e informal en total suman 100; el familiar no remunerado siempre es informal y entra en el informal total.${
+  sinFam.length?` En ${sinFam.join(" y ")}, el familiar no remunerado no se muestra (—) porque son menos de 60 personas en la muestra: por eso ahí las cinco primeras columnas no llegan a 100, y el informal total es algo mayor que la suma de asalariado e independiente informal (la diferencia es ese familiar, menos de 0,5%).`:""} Estas diferencias no indican causa: la edad, por ejemplo, también influye.</p>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel</th><th colspan="3" class="bloque ini">Asalariados</th><th colspan="3" class="bloque ini">Independientes</th></tr>`+
+  `<tr><th class="n ini">Total</th><th class="n">Formal</th><th class="n">Informal</th><th class="n ini">Total</th><th class="n">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
+  // Los ocupados formal e informal son los de la tabla de arriba; el % se calcula dentro del grupo y suma 100.
+  [["Chile",c,"total"],...NIVELES.map(([k,t])=>[t,n[k],""])].map(([t,d,k])=>`<tr class="${k}"><td>${t}</td>`+
+   [["asa","af","ai"],["inx","xf","xi"]].map(([g,f,i])=>`<td class="n">${num(d[g][0])}</td>${celda2([d[f][0],100-d[g][1]])}${celda2([d[i][0],d[g][1]])}`).join("")+`</tr>`).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo): formal e informal suman 100 en asalariados y en independientes. Son los mismos ocupados de la tabla de arriba; cambia la base del %, que aquí es el grupo y no todos los ocupados.</p>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región<br><span class="nota">ocupados (%)</span></th><th class="n">Formal</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
   [["Chile",c,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],FOR.regiones[r],""])].map(([t,d,k])=>
    `<tr class="${k}"><td>${esc(t)}</td>${celda(d.for)}${celda(d.inf)}${celda(d.ind)}</tr>`).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">Miles de ocupados (% de la región); formal e informal suman 100. Por región no se separan las cuatro casillas: en las regiones chicas quedarían con poca muestra.</p></details>`}
+ <p class="nota" style="margin:6px 0 0">Ocupados estimados (% de la región); formal e informal suman 100. Por región no se separan las cuatro casillas: en las regiones chicas quedarían con poca muestra.</p></details>`}
 // Hombres y mujeres por actividad, en barras que suman 100% ordenadas por % de mujeres: el largo de cada barra es el
 // reparto, no el tamaño, para que Comercio no aplaste al resto. Arriba, todas las actividades juntas, que es también
 // la línea punteada: se usa la misma base que las barras (7,4 millones), para que la fila de arriba sea su suma.

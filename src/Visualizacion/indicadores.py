@@ -239,26 +239,35 @@ def evolucion_desocupacion(t: pd.DataFrame) -> dict:
 def formalidad(t: pd.DataFrame) -> dict:
     """Asalariado o independiente, y formal o informal, según ENE de marzo a julio de 2026.
 
-    Cada cifra va como [miles de ocupados, %]. Miles y no unidades: la ENE estima con una muestra, y escribir la
-    unidad haría parecer exacta una cifra que no lo es. Formal es el complemento de informal, para que el lector vea
+    Cada cifra va como [ocupados estimados, %], en unidades: en miles ("80" por 80 mil) la tabla se leía como 80
+    personas y confundía. Son estimaciones con muestra, y el mapa lo dice junto a las cifras. Formal es el complemento de informal, para que el lector vea
     las dos partes que suman 100; su % se calcula desde el % informal ya redondeado, así la suma da 100 exacto.
     Chile y los niveles llevan el reparto completo; regiones y actividades solo formal, informal e independientes,
     porque las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Familiar no remunerado
     va None donde no es fiable, y cada cifra de una actividad se escribe solo si es fiable.
     """
     def par(f, pct):
-        return [int(redondear(f["ocupados"] * pct / 100 / 1000, 0)), redondear(pct, 1)]
+        return [int(redondear(f["ocupados"] * pct / 100, 0)), redondear(pct, 1)]
 
     def base(f):
         inf = redondear(f["tasa_informalidad"], 1)
-        return {"ocup": int(redondear(f["ocupados"] / 1000, 0)), "inf": par(f, f["tasa_informalidad"]),
-                "for": [int(redondear(f["ocupados"] * (100 - f["tasa_informalidad"]) / 100 / 1000, 0)), redondear(100 - inf, 1)],
+        return {"ocup": int(redondear(f["ocupados"], 0)), "inf": par(f, f["tasa_informalidad"]),
+                "for": [int(redondear(f["ocupados"] * (100 - f["tasa_informalidad"]) / 100, 0)), redondear(100 - inf, 1)],
                 "ind": par(f, f["pct_independientes"]) if f["fiabilidad_independientes"] == "fiable" else None}
 
     def reparto(f):
         return {**base(f), "af": par(f, f["pct_asalariado_formal"]), "ai": par(f, f["pct_asalariado_informal"]),
                 "xf": par(f, f["pct_independiente_formal"]), "xi": par(f, f["pct_independiente_informal"]),
-                "fam": par(f, f["pct_familiar"]) if f["fiabilidad_familiar"] == "fiable" else None}
+                "fam": par(f, f["pct_familiar"]) if f["fiabilidad_familiar"] == "fiable" else None,
+                # Informalidad dentro de cada grupo, [miles del grupo, % informal]: responde qué tan informal es ser
+                # asalariado o independiente en cada nivel, que el reparto sobre el total no deja ver. El % se calcula
+                # desde los % sin redondear; los ocupados son la suma de las dos casillas publicadas, para que el
+                # gráfico y "Ver cifras" muestren la misma cifra.
+                "asa": dentro(f, f["pct_asalariado_formal"], f["pct_asalariado_informal"]),
+                "inx": dentro(f, f["pct_independiente_formal"], f["pct_independiente_informal"])}
+
+    def dentro(f, formal, informal):
+        return [par(f, formal)[0] + par(f, informal)[0], redondear(100 * informal / (formal + informal), 1)]
     por = lambda a: t[t["ambito"] == a]
     return {"chile": reparto(por("chile").iloc[0]),
             "niveles": {f["nivel_titulo"]: reparto(f) for _, f in por("nivel").iterrows()},
