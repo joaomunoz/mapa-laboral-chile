@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una) y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 363 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 365 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 

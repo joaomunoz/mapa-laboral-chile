@@ -11,56 +11,63 @@ function desocTitulo(){const e=extremosDesoc();
  return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior: va ${e.rango}.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
-const LECT_EVO={sube:"Sube",baja:"Baja",sin_cambio_claro:"Sin cambio claro"};
+// "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
+const LECT_EVO={sube:"Sube",baja:"Baja",sin_cambio_claro:"Dentro del margen"};
 const NIVEL_EVO={Profesional:"profesionales",Tecnico:"técnicos",Sin_titulo:"sin título superior"};
 const ppTxt=v=>(v>0?"+":v<0?"−":"")+num(Math.abs(v),1);
 function frasesEvolucion(){const c=EVO.chile,niv=Object.entries(EVO.niveles),regs=Object.entries(EVO.regiones);
- const chile=c.lect==="sin_cambio_claro"?`La tasa de desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, sin un cambio claro.`
+ const chile=c.lect==="sin_cambio_claro"?`La tasa de desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, un cambio dentro del margen de error.`
   :`La tasa de desocupación ${c.lect==="sube"?"subió":"bajó"} de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026 (${ppTxt(c.dif)} pp).`;
  const grupo=(l,v)=>{const x=niv.filter(([,d])=>d.lect===l);return x.length?`${v} en ${lista(x.map(([k,d])=>`${NIVEL_EVO[k]} (${ppTxt(d.dif)} pp)`))}.`:""};
  const quietos=niv.filter(([,d])=>d.lect==="sin_cambio_claro");
- const niveles=[grupo("sube","Subió"),grupo("baja","Bajó"),quietos.length?`En ${lista(quietos.map(([k])=>NIVEL_EVO[k]))} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+ const niveles=[grupo("sube","Subió"),grupo("baja","Bajó"),quietos.length?`En ${lista(quietos.map(([k])=>NIVEL_EVO[k]))}, el cambio queda dentro del margen de error.`:""].filter(Boolean).join(" ");
  const porLect=l=>regs.filter(([,d])=>d.lect===l).sort((a,b)=>b[1].dif-a[1].dif).map(([r])=>nomReg(r));
  const sube=porLect("sube"),baja=porLect("baja"),resto=regs.length-sube.length-baja.length;
  const regiones=[sube.length?`Subió en ${sube.length} ${sube.length===1?"región":"regiones"}: ${lista(sube)}.`:"",
   baja.length?`Bajó en ${baja.length} ${baja.length===1?"región":"regiones"}: ${lista(baja)}.`:"",
-  resto?`En ${sube.length||baja.length?"las otras ":"las "}${resto} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+  resto?`En ${sube.length||baja.length?"las otras ":"las "}${resto}, el cambio queda dentro del margen de error.`:""].filter(Boolean).join(" ");
  return {chile,niveles,regiones}}
-// Barras agrupadas en columnas, 2024 y 2026 por grupo: muestran el nivel de cada año además del cambio. La lectura
-// ("sube" o "sin cambio claro") la sigue decidiendo el rango del 95% y va escrita debajo, porque las columnas no muestran
-// el margen. Ambos gráficos usan la misma escala, desde 0, para que una diferencia chica no se vea grande.
-// Con 17 grupos (modo compacto) las cifras y los nombres van en vertical, porque horizontales no caben en el ancho de
-// cada grupo, y en pantallas angostas el gráfico se desliza de lado dentro de su recuadro.
+// Columnas agrupadas, 2024 y 2026 por grupo, en una misma escala desde 0. Énfasis por lectura: los grupos que suben
+// llevan ocre y azul, y los que quedan dentro del margen van en gris, para que el gráfico diga solo cuáles cambiaron
+// sin que haya que leer el rango (la lectura la sigue decidiendo el rango del 95%). Bajo cada grupo va solo el cambio:
+// las tasas, el rango y la lectura escrita están en el globo y en la tabla "Ver cifras", porque una cifra en cada
+// marca no se lee. Con 17 grupos (modo compacto) los nombres van a 45° y en pantallas angostas el gráfico se desliza.
 function columnasEvolucion(titulo,grupos,tope,compacto){const pos=x=>100*x/tope,marcas=Array.from({length:tope/4+1},(_,k)=>4*k);
  const grupo=([t,d,clase,attr])=>{const partes=[`${num(d.t24,1)}% en 2024 y ${num(d.t26,1)}% en 2026`,`cambio ${ppTxt(d.dif)} pp (rango del 95%: ${ppTxt(d.min)} a ${ppTxt(d.max)} pp)`,LECT_EVO[d.lect].toLowerCase()];
-  // En modo compacto las cifras no van sobre las columnas, donde no caben horizontales: van en filas bajo el gráfico.
-  const col=(v,k)=>`<span class="evc-col ${k}" style="height:${pos(v)}%">${compacto?"":`<em>${num(v,1)}%</em>`}</span>`;
+  const gris=d.lect==="sin_cambio_claro",col=(v,k)=>`<span class="evc-col ${gris?"g"+k.slice(1):k}" style="height:${pos(v)}%">${compacto?"":`<em>${num(v,1)}%</em>`}</span>`;
   const tag=attr?"button":"div";
   return `<${tag} class="evc-grupo${clase}" ${attr||""}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-   `<span class="evc-cols" aria-hidden="true">${col(d.t24,"a24")}${col(d.t26,"a26")}</span><span class="evc-nombre"><span>${t}</span></span>`+(compacto?`<span class="evc-v">${num(d.t24,1)}</span><span class="evc-v">${num(d.t26,1)}</span>`:"")+
-   `<span class="evc-dif">${ppTxt(d.dif)}${compacto?"":" pp"}</span><span class="evc-lect">${compacto?(d.lect==="sin_cambio_claro"?"—":LECT_EVO[d.lect].toLowerCase()):LECT_EVO[d.lect]}</span></${tag}>`};
+   `<span class="evc-cols" aria-hidden="true">${col(d.t24,"a24")}${col(d.t26,"a26")}</span><span class="evc-nombre"><span>${t}</span></span>`+
+   `<span class="evc-dif">${ppTxt(d.dif)}${compacto?"":" pp"}</span></${tag}>`};
+ const hayGris=grupos.some(([,d])=>d.lect==="sin_cambio_claro");
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">${titulo}</strong></span>`+
-  `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span></figcaption>`+
+  `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span>${hayGris?`<span><i class="g24"></i><i class="g26"></i>Dentro del margen de error</span>`:""}</figcaption>`+
   `<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
-  (compacto?`<div class="evc-rotulos" aria-hidden="true"><span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span><span>Cambio</span><span></span></div>`:"")+
+  (compacto?`<div class="evc-rotulos" aria-hidden="true"><span>Cambio</span></div>`:"")+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
-  grupos.map(grupo).join("")+`</div></div></figure>`+
-  (compacto?`<p class="nota" style="margin:2px 0 0">Bajo cada región, sus tasas de 2024 y 2026 (%), el cambio en pp y su lectura: "sube" o "—" (sin cambio claro).</p>`:"")}
+  grupos.map(grupo).join("")+`</div></div></figure>`}
+// Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
+function tablaEvolucion(filas){const c=EVO.chile;
+ const tr=(t,d,k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
+  `<td class="n">${ppTxt(d.dif)} pp</td><td class="n">${ppTxt(d.min)} a ${ppTxt(d.max)}</td><td>${LECT_EVO[d.lect]}</td></tr>`;
+ return `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th></th><th class="n">2024</th><th class="n">2026</th>`+
+  `<th class="n">Cambio</th><th class="n">Rango del cambio (95%)</th><th>Lectura</th></tr></thead><tbody>`+
+  tr("Chile",c,"total")+NIVELES.map(([k,t])=>tr(t,EVO.niveles[k],"")).join("")+filas.map(([r,d],i)=>tr(nomReg(r),d,i?"":"sep")).join("")+`</tbody></table></div></details>`}
 function graficosEvolucion(filas){const c=EVO.chile,todos=[c,...Object.values(EVO.niveles),...filas.map(([,d])=>d)];
- const tope=Math.ceil(Math.max(...todos.flatMap(d=>[d.t24,d.t26]))/4)*4,chile=["Chile",c," ev-total",""];
+ const tope=Math.ceil(Math.max(...todos.flatMap(d=>[d.t24,d.t26]))/4)*4;
  return columnasEvolucion("Por nivel de estudios",[["Chile",c," evc-total"],...NIVELES.map(([k,t])=>[t,EVO.niveles[k],""])],tope)+
-  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)}
+  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)+tablaEvolucion(filas)}
 function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
  const filas=Object.entries(EVO.regiones).sort((a,b)=>b[1].dif-a[1].dif||a[0]-b[0]);
- const titulo=c.lect==="sin_cambio_claro"?`La desocupación no muestra un cambio claro entre 2024 y 2026 (${num(c.t24,1)}% y ${num(c.t26,1)}%)`
+ const titulo=c.lect==="sin_cambio_claro"?`La desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, dentro del margen de error`
   :`La desocupación ${c.lect==="sube"?"subió":"bajó"} de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026`;
  return `${encabezado("sec-evo","Cambio 2024–2026",titulo)}<div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_evolucion}. `+
   `Son los mismos meses en ambos años, para que no cuente la estacionalidad, y es otra fuente que el Censo: sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">Cambio de ${ppTxt(c.dif)} pp, con un rango de ${ppTxt(c.min)} a ${ppTxt(c.max)} pp. ${f.niveles}</p>
  <p style="margin:8px 0 0">${f.regiones}</p>
  ${graficosEvolucion(filas)}
- <p class="nota" style="margin:6px 0 0">Tasa según región de residencia, en una misma escala desde 0. La lectura usa el rango del cambio con 95% de confianza, que se ve al pasar el mouse: `+
-  `"sube" si el rango entero queda sobre cero; "sin cambio claro" si incluye el cero, así que la diferencia cabe en el margen de error. `+
+ <p class="nota" style="margin:6px 0 0">Tasa según región de residencia, en una misma escala desde 0; bajo cada grupo, el cambio en pp. La lectura usa el rango del cambio con 95% de confianza, que está en "Ver cifras" y al pasar el mouse: `+
+  `"sube" si el rango entero queda sobre cero; "dentro del margen" si incluye el cero, porque la diferencia puede deberse a la muestra. `+
   `Por región no se separa por nivel de estudios: la ENE no tiene muestra suficiente.</p>`}
 // Navegación del resumen: un índice arriba y, en cada sección, el tema en pequeño y el hallazgo como título. Así quien
 // solo lee los títulos se lleva lo principal, y la tabla queda como evidencia. Los botones desplazan sin tocar la

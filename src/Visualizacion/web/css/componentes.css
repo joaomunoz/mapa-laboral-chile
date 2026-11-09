@@ -129,7 +129,9 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .cl-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 /* Cambio 2024-2026: ocre y azul, dos colores que se distinguen también con daltonismo; 2024 siempre va primero. */
 .graf-ev{margin:12px 0 4px}
-.a24{background:var(--a24)}.a26{background:var(--a26)}.gs-leyenda i.a24,.gs-leyenda i.a26{border-radius:2px}
+/* Gris para lo que queda dentro del margen: dos grises, claro y oscuro, para seguir distinguiendo 2024 de 2026. */
+.a24{background:var(--a24)}.a26{background:var(--a26)}.g24{background:var(--g24)}.g26{background:var(--g26)}.gs-leyenda i.a24,.gs-leyenda i.a26,.gs-leyenda i.g24,.gs-leyenda i.g26{border-radius:2px}.gs-leyenda i.g24{margin-right:2px}
+tr.sep td{border-top:1px solid var(--eje)}
 .evc{position:relative;display:flex;max-width:640px;padding-left:2.4em;margin-top:22px}
 .evc-grilla{position:absolute;left:0;right:0;top:0;height:170px}.evc-grilla span{position:absolute;left:2.4em;right:0;border-top:1px solid var(--linea)}
 .evc-grilla span:first-child{border-top-color:var(--t2)}.evc-grilla small{position:absolute;right:100%;margin-right:4px;transform:translateY(-50%);font-size:11px;color:var(--t2)}
@@ -138,7 +140,7 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .evc-cols{display:flex;align-items:flex-end;gap:4px;height:170px;align-self:stretch;justify-content:center}
 .evc-col{position:relative;width:38px;border-radius:4px 4px 0 0}.evc-col em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:2px;font-style:normal;font-size:12px;color:var(--t1);white-space:nowrap;font-variant-numeric:tabular-nums}
 .evc-nombre{margin-top:6px;color:var(--t1);min-height:2.9em}.evc-total .evc-nombre,.evc-total .evc-dif{font-weight:700}
-.evc-dif{font-variant-numeric:tabular-nums;color:var(--t1)}.evc-lect{color:var(--t2);font-size:12.5px}
+.evc-dif{font-variant-numeric:tabular-nums;color:var(--t1)}.evc-rango{color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums}.evc-lect{color:var(--t2);font-size:12.5px}
 button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo .evc-nombre{color:var(--acento)}
 .evc-desliza{overflow-x:auto;padding-bottom:4px}.evc.compacto{max-width:none;min-width:820px}
 .compacto .evc-grupo{min-width:44px;flex:1 1 44px;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 1px 4px;border-radius:4px;font-size:12px}
@@ -150,7 +152,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .evc-rotulos{position:absolute;left:0;bottom:4px;color:var(--t2);white-space:nowrap}.evc-rotulos i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
 /* Nombres a 45°: el texto termina bajo el centro de su grupo y baja hacia la izquierda, para que cada nombre quede junto a sus columnas. */
 .compacto .evc-nombre{position:relative;align-self:stretch;height:6.6em;min-height:0;margin-top:6px}.compacto .evc-nombre span{position:absolute;right:50%;top:0;white-space:nowrap;transform:rotate(-45deg);transform-origin:right top}
-.compacto .evc-total{margin-right:8px;border-right:1px dashed var(--eje);border-radius:4px 0 0 4px}
+.compacto .evc-total{margin-right:8px;border-right:1px solid var(--linea);border-radius:4px 0 0 4px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}

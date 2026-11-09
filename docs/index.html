@@ -9,10 +9,10 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa Laboral de Chile</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -162,7 +162,9 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .cl-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 /* Cambio 2024-2026: ocre y azul, dos colores que se distinguen también con daltonismo; 2024 siempre va primero. */
 .graf-ev{margin:12px 0 4px}
-.a24{background:var(--a24)}.a26{background:var(--a26)}.gs-leyenda i.a24,.gs-leyenda i.a26{border-radius:2px}
+/* Gris para lo que queda dentro del margen: dos grises, claro y oscuro, para seguir distinguiendo 2024 de 2026. */
+.a24{background:var(--a24)}.a26{background:var(--a26)}.g24{background:var(--g24)}.g26{background:var(--g26)}.gs-leyenda i.a24,.gs-leyenda i.a26,.gs-leyenda i.g24,.gs-leyenda i.g26{border-radius:2px}.gs-leyenda i.g24{margin-right:2px}
+tr.sep td{border-top:1px solid var(--eje)}
 .evc{position:relative;display:flex;max-width:640px;padding-left:2.4em;margin-top:22px}
 .evc-grilla{position:absolute;left:0;right:0;top:0;height:170px}.evc-grilla span{position:absolute;left:2.4em;right:0;border-top:1px solid var(--linea)}
 .evc-grilla span:first-child{border-top-color:var(--t2)}.evc-grilla small{position:absolute;right:100%;margin-right:4px;transform:translateY(-50%);font-size:11px;color:var(--t2)}
@@ -171,7 +173,7 @@ footer a{color:var(--acento);overflow-wrap:anywhere}
 .evc-cols{display:flex;align-items:flex-end;gap:4px;height:170px;align-self:stretch;justify-content:center}
 .evc-col{position:relative;width:38px;border-radius:4px 4px 0 0}.evc-col em{position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:2px;font-style:normal;font-size:12px;color:var(--t1);white-space:nowrap;font-variant-numeric:tabular-nums}
 .evc-nombre{margin-top:6px;color:var(--t1);min-height:2.9em}.evc-total .evc-nombre,.evc-total .evc-dif{font-weight:700}
-.evc-dif{font-variant-numeric:tabular-nums;color:var(--t1)}.evc-lect{color:var(--t2);font-size:12.5px}
+.evc-dif{font-variant-numeric:tabular-nums;color:var(--t1)}.evc-rango{color:var(--t2);font-size:12px;font-variant-numeric:tabular-nums}.evc-lect{color:var(--t2);font-size:12.5px}
 button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo .evc-nombre{color:var(--acento)}
 .evc-desliza{overflow-x:auto;padding-bottom:4px}.evc.compacto{max-width:none;min-width:820px}
 .compacto .evc-grupo{min-width:44px;flex:1 1 44px;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 1px 4px;border-radius:4px;font-size:12px}
@@ -183,7 +185,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .evc-rotulos{position:absolute;left:0;bottom:4px;color:var(--t2);white-space:nowrap}.evc-rotulos i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
 /* Nombres a 45°: el texto termina bajo el centro de su grupo y baja hacia la izquierda, para que cada nombre quede junto a sus columnas. */
 .compacto .evc-nombre{position:relative;align-self:stretch;height:6.6em;min-height:0;margin-top:6px}.compacto .evc-nombre span{position:absolute;right:50%;top:0;white-space:nowrap;transform:rotate(-45deg);transform-origin:right top}
-.compacto .evc-total{margin-right:8px;border-right:1px dashed var(--eje);border-radius:4px 0 0 4px}
+.compacto .evc-total{margin-right:8px;border-right:1px solid var(--linea);border-radius:4px 0 0 4px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
@@ -409,56 +411,63 @@ function desocTitulo(){const e=extremosDesoc();
  return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior: va ${e.rango}.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
-const LECT_EVO={sube:"Sube",baja:"Baja",sin_cambio_claro:"Sin cambio claro"};
+// "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
+const LECT_EVO={sube:"Sube",baja:"Baja",sin_cambio_claro:"Dentro del margen"};
 const NIVEL_EVO={Profesional:"profesionales",Tecnico:"técnicos",Sin_titulo:"sin título superior"};
 const ppTxt=v=>(v>0?"+":v<0?"−":"")+num(Math.abs(v),1);
 function frasesEvolucion(){const c=EVO.chile,niv=Object.entries(EVO.niveles),regs=Object.entries(EVO.regiones);
- const chile=c.lect==="sin_cambio_claro"?`La tasa de desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, sin un cambio claro.`
+ const chile=c.lect==="sin_cambio_claro"?`La tasa de desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, un cambio dentro del margen de error.`
   :`La tasa de desocupación ${c.lect==="sube"?"subió":"bajó"} de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026 (${ppTxt(c.dif)} pp).`;
  const grupo=(l,v)=>{const x=niv.filter(([,d])=>d.lect===l);return x.length?`${v} en ${lista(x.map(([k,d])=>`${NIVEL_EVO[k]} (${ppTxt(d.dif)} pp)`))}.`:""};
  const quietos=niv.filter(([,d])=>d.lect==="sin_cambio_claro");
- const niveles=[grupo("sube","Subió"),grupo("baja","Bajó"),quietos.length?`En ${lista(quietos.map(([k])=>NIVEL_EVO[k]))} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+ const niveles=[grupo("sube","Subió"),grupo("baja","Bajó"),quietos.length?`En ${lista(quietos.map(([k])=>NIVEL_EVO[k]))}, el cambio queda dentro del margen de error.`:""].filter(Boolean).join(" ");
  const porLect=l=>regs.filter(([,d])=>d.lect===l).sort((a,b)=>b[1].dif-a[1].dif).map(([r])=>nomReg(r));
  const sube=porLect("sube"),baja=porLect("baja"),resto=regs.length-sube.length-baja.length;
  const regiones=[sube.length?`Subió en ${sube.length} ${sube.length===1?"región":"regiones"}: ${lista(sube)}.`:"",
   baja.length?`Bajó en ${baja.length} ${baja.length===1?"región":"regiones"}: ${lista(baja)}.`:"",
-  resto?`En ${sube.length||baja.length?"las otras ":"las "}${resto} no hay un cambio claro.`:""].filter(Boolean).join(" ");
+  resto?`En ${sube.length||baja.length?"las otras ":"las "}${resto}, el cambio queda dentro del margen de error.`:""].filter(Boolean).join(" ");
  return {chile,niveles,regiones}}
-// Barras agrupadas en columnas, 2024 y 2026 por grupo: muestran el nivel de cada año además del cambio. La lectura
-// ("sube" o "sin cambio claro") la sigue decidiendo el rango del 95% y va escrita debajo, porque las columnas no muestran
-// el margen. Ambos gráficos usan la misma escala, desde 0, para que una diferencia chica no se vea grande.
-// Con 17 grupos (modo compacto) las cifras y los nombres van en vertical, porque horizontales no caben en el ancho de
-// cada grupo, y en pantallas angostas el gráfico se desliza de lado dentro de su recuadro.
+// Columnas agrupadas, 2024 y 2026 por grupo, en una misma escala desde 0. Énfasis por lectura: los grupos que suben
+// llevan ocre y azul, y los que quedan dentro del margen van en gris, para que el gráfico diga solo cuáles cambiaron
+// sin que haya que leer el rango (la lectura la sigue decidiendo el rango del 95%). Bajo cada grupo va solo el cambio:
+// las tasas, el rango y la lectura escrita están en el globo y en la tabla "Ver cifras", porque una cifra en cada
+// marca no se lee. Con 17 grupos (modo compacto) los nombres van a 45° y en pantallas angostas el gráfico se desliza.
 function columnasEvolucion(titulo,grupos,tope,compacto){const pos=x=>100*x/tope,marcas=Array.from({length:tope/4+1},(_,k)=>4*k);
  const grupo=([t,d,clase,attr])=>{const partes=[`${num(d.t24,1)}% en 2024 y ${num(d.t26,1)}% en 2026`,`cambio ${ppTxt(d.dif)} pp (rango del 95%: ${ppTxt(d.min)} a ${ppTxt(d.max)} pp)`,LECT_EVO[d.lect].toLowerCase()];
-  // En modo compacto las cifras no van sobre las columnas, donde no caben horizontales: van en filas bajo el gráfico.
-  const col=(v,k)=>`<span class="evc-col ${k}" style="height:${pos(v)}%">${compacto?"":`<em>${num(v,1)}%</em>`}</span>`;
+  const gris=d.lect==="sin_cambio_claro",col=(v,k)=>`<span class="evc-col ${gris?"g"+k.slice(1):k}" style="height:${pos(v)}%">${compacto?"":`<em>${num(v,1)}%</em>`}</span>`;
   const tag=attr?"button":"div";
   return `<${tag} class="evc-grupo${clase}" ${attr||""}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-   `<span class="evc-cols" aria-hidden="true">${col(d.t24,"a24")}${col(d.t26,"a26")}</span><span class="evc-nombre"><span>${t}</span></span>`+(compacto?`<span class="evc-v">${num(d.t24,1)}</span><span class="evc-v">${num(d.t26,1)}</span>`:"")+
-   `<span class="evc-dif">${ppTxt(d.dif)}${compacto?"":" pp"}</span><span class="evc-lect">${compacto?(d.lect==="sin_cambio_claro"?"—":LECT_EVO[d.lect].toLowerCase()):LECT_EVO[d.lect]}</span></${tag}>`};
+   `<span class="evc-cols" aria-hidden="true">${col(d.t24,"a24")}${col(d.t26,"a26")}</span><span class="evc-nombre"><span>${t}</span></span>`+
+   `<span class="evc-dif">${ppTxt(d.dif)}${compacto?"":" pp"}</span></${tag}>`};
+ const hayGris=grupos.some(([,d])=>d.lect==="sin_cambio_claro");
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">${titulo}</strong></span>`+
-  `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span></figcaption>`+
+  `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span>${hayGris?`<span><i class="g24"></i><i class="g26"></i>Dentro del margen de error</span>`:""}</figcaption>`+
   `<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
-  (compacto?`<div class="evc-rotulos" aria-hidden="true"><span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span><span>Cambio</span><span></span></div>`:"")+
+  (compacto?`<div class="evc-rotulos" aria-hidden="true"><span>Cambio</span></div>`:"")+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
-  grupos.map(grupo).join("")+`</div></div></figure>`+
-  (compacto?`<p class="nota" style="margin:2px 0 0">Bajo cada región, sus tasas de 2024 y 2026 (%), el cambio en pp y su lectura: "sube" o "—" (sin cambio claro).</p>`:"")}
+  grupos.map(grupo).join("")+`</div></div></figure>`}
+// Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
+function tablaEvolucion(filas){const c=EVO.chile;
+ const tr=(t,d,k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
+  `<td class="n">${ppTxt(d.dif)} pp</td><td class="n">${ppTxt(d.min)} a ${ppTxt(d.max)}</td><td>${LECT_EVO[d.lect]}</td></tr>`;
+ return `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th></th><th class="n">2024</th><th class="n">2026</th>`+
+  `<th class="n">Cambio</th><th class="n">Rango del cambio (95%)</th><th>Lectura</th></tr></thead><tbody>`+
+  tr("Chile",c,"total")+NIVELES.map(([k,t])=>tr(t,EVO.niveles[k],"")).join("")+filas.map(([r,d],i)=>tr(nomReg(r),d,i?"":"sep")).join("")+`</tbody></table></div></details>`}
 function graficosEvolucion(filas){const c=EVO.chile,todos=[c,...Object.values(EVO.niveles),...filas.map(([,d])=>d)];
- const tope=Math.ceil(Math.max(...todos.flatMap(d=>[d.t24,d.t26]))/4)*4,chile=["Chile",c," ev-total",""];
+ const tope=Math.ceil(Math.max(...todos.flatMap(d=>[d.t24,d.t26]))/4)*4;
  return columnasEvolucion("Por nivel de estudios",[["Chile",c," evc-total"],...NIVELES.map(([k,t])=>[t,EVO.niveles[k],""])],tope)+
-  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)}
+  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)+tablaEvolucion(filas)}
 function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
  const filas=Object.entries(EVO.regiones).sort((a,b)=>b[1].dif-a[1].dif||a[0]-b[0]);
- const titulo=c.lect==="sin_cambio_claro"?`La desocupación no muestra un cambio claro entre 2024 y 2026 (${num(c.t24,1)}% y ${num(c.t26,1)}%)`
+ const titulo=c.lect==="sin_cambio_claro"?`La desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, dentro del margen de error`
   :`La desocupación ${c.lect==="sube"?"subió":"bajó"} de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026`;
  return `${encabezado("sec-evo","Cambio 2024–2026",titulo)}<div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_evolucion}. `+
   `Son los mismos meses en ambos años, para que no cuente la estacionalidad, y es otra fuente que el Censo: sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">Cambio de ${ppTxt(c.dif)} pp, con un rango de ${ppTxt(c.min)} a ${ppTxt(c.max)} pp. ${f.niveles}</p>
  <p style="margin:8px 0 0">${f.regiones}</p>
  ${graficosEvolucion(filas)}
- <p class="nota" style="margin:6px 0 0">Tasa según región de residencia, en una misma escala desde 0. La lectura usa el rango del cambio con 95% de confianza, que se ve al pasar el mouse: `+
-  `"sube" si el rango entero queda sobre cero; "sin cambio claro" si incluye el cero, así que la diferencia cabe en el margen de error. `+
+ <p class="nota" style="margin:6px 0 0">Tasa según región de residencia, en una misma escala desde 0; bajo cada grupo, el cambio en pp. La lectura usa el rango del cambio con 95% de confianza, que está en "Ver cifras" y al pasar el mouse: `+
+  `"sube" si el rango entero queda sobre cero; "dentro del margen" si incluye el cero, porque la diferencia puede deberse a la muestra. `+
   `Por región no se separa por nivel de estudios: la ENE no tiene muestra suficiente.</p>`}
 // Navegación del resumen: un índice arriba y, en cada sección, el tema en pequeño y el hallazgo como título. Así quien
 // solo lee los títulos se lleva lo principal, y la tabla queda como evidencia. Los botones desplazan sin tocar la
