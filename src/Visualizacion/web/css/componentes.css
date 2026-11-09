@@ -165,3 +165,8 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
+/* Trabajo por región: la barra de la tasa y, a la derecha, la participación como cifra. */
+.dr-fila{grid-template-columns:minmax(0,11rem) minmax(0,420px) 7em}.dr-fila.gs-cab{font-weight:400}.gs-cab .cl-nombre{color:var(--t2)}
+.dr-fila.sobre .cl-barra i,.gs-leyenda i.dr-sobre{background:var(--t1)}.dr-fila.bajo .cl-barra i,.gs-leyenda i.dr-bajo{background:var(--g26)}.gs-leyenda i.dr-sobre,.gs-leyenda i.dr-bajo{border-radius:2px}
+/* La línea de Chile pasa por detrás de la cifra: las regiones cercanas a 8,6% quedaban con el número tachado. */
+.dr-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.dr-fila:hover .cl-valor,.dr-fila:focus-visible .cl-valor{background:var(--plano)}
