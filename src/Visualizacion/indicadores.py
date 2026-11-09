@@ -150,7 +150,10 @@ def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum()
     total = suma["ocupados_residencia"].sum()
     con_titulo = ["Profesional", "Tecnico"]
-    por_nivel = {n: {"ocupados": int(f["ocupados_residencia"]), "pct": redondear(100 * f["ocupados_residencia"] / total, 1),
+    # Desocupados y fuera de la fuerza de trabajo van como cifras para la barra 100% de cada nivel: derivarlos de las
+    # tasas redondeadas en la página daría cantidades que no calzan con la fuente.
+    por_nivel = {n: {"ocupados": int(f["ocupados_residencia"]), "desocupados": int(f["desocupados"]), "fuera": int(f["fuera_fuerza_trabajo"]),
+                     "pct": redondear(100 * f["ocupados_residencia"] / total, 1),
                      "tasa_desocupacion": redondear(100 * f["desocupados"] / (f["ocupados_residencia"] + f["desocupados"]), 1),
                      "tasa_participacion": redondear(100 * (f["ocupados_residencia"] + f["desocupados"]) / f.sum(), 1)} for n, f in suma.iterrows()}
     # Situación educacional: población de 15 años o más con nivel y situación laboral informados, la misma base de "Estudios y trabajo".
@@ -162,9 +165,13 @@ def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     grupo = niveles.assign(con_titulo=niveles["nivel_titulo"].isin(con_titulo)).groupby(["codigo_region", "con_titulo"])[["ocupados_residencia", "desocupados"]].sum()
     tasa = (100 * grupo["desocupados"] / grupo.sum(axis=1)).unstack()
     desocupacion = {str(r): [redondear(f[True], 1), redondear(f[False], 1)] for r, f in tasa.iterrows()}
+    # Chile, para la fila de referencia del gráfico: se suma desde las personas y no se promedian las regiones.
+    nacional = grupo.groupby(level="con_titulo").sum()
+    tasa_chile = 100 * nacional["desocupados"] / nacional.sum(axis=1)
     sexo = {clave: redondear(100 * sum(sexo_chile[n][campo] for n in con_titulo) / sum(d[campo] for d in sexo_chile.values()), 1) for clave, campo in (("hombres", "oh"), ("mujeres", "om"))}
     return {"niveles": por_nivel, "total": int(total), "con_titulo": int(suma.loc[con_titulo, "ocupados_residencia"].sum()), "pct_con_titulo": redondear(100 * suma.loc[con_titulo, "ocupados_residencia"].sum() / total, 1),
-            "sexo": sexo, "educacion": educacion, "desocupacion_titulo": desocupacion}
+            "sexo": sexo, "educacion": educacion, "desocupacion_titulo": desocupacion,
+            "desocupacion_titulo_chile": [redondear(tasa_chile[True], 1), redondear(tasa_chile[False], 1)]}
 
 
 def situacion_poblacion(procesado: pd.DataFrame, por_sexo: pd.DataFrame) -> dict:

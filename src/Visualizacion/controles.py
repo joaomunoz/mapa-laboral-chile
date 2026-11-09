@@ -114,6 +114,10 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Estudios: 39,8% de los ocupados con título; desocupación 6,3%, 7,8% y 9,7%": (lambda e: e["pct_con_titulo"] == 39.8 and (e["niveles"]["Profesional"]["tasa_desocupacion"], e["niveles"]["Tecnico"]["tasa_desocupacion"], e["niveles"]["Sin_titulo"]["tasa_desocupacion"]) == (6.3, 7.8, 9.7))(datos["estudios"]),
         "Estudios: los niveles suman el total y su tasa coincide con la tabla regional": sum(d["ocupados"] for d in datos["estudios"]["niveles"].values()) == datos["estudios"]["total"] and all(datos["estudios"]["niveles"][n]["tasa_desocupacion"] == d["tasa"] for n, d in datos["niveles_chile"].items()),
         "Estudios: mujeres 46,5% y hombres 34,6% de los ocupados con título": datos["estudios"]["sexo"] == {"hombres": 34.6, "mujeres": 46.5},
+        # La fila de Chile del gráfico por región se suma desde las personas: debe calzar con las cifras de cada nivel.
+        "Estudios: Chile 6,8% con título y 9,7% sin título, igual que sumar los niveles": (lambda e: e["desocupacion_titulo_chile"] == [6.8, 9.7]
+            and round(100 * (e["niveles"]["Profesional"]["desocupados"] + e["niveles"]["Tecnico"]["desocupados"]) / sum(e["niveles"][n]["ocupados"] + e["niveles"][n]["desocupados"] for n in ("Profesional", "Tecnico")), 1) == 6.8
+            and e["desocupacion_titulo_chile"][1] == e["niveles"]["Sin_titulo"]["tasa_desocupacion"])(datos["estudios"]),
         "Educación por región: suma 15.102.704 y va de Maule (21,1%) a la Metropolitana (32,9%)": (lambda e: sum(e["chile"]) == 15_102_704 and sum(sum(v) for r, v in e.items() if r != "chile") == sum(e["chile"])
             and sorted((round(100 * (v[0] + v[1]) / sum(v), 1), int(r)) for r, v in e.items() if r != "chile")[::15] == [(21.1, 7), (32.9, 13)])(datos["estudios"]["educacion"]),
         "Educación por región: se excluyen 97.157 sin nivel y 5.923 sin situación laboral, y con la tabla suman los 15 años o más":

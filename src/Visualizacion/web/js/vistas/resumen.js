@@ -150,6 +150,45 @@ function graficoCL(){
     `<span class="cl-valor" style="left:calc(${pos(v.peso)}% + 6px)">${v.peso_txt}</span></span></button>`}).join("")+
   `</figure><p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. `+
   `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>`}
+// Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
+// colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
+// pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
+function barrasNivel(){const partes=[["ocupados","Ocupados","s-trabajan"],["desocupados","Desocupados","s-buscan"],["fuera","Fuera de la fuerza de trabajo","s-no-buscan"]];
+ const fila=([k,t])=>{const x=EST.niveles[k],tot=x.ocupados+x.desocupados+x.fuera,pc=v=>100*v/tot;
+  const texto=partes.map(([c,n])=>`${n.toLowerCase()} ${num(x[c])} (${num(pc(x[c]),1)}%)`),tasas=`desocupación ${num(x.tasa_desocupacion,1)}%, participación ${num(x.tasa_participacion,1)}%`;
+  return `<div class="sn-fila" role="img" tabindex="0" aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
+   `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
+   `<span class="sn-tasas">Desocupación <b>${num(x.tasa_desocupacion,1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></div>`};
+ return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por nivel de estudios, Chile</strong></span>`+
+  partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+NIVELES.map(fila).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada nivel. Junto a cada barra, las tasas: desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
+// Dumbbell por región: el largo de la línea es la diferencia entre sin título y con título, que es el hallazgo. No parte
+// en 0, porque lo que se compara es la distancia entre los dos puntos; el eje muestra las cifras. Bajo cada fila, solo la
+// diferencia: las dos tasas van en el globo y en "Ver cifras".
+function dumbbellTitulo(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
+ const todos=[EST.desocupacion_titulo_chile,...filas.map(([,v])=>v)].flat(),lo=Math.floor(Math.min(...todos)/2)*2,hi=Math.ceil(Math.max(...todos)/2)*2,pos=x=>100*(x-lo)/(hi-lo);
+ const marcas=Array.from({length:(hi-lo)/2+1},(_,k)=>lo+2*k);
+ const fila=(t,[c,sn],clase,attr)=>{const dif=sn-c,partes=[`${num(c,1)}% con título técnico o profesional`,`${num(sn,1)}% sin título superior`,`diferencia ${num(dif,1)} pp`];
+  const tag=attr?"button":"div";
+  return `<${tag} class="db-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${partes.join(", ")}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}">`+
+   `<span class="db-nombre">${t}</span><span class="db-pista" aria-hidden="true"><i class="db-linea" style="left:${pos(c)}%;width:${pos(sn)-pos(c)}%"></i>`+
+   `<i class="db-punto db-con" style="left:${pos(c)}%"></i><i class="db-punto db-sin" style="left:${pos(sn)}%"></i></span><span class="db-dif">+${num(dif,1)} pp</span></${tag}>`};
+ return `<figure class="graf-db" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación por región</strong></span>`+
+  `<span><i class="db-punto db-con ley"></i>Con título técnico o profesional</span><span><i class="db-punto db-sin ley"></i>Sin título superior</span></figcaption>`+
+  `<div class="db-fila db-eje" aria-hidden="true"><span></span><span class="db-pista">${marcas.map(m=>`<span style="left:${pos(m)}%">${m}%</span>`).join("")}</span><span class="db-dif">Diferencia</span></div>`+
+  fila("Chile",EST.desocupacion_titulo_chile," db-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`}
+// Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
+function tablaEstudios(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
+ const tr=(t,[c,sn],k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(c,1)}%</td><td class="n">${num(sn,1)}%</td><td class="n">+${num(sn-c,1)} pp</td></tr>`;
+ return `<details><summary>Ver cifras</summary>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th>`+
+  `<th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${NIVELES.map(([k,t])=>{const x=EST.niveles[k];
+   return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.fuera)}</td>`+
+    `<td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")}</tbody></table></div>
+ <p class="nota" style="margin:4px 0 0">Ocupados: entre paréntesis, % del total de ocupados con nivel informado.</p>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Con título técnico o profesional</th><th class="n">Sin título superior</th><th class="n">Diferencia</th></tr></thead><tbody>`+
+  tr("Chile",EST.desocupacion_titulo_chile,"total")+filas.map(([r,v])=>tr(nomReg(r),v,"")).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:4px 0 0">Tasa de desocupación según región de residencia.</p></details>`}
 function vistaResumen(){
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
@@ -207,10 +246,9 @@ function vistaResumen(){
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
  <p style="margin:8px 0 0">${desocTitulo()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${
-  NIVELES.map(([k,t])=>{const x=EST.niveles[k];
-   return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")
- }</tbody></table></div>
+ ${barrasNivel()}
+ ${dumbbellTitulo()}
+ ${tablaEstudios()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}
  ${formalidadHtml()}
