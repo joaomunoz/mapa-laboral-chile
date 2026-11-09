@@ -186,24 +186,15 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 /* Nombres a 45°: el texto termina bajo el centro de su grupo y baja hacia la izquierda, para que cada nombre quede junto a sus columnas. */
 .compacto .evc-nombre{position:relative;align-self:stretch;height:6.6em;min-height:0;margin-top:6px}.compacto .evc-nombre span{position:absolute;right:50%;top:0;white-space:nowrap;transform:rotate(-45deg);transform-origin:right top}
 .compacto .evc-total{margin-right:8px;border-right:1px solid var(--linea);border-radius:4px 0 0 4px}
-/* Estudios y trabajo: barras 100% por nivel con los colores de la barra de Población, y dumbbell por región en dos
+/* Estudios y trabajo: barras 100% por nivel con los colores de la barra de Población, y columnas por región en dos
    tonos de un mismo verde (oscuro con título, claro sin título; en modo oscuro se invierte el brillo). */
-.graf-sn,.graf-db{margin:12px 0 4px}
+.graf-sn{margin:12px 0 4px}
 .sn-fila{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,420px) auto;justify-content:start;align-items:center;gap:6px 12px;padding:3px 4px;border-radius:4px;font-size:13px}
 .sn-fila:hover,.sn-fila:focus-visible{background:var(--plano)}.sn-fila:focus-visible{outline:2px solid var(--acento)}
 .sn-barra{display:flex;gap:2px;height:20px}.sn-barra i{display:flex;align-items:center;justify-content:center;min-width:2px;border-radius:2px;font-style:normal;font-size:12px;color:#fff;font-variant-numeric:tabular-nums}
 .sn-barra i.s-no-buscan{color:var(--t1)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
-.db-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,13rem) minmax(0,420px) 5.4em;justify-content:start;align-items:center;gap:6px 10px;width:100%;padding:3px 4px;border-radius:4px;cursor:pointer;font-size:13px}
-.db-fila:hover,.db-fila:focus-visible{background:var(--plano)}.db-fila:focus-visible{outline:2px solid var(--acento)}
-.db-nombre{color:var(--acento);overflow-wrap:anywhere}div.db-fila{cursor:default}div.db-fila .db-nombre{color:var(--t1)}
-.db-total{font-weight:700;border-bottom:1px solid var(--linea);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}
-.db-pista{position:relative;height:16px;margin:0 6px}.db-linea{position:absolute;top:7px;height:2px;background:var(--eje)}
-.db-punto{position:absolute;top:3px;width:10px;height:10px;margin-left:-5px;border-radius:50%;box-shadow:0 0 0 2px var(--sup)}
-.db-con{background:var(--tit-con)}.db-sin{background:var(--tit-sin)}
-.gs-leyenda i.db-punto.ley{position:static;display:inline-block;margin:0 5px 0 0;border-radius:50%;box-shadow:none;vertical-align:-1px}
-.db-dif{font-variant-numeric:tabular-nums;color:var(--t1);text-align:right}
-.db-eje{cursor:default;color:var(--t2);font-size:12px;padding-bottom:0}.db-eje:hover{background:none}.db-eje .db-pista span{position:absolute;transform:translateX(-50%)}.db-eje .db-dif{color:var(--t2)}
+.tcon{background:var(--tit-con)}.tsin{background:var(--tit-sin)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
@@ -232,7 +223,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 @media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:640px){.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.db-fila{grid-template-columns:minmax(0,1fr) auto;row-gap:2px;padding:4px}.db-nombre{grid-column:1/-1}.db-eje>span:first-child{display:none}.db-eje .db-dif{visibility:hidden}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -580,21 +571,23 @@ function barrasNivel(){const partes=[["ocupados","Ocupados","s-trabajan"],["deso
  return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por nivel de estudios, Chile</strong></span>`+
   partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+NIVELES.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada nivel. Junto a cada barra, las tasas: desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
-// Dumbbell por región: el largo de la línea es la diferencia entre sin título y con título, que es el hallazgo. No parte
-// en 0, porque lo que se compara es la distancia entre los dos puntos; el eje muestra las cifras. Bajo cada fila, solo la
-// diferencia: las dos tasas van en el globo y en "Ver cifras".
-function dumbbellTitulo(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
- const todos=[EST.desocupacion_titulo_chile,...filas.map(([,v])=>v)].flat(),lo=Math.floor(Math.min(...todos)/2)*2,hi=Math.ceil(Math.max(...todos)/2)*2,pos=x=>100*(x-lo)/(hi-lo);
- const marcas=Array.from({length:(hi-lo)/2+1},(_,k)=>lo+2*k);
- const fila=(t,[c,sn],clase,attr)=>{const dif=sn-c,partes=[`${num(c,1)}% con título técnico o profesional`,`${num(sn,1)}% sin título superior`,`diferencia ${num(dif,1)} pp`];
+// Columnas agrupadas por región, con y sin título, en el mismo formato que Cambio 2024–2026: escala desde 0, nombres a 45°
+// y desplazamiento lateral en pantallas angostas. Bajo cada región va solo la diferencia; las dos tasas están en el globo
+// y en "Ver cifras". Se descartó el dumbbell: dos puntos sobre una línea se leían peor que el largo de una barra.
+function columnasTitulo(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
+ const todos=[EST.desocupacion_titulo_chile,...filas.map(([,v])=>v)].flat(),tope=Math.ceil(Math.max(...todos)/4)*4,pos=x=>100*x/tope;
+ const marcas=Array.from({length:tope/4+1},(_,k)=>4*k);
+ const grupo=(t,[c,sn],clase,attr)=>{const partes=[`${num(c,1)}% con título técnico o profesional`,`${num(sn,1)}% sin título superior`,`diferencia ${num(sn-c,1)} pp`];
   const tag=attr?"button":"div";
-  return `<${tag} class="db-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${partes.join(", ")}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}">`+
-   `<span class="db-nombre">${t}</span><span class="db-pista" aria-hidden="true"><i class="db-linea" style="left:${pos(c)}%;width:${pos(sn)-pos(c)}%"></i>`+
-   `<i class="db-punto db-con" style="left:${pos(c)}%"></i><i class="db-punto db-sin" style="left:${pos(sn)}%"></i></span><span class="db-dif">+${num(dif,1)} pp</span></${tag}>`};
- return `<figure class="graf-db" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación por región</strong></span>`+
-  `<span><i class="db-punto db-con ley"></i>Con título técnico o profesional</span><span><i class="db-punto db-sin ley"></i>Sin título superior</span></figcaption>`+
-  `<div class="db-fila db-eje" aria-hidden="true"><span></span><span class="db-pista">${marcas.map(m=>`<span style="left:${pos(m)}%">${m}%</span>`).join("")}</span><span class="db-dif">Diferencia</span></div>`+
-  fila("Chile",EST.desocupacion_titulo_chile," db-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`}
+  return `<${tag} class="evc-grupo${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="evc-cols" aria-hidden="true"><span class="evc-col tcon" style="height:${pos(c)}%"></span><span class="evc-col tsin" style="height:${pos(sn)}%"></span></span>`+
+   `<span class="evc-nombre"><span>${t}</span></span><span class="evc-dif">+${num(sn-c,1)}</span></${tag}>`};
+ return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación por región</strong></span>`+
+  `<span><i class="tcon"></i>Con título técnico o profesional</span><span><i class="tsin"></i>Sin título superior</span></figcaption>`+
+  `<div class="evc-desliza"><div class="evc compacto"><div class="evc-rotulos" aria-hidden="true"><span>Diferencia</span></div>`+
+  `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
+  grupo("Chile",EST.desocupacion_titulo_chile," evc-total","")+filas.map(([r,v])=>grupo(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</div></div></figure>`+
+  `<p class="nota" style="margin:2px 0 0">Bajo cada región, la diferencia en pp (sin título menos con título). Tasa según región de residencia.</p>`}
 // Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
 function tablaEstudios(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
  const tr=(t,[c,sn],k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(c,1)}%</td><td class="n">${num(sn,1)}%</td><td class="n">+${num(sn-c,1)} pp</td></tr>`;
@@ -665,7 +658,7 @@ function vistaResumen(){
  <p style="margin:8px 0 0">${desocTitulo()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
  ${barrasNivel()}
- ${dumbbellTitulo()}
+ ${columnasTitulo()}
  ${tablaEstudios()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}

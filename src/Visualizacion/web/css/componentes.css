@@ -153,24 +153,15 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 /* Nombres a 45°: el texto termina bajo el centro de su grupo y baja hacia la izquierda, para que cada nombre quede junto a sus columnas. */
 .compacto .evc-nombre{position:relative;align-self:stretch;height:6.6em;min-height:0;margin-top:6px}.compacto .evc-nombre span{position:absolute;right:50%;top:0;white-space:nowrap;transform:rotate(-45deg);transform-origin:right top}
 .compacto .evc-total{margin-right:8px;border-right:1px solid var(--linea);border-radius:4px 0 0 4px}
-/* Estudios y trabajo: barras 100% por nivel con los colores de la barra de Población, y dumbbell por región en dos
+/* Estudios y trabajo: barras 100% por nivel con los colores de la barra de Población, y columnas por región en dos
    tonos de un mismo verde (oscuro con título, claro sin título; en modo oscuro se invierte el brillo). */
-.graf-sn,.graf-db{margin:12px 0 4px}
+.graf-sn{margin:12px 0 4px}
 .sn-fila{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,420px) auto;justify-content:start;align-items:center;gap:6px 12px;padding:3px 4px;border-radius:4px;font-size:13px}
 .sn-fila:hover,.sn-fila:focus-visible{background:var(--plano)}.sn-fila:focus-visible{outline:2px solid var(--acento)}
 .sn-barra{display:flex;gap:2px;height:20px}.sn-barra i{display:flex;align-items:center;justify-content:center;min-width:2px;border-radius:2px;font-style:normal;font-size:12px;color:#fff;font-variant-numeric:tabular-nums}
 .sn-barra i.s-no-buscan{color:var(--t1)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
-.db-fila{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,13rem) minmax(0,420px) 5.4em;justify-content:start;align-items:center;gap:6px 10px;width:100%;padding:3px 4px;border-radius:4px;cursor:pointer;font-size:13px}
-.db-fila:hover,.db-fila:focus-visible{background:var(--plano)}.db-fila:focus-visible{outline:2px solid var(--acento)}
-.db-nombre{color:var(--acento);overflow-wrap:anywhere}div.db-fila{cursor:default}div.db-fila .db-nombre{color:var(--t1)}
-.db-total{font-weight:700;border-bottom:1px solid var(--linea);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}
-.db-pista{position:relative;height:16px;margin:0 6px}.db-linea{position:absolute;top:7px;height:2px;background:var(--eje)}
-.db-punto{position:absolute;top:3px;width:10px;height:10px;margin-left:-5px;border-radius:50%;box-shadow:0 0 0 2px var(--sup)}
-.db-con{background:var(--tit-con)}.db-sin{background:var(--tit-sin)}
-.gs-leyenda i.db-punto.ley{position:static;display:inline-block;margin:0 5px 0 0;border-radius:50%;box-shadow:none;vertical-align:-1px}
-.db-dif{font-variant-numeric:tabular-nums;color:var(--t1);text-align:right}
-.db-eje{cursor:default;color:var(--t2);font-size:12px;padding-bottom:0}.db-eje:hover{background:none}.db-eje .db-pista span{position:absolute;transform:translateX(-50%)}.db-eje .db-dif{color:var(--t2)}
+.tcon{background:var(--tit-con)}.tsin{background:var(--tit-sin)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
