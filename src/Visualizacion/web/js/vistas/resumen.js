@@ -150,27 +150,44 @@ function graficoCL(){
     `<span class="cl-valor" style="left:calc(${pos(v.peso)}% + 6px)">${v.peso_txt}</span></span></button>`}).join("")+
   `</figure><p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. `+
   `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>`}
-// Trabajo por región: barras de la tasa de desocupación ordenadas de mayor a menor, y la participación como cifra a la
-// derecha. Son dos escalas distintas (5% a 10% y 51% a 66%): un eje doble haría parecer comparables los largos.
-// En color solo las regiones sobre Chile; el resto en gris, para que el ojo vaya primero a ellas.
-// Se descartaron las barras 100% (los desocupados son 4% a 6% de la población: su tramo casi no se vería) y la
-// dispersión (participación contra desocupación), que muestra la relación pero cuesta leer.
-function graficoTrabajo(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion;
+// Trabajo por región, 1: una barra 100% por región con el mismo formato y colores que "Situación laboral por nivel de
+// estudios", para que la población se lea igual en ambas secciones. Incluye el tramo sin dato, porque los % de la tabla
+// se calculan sobre toda la población de 15 años o más. Va de mayor a menor desocupación, como dice el título, y las
+// tasas van escritas al lado: el tramo de desocupados (4% a 6%) es delgado y su largo solo no basta para comparar.
+function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion;
+ const partes=[["trabajan","Ocupados","s-trabajan"],["buscan","Desocupados","s-buscan"],["no_buscan","Fuera de la fuerza de trabajo","s-no-buscan"],["sin_dato","Sin dato","s-sin-dato"]];
  const filas=DATOS.orden.map(r=>[r,POB.regiones[r]]).sort((a,b)=>tasa(b[1])-tasa(a[1])||a[0]-b[0]);
- const tope=Math.ceil(Math.max(...filas.map(([,d])=>tasa(d)))/2)*2,pos=x=>100*x/tope;
- const fila=(t,d,clase,attr)=>{const partes=[`${num(tasa(d),1)}% de desocupación`,`${num(d.tasa_participacion,1)}% de participación`,
-   `${num(d.buscan)} desocupados`,`${num(d.trabajan)} ocupados`],tag=attr?"button":"div";
-  // Se compara con el valor publicado (1 decimal): así una región que se lee 8,6% no queda pintada distinta de Chile.
-  const color=clase?"":Math.round(10*tasa(d))>Math.round(10*tasa(ch))?" sobre":" bajo";
-  return `<${tag} class="cl-fila dr-fila${clase}${color}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-   `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i style="width:${pos(tasa(d))}%"></i><b style="left:${pos(tasa(ch))}%"></b>`+
-   `<span class="cl-valor" style="left:calc(${pos(tasa(d))}% + 6px)">${num(tasa(d),1)}%</span></span><span class="gs-num">${num(d.tasa_participacion,1)}%</span></${tag}>`};
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><i class="dr-sobre"></i>Sobre Chile</span>`+
-  `<span><i class="dr-bajo"></i>Igual o bajo Chile</span><span><span class="ref"></span>Chile (${num(tasa(ch),1)}%)</span></figcaption>`+
-  `<div class="cl-fila dr-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>Tasa de desocupación</span><span class="gs-num">Tasa de participación</span></div>`+
-  fila("Chile",ch," cl-total","")+filas.map(([r,d])=>fila(nomReg(r),d,"",`data-r="${r}"`)).join("")+`</figure>`+
-  `<p class="nota" style="margin:2px 0 8px">Desocupación: % de la fuerza de trabajo (ocupados y desocupados) que busca trabajo. `+
-  `Participación: % de la población de 15 años o más que está en la fuerza de trabajo. Según región de residencia.</p>`}
+ const fila=(t,x,clase,attr)=>{const pc=v=>100*v/x.total,tag=attr?"button":"div";
+  const texto=[`${num(x.total)} personas de 15 años o más`,...partes.map(([c,n])=>`${n.toLowerCase()} ${num(x[c])} (${num(pc(x[c]),1)}%)`)];
+  const tasas=`desocupación ${num(tasa(x),1)}%, participación ${num(x.tasa_participacion,1)}%`;
+  return `<${tag} class="sn-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
+   `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
+   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
+ return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por región</strong></span>`+
+  partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+
+  fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada región, según residencia. Junto a cada barra, las tasas: `+
+  `desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
+// Trabajo por región, 2: cuántos trabajan en la región por cada uno que vive en ella, frente a Chile. Se compara con
+// Chile y no se resta directo porque 5,8% de los ocupados no tiene región de trabajo: con la resta, toda región parecería
+// entregar trabajadores. Supone que esa falta de dato pesa igual en cada región. Barras desde un centro (igual que
+// Chile) con dos colores, uno por sentido. La escala es la misma a ambos lados, para no agrandar las diferencias chicas,
+// y el centro se corre a la izquierda porque ninguna región baja de −10%: así el espacio va a las barras.
+function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,dif=x=>100*(x.lugar_trabajo/x.trabajan/base-1);
+ const filas=DATOS.orden.map(r=>[r,POB.regiones[r],dif(POB.regiones[r])]).sort((a,b)=>b[2]-a[2]||a[0]-b[0]);
+ const lo=Math.min(0,Math.floor(filas[filas.length-1][2]/10)*10),hi=Math.max(0,Math.ceil(filas[0][2]/10)*10),cero=100*-lo/(hi-lo),ancho=v=>100*Math.abs(v)/(hi-lo);
+ // El signo sale de la cifra publicada: Maule (−0,04) se lee 0,0%, no −0,0%.
+ const fila=([r,x,v])=>{const r1=Math.round(10*v)/10,txt=`${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}%`,t=nomReg(r);
+  const partes=[`${num(x.lugar_trabajo)} ocupados trabajan en la región`,`${num(x.trabajan)} ocupados viven en ella`,`${txt} frente a Chile`];
+  return `<button class="cl-fila tr-fila" data-r="${r}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${t}</span><span class="tr-barra" aria-hidden="true"><b style="left:${cero}%"></b>`+
+   (v>=0?`<i class="recibe" style="left:${cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="left:calc(${cero+ancho(v)}% + 6px)">${txt}</span>`
+        :`<i class="entrega" style="right:${100-cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="right:calc(${100-cero+ancho(v)}% + 6px)">${txt}</span>`)+`</span></button>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Dónde trabajan los ocupados de cada región</strong></span>`+
+  `<span><i class="entrega"></i>Sus ocupados trabajan en otras regiones</span><span><i class="recibe"></i>Recibe ocupados de otras regiones</span></figcaption>`+
+  filas.map(fila).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada uno que vive en ella, comparado con Chile (0 = igual que Chile). `+
+  `Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -244,7 +261,8 @@ function vistaResumen(){
  ${sinRegion.length?`<p class="nota" style="margin:4px 0 0">Subestimadas por ocupados sin región de trabajo `+
   `(${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>`:""}
  ${encabezado("sec-lab","Trabajo por región",`La desocupación va de ${num(desMin[1],1)}% en ${enReg(desMin[0])} a ${num(desMax[1],1)}% en ${enReg(desMax[0])}`)}
- ${graficoTrabajo()}
+ ${graficoSituacionRegion()}
+ ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. `+
   `Ocupados (lugar de trabajo) cuenta a quienes trabajan en la región, vivan o no en ella. `+

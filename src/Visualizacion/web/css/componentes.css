@@ -165,8 +165,11 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
-/* Trabajo por región: la barra de la tasa y, a la derecha, la participación como cifra. */
-.dr-fila{grid-template-columns:minmax(0,11rem) minmax(0,420px) 7em}.dr-fila.gs-cab{font-weight:400}.gs-cab .cl-nombre{color:var(--t2)}
-.dr-fila.sobre .cl-barra i,.gs-leyenda i.dr-sobre{background:var(--t1)}.dr-fila.bajo .cl-barra i,.gs-leyenda i.dr-bajo{background:var(--g26)}.gs-leyenda i.dr-sobre,.gs-leyenda i.dr-bajo{border-radius:2px}
-/* La línea de Chile pasa por detrás de la cifra: las regiones cercanas a 8,6% quedaban con el número tachado. */
-.dr-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.dr-fila:hover .cl-valor,.dr-fila:focus-visible .cl-valor{background:var(--plano)}
+/* Trabajo por región. Las filas de región son botones: abren su vista. */
+button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:left;width:100%;cursor:pointer}.sn-region .sn-nombre{color:var(--acento)}
+.graf-sn .sn-tasas{min-width:21.5em}.sn-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}.sn-total .sn-tasas{font-weight:400}
+.gs-leyenda i.s-sin-dato{border-radius:2px}
+.recibe{background:var(--recibe)}.entrega{background:var(--entrega)}.gs-leyenda i.recibe,.gs-leyenda i.entrega{border-radius:2px}
+.tr-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px)}.tr-barra{margin:0 4em 0 1em}
+.tr-barra{position:relative;height:16px}.tr-barra i{position:absolute;top:0;bottom:0}.tr-barra i.recibe{border-radius:0 4px 4px 0}.tr-barra i.entrega{border-radius:4px 0 0 4px}
+.tr-barra b{position:absolute;top:-3px;bottom:-3px;border-left:1px solid var(--t1)}

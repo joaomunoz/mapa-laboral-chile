@@ -9,10 +9,10 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa Laboral de Chile</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#1baf7a;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#1baf7a;--recibe:#0081a8;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#117350;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#117350;--recibe:#1a9cc4;--entrega:#c9673a;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -198,11 +198,14 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
-/* Trabajo por región: la barra de la tasa y, a la derecha, la participación como cifra. */
-.dr-fila{grid-template-columns:minmax(0,11rem) minmax(0,420px) 7em}.dr-fila.gs-cab{font-weight:400}.gs-cab .cl-nombre{color:var(--t2)}
-.dr-fila.sobre .cl-barra i,.gs-leyenda i.dr-sobre{background:var(--t1)}.dr-fila.bajo .cl-barra i,.gs-leyenda i.dr-bajo{background:var(--g26)}.gs-leyenda i.dr-sobre,.gs-leyenda i.dr-bajo{border-radius:2px}
-/* La línea de Chile pasa por detrás de la cifra: las regiones cercanas a 8,6% quedaban con el número tachado. */
-.dr-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.dr-fila:hover .cl-valor,.dr-fila:focus-visible .cl-valor{background:var(--plano)}
+/* Trabajo por región. Las filas de región son botones: abren su vista. */
+button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:left;width:100%;cursor:pointer}.sn-region .sn-nombre{color:var(--acento)}
+.graf-sn .sn-tasas{min-width:21.5em}.sn-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}.sn-total .sn-tasas{font-weight:400}
+.gs-leyenda i.s-sin-dato{border-radius:2px}
+.recibe{background:var(--recibe)}.entrega{background:var(--entrega)}.gs-leyenda i.recibe,.gs-leyenda i.entrega{border-radius:2px}
+.tr-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px)}.tr-barra{margin:0 4em 0 1em}
+.tr-barra{position:relative;height:16px}.tr-barra i{position:absolute;top:0;bottom:0}.tr-barra i.recibe{border-radius:0 4px 4px 0}.tr-barra i.entrega{border-radius:4px 0 0 4px}
+.tr-barra b{position:absolute;top:-3px;bottom:-3px;border-left:1px solid var(--t1)}
 .envoltura{max-width:1240px;margin:0 auto}
 /* El mapa ocupa el alto de dos filas: a su derecha van las regiones en 2 filas de 8 y, debajo, el detalle con todo el ancho restante. */
 .grilla{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
@@ -228,7 +231,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 @media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:640px){.dr-fila{grid-template-columns:minmax(0,1fr) 5.4em;row-gap:2px}.dr-fila .cl-nombre{grid-column:1/-1}.dr-fila.gs-cab span:nth-child(2){display:none}.dr-fila .gs-num{grid-column:2}.dr-fila.gs-cab{display:grid}.dr-fila.gs-cab .cl-nombre{display:none}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.tr-fila{grid-template-columns:minmax(0,1fr)}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -564,27 +567,44 @@ function graficoCL(){
     `<span class="cl-valor" style="left:calc(${pos(v.peso)}% + 6px)">${v.peso_txt}</span></span></button>`}).join("")+
   `</figure><p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. `+
   `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>`}
-// Trabajo por región: barras de la tasa de desocupación ordenadas de mayor a menor, y la participación como cifra a la
-// derecha. Son dos escalas distintas (5% a 10% y 51% a 66%): un eje doble haría parecer comparables los largos.
-// En color solo las regiones sobre Chile; el resto en gris, para que el ojo vaya primero a ellas.
-// Se descartaron las barras 100% (los desocupados son 4% a 6% de la población: su tramo casi no se vería) y la
-// dispersión (participación contra desocupación), que muestra la relación pero cuesta leer.
-function graficoTrabajo(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion;
+// Trabajo por región, 1: una barra 100% por región con el mismo formato y colores que "Situación laboral por nivel de
+// estudios", para que la población se lea igual en ambas secciones. Incluye el tramo sin dato, porque los % de la tabla
+// se calculan sobre toda la población de 15 años o más. Va de mayor a menor desocupación, como dice el título, y las
+// tasas van escritas al lado: el tramo de desocupados (4% a 6%) es delgado y su largo solo no basta para comparar.
+function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion;
+ const partes=[["trabajan","Ocupados","s-trabajan"],["buscan","Desocupados","s-buscan"],["no_buscan","Fuera de la fuerza de trabajo","s-no-buscan"],["sin_dato","Sin dato","s-sin-dato"]];
  const filas=DATOS.orden.map(r=>[r,POB.regiones[r]]).sort((a,b)=>tasa(b[1])-tasa(a[1])||a[0]-b[0]);
- const tope=Math.ceil(Math.max(...filas.map(([,d])=>tasa(d)))/2)*2,pos=x=>100*x/tope;
- const fila=(t,d,clase,attr)=>{const partes=[`${num(tasa(d),1)}% de desocupación`,`${num(d.tasa_participacion,1)}% de participación`,
-   `${num(d.buscan)} desocupados`,`${num(d.trabajan)} ocupados`],tag=attr?"button":"div";
-  // Se compara con el valor publicado (1 decimal): así una región que se lee 8,6% no queda pintada distinta de Chile.
-  const color=clase?"":Math.round(10*tasa(d))>Math.round(10*tasa(ch))?" sobre":" bajo";
-  return `<${tag} class="cl-fila dr-fila${clase}${color}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-   `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i style="width:${pos(tasa(d))}%"></i><b style="left:${pos(tasa(ch))}%"></b>`+
-   `<span class="cl-valor" style="left:calc(${pos(tasa(d))}% + 6px)">${num(tasa(d),1)}%</span></span><span class="gs-num">${num(d.tasa_participacion,1)}%</span></${tag}>`};
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><i class="dr-sobre"></i>Sobre Chile</span>`+
-  `<span><i class="dr-bajo"></i>Igual o bajo Chile</span><span><span class="ref"></span>Chile (${num(tasa(ch),1)}%)</span></figcaption>`+
-  `<div class="cl-fila dr-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>Tasa de desocupación</span><span class="gs-num">Tasa de participación</span></div>`+
-  fila("Chile",ch," cl-total","")+filas.map(([r,d])=>fila(nomReg(r),d,"",`data-r="${r}"`)).join("")+`</figure>`+
-  `<p class="nota" style="margin:2px 0 8px">Desocupación: % de la fuerza de trabajo (ocupados y desocupados) que busca trabajo. `+
-  `Participación: % de la población de 15 años o más que está en la fuerza de trabajo. Según región de residencia.</p>`}
+ const fila=(t,x,clase,attr)=>{const pc=v=>100*v/x.total,tag=attr?"button":"div";
+  const texto=[`${num(x.total)} personas de 15 años o más`,...partes.map(([c,n])=>`${n.toLowerCase()} ${num(x[c])} (${num(pc(x[c]),1)}%)`)];
+  const tasas=`desocupación ${num(tasa(x),1)}%, participación ${num(x.tasa_participacion,1)}%`;
+  return `<${tag} class="sn-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
+   `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
+   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
+ return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por región</strong></span>`+
+  partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+
+  fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada región, según residencia. Junto a cada barra, las tasas: `+
+  `desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
+// Trabajo por región, 2: cuántos trabajan en la región por cada uno que vive en ella, frente a Chile. Se compara con
+// Chile y no se resta directo porque 5,8% de los ocupados no tiene región de trabajo: con la resta, toda región parecería
+// entregar trabajadores. Supone que esa falta de dato pesa igual en cada región. Barras desde un centro (igual que
+// Chile) con dos colores, uno por sentido. La escala es la misma a ambos lados, para no agrandar las diferencias chicas,
+// y el centro se corre a la izquierda porque ninguna región baja de −10%: así el espacio va a las barras.
+function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,dif=x=>100*(x.lugar_trabajo/x.trabajan/base-1);
+ const filas=DATOS.orden.map(r=>[r,POB.regiones[r],dif(POB.regiones[r])]).sort((a,b)=>b[2]-a[2]||a[0]-b[0]);
+ const lo=Math.min(0,Math.floor(filas[filas.length-1][2]/10)*10),hi=Math.max(0,Math.ceil(filas[0][2]/10)*10),cero=100*-lo/(hi-lo),ancho=v=>100*Math.abs(v)/(hi-lo);
+ // El signo sale de la cifra publicada: Maule (−0,04) se lee 0,0%, no −0,0%.
+ const fila=([r,x,v])=>{const r1=Math.round(10*v)/10,txt=`${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}%`,t=nomReg(r);
+  const partes=[`${num(x.lugar_trabajo)} ocupados trabajan en la región`,`${num(x.trabajan)} ocupados viven en ella`,`${txt} frente a Chile`];
+  return `<button class="cl-fila tr-fila" data-r="${r}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${t}</span><span class="tr-barra" aria-hidden="true"><b style="left:${cero}%"></b>`+
+   (v>=0?`<i class="recibe" style="left:${cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="left:calc(${cero+ancho(v)}% + 6px)">${txt}</span>`
+        :`<i class="entrega" style="right:${100-cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="right:calc(${100-cero+ancho(v)}% + 6px)">${txt}</span>`)+`</span></button>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Dónde trabajan los ocupados de cada región</strong></span>`+
+  `<span><i class="entrega"></i>Sus ocupados trabajan en otras regiones</span><span><i class="recibe"></i>Recibe ocupados de otras regiones</span></figcaption>`+
+  filas.map(fila).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada uno que vive en ella, comparado con Chile (0 = igual que Chile). `+
+  `Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -658,7 +678,8 @@ function vistaResumen(){
  ${sinRegion.length?`<p class="nota" style="margin:4px 0 0">Subestimadas por ocupados sin región de trabajo `+
   `(${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>`:""}
  ${encabezado("sec-lab","Trabajo por región",`La desocupación va de ${num(desMin[1],1)}% en ${enReg(desMin[0])} a ${num(desMax[1],1)}% en ${enReg(desMax[0])}`)}
- ${graficoTrabajo()}
+ ${graficoSituacionRegion()}
+ ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. `+
   `Ocupados (lugar de trabajo) cuenta a quienes trabajan en la región, vivan o no en ella. `+
