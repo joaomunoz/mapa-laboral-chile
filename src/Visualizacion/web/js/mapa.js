@@ -49,7 +49,7 @@ function pintarResumen(){
    `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
    `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
   [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",
-   `Con y sin título, ${ed.rango}. No indica causa: la edad también influye.`],
+   `Con título, ${ed.con}; sin título, ${ed.sin}. No indica causa: la edad también influye.`],
   [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",
    `${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres; el Censo no indica su causa. `+
    `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`]]

@@ -404,7 +404,7 @@ function pintarResumen(){
    `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
    `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
   [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",
-   `Con y sin título, ${ed.rango}. No indica causa: la edad también influye.`],
+   `Con título, ${ed.con}; sin título, ${ed.sin}. No indica causa: la edad también influye.`],
   [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",
    `${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres; el Censo no indica su causa. `+
    `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`]]
@@ -449,10 +449,13 @@ function pintar(){
 }
 // Relación entre las dos realidades, región por región: se escribe desde los datos para no afirmar más de lo que muestran.
 function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d.filter(([,v])=>v[0]<v[1]).length;
- const [a,va]=d.reduce((m,x)=>x[1][0]<m[1][0]?x:m),[b,vb]=d.reduce((m,x)=>x[1][0]>m[1][0]?x:m);
- return {menor,n:d.length,rango:`de ${num(va[0],1)}% frente a ${num(va[1],1)}% en ${nomReg(Number(a))} a ${num(vb[0],1)}% frente a ${num(vb[1],1)}% en ${nomReg(Number(b))}`}}
+ // Un rango por grupo, cada uno con sus extremos: con un solo rango (por la tasa con título), Biobío parecía la región
+ // con más desocupación sin título, que es La Araucanía, y cuatro cifras en una línea no se leían a simple vista.
+ const rango=i=>{const [a,va]=d.reduce((m,x)=>x[1][i]<m[1][i]?x:m),[b,vb]=d.reduce((m,x)=>x[1][i]>m[1][i]?x:m);
+  return `de ${num(va[i],1)}% en ${nomReg(Number(a))} a ${num(vb[i],1)}% en ${nomReg(Number(b))}`};
+ return {menor,n:d.length,con:rango(0),sin:rango(1)}}
 function desocTitulo(){const e=extremosDesoc();
- return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior: va ${e.rango}.`}
+ return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior. Con título va ${e.con}; sin título, ${e.sin}.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
 // "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
@@ -665,21 +668,26 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
 // entregar trabajadores. Supone que esa falta de dato pesa igual en cada región. Barras desde un centro (igual que
 // Chile) con dos colores, uno por sentido. La escala es la misma a ambos lados, para no agrandar las diferencias chicas,
 // y el centro se corre a la izquierda porque ninguna región baja de −10%: así el espacio va a las barras.
+// La leyenda describe la medida y no afirma traslados: una barra negativa también puede venir de más ocupados sin región de trabajo.
 function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,dif=x=>100*(x.lugar_trabajo/x.trabajan/base-1);
  const filas=DATOS.orden.map(r=>[r,POB.regiones[r],dif(POB.regiones[r])]).sort((a,b)=>b[2]-a[2]||a[0]-b[0]);
  const lo=Math.min(0,Math.floor(filas[filas.length-1][2]/10)*10),hi=Math.max(0,Math.ceil(filas[0][2]/10)*10),cero=100*-lo/(hi-lo),ancho=v=>100*Math.abs(v)/(hi-lo);
  // El signo sale de la cifra publicada: Maule (−0,04) se lee 0,0%, no −0,0%.
  const fila=([r,x,v])=>{const r1=Math.round(10*v)/10,txt=`${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}%`,t=nomReg(r);
-  const partes=[`${num(x.lugar_trabajo)} ocupados trabajan en la región`,`${num(x.trabajan)} ocupados viven en ella`,`${txt} frente a Chile`];
+  const partes=[`${num(x.lugar_trabajo)} ocupados trabajan en la región`,`${num(x.trabajan)} ocupados viven en ella`,
+   `${num(100*x.lugar_trabajo/x.trabajan,0)} trabajan por cada 100 que viven (Chile: ${num(100*base,0)})`,`${txt} frente a Chile`];
   return `<button class="cl-fila tr-fila" data-r="${r}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
    `<span class="cl-nombre">${t}</span><span class="tr-barra" aria-hidden="true"><b style="left:${cero}%"></b>`+
    (v>=0?`<i class="recibe" style="left:${cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="left:calc(${cero+ancho(v)}% + 6px)">${txt}</span>`
         :`<i class="entrega" style="right:${100-cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="right:calc(${100-cero+ancho(v)}% + 6px)">${txt}</span>`)+`</span></button>`};
  return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Dónde trabajan los ocupados de cada región</strong></span>`+
-  `<span><i class="entrega"></i>Sus ocupados trabajan en otras regiones</span><span><i class="recibe"></i>Recibe ocupados de otras regiones</span></figcaption>`+
+  `<span><i class="entrega"></i>Trabajan en ella menos de los que viven, frente a Chile</span><span><i class="recibe"></i>Trabajan en ella más de los que viven, frente a Chile</span></figcaption>`+
   filas.map(fila).join("")+`</figure>`+
-  `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada uno que vive en ella, comparado con Chile (0 = igual que Chile). `+
-  `Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada.</p>`}
+  // El % es un índice frente a Chile y se leía como "34% más trabajadores": el ejemplo da la cifra directa.
+  `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada 100 que viven en ella, comparado con Chile (0 = igual que Chile). `+
+  `Por ejemplo, en ${nomReg(filas[0][0])} trabajan ${num(100*filas[0][1].lugar_trabajo/filas[0][1].trabajan,0)} por cada 100 que viven, y en Chile ${num(100*base,0)}: `+
+  `${num(filas[0][2],1)}% más. Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada, `+
+  `y se supone que esa falta de dato pesa igual en cada región: donde pese más, la barra baja aunque sus ocupados no trabajen en otra región.</p>`}
 // Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
 // % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
 // Se descartaron las barras 100%: sin título ocupa 67% a 79% de cada barra y la diferencia entre regiones (12 puntos)
