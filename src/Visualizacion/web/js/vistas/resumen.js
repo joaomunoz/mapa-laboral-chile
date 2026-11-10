@@ -10,8 +10,12 @@ function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d
  const rango=i=>{const [a,va]=d.reduce((m,x)=>x[1][i]<m[1][i]?x:m),[b,vb]=d.reduce((m,x)=>x[1][i]>m[1][i]?x:m);
   return `de ${num(va[i],1)}% en ${nomReg(Number(a))} a ${num(vb[i],1)}% en ${nomReg(Number(b))}`};
  return {menor,n:d.length,con:rango(0),sin:rango(1)}}
+// En pantallas angostas las columnas por región se desplazan hacia el lado; sin aviso, parecía que el gráfico terminaba
+// en la región cortada. Va oculto y se muestra solo si el gráfico no cabe (avisoDesliza, en navegacion.js).
+const AVISO_DESLIZA=`<p class="nota evc-aviso" hidden>Desliza el gráfico hacia el lado para ver las 16 regiones.</p>`;
+// El título de la sección ya dice en cuántas regiones es menor: el párrafo da solo los dos rangos.
 function desocTitulo(){const e=extremosDesoc();
- return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior. Con título va ${e.con}; sin título, ${e.sin}.`}
+ return `Con título técnico o profesional, la tasa de desocupación va ${e.con}; sin título superior, ${e.sin}.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
 // "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
@@ -45,7 +49,7 @@ function columnasEvolucion(titulo,grupos,tope,compacto){const pos=x=>100*x/tope,
  const hayGris=grupos.some(([,d])=>d.lect==="sin_cambio_claro");
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">${titulo}</strong></span>`+
   `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span>${hayGris?`<span><i class="g24"></i><i class="g26"></i>Dentro del margen de error</span>`:""}</figcaption>`+
-  `<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
+  `${compacto?AVISO_DESLIZA:""}<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
   (compacto?`<div class="evc-rotulos" aria-hidden="true"><span>Cambio</span></div>`:"")+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupos.map(grupo).join("")+`</div></div></figure>`}
@@ -107,7 +111,9 @@ function graficoFormalidadNivel(){const filas=[["Chile",FOR.chile," cl-total"],.
  return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por nivel de estudios, Chile</strong></span>${leyendaFormal}</figcaption>`+
   `<div class="fo-paneles">${grupos.map(panel).join("")}</div></figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de los ocupados, de los asalariados y de los independientes de cada nivel; a la derecha, cuántos son. `+
-  `Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal.</p>`}
+  `Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal. `+
+  // Las definiciones van junto al gráfico que las usa: antes estaban en la nota de arriba y alejaban el gráfico del título.
+  `Asalariado: sector privado, público o servicio doméstico. Independiente: empleador o cuenta propia.</p>`}
 // Formalidad por región: barras formal/informal como las de los niveles, de mayor a menor informalidad, con Chile
 // primero y una línea en su informalidad; el % de independientes va como cifra. No se pinta énfasis sobre o bajo Chile:
 // no hay margen de error por región y una diferencia de uno o dos puntos puede deberse a la muestra.
@@ -132,8 +138,7 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
  return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
  <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
   // Sin esta aclaración, los 9,4 millones de ocupados de la ENE parecen contradecir los 8,3 millones del Censo de las pestañas anteriores.
-  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan. `+
-  `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
+  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
   `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
   `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
@@ -289,7 +294,7 @@ function columnasTitulo(){const filas=Object.entries(EST.desocupacion_titulo).so
    `<span class="evc-nombre"><span>${t}</span></span><span class="evc-dif">+${num(sn-c,1)}</span></${tag}>`};
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación por región</strong></span>`+
   `<span><i class="tcon"></i>Con título técnico o profesional</span><span><i class="tsin"></i>Sin título superior</span></figcaption>`+
-  `<div class="evc-desliza"><div class="evc compacto"><div class="evc-rotulos" aria-hidden="true"><span>Diferencia</span></div>`+
+  AVISO_DESLIZA+`<div class="evc-desliza"><div class="evc compacto"><div class="evc-rotulos" aria-hidden="true"><span>Diferencia</span></div>`+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupo("Chile",EST.desocupacion_titulo_chile," evc-total","")+filas.map(([r,v])=>grupo(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</div></div></figure>`+
   `<p class="nota" style="margin:2px 0 0">Bajo cada región, la diferencia en pp (sin título menos con título). Tasa según región de residencia.</p>`}
@@ -309,7 +314,9 @@ function vistaResumen(){
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
  const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
- const corto=c=>esc(porCiiu(c).corto),me=RES.mayor_empleador,[d1,d2]=RES.mas_desiguales;
+ const corto=c=>esc(porCiiu(c).corto),[d1]=RES.mas_desiguales;
+ // El título nombra lo que muestran los dos gráficos de la sección: mujeres por actividad y la mayor concentración.
+ const porMujeres=[...DATOS.actividades].sort((a,b)=>b.sexo.pct_m-a.sexo.pct_m),mMax=porMujeres[0],mMin=porMujeres[porMujeres.length-1];
  const [desMin,desMax]=extremos(r=>POB.regiones[r].tasa_desocupacion),[titMin,titMax]=extremos(r=>pctTitulo(EDU[r])),e=extremosDesoc();
  return `<h2>Chile · Todas las actividades</h2>${indiceHtml()}
  ${banda("Censo 2024")}
@@ -329,7 +336,7 @@ function vistaResumen(){
  ${filasSituacion(ch,sH,sM,true)}
  </tbody></table></div>
  <div class="aviso">Estar fuera de la fuerza de trabajo no equivale a desempleo. El Censo registra la actividad solo de los ocupados.</div></details>
- ${encabezado("sec-act","Actividades",`${corto(me.ciiu)} es la que más emplea en ${me.n} de 16 regiones; las más concentradas son ${corto(d1.ciiu)}, seguida de ${corto(d2.ciiu)}`)}
+ ${encabezado("sec-act","Actividades",`Las mujeres son ${num(mMax.sexo.pct_m,1)}% de los ocupados en ${esc(mMax.corto)} y ${num(mMin.sexo.pct_m,1)}% en ${esc(mMin.corto)}; ${corto(d1.ciiu)} es la más concentrada, con CL ${d1.txt} en ${enReg(d1.r)}`)}
  <div class="nota">Ocupados (participación), según lugar de trabajo. `+
   `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales. `+
   // La ficha de cada región muestra la base de la participación; sin esto, sus dos totales de Chile parecían contradecirse.

@@ -26,4 +26,4 @@ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
 addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();if(ficha)document.getElementById("ficha")?.scrollIntoView({block:"nearest"});else if(act)mostrarDetalle();else scrollTo(0,0)});
 leerVista();
 pintar();
-addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA)});
+addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA);avisoDesliza()});

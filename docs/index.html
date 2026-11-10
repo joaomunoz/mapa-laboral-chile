@@ -9,10 +9,13 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa Laboral de Chile</title>
 <style>
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#c98a00;--a26:#256abf;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#1baf7a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
+/* Años del cambio (--a24, --a26): dos tonos de violeta, claro y oscuro como el par gris de "dentro del margen". Ocre y azul
+   no, porque en Formalidad, la sección anterior, significan informal y formal. Validados con validate_palette.js (--ordinal).
+   Sin título superior (--tit-sin) va en gris: en verde, el color de los títulos en Educación por región, se leía como titulado. */
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#a3a19a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#c08400;--a26:#4f8fe0;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#117350;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#62615b;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -258,6 +261,8 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:640px){.fo-reg.gs-cab{display:grid}.fo-reg.gs-cab .fo-nombre,.fo-reg.gs-cab span:nth-child(2){display:none}.fo-reg.gs-cab .fo-miles{grid-column:2}.fo-panel .fo-fila,.fo-reg{grid-template-columns:minmax(0,1fr) 6.6em}.fo-paneles{grid-template-columns:minmax(0,1fr)}.fo-fila{grid-template-columns:minmax(0,1fr) 5.6em;row-gap:2px}.fo-nombre{grid-column:1/-1}.ed-fila{grid-template-columns:minmax(0,1fr) 5.4em;row-gap:2px}.ed-fila .cl-nombre{grid-column:1/-1}.ed-fila .gs-num{grid-column:2}.ed-fila.gs-cab{display:grid}.ed-fila.gs-cab .cl-nombre,.ed-fila.gs-cab span:nth-child(2){display:none}.tr-fila{grid-template-columns:minmax(0,1fr)}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Actividades en celular: el encabezado de columnas se oculta, así que cada cifra lleva su rótulo en su propia línea. */
+@media(max-width:640px){.gs-extra{grid-column:1/-1;margin-left:0;grid-template-columns:auto auto;justify-content:start;gap:16px}.gs-extra .gs-num{text-align:left}.gs-et{display:inline;color:var(--t2)}}
 </style>
 </head>
 <body>
@@ -458,8 +463,12 @@ function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d
  const rango=i=>{const [a,va]=d.reduce((m,x)=>x[1][i]<m[1][i]?x:m),[b,vb]=d.reduce((m,x)=>x[1][i]>m[1][i]?x:m);
   return `de ${num(va[i],1)}% en ${nomReg(Number(a))} a ${num(vb[i],1)}% en ${nomReg(Number(b))}`};
  return {menor,n:d.length,con:rango(0),sin:rango(1)}}
+// En pantallas angostas las columnas por región se desplazan hacia el lado; sin aviso, parecía que el gráfico terminaba
+// en la región cortada. Va oculto y se muestra solo si el gráfico no cabe (avisoDesliza, en navegacion.js).
+const AVISO_DESLIZA=`<p class="nota evc-aviso" hidden>Desliza el gráfico hacia el lado para ver las 16 regiones.</p>`;
+// El título de la sección ya dice en cuántas regiones es menor: el párrafo da solo los dos rangos.
 function desocTitulo(){const e=extremosDesoc();
- return `${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, la tasa de desocupación es menor con título técnico o profesional que sin título superior. Con título va ${e.con}; sin título, ${e.sin}.`}
+ return `Con título técnico o profesional, la tasa de desocupación va ${e.con}; sin título superior, ${e.sin}.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
 // "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
@@ -493,7 +502,7 @@ function columnasEvolucion(titulo,grupos,tope,compacto){const pos=x=>100*x/tope,
  const hayGris=grupos.some(([,d])=>d.lect==="sin_cambio_claro");
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">${titulo}</strong></span>`+
   `<span><i class="a24"></i>2024</span><span><i class="a26"></i>2026</span>${hayGris?`<span><i class="g24"></i><i class="g26"></i>Dentro del margen de error</span>`:""}</figcaption>`+
-  `<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
+  `${compacto?AVISO_DESLIZA:""}<div class="${compacto?"evc-desliza":""}"><div class="evc${compacto?" compacto":""}">`+
   (compacto?`<div class="evc-rotulos" aria-hidden="true"><span>Cambio</span></div>`:"")+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupos.map(grupo).join("")+`</div></div></figure>`}
@@ -555,7 +564,9 @@ function graficoFormalidadNivel(){const filas=[["Chile",FOR.chile," cl-total"],.
  return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por nivel de estudios, Chile</strong></span>${leyendaFormal}</figcaption>`+
   `<div class="fo-paneles">${grupos.map(panel).join("")}</div></figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de los ocupados, de los asalariados y de los independientes de cada nivel; a la derecha, cuántos son. `+
-  `Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal.</p>`}
+  `Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal. `+
+  // Las definiciones van junto al gráfico que las usa: antes estaban en la nota de arriba y alejaban el gráfico del título.
+  `Asalariado: sector privado, público o servicio doméstico. Independiente: empleador o cuenta propia.</p>`}
 // Formalidad por región: barras formal/informal como las de los niveles, de mayor a menor informalidad, con Chile
 // primero y una línea en su informalidad; el % de independientes va como cifra. No se pinta énfasis sobre o bajo Chile:
 // no hay margen de error por región y una diferencia de uno o dos puntos puede deberse a la muestra.
@@ -580,8 +591,7 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
  return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
  <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
   // Sin esta aclaración, los 9,4 millones de ocupados de la ENE parecen contradecir los 8,3 millones del Censo de las pestañas anteriores.
-  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan. `+
-  `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
+  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
   `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
   `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
@@ -737,7 +747,7 @@ function columnasTitulo(){const filas=Object.entries(EST.desocupacion_titulo).so
    `<span class="evc-nombre"><span>${t}</span></span><span class="evc-dif">+${num(sn-c,1)}</span></${tag}>`};
  return `<figure class="graf-ev" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación por región</strong></span>`+
   `<span><i class="tcon"></i>Con título técnico o profesional</span><span><i class="tsin"></i>Sin título superior</span></figcaption>`+
-  `<div class="evc-desliza"><div class="evc compacto"><div class="evc-rotulos" aria-hidden="true"><span>Diferencia</span></div>`+
+  AVISO_DESLIZA+`<div class="evc-desliza"><div class="evc compacto"><div class="evc-rotulos" aria-hidden="true"><span>Diferencia</span></div>`+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupo("Chile",EST.desocupacion_titulo_chile," evc-total","")+filas.map(([r,v])=>grupo(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</div></div></figure>`+
   `<p class="nota" style="margin:2px 0 0">Bajo cada región, la diferencia en pp (sin título menos con título). Tasa según región de residencia.</p>`}
@@ -757,7 +767,9 @@ function vistaResumen(){
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
  const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
- const corto=c=>esc(porCiiu(c).corto),me=RES.mayor_empleador,[d1,d2]=RES.mas_desiguales;
+ const corto=c=>esc(porCiiu(c).corto),[d1]=RES.mas_desiguales;
+ // El título nombra lo que muestran los dos gráficos de la sección: mujeres por actividad y la mayor concentración.
+ const porMujeres=[...DATOS.actividades].sort((a,b)=>b.sexo.pct_m-a.sexo.pct_m),mMax=porMujeres[0],mMin=porMujeres[porMujeres.length-1];
  const [desMin,desMax]=extremos(r=>POB.regiones[r].tasa_desocupacion),[titMin,titMax]=extremos(r=>pctTitulo(EDU[r])),e=extremosDesoc();
  return `<h2>Chile · Todas las actividades</h2>${indiceHtml()}
  ${banda("Censo 2024")}
@@ -777,7 +789,7 @@ function vistaResumen(){
  ${filasSituacion(ch,sH,sM,true)}
  </tbody></table></div>
  <div class="aviso">Estar fuera de la fuerza de trabajo no equivale a desempleo. El Censo registra la actividad solo de los ocupados.</div></details>
- ${encabezado("sec-act","Actividades",`${corto(me.ciiu)} es la que más emplea en ${me.n} de 16 regiones; las más concentradas son ${corto(d1.ciiu)}, seguida de ${corto(d2.ciiu)}`)}
+ ${encabezado("sec-act","Actividades",`Las mujeres son ${num(mMax.sexo.pct_m,1)}% de los ocupados en ${esc(mMax.corto)} y ${num(mMin.sexo.pct_m,1)}% en ${esc(mMin.corto)}; ${corto(d1.ciiu)} es la más concentrada, con CL ${d1.txt} en ${enReg(d1.r)}`)}
  <div class="nota">Ocupados (participación), según lugar de trabajo. `+
   `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales. `+
   // La ficha de cada región muestra la base de la participación; sin esto, sus dos totales de Chile parecían contradecirse.
@@ -964,6 +976,8 @@ function leerVista(){const [c,r,f]=location.hash.slice(1).split("/");
  reg=act&&r&&act.regiones[Number(r)]?Number(r):null;
  const k=f?decodeURIComponent(f):null;ficha=act&&k&&DATOS.fichas[k]?k:null;
  sel.value=act?act.ciiu:""}
+// Muestra el aviso de cada gráfico de columnas solo si no cabe en el ancho disponible.
+function avisoDesliza(){document.querySelectorAll(".evc-desliza").forEach(d=>{const a=d.previousElementSibling;if(a?.classList.contains("evc-aviso"))a.hidden=d.scrollWidth<=d.clientWidth+1})}
 function detalle(){
  guardarVista();
  // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
@@ -971,7 +985,7 @@ function detalle(){
  // El botón vuelve al resumen y también suelta la región: la etiqueta nombra a Chile para que no sorprenda.
  let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
  if(act&&ficha)h+=fichaHtml(ficha);
- const e=document.getElementById("detalle");e.innerHTML=h;
+ const e=document.getElementById("detalle");e.innerHTML=h;avisoDesliza();
  document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
@@ -1007,6 +1021,6 @@ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
 addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();if(ficha)document.getElementById("ficha")?.scrollIntoView({block:"nearest"});else if(act)mostrarDetalle();else scrollTo(0,0)});
 leerVista();
 pintar();
-addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA)});
+addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA);avisoDesliza()});
 </script>
 </body></html>

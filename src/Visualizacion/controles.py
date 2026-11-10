@@ -110,6 +110,8 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Resumen: cada color se usa": {d["ciiu"] for d in datos["resumen"]["regiones"].values()} == set(COLOR_RESUMEN),
         "Resumen: Metropolitana en 18 de 20; excepciones en Maule y Antofagasta": datos["resumen"]["n_metropolitana"] == 18 and sorted(e["r"] for e in datos["resumen"]["excepciones"]) == [2, 7],
         "Resumen: Comercio emplea más en 12 de 16 regiones": datos["resumen"]["mayor_empleador"] == {"ciiu": "G", "n": 12},
+        "Título de Actividades: mujeres de 93,4% en Hogares a 8,5% en Construcción; Minería con CL 8,06 en Antofagasta": (lambda s: (s[0][0], round(s[0][1], 1), s[-1][0], round(s[-1][1], 1)) == ("T", 93.4, "F", 8.5))(sorted(((a["ciiu"], a["sexo"]["pct_m"]) for a in datos["actividades"]), key=lambda x: -x[1]))
+            and (datos["resumen"]["mas_desiguales"][0]["txt"], datos["resumen"]["mas_desiguales"][0]["r"]) == ("8,06", 2),
         "Resumen: Minería y Agricultura son las más desiguales": [d["ciiu"] for d in datos["resumen"]["mas_desiguales"]] == ["B", "A"],
         # La leyenda del mapa dice que el color suave también pesa más que en Chile: ninguna región puede quedar bajo 1,2.
         "Resumen: la actividad con mayor CL de cada región tiene CL de 1,2 o más": all(round(d["peso"], 2) >= CORTES_ROJO[0] for d in datos["resumen"]["regiones"].values()),

@@ -17,6 +17,8 @@ function leerVista(){const [c,r,f]=location.hash.slice(1).split("/");
  reg=act&&r&&act.regiones[Number(r)]?Number(r):null;
  const k=f?decodeURIComponent(f):null;ficha=act&&k&&DATOS.fichas[k]?k:null;
  sel.value=act?act.ciiu:""}
+// Muestra el aviso de cada gráfico de columnas solo si no cabe en el ancho disponible.
+function avisoDesliza(){document.querySelectorAll(".evc-desliza").forEach(d=>{const a=d.previousElementSibling;if(a?.classList.contains("evc-aviso"))a.hidden=d.scrollWidth<=d.clientWidth+1})}
 function detalle(){
  guardarVista();
  // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
@@ -24,7 +26,7 @@ function detalle(){
  // El botón vuelve al resumen y también suelta la región: la etiqueta nombra a Chile para que no sorprenda.
  let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
  if(act&&ficha)h+=fichaHtml(ficha);
- const e=document.getElementById("detalle");e.innerHTML=h;
+ const e=document.getElementById("detalle");e.innerHTML=h;avisoDesliza();
  document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
