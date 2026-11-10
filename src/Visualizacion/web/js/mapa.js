@@ -25,7 +25,9 @@ function pintarResumen(){
  document.getElementById("t-mapa").textContent="13 de 16 regiones se especializan en minería, agricultura o administración pública";
  document.getElementById("n-mapa").textContent="Actividad con mayor CL, según región de trabajo. No es la actividad con más ocupados.";
  document.getElementById("leyenda").className="leyenda-cat";
- document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+`<div>Color suave: CL menor a ${RES.corte_suave}</div>`;
+ document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+
+  // El resto del sitio lee "sobre Chile" desde 1,2: la leyenda nombra los dos cortes para que 1,6 no parezca otro umbral.
+  `<div>Color fuerte: CL de ${RES.corte_suave} o más. Suave: de ${RES.corte_sobre} a menos de ${RES.corte_suave}; también pesa más que en Chile.</div>`;
  document.getElementById("ejes").hidden=true;
  document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=RES.regiones[r],a=porCiiu(d.ciiu);
   p.style.fill=`var(--k${RES.colores[d.ciiu]})`;p.style.opacity=d.suave?.45:1;

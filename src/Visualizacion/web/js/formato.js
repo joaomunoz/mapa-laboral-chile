@@ -23,6 +23,8 @@ const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+fi
 const deCada10=p=>`${Math.round(p/10)} de cada 10`;
 const CHICA=60;
 const chica=v=>v<CHICA?" *":"";
+// El Censo cuenta personas, no estima con muestra: el riesgo de una cifra chica es que unas pocas personas mueven mucho su %.
+const NOTA_CHICA=`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas: es un conteo del Censo, pero con tan pocas, unas pocas personas cambian mucho el %. Léelo con cautela.</p>`;
 const celdaNivel=(v,p)=>v==null?"menos de 10":`${num(v)} (${num(p,1)}%)${chica(v)}`;
 // Misma regla en el detalle de región: bajo 10 la cifra no viene en los datos, y su participación tampoco.
 const celdaSexo=v=>v==null?"menos de 10":num(v)+chica(v);

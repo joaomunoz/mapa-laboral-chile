@@ -11,7 +11,7 @@ function perfilEstudios(filas,lugar,rotulo,comparacion){
   NIVELES.map(([,t],i)=>{const f=filas[i];
    return `<tr><td>${t}</td><td class="n">${num(f[0])} (${num(f[1],1)}%)</td><td class="n">${celdaNivel(f[2],f[4])}</td>`+
     `<td class="n">${celdaNivel(f[3],f[5])}</td><td class="n">${num(comparacion[i],1)}%</td></tr>`}).join("")
- }</tbody></table></div>${hayChicas?`<p class="nota" style="margin:6px 0 0">* Menos de ${CHICA} personas.</p>`:""}`}
+ }</tbody></table></div>${hayChicas?NOTA_CHICA:""}`}
 function avisos(){let h="";
  if(act.alerta_fuente)h+=`<div class="aviso">Censo y ENE difieren en el tamaño de esta actividad: usa los ocupados solo como referencia.</div>`;
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;

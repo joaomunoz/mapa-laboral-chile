@@ -319,7 +319,9 @@ function vistaResumen(){
   `${num(ch.pct_no_buscan,1)}% fuera de la fuerza de trabajo, ${num(ch.pct_sin_dato,1)}% sin dato">${
   [["s-trabajan",ch.trabajan],["s-buscan",ch.buscan],["s-no-buscan",ch.no_buscan],["s-sin-dato",ch.sin_dato]].map(([k,v])=>`<i class="${k}" style="flex:${v} 0 0"></i>`).join("")
  }</div>
- <div class="nota">Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
+ <div class="nota">Entre paréntesis, % de la población de 15 años o más de cada columna. `+
+  // Sin esto, el % de desocupados (sobre la población) se confundía con la tasa de desocupación, que va dos filas abajo.
+  `Por eso los desocupados son ${num(ch.pct_buscan,1)}% y la tasa de desocupación es ${num(ch.tasa_desocupacion,1)}%: la tasa se calcula solo sobre ocupados y desocupados.</div>
  <div class="tabla-ancha"><table><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>
  <tr class="total"><td>Población total</td><td class="n">${num(POB.poblacion_total)}</td><td class="n">${num(sH.poblacion_total)}</td><td class="n">${num(sM.poblacion_total)}</td></tr>
  <tr><td>Menores de 15 años</td><td class="n">${num(POB.menores_15)}</td><td class="n">${num(sH.menores_15)}</td><td class="n">${num(sM.menores_15)}</td></tr>
