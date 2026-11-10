@@ -22,7 +22,7 @@ La vista inicial resume la población, las 20 actividades (con un gráfico de ho
 
 **Según la ENE (marzo a julio de 2026):**
 
-- **Formalidad:** 26,6% de los ocupados es informal. Sin título superior, 36,0%; con título técnico, 17,1%; con título profesional, 12,3%. Por región, va de 21,8% en Antofagasta a 35,6% en La Araucanía.
+- **Formalidad:** 73,4% de los ocupados tiene empleo formal y 26,6% informal. Sin título superior, 64,0% formal y 36,0% informal; con título técnico, 82,9% y 17,1%; con título profesional, 87,7% y 12,3%. La diferencia está sobre todo en los independientes: 69,2% de los que no tienen título superior es informal, frente a 22,6% de los profesionales. Por región, la informalidad va de 21,8% en Antofagasta (78,2% formal) a 35,6% en La Araucanía (64,4% formal).
 - **Independientes:** son 24,1% de los ocupados: 13,8% informales y 10,4% formales.
 - **Desocupación:** subió de 8,6% en 2024 a 9,5% en 2026, con los mismos meses.
 
