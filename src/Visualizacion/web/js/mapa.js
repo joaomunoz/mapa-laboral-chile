@@ -46,7 +46,7 @@ function pintarResumen(){
   [`${patron.length} de ${todas.length}`,"regiones se especializan en minería, agricultura o administración pública",
    "Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades."],
   [deCada10(EST.pct_con_titulo),"ocupados tiene título técnico o profesional",
-   `${num(EST.pct_con_titulo,1)}%. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
+   `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
    `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
   [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",
    `Con y sin título, ${ed.rango}. No indica causa: la edad también influye.`],

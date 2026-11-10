@@ -253,7 +253,9 @@ function graficoEducacion(){const ch=EDU.chile,tope=Math.ceil(Math.max(...DATOS.
   `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>Chile (${num(pctTitulo(ch),1)}%)</span></figcaption>`+
   `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
   fila("Chile",ch," cl-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`+
-  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`}
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior. `+
+  // Los hallazgos dan el % de los ocupados (39,8%): sin esta comparación, las dos cifras parecen contradecirse.
+  `Es menos que el ${num(EST.pct_con_titulo,1)}% de los ocupados porque esta base incluye a quienes no trabajan, como jóvenes que aún estudian o personas mayores.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -319,7 +321,9 @@ function vistaResumen(){
  <div class="aviso">Estar fuera de la fuerza de trabajo no equivale a desempleo. El Censo registra la actividad solo de los ocupados.</div></details>
  ${encabezado("sec-act","Actividades",`${corto(me.ciiu)} es la que más emplea en ${me.n} de 16 regiones; las más concentradas son ${corto(d1.ciiu)}, seguida de ${corto(d2.ciiu)}`)}
  <div class="nota">Ocupados (participación), según lugar de trabajo. `+
-  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales.</div>
+  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales. `+
+  // La ficha de cada región muestra la base de la participación; sin esto, sus dos totales de Chile parecían contradecirse.
+  `La participación se calcula sobre ${num(BASE.chile)}, que incluye a los ${num(BASE.chile-RES.total)} de organismos internacionales.</div>
  ${graficoSexo()}
  <p class="invita"><strong>Elige una actividad</strong> para ver en qué regiones se concentra y sus carreras afines, con títulos, empleabilidad e ingresos. `+
   `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
@@ -342,7 +346,7 @@ function vistaResumen(){
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
   `</tbody></table></div></details>
  <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
- ${encabezado("sec-edu","Educación por región",`Con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
+ ${encabezado("sec-edu","Educación por región",`Población de 15 años o más con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
  ${graficoEducacion()}
  <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia, con nivel de estudios y situación laboral informados. `+

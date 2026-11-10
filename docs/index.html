@@ -401,7 +401,7 @@ function pintarResumen(){
   [`${patron.length} de ${todas.length}`,"regiones se especializan en minería, agricultura o administración pública",
    "Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades."],
   [deCada10(EST.pct_con_titulo),"ocupados tiene título técnico o profesional",
-   `${num(EST.pct_con_titulo,1)}%. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
+   `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
    `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
   [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",
    `Con y sin título, ${ed.rango}. No indica causa: la edad también influye.`],
@@ -697,7 +697,9 @@ function graficoEducacion(){const ch=EDU.chile,tope=Math.ceil(Math.max(...DATOS.
   `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>Chile (${num(pctTitulo(ch),1)}%)</span></figcaption>`+
   `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Región</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
   fila("Chile",ch," cl-total","")+filas.map(([r,v])=>fila(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</figure>`+
-  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`}
+  `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más con nivel informado, según residencia. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior. `+
+  // Los hallazgos dan el % de los ocupados (39,8%): sin esta comparación, las dos cifras parecen contradecirse.
+  `Es menos que el ${num(EST.pct_con_titulo,1)}% de los ocupados porque esta base incluye a quienes no trabajan, como jóvenes que aún estudian o personas mayores.</p>`}
 // Estudios y trabajo, Chile: una barra 100% por nivel (ocupados, desocupados y fuera de la fuerza de trabajo) con los
 // colores de la barra de Población, para comparar los tres repartos sobre un mismo eje. Se descartaron tres gráficos de
 // pastel: los ángulos se comparan mal entre pasteles y la tajada de desocupados (5% en los tres) se vería igual.
@@ -763,7 +765,9 @@ function vistaResumen(){
  <div class="aviso">Estar fuera de la fuerza de trabajo no equivale a desempleo. El Censo registra la actividad solo de los ocupados.</div></details>
  ${encabezado("sec-act","Actividades",`${corto(me.ciiu)} es la que más emplea en ${me.n} de 16 regiones; las más concentradas son ${corto(d1.ciiu)}, seguida de ${corto(d2.ciiu)}`)}
  <div class="nota">Ocupados (participación), según lugar de trabajo. `+
-  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales.</div>
+  `Suman ${num(RES.total)} de ${num(ch.trabajan)}: se excluyen ${num(ch.trabajan-RES.total)} sin región de trabajo o actividad, o en organismos internacionales. `+
+  // La ficha de cada región muestra la base de la participación; sin esto, sus dos totales de Chile parecían contradecirse.
+  `La participación se calcula sobre ${num(BASE.chile)}, que incluye a los ${num(BASE.chile-RES.total)} de organismos internacionales.</div>
  ${graficoSexo()}
  <p class="invita"><strong>Elige una actividad</strong> para ver en qué regiones se concentra y sus carreras afines, con títulos, empleabilidad e ingresos. `+
   `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
@@ -786,7 +790,7 @@ function vistaResumen(){
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
   `</tbody></table></div></details>
  <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
- ${encabezado("sec-edu","Educación por región",`Con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
+ ${encabezado("sec-edu","Educación por región",`Población de 15 años o más con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
  ${graficoEducacion()}
  <details><summary>Ver cifras</summary>
  <div class="nota">Población de 15 años o más, según región de residencia, con nivel de estudios y situación laboral informados. `+
@@ -858,7 +862,7 @@ function vistaRegion(){
  <div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:10px"><thead><tr><th rowspan="2">Indicador</th><th rowspan="2">Cálculo</th>`+
   `<th colspan="3" class="bloque ini">${nomReg(reg)}</th><th colspan="3" class="bloque ini">Chile</th></tr>`+
   `<tr><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>
- <tr><td>A. Total de ocupados (lugar de trabajo, con actividad informada)</td><td></td><td class="n ini">${num(BASE.regiones[reg])}</td><td class="n">${num(bs.h)}</td>`+
+ <tr><td>A. Total de ocupados (lugar de trabajo, con actividad informada; incluye organismos internacionales)</td><td></td><td class="n ini">${num(BASE.regiones[reg])}</td><td class="n">${num(bs.h)}</td>`+
   `<td class="n">${num(bs.m)}</td><td class="n ini">${num(BASE.chile)}</td><td class="n">${num(BASE.sexo.chile.h)}</td><td class="n">${num(BASE.sexo.chile.m)}</td></tr>
  <tr><td>B. Ocupados en la actividad</td><td></td><td class="n ini">${num(d.ocupados)}</td><td class="n">${celdaSexo(d.h)}</td><td class="n">${celdaSexo(d.m)}</td><td class="n ini">${num(n.ocupados)}</td><td class="n">${num(act.sexo.h)}</td><td class="n">${num(act.sexo.m)}</td></tr>
  <tr><td>C. Participación</td><td>B ÷ A</td><td class="n ini">${part(d.pct)}</td><td class="n">${partSexo(d.pct_h)}</td><td class="n">${partSexo(d.pct_m)}</td><td class="n ini">${part(act.pct_nacional)}</td><td class="n">${part(act.sexo.part_h)}</td><td class="n">${part(act.sexo.part_m)}</td></tr>
