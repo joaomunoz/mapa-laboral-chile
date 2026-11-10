@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import re
+from pathlib import Path
 
 import pandas as pd
 import pyarrow.parquet as pq
@@ -29,6 +30,18 @@ def totales_sexo_genero_correctos() -> bool:
     d = pd.read_parquet(RUTA_PERSONAS, columns=["sexo", "div_genero", "sit_fuerza_trabajo"])
     genero = d.loc[d["sit_fuerza_trabajo"] == OCUPADO, "div_genero"].value_counts()
     return d["sexo"].value_counts().to_dict() == POBLACION_POR_SEXO and genero[1] == OCUPADOS_DIVERSIDAD_GENERO and genero[-66] == OCUPADOS_GENERO_SUPRIMIDO
+
+
+# Los nombres oficiales se escribieron a mano y 4 de 20 no estaban en ningún glosario: se comparan con la fuente.
+RUTA_DICCIONARIO_CENSO = Path(__file__).resolve().parents[2] / "Datos" / "datos_externos" / "glosarios" / "CENSO_2024" / "diccionario_variables_censo2024.xlsx"
+
+
+def nombres_segun_diccionario(actividades: list[dict]) -> bool:
+    """Compara el nombre oficial de cada actividad con la etiqueta de cod_caenes en el diccionario del Censo 2024."""
+    d = pd.read_excel(RUTA_DICCIONARIO_CENSO, sheet_name="tabla_personas", header=None, usecols=[1, 3, 4])
+    d = d[d[1] == "cod_caenes"]
+    oficial = dict(zip(d[3].astype(str).str.strip(), d[4].astype(str).str.strip()))
+    return all(oficial.get(a["ciiu"]) == a["glosa"] for a in actividades)
 
 
 def nombres_globales_js(codigo: str) -> list[str]:
@@ -77,6 +90,7 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "El color coincide con la lectura en todas las celdas": all(lectura_esperada(d["clase"]) == d["lectura"] for d in con_base),
         "La cifra visible cae en el tramo de su color": all(texto_calza(d) for d in celdas),
         "20 actividades en la lista": len(datos["actividades"]) == 20 and "U" not in [a["ciiu"] for a in datos["actividades"]],
+        "Nombres oficiales: los 20 coinciden con el diccionario del Censo 2024": nombres_segun_diccionario(datos["actividades"]),
         "Bordes válidos antes y después de simplificar": geo["geometria_valida"],
         "El área de cada región cambia menos de 0,5% al reconstruir los bordes": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
         "El área de cada región cambia menos de 1% al simplificar": geo["diferencia_simplificada_pct"] < DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT,

@@ -63,7 +63,7 @@ NOMBRES_REGION = {
 NOMBRES_CORTOS = {
     "A": "Agricultura y pesca", "B": "Minería", "C": "Industria manufacturera", "D": "Electricidad y gas", "E": "Agua y residuos", "F": "Construcción", "G": "Comercio",
     "H": "Transporte", "I": "Alojamiento y comida", "J": "Información y comunicaciones", "K": "Finanzas y seguros", "L": "Inmobiliarias", "M": "Servicios profesionales",
-    "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud", "R": "Artes y deportes", "S": "Otros servicios", "T": "Hogares como empleadores",
+    "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud y asistencia social", "R": "Artes y recreación", "S": "Otros servicios", "T": "Hogares como empleadores",
 }
 # Índice de color de cada actividad que distingue a alguna región. Sigue a la actividad, no a su orden, y se eligió con
 # validate_palette.js para que las actividades de regiones vecinas se distingan, también con daltonismo (ΔE 8,4 o más).

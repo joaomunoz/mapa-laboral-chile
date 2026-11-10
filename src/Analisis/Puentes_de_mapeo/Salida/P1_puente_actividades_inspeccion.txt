@@ -15,7 +15,7 @@ Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   
 actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.000    MB
 actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.001    MB
 actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.003    MB
-origen                         | object       | 0        | 0.00   % | 1        | 0               | 0.003    MB
+origen                         | object       | 0        | 0.00   % | 1        | 0               | 0.005    MB
 -------------------------------------------------------------------------------------------------------------------
 
 🧠 Clasificación Automática de Variables:
@@ -24,12 +24,12 @@ origen                         | object       | 0        | 0.00   % | 1        |
    - Fechas (0): []
 
 🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
-    actividad_caenes  ...                              origen
-0                  1  ...  Libro de códigos ENE 2020, Anexo 5
-17                18  ...  Libro de códigos ENE 2020, Anexo 5
-15                16  ...  Libro de códigos ENE 2020, Anexo 5
-1                  2  ...  Libro de códigos ENE 2020, Anexo 5
-8                  9  ...  Libro de códigos ENE 2020, Anexo 5
+    actividad_caenes  ...                                             origen
+0                  1  ...  Códigos: Libro de códigos ENE 2020, Anexo 5; n...
+17                18  ...  Códigos: Libro de códigos ENE 2020, Anexo 5; n...
+15                16  ...  Códigos: Libro de códigos ENE 2020, Anexo 5; n...
+1                  2  ...  Códigos: Libro de códigos ENE 2020, Anexo 5; n...
+8                  9  ...  Códigos: Libro de códigos ENE 2020, Anexo 5; n...
 
 [5 rows x 4 columns]
 ============================================================

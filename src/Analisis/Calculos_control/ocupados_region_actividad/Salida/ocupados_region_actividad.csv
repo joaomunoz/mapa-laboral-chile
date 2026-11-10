@@ -3,9 +3,9 @@ residencia;1;TARAPACA;1;A;Agricultura, ganadería, silvicultura y pesca;4094.350
 residencia;1;TARAPACA;2;B;Explotación de minas y canteras;6546.023215280787;50;28;False;3.466795401265251;1.5432474841333197;2.246428675185683
 residencia;1;TARAPACA;3;C;Industrias manufactureras;10891.838420749873;102;57;True;5.768353411921127;9.219823193409667;0.6256468579619128
 residencia;1;TARAPACA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;170.2443688947864;2;0;False;0.09016197709137426;0.4801127661324457;0.18779333409039542
-residencia;1;TARAPACA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1678.0176642789304;15;7;False;0.8886836679992624;0.7391144393603399;1.2023627474635266
+residencia;1;TARAPACA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1678.0176642789304;15;7;False;0.8886836679992624;0.7391144393603399;1.2023627474635266
 residencia;1;TARAPACA;6;F;Construcción;16113.268152286731;123;61;True;8.53363975234624;8.849771739804316;0.9642779501265344
-residencia;1;TARAPACA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";43568.31635079589;334;90;True;23.073923479712253;18.420697858167824;1.2526085416183712
+residencia;1;TARAPACA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";43568.31635079589;334;90;True;23.073923479712253;18.420697858167824;1.2526085416183712
 residencia;1;TARAPACA;8;H;Transporte y almacenamiento;16067.156306449924;118;54;True;8.509218767294167;6.629514436105251;1.283535747497854
 residencia;1;TARAPACA;9;I;Actividades de alojamiento y de servicio de comidas;13960.69488449126;112;55;True;7.393629877608918;4.975040044017093;1.4861447972665836
 residencia;1;TARAPACA;10;J;Información y comunicaciones;1278.0604845214243;10;7;False;0.6768650315713336;1.9332406705642227;0.3501193834153035
@@ -13,19 +13,19 @@ residencia;1;TARAPACA;11;K;Actividades financieras y de seguros;1301.13902964631
 residencia;1;TARAPACA;12;L;Actividades inmobiliarias;1435.0879211343042;9;4;False;0.7600272779030023;0.9047818485486645;0.8400116327732934
 residencia;1;TARAPACA;13;M;Actividades profesionales, científicas y técnicas;4770.020875324064;35;23;False;2.526218727105963;3.8798985898259932;0.6511043184814941
 residencia;1;TARAPACA;14;N;Actividades de servicios administrativos y de apoyo;6214.894552284406;54;32;False;3.291428573444778;6.336698633253308;0.5194232460688973
-residencia;1;TARAPACA;15;O;Administración pública, defensa y seguridad social;25301.732274466896;193;66;True;13.399880539440451;8.26303118517578;1.6216664610295057
+residencia;1;TARAPACA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";25301.732274466896;193;66;True;13.399880539440451;8.26303118517578;1.6216664610295057
 residencia;1;TARAPACA;16;P;Enseñanza;13298.390444237486;92;47;True;7.042871270100549;6.5344988794406;1.0777982214151776
-residencia;1;TARAPACA;17;Q;Actividades de atención de la salud humana y de servicios sociales;10446.395560168956;71;38;True;5.532445409489437;5.963534864685459;0.9277124281189627
-residencia;1;TARAPACA;18;R;Actividades artísticas, de espectáculos y deportivas;1450.1825693703317;13;6;False;0.7680214532011008;1.1210763781824336;0.6850750476486448
+residencia;1;TARAPACA;17;Q;Actividades de atención de la salud humana y de asistencia social;10446.395560168956;71;38;True;5.532445409489437;5.963534864685459;0.9277124281189627
+residencia;1;TARAPACA;18;R;Actividades artísticas, de entretenimiento y recreativas;1450.1825693703317;13;6;False;0.7680214532011008;1.1210763781824336;0.6850750476486448
 residencia;1;TARAPACA;19;S;Otras actividades de servicios;6759.128219647308;54;32;False;3.5796565117177557;3.58842091300966;0.9975575882806476
-residencia;1;TARAPACA;20;T;Actividades de los hogares como empleadores;3475.6394346834404;27;19;False;1.8407100635526636;2.9534132172464496;0.6232484004621641
+residencia;1;TARAPACA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";3475.6394346834404;27;19;False;1.8407100635526636;2.9534132172464496;0.6232484004621641
 residencia;2;ANTOFAGASTA;1;A;Agricultura, ganadería, silvicultura y pesca;3632.7880675448537;33;9;False;1.0776847145192223;5.697491759161663;0.1891507280877216
 residencia;2;ANTOFAGASTA;2;B;Explotación de minas y canteras;34942.11628893547;233;108;True;10.365753222424653;1.5432474841333197;6.716844400524657
 residencia;2;ANTOFAGASTA;3;C;Industrias manufactureras;38690.23761826355;267;118;True;11.47765212477659;9.219823193409667;1.2448885281206716
 residencia;2;ANTOFAGASTA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;4199.906292676672;16;7;False;1.2459231669657154;0.4801127661324457;2.5950636076650593
-residencia;2;ANTOFAGASTA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5179.611340489644;31;22;False;1.5365575599263028;0.7391144393603399;2.078916982404109
+residencia;2;ANTOFAGASTA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5179.611340489644;31;22;False;1.5365575599263028;0.7391144393603399;2.078916982404109
 residencia;2;ANTOFAGASTA;6;F;Construcción;30438.95495251664;204;108;True;9.0298679329334;8.849771739804316;1.0203503772101885
-residencia;2;ANTOFAGASTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";48170.13308608348;354;129;True;14.289910437388285;18.420697858167824;0.7757529354976131
+residencia;2;ANTOFAGASTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";48170.13308608348;354;129;True;14.289910437388285;18.420697858167824;0.7757529354976131
 residencia;2;ANTOFAGASTA;8;H;Transporte y almacenamiento;29939.939086047132;201;99;True;8.881832385139882;6.629514436105251;1.3397410128211196
 residencia;2;ANTOFAGASTA;9;I;Actividades de alojamiento y de servicio de comidas;16934.64674608987;139;70;True;5.023747492205835;4.975040044017093;1.009790363043875
 residencia;2;ANTOFAGASTA;10;J;Información y comunicaciones;2821.224507007099;20;13;False;0.8369303330935476;1.9332406705642227;0.43291574910292296
@@ -33,20 +33,20 @@ residencia;2;ANTOFAGASTA;11;K;Actividades financieras y de seguros;2293.03770661
 residencia;2;ANTOFAGASTA;12;L;Actividades inmobiliarias;2278.451104488544;17;12;False;0.6759138938006397;0.9047818485486645;0.7470462574872103
 residencia;2;ANTOFAGASTA;13;M;Actividades profesionales, científicas y técnicas;11069.048547157185;83;56;True;3.283688506388549;3.8798985898259932;0.8463335910374443
 residencia;2;ANTOFAGASTA;14;N;Actividades de servicios administrativos y de apoyo;25994.917130206533;192;111;True;7.711521929037382;6.336698633253308;1.2169620768406704
-residencia;2;ANTOFAGASTA;15;O;Administración pública, defensa y seguridad social;26943.16951691874;197;105;True;7.992825733075903;8.26303118517578;0.9672994756954764
+residencia;2;ANTOFAGASTA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";26943.16951691874;197;105;True;7.992825733075903;8.26303118517578;0.9672994756954764
 residencia;2;ANTOFAGASTA;16;P;Enseñanza;18192.113205559024;114;70;True;5.396781194473626;6.5344988794406;0.825890599117469
-residencia;2;ANTOFAGASTA;17;Q;Actividades de atención de la salud humana y de servicios sociales;15857.049696831838;111;74;True;4.704072948355759;5.963534864685459;0.7888061451962134
-residencia;2;ANTOFAGASTA;18;R;Actividades artísticas, de espectáculos y deportivas;3536.043569893088;26;20;False;1.0489849763581656;1.1210763781824336;0.9356944778899475
+residencia;2;ANTOFAGASTA;17;Q;Actividades de atención de la salud humana y de asistencia social;15857.049696831838;111;74;True;4.704072948355759;5.963534864685459;0.7888061451962134
+residencia;2;ANTOFAGASTA;18;R;Actividades artísticas, de entretenimiento y recreativas;3536.043569893088;26;20;False;1.0489849763581656;1.1210763781824336;0.9356944778899475
 residencia;2;ANTOFAGASTA;19;S;Otras actividades de servicios;12262.942352055064;83;55;True;3.6378630633335103;3.58842091300966;1.013778247179588
-residencia;2;ANTOFAGASTA;20;T;Actividades de los hogares como empleadores;3585.5196532762516;30;21;False;1.0636623034702724;2.9534132172464496;0.3601467946506838
-residencia;2;ANTOFAGASTA;21;U;Actividades de organizaciones y organismos extraterritoriales;130.066916985123;1;0;False;0.038585000196347675;0.02003107647860285;1.9262569456795837
+residencia;2;ANTOFAGASTA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";3585.5196532762516;30;21;False;1.0636623034702724;2.9534132172464496;0.3601467946506838
+residencia;2;ANTOFAGASTA;21;U;Actividades de organizaciones y órganos extraterritoriales;130.066916985123;1;0;False;0.038585000196347675;0.02003107647860285;1.9262569456795837
 residencia;3;ATACAMA;1;A;Agricultura, ganadería, silvicultura y pesca;7122.140327616926;122;54;True;4.670369896882887;5.697491759161663;0.8197238529345573
 residencia;3;ATACAMA;2;B;Explotación de minas y canteras;15262.452481403976;232;133;True;10.00840973960498;1.5432474841333197;6.485291466537303
 residencia;3;ATACAMA;3;C;Industrias manufactureras;13869.953418837546;246;140;True;9.095273322167392;9.219823193409667;0.9864910781227016
 residencia;3;ATACAMA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;976.62430911958;17;13;False;0.6404250076609083;0.4801127661324457;1.3339053923099355
-residencia;3;ATACAMA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1288.0403351885805;25;14;False;0.8446372200937134;0.7391144393603399;1.142769204759005
+residencia;3;ATACAMA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1288.0403351885805;25;14;False;0.8446372200937134;0.7391144393603399;1.142769204759005
 residencia;3;ATACAMA;6;F;Construcción;17417.638000432078;271;138;True;11.421680625498169;8.849771739804316;1.2906186691941415
-residencia;3;ATACAMA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";23184.37238092338;409;182;True;15.203238052769178;18.420697858167824;0.8253345323737554
+residencia;3;ATACAMA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";23184.37238092338;409;182;True;15.203238052769178;18.420697858167824;0.8253345323737554
 residencia;3;ATACAMA;8;H;Transporte y almacenamiento;10023.326670040837;170;112;True;6.572833585553019;6.629514436105251;0.9914502259405997
 residencia;3;ATACAMA;9;I;Actividades de alojamiento y de servicio de comidas;8041.124787554637;137;88;True;5.272997359971973;4.975040044017093;1.059890435718844
 residencia;3;ATACAMA;10;J;Información y comunicaciones;1500.3530225786747;22;14;False;0.9838620511558088;1.9332406705642227;0.5089185563578411
@@ -54,19 +54,19 @@ residencia;3;ATACAMA;11;K;Actividades financieras y de seguros;1082.292754467793
 residencia;3;ATACAMA;12;L;Actividades inmobiliarias;1363.6868224616117;26;17;False;0.8942426842819082;0.9047818485486645;0.9883517067858271
 residencia;3;ATACAMA;13;M;Actividades profesionales, científicas y técnicas;3020.8610681531104;56;38;False;1.9809408332857856;3.8798985898259932;0.5105651056139143
 residencia;3;ATACAMA;14;N;Actividades de servicios administrativos y de apoyo;13011.812317197653;202;117;True;8.532544116617197;6.336698633253308;1.3465283123676857
-residencia;3;ATACAMA;15;O;Administración pública, defensa y seguridad social;9233.062611311965;157;94;True;6.054615002276274;8.26303118517578;0.7327353445232669
+residencia;3;ATACAMA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";9233.062611311965;157;94;True;6.054615002276274;8.26303118517578;0.7327353445232669
 residencia;3;ATACAMA;16;P;Enseñanza;11953.22280828553;196;127;True;7.8383701256318945;6.5344988794406;1.1995365322188127
-residencia;3;ATACAMA;17;Q;Actividades de atención de la salud humana y de servicios sociales;7269.865201612613;125;85;True;4.767241030108806;5.963534864685459;0.7993985343054165
-residencia;3;ATACAMA;18;R;Actividades artísticas, de espectáculos y deportivas;965.906085561551;17;9;False;0.6333964928674868;1.1210763781824336;0.5649895985627607
+residencia;3;ATACAMA;17;Q;Actividades de atención de la salud humana y de asistencia social;7269.865201612613;125;85;True;4.767241030108806;5.963534864685459;0.7993985343054165
+residencia;3;ATACAMA;18;R;Actividades artísticas, de entretenimiento y recreativas;965.906085561551;17;9;False;0.6333964928674868;1.1210763781824336;0.5649895985627607
 residencia;3;ATACAMA;19;S;Otras actividades de servicios;3498.658586649292;59;45;False;2.2942583255762763;3.58842091300966;0.6393503942802654
-residencia;3;ATACAMA;20;T;Actividades de los hogares como empleadores;2410.885424582421;44;33;False;1.5809470459522623;2.9534132172464496;0.5352949044584502
+residencia;3;ATACAMA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";2410.885424582421;44;33;False;1.5809470459522623;2.9534132172464496;0.5352949044584502
 residencia;4;COQUIMBO;1;A;Agricultura, ganadería, silvicultura y pesca;33196.97358254855;538;172;True;8.821207352817716;5.697491759161663;1.5482615378307596
 residencia;4;COQUIMBO;2;B;Explotación de minas y canteras;21751.722176019273;190;121;True;5.779938075331594;1.5432474841333197;3.7453086006989857
 residencia;4;COQUIMBO;3;C;Industrias manufactureras;28437.563926166575;272;156;True;7.556521602125705;9.219823193409667;0.8195950663703735
 residencia;4;COQUIMBO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;917.6587447741726;11;5;False;0.24384325416443467;0.4801127661324457;0.5078874617909392
-residencia;4;COQUIMBO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";4366.536146776553;55;38;False;1.1602901291140113;0.7391144393603399;1.5698382649893488
+residencia;4;COQUIMBO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";4366.536146776553;55;38;False;1.1602901291140113;0.7391144393603399;1.5698382649893488
 residencia;4;COQUIMBO;6;F;Construcción;42564.796801789;391;207;True;11.310455683120376;8.849771739804316;1.278050554936739
-residencia;4;COQUIMBO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";59763.84166953481;501;217;True;15.880641596951918;18.420697858167824;0.8621085758654017
+residencia;4;COQUIMBO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";59763.84166953481;501;217;True;15.880641596951918;18.420697858167824;0.8621085758654017
 residencia;4;COQUIMBO;8;H;Transporte y almacenamiento;20820.04969205148;167;110;True;5.532371044994977;6.629514436105251;0.8345062218832981
 residencia;4;COQUIMBO;9;I;Actividades de alojamiento y de servicio de comidas;23260.431274695005;220;118;True;6.1808371440797645;4.975040044017093;1.2423693255520114
 residencia;4;COQUIMBO;10;J;Información y comunicaciones;4247.621162157154;31;18;False;1.128691654208567;1.9332406705642227;0.5838340106300136
@@ -74,19 +74,19 @@ residencia;4;COQUIMBO;11;K;Actividades financieras y de seguros;3611.29042853343
 residencia;4;COQUIMBO;12;L;Actividades inmobiliarias;3195.426730855875;26;14;False;0.8490991416288062;0.9047818485486645;0.9384573121032684
 residencia;4;COQUIMBO;13;M;Actividades profesionales, científicas y técnicas;11727.996860674853;91;58;True;3.1164013154377974;3.8798985898259932;0.8032172087202832
 residencia;4;COQUIMBO;14;N;Actividades de servicios administrativos y de apoyo;19446.691625947864;169;111;True;5.167437891054301;6.336698633253308;0.8154779310376167
-residencia;4;COQUIMBO;15;O;Administración pública, defensa y seguridad social;21464.475450187067;179;115;True;5.703609944886717;8.26303118517578;0.6902563740917774
+residencia;4;COQUIMBO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";21464.475450187067;179;115;True;5.703609944886717;8.26303118517578;0.6902563740917774
 residencia;4;COQUIMBO;16;P;Enseñanza;34830.16393853405;263;141;True;9.255183984481029;6.5344988794406;1.4163571155548718
-residencia;4;COQUIMBO;17;Q;Actividades de atención de la salud humana y de servicios sociales;21565.44146904775;166;103;True;5.730438962470019;5.963534864685459;0.9609131316401325
-residencia;4;COQUIMBO;18;R;Actividades artísticas, de espectáculos y deportivas;3936.1392484011;32;19;False;1.0459236711253423;1.1210763781824336;0.9329637939754525
+residencia;4;COQUIMBO;17;Q;Actividades de atención de la salud humana y de asistencia social;21565.44146904775;166;103;True;5.730438962470019;5.963534864685459;0.9609131316401325
+residencia;4;COQUIMBO;18;R;Actividades artísticas, de entretenimiento y recreativas;3936.1392484011;32;19;False;1.0459236711253423;1.1210763781824336;0.9329637939754525
 residencia;4;COQUIMBO;19;S;Otras actividades de servicios;8906.90578265324;80;49;True;2.3667718560374738;3.58842091300966;0.6595580377588504
-residencia;4;COQUIMBO;20;T;Actividades de los hogares como empleadores;8319.678444258183;98;66;True;2.2107319055177315;2.9534132172464496;0.748534574372515
+residencia;4;COQUIMBO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";8319.678444258183;98;66;True;2.2107319055177315;2.9534132172464496;0.748534574372515
 residencia;5;VALPARAISO;1;A;Agricultura, ganadería, silvicultura y pesca;44691.72256179059;441;146;True;4.901443585629612;5.697491759161663;0.8602809434077738
 residencia;5;VALPARAISO;2;B;Explotación de minas y canteras;15135.087840050672;108;63;True;1.659899752330891;1.5432474841333197;1.0755888277135812
 residencia;5;VALPARAISO;3;C;Industrias manufactureras;70139.89561137649;541;310;True;7.692403016370508;9.219823193409667;0.8343330294955158
 residencia;5;VALPARAISO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;3882.5343398440436;30;14;False;0.42580643450707134;0.4801127661324457;0.8868883823630859
-residencia;5;VALPARAISO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5901.50939150372;63;36;True;0.6472320531509156;0.7391144393603399;0.8756858460390204
+residencia;5;VALPARAISO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5901.50939150372;63;36;True;0.6472320531509156;0.7391144393603399;0.8756858460390204
 residencia;5;VALPARAISO;6;F;Construcción;88050.68706671697;674;346;True;9.656720542305026;8.849771739804316;1.0911830074521847
-residencia;5;VALPARAISO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";159209.6642289367;1141;476;True;17.46088856669705;18.420697858167824;0.9478950635388014
+residencia;5;VALPARAISO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";159209.6642289367;1141;476;True;17.46088856669705;18.420697858167824;0.9478950635388014
 residencia;5;VALPARAISO;8;H;Transporte y almacenamiento;66864.13261258157;436;261;True;7.333142584725985;6.629514436105251;1.1061356989870446
 residencia;5;VALPARAISO;9;I;Actividades de alojamiento y de servicio de comidas;44402.8162118744;334;190;True;4.86975856445625;4.975040044017093;0.9788380638890629
 residencia;5;VALPARAISO;10;J;Información y comunicaciones;16409.30361768152;101;57;True;1.7996459154227649;1.9332406705642227;0.9308959524928329
@@ -94,20 +94,20 @@ residencia;5;VALPARAISO;11;K;Actividades financieras y de seguros;12239.48431309
 residencia;5;VALPARAISO;12;L;Actividades inmobiliarias;11057.973731865066;92;54;True;1.2127533089192082;0.9047818485486645;1.3403820057448679
 residencia;5;VALPARAISO;13;M;Actividades profesionales, científicas y técnicas;29342.043102697247;229;146;True;3.218009078887938;3.8798985898259932;0.8294054610928014
 residencia;5;VALPARAISO;14;N;Actividades de servicios administrativos y de apoyo;53819.29021883991;439;263;True;5.902484838474358;6.336698633253308;0.9314763380886837
-residencia;5;VALPARAISO;15;O;Administración pública, defensa y seguridad social;91279.22136480581;645;326;True;10.01080129415955;8.26303118517578;1.2115168235258924
+residencia;5;VALPARAISO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";91279.22136480581;645;326;True;10.01080129415955;8.26303118517578;1.2115168235258924
 residencia;5;VALPARAISO;16;P;Enseñanza;69586.01830403248;456;263;True;7.631658023345153;6.5344988794406;1.1679025682224125
-residencia;5;VALPARAISO;17;Q;Actividades de atención de la salud humana y de servicios sociales;50876.862352765806;367;218;True;5.579782034383361;5.963534864685459;0.9356501070238417
-residencia;5;VALPARAISO;18;R;Actividades artísticas, de espectáculos y deportivas;9370.180687091904;69;41;True;1.0276491795866234;1.1210763781824336;0.9166629496312456
+residencia;5;VALPARAISO;17;Q;Actividades de atención de la salud humana y de asistencia social;50876.862352765806;367;218;True;5.579782034383361;5.963534864685459;0.9356501070238417
+residencia;5;VALPARAISO;18;R;Actividades artísticas, de entretenimiento y recreativas;9370.180687091904;69;41;True;1.0276491795866234;1.1210763781824336;0.9166629496312456
 residencia;5;VALPARAISO;19;S;Otras actividades de servicios;32409.37130053659;240;160;True;3.5544099884642932;3.58842091300966;0.9905220359122138
-residencia;5;VALPARAISO;20;T;Actividades de los hogares como empleadores;36721.97662428635;307;192;True;4.027383292910549;2.9534132172464496;1.3636369165657731
-residencia;5;VALPARAISO;21;U;Actividades de organizaciones y organismos extraterritoriales;417.56823205355386;4;2;False;0.04579566450435755;0.02003107647860285;2.286230825052082
+residencia;5;VALPARAISO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";36721.97662428635;307;192;True;4.027383292910549;2.9534132172464496;1.3636369165657731
+residencia;5;VALPARAISO;21;U;Actividades de organizaciones y órganos extraterritoriales;417.56823205355386;4;2;False;0.04579566450435755;0.02003107647860285;2.286230825052082
 residencia;6;O'HIGGINS;1;A;Agricultura, ganadería, silvicultura y pesca;66135.58062590177;616;200;True;15.044498594405894;5.697491759161663;2.64054767086132
 residencia;6;O'HIGGINS;2;B;Explotación de minas y canteras;7375.085937548547;52;31;False;1.6776819523017366;1.5432474841333197;1.087111412492543
 residencia;6;O'HIGGINS;3;C;Industrias manufactureras;41392.95590060667;311;168;True;9.416055033787512;9.219823193409667;1.021283688012381
 residencia;6;O'HIGGINS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;1165.058317940868;7;2;False;0.2650270559475154;0.4801127661324457;0.5520100164851773
-residencia;6;O'HIGGINS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";4633.880139151628;32;15;False;1.0541134224624717;0.7391144393603399;1.4261843177827034
+residencia;6;O'HIGGINS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";4633.880139151628;32;15;False;1.0541134224624717;0.7391144393603399;1.4261843177827034
 residencia;6;O'HIGGINS;6;F;Construcción;42649.03705350494;309;176;True;9.701787932181947;8.849771739804316;1.096275499236376
-residencia;6;O'HIGGINS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";85380.43138226501;621;241;True;19.42231046834089;18.420697858167824;1.0543743031824901
+residencia;6;O'HIGGINS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";85380.43138226501;621;241;True;19.42231046834089;18.420697858167824;1.0543743031824901
 residencia;6;O'HIGGINS;8;H;Transporte y almacenamiento;21387.747253161022;142;97;True;4.865277214511521;6.629514436105251;0.7338813817214953
 residencia;6;O'HIGGINS;9;I;Actividades de alojamiento y de servicio de comidas;17195.16474033139;123;77;True;3.911550020703641;4.975040044017093;0.7862348817488638
 residencia;6;O'HIGGINS;10;J;Información y comunicaciones;4558.883921449008;33;18;False;1.037053309265689;1.9332406705642227;0.5364325947907053
@@ -115,19 +115,19 @@ residencia;6;O'HIGGINS;11;K;Actividades financieras y de seguros;3837.6807611440
 residencia;6;O'HIGGINS;12;L;Actividades inmobiliarias;2793.853078591106;25;13;False;0.6355447146007023;0.9047818485486645;0.7024286745143726
 residencia;6;O'HIGGINS;13;M;Actividades profesionales, científicas y técnicas;16072.156874754928;104;66;True;3.656088586853993;3.8798985898259932;0.9423155018641769
 residencia;6;O'HIGGINS;14;N;Actividades de servicios administrativos y de apoyo;17848.702651378368;150;101;True;4.06021659459755;6.336698633253308;0.6407463617238501
-residencia;6;O'HIGGINS;15;O;Administración pública, defensa y seguridad social;30500.926112066238;212;125;True;6.938339932580001;8.26303118517578;0.8396845875430883
+residencia;6;O'HIGGINS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";30500.926112066238;212;125;True;6.938339932580001;8.26303118517578;0.8396845875430883
 residencia;6;O'HIGGINS;16;P;Enseñanza;20714.97741440813;154;92;True;4.712235768474643;6.5344988794406;0.7211319269333235
-residencia;6;O'HIGGINS;17;Q;Actividades de atención de la salud humana y de servicios sociales;23494.310745813786;143;92;True;5.34447753609801;5.963534864685459;0.8961928885075612
-residencia;6;O'HIGGINS;18;R;Actividades artísticas, de espectáculos y deportivas;5475.449653006372;31;18;False;1.2455533591570611;1.1210763781824336;1.111033452668442
+residencia;6;O'HIGGINS;17;Q;Actividades de atención de la salud humana y de asistencia social;23494.310745813786;143;92;True;5.34447753609801;5.963534864685459;0.8961928885075612
+residencia;6;O'HIGGINS;18;R;Actividades artísticas, de entretenimiento y recreativas;5475.449653006372;31;18;False;1.2455533591570611;1.1210763781824336;1.111033452668442
 residencia;6;O'HIGGINS;19;S;Otras actividades de servicios;11596.501251105185;89;56;True;2.637968021466951;3.58842091300966;0.7351333874750077
-residencia;6;O'HIGGINS;20;T;Actividades de los hogares como empleadores;15391.382245827626;132;91;True;3.5012262139667314;2.9534132172464496;1.1854847108834379
+residencia;6;O'HIGGINS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";15391.382245827626;132;91;True;3.5012262139667314;2.9534132172464496;1.1854847108834379
 residencia;7;MAULE;1;A;Agricultura, ganadería, silvicultura y pesca;88619.85976708992;785;230;True;17.121630852564575;5.697491759161663;3.005117264984667
 residencia;7;MAULE;2;B;Explotación de minas y canteras;2473.231202301829;24;9;False;0.47783591364451683;1.5432474841333197;0.3096301264426601
 residencia;7;MAULE;3;C;Industrias manufactureras;43965.89446186808;355;194;True;8.494346719317063;9.219823193409667;0.9213134071148811
 residencia;7;MAULE;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;966.2012645628504;9;2;False;0.18667307107689232;0.4801127661324457;0.3888108882849326
-residencia;7;MAULE;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";3435.4477835918124;27;11;False;0.6637391315954652;0.7391144393603399;0.8980194354880854
+residencia;7;MAULE;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";3435.4477835918124;27;11;False;0.6637391315954652;0.7391144393603399;0.8980194354880854
 residencia;7;MAULE;6;F;Construcción;42018.22360791541;342;195;True;8.118050689608598;8.849771739804316;0.9173175227893621
-residencia;7;MAULE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";98576.20856482234;772;300;True;19.045228217784683;18.420697858167824;1.0339037296211848
+residencia;7;MAULE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";98576.20856482234;772;300;True;19.045228217784683;18.420697858167824;1.0339037296211848
 residencia;7;MAULE;8;H;Transporte y almacenamiento;24303.18261317472;181;121;True;4.695450007919905;6.629514436105251;0.7082645423242215
 residencia;7;MAULE;9;I;Actividades de alojamiento y de servicio de comidas;25045.287265913885;192;111;True;4.838826920855274;4.975040044017093;0.9726206981337513
 residencia;7;MAULE;10;J;Información y comunicaciones;3187.3524020371256;26;14;False;0.6158063369558715;1.9332406705642227;0.3185357862226985
@@ -135,19 +135,19 @@ residencia;7;MAULE;11;K;Actividades financieras y de seguros;4906.75730238267;32
 residencia;7;MAULE;12;L;Actividades inmobiliarias;1854.4812850107653;17;7;False;0.3582915169172421;0.9047818485486645;0.3959976844053266
 residencia;7;MAULE;13;M;Actividades profesionales, científicas y técnicas;9907.643324115377;81;47;True;1.914187317156818;3.8798985898259932;0.4933601414676836
 residencia;7;MAULE;14;N;Actividades de servicios administrativos y de apoyo;20701.614362675562;175;112;True;3.999615888599132;6.336698633253308;0.631182910863113
-residencia;7;MAULE;15;O;Administración pública, defensa y seguridad social;56132.094046824546;423;216;True;10.844894087815673;8.26303118517578;1.3124595375207904
+residencia;7;MAULE;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";56132.094046824546;423;216;True;10.844894087815673;8.26303118517578;1.3124595375207904
 residencia;7;MAULE;16;P;Enseñanza;28764.024427242683;210;133;True;5.557298435945963;6.5344988794406;0.8504551823294073
-residencia;7;MAULE;17;Q;Actividades de atención de la salud humana y de servicios sociales;21414.59342274789;151;85;True;4.13736564699697;5.963534864685459;0.6937773888935235
-residencia;7;MAULE;18;R;Actividades artísticas, de espectáculos y deportivas;4684.863972757839;38;19;False;0.9051302015919774;1.1210763781824336;0.8073760353950522
+residencia;7;MAULE;17;Q;Actividades de atención de la salud humana y de asistencia social;21414.59342274789;151;85;True;4.13736564699697;5.963534864685459;0.6937773888935235
+residencia;7;MAULE;18;R;Actividades artísticas, de entretenimiento y recreativas;4684.863972757839;38;19;False;0.9051302015919774;1.1210763781824336;0.8073760353950522
 residencia;7;MAULE;19;S;Otras actividades de servicios;15000.563967128975;120;80;True;2.8981553288447253;3.58842091300966;0.807640853484493
-residencia;7;MAULE;20;T;Actividades de los hogares como empleadores;21632.53708368455;189;125;True;4.179473036006851;2.9534132172464496;1.4151331793332635
+residencia;7;MAULE;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";21632.53708368455;189;125;True;4.179473036006851;2.9534132172464496;1.4151331793332635
 residencia;8;BIOBIO;1;A;Agricultura, ganadería, silvicultura y pesca;44412.81219856027;457;208;True;6.286833029615477;5.697491759161663;1.1034387227513132
 residencia;8;BIOBIO;2;B;Explotación de minas y canteras;4407.623651349125;38;20;False;0.6239189229794894;1.5432474841333197;0.4042896096667731
 residencia;8;BIOBIO;3;C;Industrias manufactureras;87331.81454521637;795;394;True;12.362210565826722;9.219823193409667;1.3408294613136653
 residencia;8;BIOBIO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;2973.7053853827256;24;14;False;0.42094135254456105;0.4801127661324457;0.8767551755298225
-residencia;8;BIOBIO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";3453.6861845449725;31;15;False;0.4888847903134549;0.7391144393603399;0.6614466776437975
+residencia;8;BIOBIO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";3453.6861845449725;31;15;False;0.4888847903134549;0.7391144393603399;0.6614466776437975
 residencia;8;BIOBIO;6;F;Construcción;70612.38165811985;638;351;True;9.995499751814247;8.849771739804316;1.1294641314709508
-residencia;8;BIOBIO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";109548.17293460891;955;419;True;15.507035871996719;18.420697858167824;0.8418267316143414
+residencia;8;BIOBIO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";109548.17293460891;955;419;True;15.507035871996719;18.420697858167824;0.8418267316143414
 residencia;8;BIOBIO;8;H;Transporte y almacenamiento;45468.01152840856;390;252;True;6.436201233773768;6.629514436105251;0.970840518684344
 residencia;8;BIOBIO;9;I;Actividades de alojamiento y de servicio de comidas;37552.22371517949;355;213;True;5.315685918122366;4.975040044017093;1.068470981357211
 residencia;8;BIOBIO;10;J;Información y comunicaciones;6466.535949893806;51;36;False;0.9153672056440091;1.9332406705642227;0.47348848986135605
@@ -155,20 +155,20 @@ residencia;8;BIOBIO;11;K;Actividades financieras y de seguros;7112.1073992348765
 residencia;8;BIOBIO;12;L;Actividades inmobiliarias;4855.036803933797;41;28;False;0.6872522641103824;0.9047818485486645;0.7595778642252657
 residencia;8;BIOBIO;13;M;Actividades profesionales, científicas y técnicas;21214.125567670144;161;108;True;3.002954749115443;3.8798985898259932;0.7739776387429034
 residencia;8;BIOBIO;14;N;Actividades de servicios administrativos y de apoyo;38004.322001472356;381;242;True;5.379682460971114;6.336698633253308;0.8489724338064575
-residencia;8;BIOBIO;15;O;Administración pública, defensa y seguridad social;91174.21030122777;790;383;True;12.90611894171943;8.26303118517578;1.5619109564627496
+residencia;8;BIOBIO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";91174.21030122777;790;383;True;12.90611894171943;8.26303118517578;1.5619109564627496
 residencia;8;BIOBIO;16;P;Enseñanza;45657.38559164722;389;238;True;6.4630079829253075;6.5344988794406;0.9890594676295342
-residencia;8;BIOBIO;17;Q;Actividades de atención de la salud humana y de servicios sociales;37216.86937785285;331;213;True;5.268215005559925;5.963534864685459;0.883404746529941
-residencia;8;BIOBIO;18;R;Actividades artísticas, de espectáculos y deportivas;7321.40823161055;60;40;True;1.0363782164480895;1.1210763781824336;0.9244492495046033
+residencia;8;BIOBIO;17;Q;Actividades de atención de la salud humana y de asistencia social;37216.86937785285;331;213;True;5.268215005559925;5.963534864685459;0.883404746529941
+residencia;8;BIOBIO;18;R;Actividades artísticas, de entretenimiento y recreativas;7321.40823161055;60;40;True;1.0363782164480895;1.1210763781824336;0.9244492495046033
 residencia;8;BIOBIO;19;S;Otras actividades de servicios;20781.209457308756;197;138;True;2.941673529419095;3.58842091300966;0.8197682492469567
-residencia;8;BIOBIO;20;T;Actividades de los hogares como empleadores;20787.783292043387;214;149;True;2.942604085249609;2.9534132172464496;0.9963401220209482
-residencia;8;BIOBIO;21;U;Actividades de organizaciones y organismos extraterritoriales;90.307118612232;1;0;False;0.012783378218936279;0.02003107647860285;0.6381772957929372
+residencia;8;BIOBIO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";20787.783292043387;214;149;True;2.942604085249609;2.9534132172464496;0.9963401220209482
+residencia;8;BIOBIO;21;U;Actividades de organizaciones y órganos extraterritoriales;90.307118612232;1;0;False;0.012783378218936279;0.02003107647860285;0.6381772957929372
 residencia;9;LA ARAUCANIA;1;A;Agricultura, ganadería, silvicultura y pesca;47998.34830836903;389;138;True;11.421931474309874;5.697491759161663;2.0047297928853016
 residencia;9;LA ARAUCANIA;2;B;Explotación de minas y canteras;1543.7824907901318;13;4;False;0.3673663457700647;1.5432474841333197;0.23804759090624786
 residencia;9;LA ARAUCANIA;3;C;Industrias manufactureras;38629.876133000216;295;158;True;9.192562111044019;9.219823193409667;0.9970432098540529
 residencia;9;LA ARAUCANIA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;626.3030386937339;5;1;False;0.14903826157002506;0.4801127661324457;0.31042345066265287
-residencia;9;LA ARAUCANIA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5075.912591297358;31;17;False;1.2078900176920506;0.7391144393603399;1.634239507940622
+residencia;9;LA ARAUCANIA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5075.912591297358;31;17;False;1.2078900176920506;0.7391144393603399;1.634239507940622
 residencia;9;LA ARAUCANIA;6;F;Construcción;47667.772863034916;339;180;True;11.343266057336818;8.849771739804316;1.2817580374776578
-residencia;9;LA ARAUCANIA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";74624.46180590137;535;230;True;17.75801707963444;18.420697858167824;0.964025207750772
+residencia;9;LA ARAUCANIA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";74624.46180590137;535;230;True;17.75801707963444;18.420697858167824;0.964025207750772
 residencia;9;LA ARAUCANIA;8;H;Transporte y almacenamiento;25175.385042350674;168;111;True;5.990862871899228;6.629514436105251;0.9036654086266351
 residencia;9;LA ARAUCANIA;9;I;Actividades de alojamiento y de servicio de comidas;21677.151296858745;150;87;True;5.158405349289845;4.975040044017093;1.03685705112932
 residencia;9;LA ARAUCANIA;10;J;Información y comunicaciones;2840.798420627502;21;10;False;0.6760108636296029;1.9332406705642227;0.3496775512343773
@@ -176,19 +176,19 @@ residencia;9;LA ARAUCANIA;11;K;Actividades financieras y de seguros;3595.5236531
 residencia;9;LA ARAUCANIA;12;L;Actividades inmobiliarias;1836.5451928857221;13;8;False;0.43703364973824277;0.9047818485486645;0.48302654439772014
 residencia;9;LA ARAUCANIA;13;M;Actividades profesionales, científicas y técnicas;7057.444542463817;50;34;False;1.6794254550152665;3.8798985898259932;0.4328529254396275
 residencia;9;LA ARAUCANIA;14;N;Actividades de servicios administrativos y de apoyo;19554.97126366166;154;104;True;4.653400577884005;6.336698633253308;0.7343572492881699
-residencia;9;LA ARAUCANIA;15;O;Administración pública, defensa y seguridad social;46106.59009637528;321;166;True;10.97175905328121;8.26303118517578;1.32781285794552
+residencia;9;LA ARAUCANIA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";46106.59009637528;321;166;True;10.97175905328121;8.26303118517578;1.32781285794552
 residencia;9;LA ARAUCANIA;16;P;Enseñanza;27460.02886155176;193;117;True;6.534528353437693;6.5344988794406;1.000004510521409
-residencia;9;LA ARAUCANIA;17;Q;Actividades de atención de la salud humana y de servicios sociales;20538.376344345143;153;97;True;4.887416660497757;5.963534864685459;0.8195502787180466
-residencia;9;LA ARAUCANIA;18;R;Actividades artísticas, de espectáculos y deportivas;2808.1247508914125;21;10;False;0.6682356707345846;1.1210763781824336;0.5960661412008113
+residencia;9;LA ARAUCANIA;17;Q;Actividades de atención de la salud humana y de asistencia social;20538.376344345143;153;97;True;4.887416660497757;5.963534864685459;0.8195502787180466
+residencia;9;LA ARAUCANIA;18;R;Actividades artísticas, de entretenimiento y recreativas;2808.1247508914125;21;10;False;0.6682356707345846;1.1210763781824336;0.5960661412008113
 residencia;9;LA ARAUCANIA;19;S;Otras actividades de servicios;10687.461933552428;84;56;True;2.5432428852566713;3.58842091300966;0.7087359445588609
-residencia;9;LA ARAUCANIA;20;T;Actividades de los hogares como empleadores;14724.840842017033;133;97;True;3.503998137334088;2.9534132172464496;1.1864232600004967
+residencia;9;LA ARAUCANIA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";14724.840842017033;133;97;True;3.503998137334088;2.9534132172464496;1.1864232600004967
 residencia;10;LOS LAGOS;1;A;Agricultura, ganadería, silvicultura y pesca;55602.79511447413;585;220;True;13.670119294122989;5.697491759161663;2.3993223460378346
 residencia;10;LOS LAGOS;2;B;Explotación de minas y canteras;1011.2227399790565;8;1;False;0.2486122408052319;1.5432474841333197;0.1610968061579905
 residencia;10;LOS LAGOS;3;C;Industrias manufactureras;48732.84673671594;413;211;True;11.981121219924118;9.219823193409667;1.2994957678242929
 residencia;10;LOS LAGOS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;2067.575802808392;15;4;False;0.5083199111815035;0.4801127661324457;1.058751083159652
-residencia;10;LOS LAGOS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";2952.070542384345;22;7;False;0.7257756808084525;0.7391144393603399;0.9819530537606174
+residencia;10;LOS LAGOS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";2952.070542384345;22;7;False;0.7257756808084525;0.7391144393603399;0.9819530537606174
 residencia;10;LOS LAGOS;6;F;Construcción;36922.77530229984;294;165;True;9.07757860038131;8.849771739804316;1.0257415521297988
-residencia;10;LOS LAGOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";74826.43701824149;602;257;True;18.3963111618335;18.420697858167824;0.9986761252737495
+residencia;10;LOS LAGOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";74826.43701824149;602;257;True;18.3963111618335;18.420697858167824;0.9986761252737495
 residencia;10;LOS LAGOS;8;H;Transporte y almacenamiento;28415.25670343335;212;130;True;6.985978818319259;6.629514436105251;1.053769304773311
 residencia;10;LOS LAGOS;9;I;Actividades de alojamiento y de servicio de comidas;19802.656320290018;145;89;True;4.868544354318173;4.975040044017093;0.9785940035142049
 residencia;10;LOS LAGOS;10;J;Información y comunicaciones;1917.9696762945641;18;8;False;0.4715387818809855;1.9332406705642227;0.2439110603561663
@@ -196,19 +196,19 @@ residencia;10;LOS LAGOS;11;K;Actividades financieras y de seguros;2756.393770964
 residencia;10;LOS LAGOS;12;L;Actividades inmobiliarias;1395.424691315735;14;6;False;0.34306947981622615;0.9047818485486645;0.3791736984628222
 residencia;10;LOS LAGOS;13;M;Actividades profesionales, científicas y técnicas;10547.782129053898;88;49;True;2.5932048864761286;3.8798985898259932;0.6683692437931552
 residencia;10;LOS LAGOS;14;N;Actividades de servicios administrativos y de apoyo;18336.65061101795;162;97;True;4.508122312757933;6.336698633253308;0.7114307581396576
-residencia;10;LOS LAGOS;15;O;Administración pública, defensa y seguridad social;38448.28636497909;284;157;True;9.452630217272079;8.26303118517578;1.1439664216964942
+residencia;10;LOS LAGOS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";38448.28636497909;284;157;True;9.452630217272079;8.26303118517578;1.1439664216964942
 residencia;10;LOS LAGOS;16;P;Enseñanza;20559.79802128227;158;99;True;5.0546899851953695;6.5344988794406;0.7735390392519415
-residencia;10;LOS LAGOS;17;Q;Actividades de atención de la salud humana y de servicios sociales;19691.32089793052;142;88;True;4.841172196098744;5.963534864685459;0.811795739598495
-residencia;10;LOS LAGOS;18;R;Actividades artísticas, de espectáculos y deportivas;3903.4638787900585;28;12;False;0.9596786775467269;1.1210763781824336;0.8560332696534239
+residencia;10;LOS LAGOS;17;Q;Actividades de atención de la salud humana y de asistencia social;19691.32089793052;142;88;True;4.841172196098744;5.963534864685459;0.811795739598495
+residencia;10;LOS LAGOS;18;R;Actividades artísticas, de entretenimiento y recreativas;3903.4638787900585;28;12;False;0.9596786775467269;1.1210763781824336;0.8560332696534239
 residencia;10;LOS LAGOS;19;S;Otras actividades de servicios;8056.861524868706;53;31;False;1.9808043454368436;3.58842091300966;0.551998885709178
-residencia;10;LOS LAGOS;20;T;Actividades de los hogares como empleadores;10799.375497802708;112;75;True;2.6550598949757145;2.9534132172464496;0.8989801628405732
+residencia;10;LOS LAGOS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";10799.375497802708;112;75;True;2.6550598949757145;2.9534132172464496;0.8989801628405732
 residencia;11;AYSEN;1;A;Agricultura, ganadería, silvicultura y pesca;5019.462310598093;120;71;True;8.650361876505777;5.697491759161663;1.5182754521050161
 residencia;11;AYSEN;2;B;Explotación de minas y canteras;500.28355494626646;10;5;False;0.8621707910850531;1.5432474841333197;0.5586730579180202
 residencia;11;AYSEN;3;C;Industrias manufactureras;4768.3884983012695;134;74;True;8.217670245472767;9.219823193409667;0.8913045373089976
 residencia;11;AYSEN;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;219.12565947002633;6;3;False;0.3776333267492635;0.4801127661324457;0.7865513133326851
-residencia;11;AYSEN;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";229.42297664276185;8;5;False;0.39537935498683896;0.7391144393603399;0.5349365861787473
+residencia;11;AYSEN;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";229.42297664276185;8;5;False;0.39537935498683896;0.7391144393603399;0.5349365861787473
 residencia;11;AYSEN;6;F;Construcción;5212.176038315457;135;83;True;8.982477824424302;8.849771739804316;1.0149954245738457
-residencia;11;AYSEN;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";8270.789860264642;224;103;True;14.253583525224004;18.420697858167824;0.7737808651426253
+residencia;11;AYSEN;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";8270.789860264642;224;103;True;14.253583525224004;18.420697858167824;0.7737808651426253
 residencia;11;AYSEN;8;H;Transporte y almacenamiento;3140.7267040681113;79;56;True;5.41261610591856;6.629514436105251;0.816442313850424
 residencia;11;AYSEN;9;I;Actividades de alojamiento y de servicio de comidas;3915.279061258383;101;56;True;6.747451944380719;4.975040044017093;1.356260831004788
 residencia;11;AYSEN;10;J;Información y comunicaciones;545.4311939129374;16;13;False;0.9399766178380389;1.9332406705642227;0.48621810628663403
@@ -216,19 +216,19 @@ residencia;11;AYSEN;11;K;Actividades financieras y de seguros;574.3425683669262;
 residencia;11;AYSEN;12;L;Actividades inmobiliarias;107.80902970444272;3;0;False;0.18579422710861396;0.9047818485486645;0.2053469876817725
 residencia;11;AYSEN;13;M;Actividades profesionales, científicas y técnicas;1307.9037934358169;40;30;False;2.253994633844831;3.8798985898259932;0.5809416358858799
 residencia;11;AYSEN;14;N;Actividades de servicios administrativos y de apoyo;2841.825156604425;80;57;True;4.897499866167302;6.336698633253308;0.7728787732568702
-residencia;11;AYSEN;15;O;Administración pública, defensa y seguridad social;9566.863016016581;244;113;True;16.487189661085836;8.26303118517578;1.995295587249451
+residencia;11;AYSEN;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";9566.863016016581;244;113;True;16.487189661085836;8.26303118517578;1.995295587249451
 residencia;11;AYSEN;16;P;Enseñanza;4657.460039866579;122;76;True;8.026500106424812;6.5344988794406;1.2283268012606865
-residencia;11;AYSEN;17;Q;Actividades de atención de la salud humana y de servicios sociales;3854.89152581215;107;73;True;6.643382224933421;5.963534864685459;1.1140007354151387
-residencia;11;AYSEN;18;R;Actividades artísticas, de espectáculos y deportivas;461.1153247974727;12;8;False;0.7946696636965783;1.1210763781824336;0.7088452483362031
+residencia;11;AYSEN;17;Q;Actividades de atención de la salud humana y de asistencia social;3854.89152581215;107;73;True;6.643382224933421;5.963534864685459;1.1140007354151387
+residencia;11;AYSEN;18;R;Actividades artísticas, de entretenimiento y recreativas;461.1153247974727;12;8;False;0.7946696636965783;1.1210763781824336;0.7088452483362031
 residencia;11;AYSEN;19;S;Otras actividades de servicios;1307.6498954026918;31;23;False;2.2535570750526013;3.58842091300966;0.6280080095627664
-residencia;11;AYSEN;20;T;Actividades de los hogares como empleadores;1525.092266175925;48;40;False;2.6282894822473644;2.9534132172464496;0.8899159341806538
+residencia;11;AYSEN;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1525.092266175925;48;40;False;2.6282894822473644;2.9534132172464496;0.8899159341806538
 residencia;12;MAGALLANES;1;A;Agricultura, ganadería, silvicultura y pesca;5284.683955279312;92;45;True;5.600942481646004;5.697491759161663;0.9830540733366738
 residencia;12;MAGALLANES;2;B;Explotación de minas y canteras;1440.1140552569225;21;15;False;1.526296758474308;1.5432474841333197;0.9890161974451355
 residencia;12;MAGALLANES;3;C;Industrias manufactureras;7445.485772603823;130;70;True;7.891056099695105;9.219823193409667;0.8558793302387442
 residencia;12;MAGALLANES;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;359.4713221268288;5;2;False;0.3809836531515341;0.4801127661324457;0.7935295206177345
-residencia;12;MAGALLANES;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";410.31755489676283;8;4;False;0.4348727461536402;0.7391144393603399;0.5883699776316059
+residencia;12;MAGALLANES;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";410.31755489676283;8;4;False;0.4348727461536402;0.7391144393603399;0.5883699776316059
 residencia;12;MAGALLANES;6;F;Construcción;9354.187764143075;143;79;True;9.913983139359392;8.849771739804316;1.1202529772342589
-residencia;12;MAGALLANES;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";16052.682720389474;239;122;True;17.013345235753484;18.420697858167824;0.9235993862311621
+residencia;12;MAGALLANES;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";16052.682720389474;239;122;True;17.013345235753484;18.420697858167824;0.9235993862311621
 residencia;12;MAGALLANES;8;H;Transporte y almacenamiento;8381.687710891649;129;84;True;8.883284443325255;6.629514436105251;1.339960042163218
 residencia;12;MAGALLANES;9;I;Actividades de alojamiento y de servicio de comidas;7251.21065822973;108;66;True;7.6851547155380695;4.975040044017093;1.5447422829852633
 residencia;12;MAGALLANES;10;J;Información y comunicaciones;1079.0853128582596;17;11;False;1.143662482232328;1.9332406705642227;0.5915779135241068
@@ -236,19 +236,19 @@ residencia;12;MAGALLANES;11;K;Actividades financieras y de seguros;902.361025619
 residencia;12;MAGALLANES;12;L;Actividades inmobiliarias;624.5209485676343;11;6;False;0.6618950047175426;0.9047818485486645;0.7315520374102
 residencia;12;MAGALLANES;13;M;Actividades profesionales, científicas y técnicas;1568.6462119063583;26;20;False;1.6625208397112257;3.8798985898259932;0.4284959519485242
 residencia;12;MAGALLANES;14;N;Actividades de servicios administrativos y de apoyo;4907.956028743648;85;59;True;5.2016695136479605;6.336698633253308;0.8208800535898904
-residencia;12;MAGALLANES;15;O;Administración pública, defensa y seguridad social;9464.52465702718;133;79;True;10.030923072925342;8.26303118517578;1.2139519805905166
+residencia;12;MAGALLANES;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";9464.52465702718;133;79;True;10.030923072925342;8.26303118517578;1.2139519805905166
 residencia;12;MAGALLANES;16;P;Enseñanza;7992.9257356315175;128;71;True;8.471257256664856;6.5344988794406;1.296389732855851
-residencia;12;MAGALLANES;17;Q;Actividades de atención de la salud humana y de servicios sociales;6716.341997888179;95;65;True;7.118277182811565;5.963534864685459;1.1936338672159355
-residencia;12;MAGALLANES;18;R;Actividades artísticas, de espectáculos y deportivas;1205.5386532700247;15;11;False;1.2776833418053515;1.1210763781824336;1.1396933934838767
+residencia;12;MAGALLANES;17;Q;Actividades de atención de la salud humana y de asistencia social;6716.341997888179;95;65;True;7.118277182811565;5.963534864685459;1.1936338672159355
+residencia;12;MAGALLANES;18;R;Actividades artísticas, de entretenimiento y recreativas;1205.5386532700247;15;11;False;1.2776833418053515;1.1210763781824336;1.1396933934838767
 residencia;12;MAGALLANES;19;S;Otras actividades de servicios;2216.254607183694;39;28;False;2.3488849445988786;3.58842091300966;0.6545734186541776
-residencia;12;MAGALLANES;20;T;Actividades de los hogares como empleadores;1695.4799339099684;34;28;False;1.7969448445688168;2.9534132172464496;0.6084298783778583
+residencia;12;MAGALLANES;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1695.4799339099684;34;28;False;1.7969448445688168;2.9534132172464496;0.6084298783778583
 residencia;13;METROPOLITANA;1;A;Agricultura, ganadería, silvicultura y pesca;64496.46373418156;332;139;True;1.5667428484820969;5.697491759161663;0.27498817281530036
 residencia;13;METROPOLITANA;2;B;Explotación de minas y canteras;25866.353602073083;82;45;True;0.6283433567673163;1.5432474841333197;0.40715657289419843
 residencia;13;METROPOLITANA;3;C;Industrias manufactureras;373728.92800268356;1238;641;True;9.078592705986832;9.219823193409667;0.9846818659685593
 residencia;13;METROPOLITANA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;24616.700457192594;56;28;False;0.5979868842652893;0.4801127661324457;1.2455134011169502
-residencia;13;METROPOLITANA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";25768.777822219487;90;48;True;0.6259730538635673;0.7391144393603399;0.8469230480807682
+residencia;13;METROPOLITANA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";25768.777822219487;90;48;True;0.6259730538635673;0.7391144393603399;0.8469230480807682
 residencia;13;METROPOLITANA;6;F;Construcción;319059.9328104362;1048;567;True;7.750577923592458;8.849771739804316;0.8757941053702066
-residencia;13;METROPOLITANA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";819009.9450633945;2630;898;True;19.89532293665482;18.420697858167824;1.0800526174329026
+residencia;13;METROPOLITANA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";819009.9450633945;2630;898;True;19.89532293665482;18.420697858167824;1.0800526174329026
 residencia;13;METROPOLITANA;8;H;Transporte y almacenamiento;279919.1262778822;861;512;True;6.7997726364771545;6.629514436105251;1.025681850761898
 residencia;13;METROPOLITANA;9;I;Actividades de alojamiento y de servicio de comidas;190224.05211587946;609;381;True;4.620907194077526;4.975040044017093;0.9288180905467401
 residencia;13;METROPOLITANA;10;J;Información y comunicaciones;125777.62706675465;353;241;True;3.055379881260814;1.9332406705642227;1.5804446532614542
@@ -256,20 +256,20 @@ residencia;13;METROPOLITANA;11;K;Actividades financieras y de seguros;131679.210
 residencia;13;METROPOLITANA;12;L;Actividades inmobiliarias;48150.22438818172;158;114;True;1.1696613325020346;0.9047818485486645;1.2927550816567066
 residencia;13;METROPOLITANA;13;M;Actividades profesionales, científicas y técnicas;216329.37561555486;641;381;True;5.255055588150671;3.8798985898259932;1.354431170425604
 residencia;13;METROPOLITANA;14;N;Actividades de servicios administrativos y de apoyo;322055.7033133134;1098;568;True;7.823350936860612;6.336698633253308;1.234609911193464
-residencia;13;METROPOLITANA;15;O;Administración pública, defensa y seguridad social;250453.5281864519;787;434;True;6.083996725471203;8.26303118517578;0.736291148989749
+residencia;13;METROPOLITANA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";250453.5281864519;787;434;True;6.083996725471203;8.26303118517578;0.736291148989749
 residencia;13;METROPOLITANA;16;P;Enseñanza;263304.2011128792;843;497;True;6.396164226446797;6.5344988794406;0.978830105330794
-residencia;13;METROPOLITANA;17;Q;Actividades de atención de la salud humana y de servicios sociales;282519.2971927449;872;512;True;6.862935776746088;5.963534864685459;1.150816744174106
-residencia;13;METROPOLITANA;18;R;Actividades artísticas, de espectáculos y deportivas;54502.273694363284;179;118;True;1.3239647973351196;1.1210763781824336;1.1809764464769321
+residencia;13;METROPOLITANA;17;Q;Actividades de atención de la salud humana y de asistencia social;282519.2971927449;872;512;True;6.862935776746088;5.963534864685459;1.150816744174106
+residencia;13;METROPOLITANA;18;R;Actividades artísticas, de entretenimiento y recreativas;54502.273694363284;179;118;True;1.3239647973351196;1.1210763781824336;1.1809764464769321
 residencia;13;METROPOLITANA;19;S;Otras actividades de servicios;185320.86800224453;610;391;True;4.501799444597034;3.58842091300966;1.254534948304409
-residencia;13;METROPOLITANA;20;T;Actividades de los hogares como empleadores;112652.96310367859;406;273;True;2.736556612319602;2.9534132172464496;0.9265742417415505
-residencia;13;METROPOLITANA;21;U;Actividades de organizaciones y organismos extraterritoriales;1159.8294985186026;5;0;False;0.028174483794210715;0.02003107647860285;1.4065386762566972
+residencia;13;METROPOLITANA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";112652.96310367859;406;273;True;2.736556612319602;2.9534132172464496;0.9265742417415505
+residencia;13;METROPOLITANA;21;U;Actividades de organizaciones y órganos extraterritoriales;1159.8294985186026;5;0;False;0.028174483794210715;0.02003107647860285;1.4065386762566972
 residencia;14;LOS RIOS;1;A;Agricultura, ganadería, silvicultura y pesca;19609.052262004418;404;140;True;10.918479169589228;5.697491759161663;1.9163659433174483
 residencia;14;LOS RIOS;2;B;Explotación de minas y canteras;653.2791571436409;9;1;False;0.363751127484146;1.5432474841333197;0.2357049865455811
 residencia;14;LOS RIOS;3;C;Industrias manufactureras;15896.806118175897;242;133;True;8.851470440548466;9.219823193409667;0.9600477422251981
 residencia;14;LOS RIOS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;533.5388338434241;6;1;False;0.2970787453493626;0.4801127661324457;0.618768685828715
-residencia;14;LOS RIOS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1293.981529234658;18;11;False;0.7204993991554411;0.7391144393603399;0.974814400566969
+residencia;14;LOS RIOS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1293.981529234658;18;11;False;0.7204993991554411;0.7391144393603399;0.974814400566969
 residencia;14;LOS RIOS;6;F;Construcción;16677.410755783283;264;141;True;9.286117427130048;8.849771739804316;1.04930586914046
-residencia;14;LOS RIOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";26298.102942673315;408;186;True;14.642996782443225;18.420697858167824;0.794920849100755
+residencia;14;LOS RIOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";26298.102942673315;408;186;True;14.642996782443225;18.420697858167824;0.794920849100755
 residencia;14;LOS RIOS;8;H;Transporte y almacenamiento;9086.086810992518;141;90;True;5.059206750707107;6.629514436105251;0.7631338312130325
 residencia;14;LOS RIOS;9;I;Actividades de alojamiento y de servicio de comidas;11603.917268213858;171;96;True;6.461155148437495;4.975040044017093;1.2987141995384703
 residencia;14;LOS RIOS;10;J;Información y comunicaciones;3242.7731338861645;37;24;False;1.80560235349286;1.9332406705642227;0.933977016408355
@@ -277,20 +277,20 @@ residencia;14;LOS RIOS;11;K;Actividades financieras y de seguros;1323.1885569959
 residencia;14;LOS RIOS;12;L;Actividades inmobiliarias;591.9006825329423;12;4;False;0.3295750955401335;0.9047818485486645;0.36425918144666114
 residencia;14;LOS RIOS;13;M;Actividades profesionales, científicas y técnicas;5907.108280721835;71;43;True;3.2891257493633;3.8798985898259932;0.8477349789471719
 residencia;14;LOS RIOS;14;N;Actividades de servicios administrativos y de apoyo;8324.155521467072;137;86;True;4.634957235626695;6.336698633253308;0.7314466891803365
-residencia;14;LOS RIOS;15;O;Administración pública, defensa y seguridad social;17605.174825588925;261;128;True;9.802703977827058;8.26303118517578;1.186332685687247
+residencia;14;LOS RIOS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";17605.174825588925;261;128;True;9.802703977827058;8.26303118517578;1.186332685687247
 residencia;14;LOS RIOS;16;P;Enseñanza;15848.0453690312;223;129;True;8.824320060371168;6.5344988794406;1.3504203188610224
-residencia;14;LOS RIOS;17;Q;Actividades de atención de la salud humana y de servicios sociales;11000.412283220745;172;103;True;6.125118683270921;5.963534864685459;1.0270953087810923
-residencia;14;LOS RIOS;18;R;Actividades artísticas, de espectáculos y deportivas;1542.4282555535672;24;13;False;0.8588365492543191;1.1210763781824336;0.7660821028507658
+residencia;14;LOS RIOS;17;Q;Actividades de atención de la salud humana y de asistencia social;11000.412283220745;172;103;True;6.125118683270921;5.963534864685459;1.0270953087810923
+residencia;14;LOS RIOS;18;R;Actividades artísticas, de entretenimiento y recreativas;1542.4282555535672;24;13;False;0.8588365492543191;1.1210763781824336;0.7660821028507658
 residencia;14;LOS RIOS;19;S;Otras actividades de servicios;4313.523759498051;67;45;True;2.4018049769220955;3.58842091300966;0.6693208615005165
-residencia;14;LOS RIOS;20;T;Actividades de los hogares como empleadores;8193.410386342608;161;95;True;4.562157285108552;2.9534132172464496;1.5447067340485392
-residencia;14;LOS RIOS;21;U;Actividades de organizaciones y organismos extraterritoriales;50.79116743894613;2;0;False;0.028280933533733423;0.02003107647860285;1.4118529058557112
+residencia;14;LOS RIOS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";8193.410386342608;161;95;True;4.562157285108552;2.9534132172464496;1.5447067340485392
+residencia;14;LOS RIOS;21;U;Actividades de organizaciones y órganos extraterritoriales;50.79116743894613;2;0;False;0.028280933533733423;0.02003107647860285;1.4118529058557112
 residencia;15;ARICA Y PARINACOTA;1;A;Agricultura, ganadería, silvicultura y pesca;7574.236125028272;115;39;True;6.50889340053016;5.697491759161663;1.1424138332563183
 residencia;15;ARICA Y PARINACOTA;2;B;Explotación de minas y canteras;3029.4943270387835;44;30;False;2.60338538523351;1.5432474841333197;1.6869526190710484
 residencia;15;ARICA Y PARINACOTA;3;C;Industrias manufactureras;7770.003945481538;109;67;True;6.677125794338674;9.219823193409667;0.7242140824469916
 residencia;15;ARICA Y PARINACOTA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;149.0213045372106;3;1;False;0.12806093837443241;0.4801127661324457;0.2667309586579605
-residencia;15;ARICA Y PARINACOTA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";815.9056266049807;12;8;False;0.7011456549283063;0.7391144393603399;0.9486293564161817
+residencia;15;ARICA Y PARINACOTA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";815.9056266049807;12;8;False;0.7011456549283063;0.7391144393603399;0.9486293564161817
 residencia;15;ARICA Y PARINACOTA;6;F;Construcción;10035.512570533589;136;81;True;8.623982730805045;8.849771739804316;0.974486459579096
-residencia;15;ARICA Y PARINACOTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";18494.093431430396;265;101;True;15.89283469614253;18.420697858167824;0.8627704997123968
+residencia;15;ARICA Y PARINACOTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";18494.093431430396;265;101;True;15.89283469614253;18.420697858167824;0.8627704997123968
 residencia;15;ARICA Y PARINACOTA;8;H;Transporte y almacenamiento;10904.483845884504;141;83;True;9.37073016592818;6.629514436105251;1.4134866521888676
 residencia;15;ARICA Y PARINACOTA;9;I;Actividades de alojamiento y de servicio de comidas;8198.247492194647;123;71;True;7.045135392799692;4.975040044017093;1.4160962184157821
 residencia;15;ARICA Y PARINACOTA;10;J;Información y comunicaciones;774.1923268794768;11;7;False;0.6652994762753195;1.9332406705642227;0.3441369129075635
@@ -298,19 +298,19 @@ residencia;15;ARICA Y PARINACOTA;11;K;Actividades financieras y de seguros;1563.
 residencia;15;ARICA Y PARINACOTA;12;L;Actividades inmobiliarias;1067.3052383238119;14;8;False;0.9171850345570257;0.9047818485486645;1.013708482357661
 residencia;15;ARICA Y PARINACOTA;13;M;Actividades profesionales, científicas y técnicas;3194.046996448929;41;31;False;2.744793147849218;3.8798985898259932;0.7074394044851355
 residencia;15;ARICA Y PARINACOTA;14;N;Actividades de servicios administrativos y de apoyo;3992.8607182400992;67;43;True;3.4312509339801034;6.336698633253308;0.5414887361020787
-residencia;15;ARICA Y PARINACOTA;15;O;Administración pública, defensa y seguridad social;15481.00998470204;199;97;True;13.303551943674385;8.26303118517578;1.6100086815043744
+residencia;15;ARICA Y PARINACOTA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";15481.00998470204;199;97;True;13.303551943674385;8.26303118517578;1.6100086815043744
 residencia;15;ARICA Y PARINACOTA;16;P;Enseñanza;10167.5246554809;145;87;True;8.737426855640878;6.5344988794406;1.3371227108372945
-residencia;15;ARICA Y PARINACOTA;17;Q;Actividades de atención de la salud humana y de servicios sociales;7485.85162851972;100;63;True;6.432940491677382;5.963534864685459;1.078712649065175
-residencia;15;ARICA Y PARINACOTA;18;R;Actividades artísticas, de espectáculos y deportivas;1070.7003876518625;15;10;False;0.9201026442922359;1.1210763781824336;0.8207314525563101
+residencia;15;ARICA Y PARINACOTA;17;Q;Actividades de atención de la salud humana y de asistencia social;7485.85162851972;100;63;True;6.432940491677382;5.963534864685459;1.078712649065175
+residencia;15;ARICA Y PARINACOTA;18;R;Actividades artísticas, de entretenimiento y recreativas;1070.7003876518625;15;10;False;0.9201026442922359;1.1210763781824336;0.8207314525563101
 residencia;15;ARICA Y PARINACOTA;19;S;Otras actividades de servicios;3136.3048366402713;45;32;False;2.695172624180961;3.58842091300966;0.7510748291566725
-residencia;15;ARICA Y PARINACOTA;20;T;Actividades de los hogares como empleadores;1463.1519446731706;21;17;False;1.257354521228439;2.9534132172464496;0.4257292931060646
+residencia;15;ARICA Y PARINACOTA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1463.1519446731706;21;17;False;1.257354521228439;2.9534132172464496;0.4257292931060646
 residencia;16;NUBLE;1;A;Agricultura, ganadería, silvicultura y pesca;28300.347318221582;454;136;True;13.712603520771783;5.697491759161663;2.4067790003770844
 residencia;16;NUBLE;2;B;Explotación de minas y canteras;480.3392816540511;8;2;False;0.2327428017299769;1.5432474841333197;0.15081366023459558
 residencia;16;NUBLE;3;C;Industrias manufactureras;19156.611684231935;230;130;True;9.282112967501353;9.219823193409667;1.0067560703480964
 residencia;16;NUBLE;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;483.4183161320444;7;3;False;0.23423471200757;0.4801127661324457;0.48787436729593886
-residencia;16;NUBLE;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1725.875420359119;21;12;False;0.8362528240207174;0.7391144393603399;1.1314253645814916
+residencia;16;NUBLE;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1725.875420359119;21;12;False;0.8362528240207174;0.7391144393603399;1.1314253645814916
 residencia;16;NUBLE;6;F;Construcción;21904.23861644388;260;137;True;10.613443580541496;8.849771739804316;1.1992900938681361
-residencia;16;NUBLE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";34971.887872894156;392;162;True;16.945220755828522;18.420697858167824;0.9199011289528823
+residencia;16;NUBLE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";34971.887872894156;392;162;True;16.945220755828522;18.420697858167824;0.9199011289528823
 residencia;16;NUBLE;8;H;Transporte y almacenamiento;11906.799568030121;130;91;True;5.769300985665571;6.629514436105251;0.8702448786060651
 residencia;16;NUBLE;9;I;Actividades de alojamiento y de servicio de comidas;10055.434921153843;133;84;True;4.872243819210152;4.975040044017093;0.9793376085624553
 residencia;16;NUBLE;10;J;Información y comunicaciones;1761.4244599456717;20;11;False;0.8534776969140884;1.9332406705642227;0.4414751406326446
@@ -318,19 +318,19 @@ residencia;16;NUBLE;11;K;Actividades financieras y de seguros;859.4541029264459;
 residencia;16;NUBLE;12;L;Actividades inmobiliarias;889.8412409358212;13;7;False;0.43116220434256003;0.9047818485486645;0.47653719516386783
 residencia;16;NUBLE;13;M;Actividades profesionales, científicas y técnicas;5019.27700109832;55;33;False;2.4320321833179124;3.8798985898259932;0.6268288015813797
 residencia;16;NUBLE;14;N;Actividades de servicios administrativos y de apoyo;9724.297080453145;113;78;True;4.711794837111282;6.336698633253308;0.7435724988379654
-residencia;16;NUBLE;15;O;Administración pública, defensa y seguridad social;23396.91838447136;255;131;True;11.336704168557652;8.26303118517578;1.3719788676213844
+residencia;16;NUBLE;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";23396.91838447136;255;131;True;11.336704168557652;8.26303118517578;1.3719788676213844
 residencia;16;NUBLE;16;P;Enseñanza;10048.331372579063;108;69;True;4.868801877522964;6.5344988794406;0.7450918528491306
-residencia;16;NUBLE;17;Q;Actividades de atención de la salud humana y de servicios sociales;10395.458860415169;118;77;True;5.036998456820535;5.963534864685459;0.8446330190250688
-residencia;16;NUBLE;18;R;Actividades artísticas, de espectáculos y deportivas;1224.4370456357524;12;4;False;0.5932867026030312;1.1210763781824336;0.5292116702743381
+residencia;16;NUBLE;17;Q;Actividades de atención de la salud humana y de asistencia social;10395.458860415169;118;77;True;5.036998456820535;5.963534864685459;0.8446330190250688
+residencia;16;NUBLE;18;R;Actividades artísticas, de entretenimiento y recreativas;1224.4370456357524;12;4;False;0.5932867026030312;1.1210763781824336;0.5292116702743381
 residencia;16;NUBLE;19;S;Otras actividades de servicios;4902.330072719637;60;48;True;2.3753669119063336;3.58842091300966;0.6619532572933534
-residencia;16;NUBLE;20;T;Actividades de los hogares como empleadores;9175.291381287712;123;78;True;4.445780522917601;2.9534132172464496;1.5053025756627876
+residencia;16;NUBLE;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";9175.291381287712;123;78;True;4.445780522917601;2.9534132172464496;1.5053025756627876
 trabajo;1;TARAPACA;1;A;Agricultura, ganadería, silvicultura y pesca;4185.881755541578;58;17;False;2.007365055904834;5.696850151147789;0.3523640261979499
 trabajo;1;TARAPACA;2;B;Explotación de minas y canteras;10999.376247095232;84;40;True;5.274817781447794;1.5416199909832322;3.4216070187851937
 trabajo;1;TARAPACA;3;C;Industrias manufactureras;13160.047424637238;120;59;True;6.3109807866154854;9.224495192716669;0.6841545965136835
 trabajo;1;TARAPACA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;325.71253074499504;4;0;False;0.1561974252192508;0.48071751988413647;0.32492559301125085
-trabajo;1;TARAPACA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1901.0740097608316;17;7;False;0.9116716043951026;0.7400454336218187;1.2319130190876755
+trabajo;1;TARAPACA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1901.0740097608316;17;7;False;0.9116716043951026;0.7400454336218187;1.2319130190876755
 trabajo;1;TARAPACA;6;F;Construcción;21600.675357092794;184;76;True;10.358735250552412;8.845840548663071;1.171028936545549
-trabajo;1;TARAPACA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";45100.276130975806;344;91;True;21.628111734672352;18.429456720642392;1.1735620893505354
+trabajo;1;TARAPACA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";45100.276130975806;344;91;True;21.628111734672352;18.429456720642392;1.1735620893505354
 trabajo;1;TARAPACA;8;H;Transporte y almacenamiento;17017.017365998265;126;56;True;8.16061418147036;6.629673395121441;1.2309225047911845
 trabajo;1;TARAPACA;9;I;Actividades de alojamiento y de servicio de comidas;13931.586154830055;112;55;True;6.680976877454862;4.981306642915655;1.3412097179274145
 trabajo;1;TARAPACA;10;J;Información y comunicaciones;1333.6777446419112;11;7;False;0.6395732743496393;1.9270309947883781;0.3318956862029485
@@ -338,19 +338,19 @@ trabajo;1;TARAPACA;11;K;Actividades financieras y de seguros;1301.1390296463126;
 trabajo;1;TARAPACA;12;L;Actividades inmobiliarias;1435.0879211343042;9;4;False;0.688205141299649;0.9034106886800924;0.7617854757786134
 trabajo;1;TARAPACA;13;M;Actividades profesionales, científicas y técnicas;6057.702428714103;40;21;False;2.9050080448097244;3.861585465252312;0.7522837629646801
 trabajo;1;TARAPACA;14;N;Actividades de servicios administrativos y de apoyo;8896.04324788259;69;37;True;4.266151648449325;6.334871586503751;0.6734393255165945
-trabajo;1;TARAPACA;15;O;Administración pública, defensa y seguridad social;25762.513032585204;198;67;True;12.354569821624944;8.270347608212775;1.4938392443573203
+trabajo;1;TARAPACA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";25762.513032585204;198;67;True;12.354569821624944;8.270347608212775;1.4938392443573203
 trabajo;1;TARAPACA;16;P;Enseñanza;13178.415555949738;93;47;True;6.319789335707961;6.531193745024176;0.9676315819788267
-trabajo;1;TARAPACA;17;Q;Actividades de atención de la salud humana y de servicios sociales;10489.268957403767;72;38;True;5.0301927280206735;5.971046579301609;0.8424306629021506
-trabajo;1;TARAPACA;18;R;Actividades artísticas, de espectáculos y deportivas;1450.1825693703317;13;6;False;0.6954438716723031;1.1220514268224204;0.6197967892093473
+trabajo;1;TARAPACA;17;Q;Actividades de atención de la salud humana y de asistencia social;10489.268957403767;72;38;True;5.0301927280206735;5.971046579301609;0.8424306629021506
+trabajo;1;TARAPACA;18;R;Actividades artísticas, de entretenimiento y recreativas;1450.1825693703317;13;6;False;0.6954438716723031;1.1220514268224204;0.6197967892093473
 trabajo;1;TARAPACA;19;S;Otras actividades de servicios;6924.867375988036;56;32;False;3.3208622696833157;3.592492132566926;0.9243895733490378
-trabajo;1;TARAPACA;20;T;Actividades de los hogares como empleadores;3475.6394346834404;27;19;False;1.6667640309886604;2.9508320542328925;0.5648454403217325
+trabajo;1;TARAPACA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";3475.6394346834404;27;19;False;1.6667640309886604;2.9508320542328925;0.5648454403217325
 trabajo;2;ANTOFAGASTA;1;A;Agricultura, ganadería, silvicultura y pesca;4163.526311693112;36;8;False;0.983811356295075;5.696850151147789;0.17269391509215998
 trabajo;2;ANTOFAGASTA;2;B;Explotación de minas y canteras;57908.80866628709;434;214;True;13.683435465607593;1.5416199909832322;8.876010654792049
 trabajo;2;ANTOFAGASTA;3;C;Industrias manufactureras;46754.51727616718;340;144;True;11.047756543582995;9.224495192716669;1.1976543228409842
 trabajo;2;ANTOFAGASTA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;4424.1294775662855;18;6;False;1.0453900121936655;0.48071751988413647;2.174645127237359
-trabajo;2;ANTOFAGASTA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5483.4029291053475;35;22;False;1.2956887188739232;0.7400454336218187;1.7508232062628357
+trabajo;2;ANTOFAGASTA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5483.4029291053475;35;22;False;1.2956887188739232;0.7400454336218187;1.7508232062628357
 trabajo;2;ANTOFAGASTA;6;F;Construcción;61268.70635868746;446;235;True;14.477355152506101;8.845840548663071;1.6366285456834464
-trabajo;2;ANTOFAGASTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";49139.8975394173;362;132;True;11.611404762996623;18.429456720642392;0.6300459606056085
+trabajo;2;ANTOFAGASTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";49139.8975394173;362;132;True;11.611404762996623;18.429456720642392;0.6300459606056085
 trabajo;2;ANTOFAGASTA;8;H;Transporte y almacenamiento;36313.30408417265;261;112;True;8.580572876955715;6.629673395121441;1.2942678116345636
 trabajo;2;ANTOFAGASTA;9;I;Actividades de alojamiento y de servicio de comidas;21811.555422439018;186;87;True;5.15391385009136;4.981306642915655;1.0346509901013994
 trabajo;2;ANTOFAGASTA;10;J;Información y comunicaciones;3242.399017045016;23;13;False;0.7661555940333875;1.9270309947883781;0.39758343073123475
@@ -358,20 +358,20 @@ trabajo;2;ANTOFAGASTA;11;K;Actividades financieras y de seguros;2432.11650276801
 trabajo;2;ANTOFAGASTA;12;L;Actividades inmobiliarias;2278.451104488544;17;12;False;0.5383816273872293;0.9034106886800924;0.5959433889074519
 trabajo;2;ANTOFAGASTA;13;M;Actividades profesionales, científicas y técnicas;14980.981341549992;120;64;True;3.5398982662530756;3.861585465252312;0.9166955640645862
 trabajo;2;ANTOFAGASTA;14;N;Actividades de servicios administrativos y de apoyo;31267.88872961649;243;131;True;7.388377475404531;6.334871586503751;1.1663026431577936
-trabajo;2;ANTOFAGASTA;15;O;Administración pública, defensa y seguridad social;27155.199451030672;199;105;True;6.4165785448147625;8.270347608212775;0.7758535491836948
+trabajo;2;ANTOFAGASTA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";27155.199451030672;199;105;True;6.4165785448147625;8.270347608212775;0.7758535491836948
 trabajo;2;ANTOFAGASTA;16;P;Enseñanza;18797.442751357452;117;70;True;4.4417006795789185;6.531193745024176;0.6800748611940737
-trabajo;2;ANTOFAGASTA;17;Q;Actividades de atención de la salud humana y de servicios sociales;16083.688688037655;114;74;True;3.800460090276571;5.971046579301609;0.6364814006728254
-trabajo;2;ANTOFAGASTA;18;R;Actividades artísticas, de espectáculos y deportivas;3679.200732812288;27;20;False;0.8693687014452787;1.1220514268224204;0.7748029017772176
+trabajo;2;ANTOFAGASTA;17;Q;Actividades de atención de la salud humana y de asistencia social;16083.688688037655;114;74;True;3.800460090276571;5.971046579301609;0.6364814006728254
+trabajo;2;ANTOFAGASTA;18;R;Actividades artísticas, de entretenimiento y recreativas;3679.200732812288;27;20;False;0.8693687014452787;1.1220514268224204;0.7748029017772176
 trabajo;2;ANTOFAGASTA;19;S;Otras actividades de servicios;12302.922541459266;84;55;True;2.907092211213686;3.592492132566926;0.8092132436032632
-trabajo;2;ANTOFAGASTA;20;T;Actividades de los hogares como empleadores;3585.5196532762516;30;21;False;0.8472325353644509;2.9508320542328925;0.2871164877544005
-trabajo;2;ANTOFAGASTA;21;U;Actividades de organizaciones y organismos extraterritoriales;130.066916985123;1;0;False;0.03073387807082619;0.02005630777738381;1.532379658906251
+trabajo;2;ANTOFAGASTA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";3585.5196532762516;30;21;False;0.8472325353644509;2.9508320542328925;0.2871164877544005
+trabajo;2;ANTOFAGASTA;21;U;Actividades de organizaciones y órganos extraterritoriales;130.066916985123;1;0;False;0.03073387807082619;0.02005630777738381;1.532379658906251
 trabajo;3;ATACAMA;1;A;Agricultura, ganadería, silvicultura y pesca;6980.110383808863;121;53;True;4.135938002739741;5.696850151147789;0.7260043520552215
 trabajo;3;ATACAMA;2;B;Explotación de minas y canteras;18680.51923395031;235;126;True;11.068803380219068;1.5416199909832322;7.1799817367180605
 trabajo;3;ATACAMA;3;C;Industrias manufactureras;17773.23193661418;264;142;True;10.531206722555911;9.224495192716669;1.1416566980132392
 trabajo;3;ATACAMA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;1217.4597522556967;18;12;False;0.7213837288075657;0.48071751988413647;1.5006395626717228
-trabajo;3;ATACAMA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1271.083593859268;25;14;False;0.753157565057428;0.7400454336218187;1.017718008705814
+trabajo;3;ATACAMA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1271.083593859268;25;14;False;0.753157565057428;0.7400454336218187;1.017718008705814
 trabajo;3;ATACAMA;6;F;Construcción;20024.542380819632;287;147;True;11.865179956525502;8.845840548663071;1.3413287172940012
-trabajo;3;ATACAMA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";24427.246881289404;418;183;True;14.473922778209916;18.429456720642392;0.7853689339630953
+trabajo;3;ATACAMA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";24427.246881289404;418;183;True;14.473922778209916;18.429456720642392;0.7853689339630953
 trabajo;3;ATACAMA;8;H;Transporte y almacenamiento;11010.88277381367;175;110;True;6.524299187812868;6.629673395121441;0.9841056714217454
 trabajo;3;ATACAMA;9;I;Actividades de alojamiento y de servicio de comidas;9794.457961249782;149;89;True;5.80352869377761;4.981306642915655;1.1650615209628397
 trabajo;3;ATACAMA;10;J;Información y comunicaciones;1444.7357624581875;21;13;False;0.8560520128347037;1.9270309947883781;0.44423365018511973
@@ -379,19 +379,19 @@ trabajo;3;ATACAMA;11;K;Actividades financieras y de seguros;1082.292754467793;16
 trabajo;3;ATACAMA;12;L;Actividades inmobiliarias;1610.5230836394576;28;17;False;0.9542862877018402;0.9034106886800924;1.056315028878038
 trabajo;3;ATACAMA;13;M;Actividades profesionales, científicas y técnicas;3192.1053270601083;56;36;False;1.8914242046315173;3.861585465252312;0.4898050869652146
 trabajo;3;ATACAMA;14;N;Actividades de servicios administrativos y de apoyo;14679.989263172894;214;117;True;8.698361792988907;6.334871586503751;1.373092046809678
-trabajo;3;ATACAMA;15;O;Administración pública, defensa y seguridad social;9662.196532901518;161;96;True;5.725159579576908;8.270347608212775;0.692251384197153
+trabajo;3;ATACAMA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";9662.196532901518;161;96;True;5.725159579576908;8.270347608212775;0.692251384197153
 trabajo;3;ATACAMA;16;P;Enseñanza;11920.474947779832;195;126;True;7.063261558383357;6.531193745024176;1.0814656300411452
-trabajo;3;ATACAMA;17;Q;Actividades de atención de la salud humana y de servicios sociales;7096.4289873194875;122;82;True;4.204860484796923;5.971046579301609;0.7042082872662393
-trabajo;3;ATACAMA;18;R;Actividades artísticas, de espectáculos y deportivas;1052.4670105321627;18;9;False;0.6236202676088017;1.1220514268224204;0.5557858157846253
+trabajo;3;ATACAMA;17;Q;Actividades de atención de la salud humana y de asistencia social;7096.4289873194875;122;82;True;4.204860484796923;5.971046579301609;0.7042082872662393
+trabajo;3;ATACAMA;18;R;Actividades artísticas, de entretenimiento y recreativas;1052.4670105321627;18;9;False;0.6236202676088017;1.1220514268224204;0.5557858157846253
 trabajo;3;ATACAMA;19;S;Otras actividades de servicios;3498.658586649292;59;45;False;2.0730667871241444;3.592492132566926;0.5770553450434103
-trabajo;3;ATACAMA;20;T;Actividades de los hogares como empleadores;2347.8804407342896;43;32;False;1.3911940365939333;2.9508320542328925;0.471458222977584
+trabajo;3;ATACAMA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";2347.8804407342896;43;32;False;1.3911940365939333;2.9508320542328925;0.471458222977584
 trabajo;4;COQUIMBO;1;A;Agricultura, ganadería, silvicultura y pesca;32688.674104212972;530;171;True;9.531091315900953;5.696850151147789;1.6730458170785218
 trabajo;4;COQUIMBO;2;B;Explotación de minas y canteras;9602.636603140625;99;55;True;2.7998567958481533;1.5416199909832322;1.8161783138673677
 trabajo;4;COQUIMBO;3;C;Industrias manufactureras;25615.967695698833;247;140;True;7.468890493218513;9.224495192716669;0.8096801328614364
 trabajo;4;COQUIMBO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;824.4505211024367;10;3;False;0.2403864157052705;0.48071751988413647;0.5000575301753282
-trabajo;4;COQUIMBO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";4331.705360822592;54;36;False;1.263002568288838;0.7400454336218187;1.7066554442578494
+trabajo;4;COQUIMBO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";4331.705360822592;54;36;False;1.263002568288838;0.7400454336218187;1.7066554442578494
 trabajo;4;COQUIMBO;6;F;Construcción;34616.077336511466;314;170;True;10.093067496122714;8.845840548663071;1.1409958658646797
-trabajo;4;COQUIMBO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";59537.69050363754;497;213;True;17.359503879506793;18.429456720642392;0.9419433324945944
+trabajo;4;COQUIMBO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";59537.69050363754;497;213;True;17.359503879506793;18.429456720642392;0.9419433324945944
 trabajo;4;COQUIMBO;8;H;Transporte y almacenamiento;19337.061841584513;152;97;True;5.638139424248245;6.629673395121441;0.8504399973001938
 trabajo;4;COQUIMBO;9;I;Actividades de alojamiento y de servicio de comidas;19169.030589241058;185;102;True;5.589146271301602;4.981306642915655;1.1220241338184647
 trabajo;4;COQUIMBO;10;J;Información y comunicaciones;4603.611901861658;31;16;False;1.342282812687007;1.9270309947883781;0.6965548640977688
@@ -399,19 +399,19 @@ trabajo;4;COQUIMBO;11;K;Actividades financieras y de seguros;3418.536726470538;2
 trabajo;4;COQUIMBO;12;L;Actividades inmobiliarias;3179.4527182733277;26;13;False;0.9270383404307918;0.9034106886800924;1.026153832411724
 trabajo;4;COQUIMBO;13;M;Actividades profesionales, científicas y técnicas;11221.5781319164;81;46;True;3.271894281879975;3.861585465252312;0.8472929866039344
 trabajo;4;COQUIMBO;14;N;Actividades de servicios administrativos y de apoyo;16132.455043171532;134;87;True;4.703766866650547;6.334871586503751;0.7425196868507606
-trabajo;4;COQUIMBO;15;O;Administración pública, defensa y seguridad social;21199.64173594949;175;112;True;6.1812149555395495;8.270347608212775;0.747394819221548
+trabajo;4;COQUIMBO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";21199.64173594949;175;112;True;6.1812149555395495;8.270347608212775;0.747394819221548
 trabajo;4;COQUIMBO;16;P;Enseñanza;34772.56688384756;261;140;True;10.138695414859622;6.531193745024176;1.5523495107741736
-trabajo;4;COQUIMBO;17;Q;Actividades de atención de la salud humana y de servicios sociales;21649.38917764696;168;103;True;6.31234856843084;5.971046579301609;1.0571594919912937
-trabajo;4;COQUIMBO;18;R;Actividades artísticas, de espectáculos y deportivas;3568.964415575927;29;17;False;1.0406089167033905;1.1220514268224204;0.9274164194508713
+trabajo;4;COQUIMBO;17;Q;Actividades de atención de la salud humana y de asistencia social;21649.38917764696;168;103;True;6.31234856843084;5.971046579301609;1.0571594919912937
+trabajo;4;COQUIMBO;18;R;Actividades artísticas, de entretenimiento y recreativas;3568.964415575927;29;17;False;1.0406089167033905;1.1220514268224204;0.9274164194508713
 trabajo;4;COQUIMBO;19;S;Otras actividades de servicios;8814.951116271082;79;49;True;2.570190022591176;3.592492132566926;0.71543372337317
-trabajo;4;COQUIMBO;20;T;Actividades de los hogares como empleadores;8684.405763447263;100;65;True;2.5321266959887065;2.9508320542328925;0.8581060017822553
+trabajo;4;COQUIMBO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";8684.405763447263;100;65;True;2.5321266959887065;2.9508320542328925;0.8581060017822553
 trabajo;5;VALPARAISO;1;A;Agricultura, ganadería, silvicultura y pesca;43940.362632070195;439;143;True;5.060689608215813;5.696850151147789;0.8883311784488831
 trabajo;5;VALPARAISO;2;B;Explotación de minas y canteras;9136.197451398617;61;22;True;1.0522320875694249;1.5416199909832322;0.6825495866191513
 trabajo;5;VALPARAISO;3;C;Industrias manufactureras;65620.5048313273;507;296;True;7.557630092096667;9.224495192716669;0.8193001279965869
 trabajo;5;VALPARAISO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;3389.502011799727;28;12;False;0.3903749669016629;0.48071751988413647;0.8120672760080637
-trabajo;5;VALPARAISO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5556.273161674754;59;33;False;0.6399258487041548;0.7400454336218187;0.8647115698996023
+trabajo;5;VALPARAISO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5556.273161674754;59;33;False;0.6399258487041548;0.7400454336218187;0.8647115698996023
 trabajo;5;VALPARAISO;6;F;Construcción;83099.86766842894;630;329;True;9.570759355699796;8.845840548663071;1.081950245773567
-trabajo;5;VALPARAISO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";155498.70499090626;1116;468;True;17.90906204001486;18.429456720642392;0.9717628854438964
+trabajo;5;VALPARAISO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";155498.70499090626;1116;468;True;17.90906204001486;18.429456720642392;0.9717628854438964
 trabajo;5;VALPARAISO;8;H;Transporte y almacenamiento;61485.50215553339;402;236;True;7.081394489615274;6.629673395121441;1.0681362516027169
 trabajo;5;VALPARAISO;9;I;Actividades de alojamiento y de servicio de comidas;42213.99686980452;320;185;True;4.861860997122354;4.981306642915655;0.9760212220696802
 trabajo;5;VALPARAISO;10;J;Información y comunicaciones;13591.513810214117;82;44;True;1.5653587858437683;1.9270309947883781;0.8123163509446677
@@ -419,20 +419,20 @@ trabajo;5;VALPARAISO;11;K;Actividades financieras y de seguros;10568.66637753009
 trabajo;5;VALPARAISO;12;L;Actividades inmobiliarias;11253.76936496225;92;52;True;1.2961166059415998;0.9034106886800924;1.434692573579422
 trabajo;5;VALPARAISO;13;M;Actividades profesionales, científicas y técnicas;24720.429249937602;193;121;True;2.847095743458579;3.861585465252312;0.7372867359993942
 trabajo;5;VALPARAISO;14;N;Actividades de servicios administrativos y de apoyo;51619.58940294128;420;254;True;5.945119794736762;6.334871586503751;0.9384751866798147
-trabajo;5;VALPARAISO;15;O;Administración pública, defensa y seguridad social;88832.85908566491;629;317;True;10.23103815977187;8.270347608212775;1.2370747451548534
+trabajo;5;VALPARAISO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";88832.85908566491;629;317;True;10.23103815977187;8.270347608212775;1.2370747451548534
 trabajo;5;VALPARAISO;16;P;Enseñanza;68427.72568712023;444;259;True;7.880942704052883;6.531193745024176;1.2066619077189404
-trabajo;5;VALPARAISO;17;Q;Actividades de atención de la salud humana y de servicios sociales;49875.81304857171;357;213;True;5.744285974827188;5.971046579301609;0.9620233067247412
-trabajo;5;VALPARAISO;18;R;Actividades artísticas, de espectáculos y deportivas;9830.182612793464;70;39;True;1.132159591216461;1.1220514268224204;1.0090086462638048
+trabajo;5;VALPARAISO;17;Q;Actividades de atención de la salud humana y de asistencia social;49875.81304857171;357;213;True;5.744285974827188;5.971046579301609;0.9620233067247412
+trabajo;5;VALPARAISO;18;R;Actividades artísticas, de entretenimiento y recreativas;9830.182612793464;70;39;True;1.132159591216461;1.1220514268224204;1.0090086462638048
 trabajo;5;VALPARAISO;19;S;Otras actividades de servicios;32741.294194588754;241;159;True;3.7708730052482404;3.592492132566926;1.049653796333816
-trabajo;5;VALPARAISO;20;T;Actividades de los hogares como empleadores;36494.404947019124;303;189;True;4.203125436625423;2.9508320542328925;1.424386532129522
-trabajo;5;VALPARAISO;21;U;Actividades de organizaciones y organismos extraterritoriales;371.120735713179;3;2;False;0.04274263429146867;0.02005630777738381;2.1311317499658013
+trabajo;5;VALPARAISO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";36494.404947019124;303;189;True;4.203125436625423;2.9508320542328925;1.424386532129522
+trabajo;5;VALPARAISO;21;U;Actividades de organizaciones y órganos extraterritoriales;371.120735713179;3;2;False;0.04274263429146867;0.02005630777738381;2.1311317499658013
 trabajo;6;O'HIGGINS;1;A;Agricultura, ganadería, silvicultura y pesca;67569.4355094477;624;203;True;15.299578678840193;5.696850151147789;2.6856206979145605
 trabajo;6;O'HIGGINS;2;B;Explotación de minas y canteras;8591.778432498206;56;25;False;1.9454149517171688;1.5416199909832322;1.2619289858043419
 trabajo;6;O'HIGGINS;3;C;Industrias manufactureras;41665.58709550814;308;165;True;9.43423491940618;9.224495192716669;1.022737257953705
 trabajo;6;O'HIGGINS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;788.2315182384091;6;1;False;0.17847729582917704;0.48071751988413647;0.37127270891269787
-trabajo;6;O'HIGGINS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";4622.16515911135;32;14;False;1.0465853234563454;0.7400454336218187;1.4142176627376855
+trabajo;6;O'HIGGINS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";4622.16515911135;32;14;False;1.0465853234563454;0.7400454336218187;1.4142176627376855
 trabajo;6;O'HIGGINS;6;F;Construcción;46209.94495267593;325;169;True;10.463202529633184;8.845840548663071;1.1828386993946614
-trabajo;6;O'HIGGINS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";85568.22692601611;614;237;True;19.375000107561743;18.429456720642392;1.0513060911806624
+trabajo;6;O'HIGGINS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";85568.22692601611;614;237;True;19.375000107561743;18.429456720642392;1.0513060911806624
 trabajo;6;O'HIGGINS;8;H;Transporte y almacenamiento;21175.947003232013;139;93;True;4.7948168403685765;6.629673395121441;0.7232357545542024
 trabajo;6;O'HIGGINS;9;I;Actividades de alojamiento y de servicio de comidas;16735.58320717064;120;75;True;3.789396345905284;4.981306642915655;0.7607233638777309
 trabajo;6;O'HIGGINS;10;J;Información y comunicaciones;3867.3205778766724;27;14;False;0.8756677484637092;1.9270309947883781;0.45441290297454345
@@ -440,19 +440,19 @@ trabajo;6;O'HIGGINS;11;K;Actividades financieras y de seguros;3420.4536375264547
 trabajo;6;O'HIGGINS;12;L;Actividades inmobiliarias;2563.3599072180027;22;11;False;0.580415187532279;0.9034106886800924;0.6424710209929898
 trabajo;6;O'HIGGINS;13;M;Actividades profesionales, científicas y técnicas;15437.970621312084;99;60;True;3.495581165974998;3.861585465252312;0.9052191638458532
 trabajo;6;O'HIGGINS;14;N;Actividades de servicios administrativos y de apoyo;17871.633230408082;144;94;True;4.046629317922481;6.334871586503751;0.6387863215007704
-trabajo;6;O'HIGGINS;15;O;Administración pública, defensa y seguridad social;29977.66106897047;207;123;True;6.7877669936755565;8.270347608212775;0.8207353929035632
+trabajo;6;O'HIGGINS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";29977.66106897047;207;123;True;6.7877669936755565;8.270347608212775;0.8207353929035632
 trabajo;6;O'HIGGINS;16;P;Enseñanza;20400.836746488665;151;89;True;4.619310559038718;6.531193745024176;0.7072689525644472
-trabajo;6;O'HIGGINS;17;Q;Actividades de atención de la salud humana y de servicios sociales;23784.49967199067;141;90;True;5.385464912128646;5.971046579301609;0.9019298108973295
-trabajo;6;O'HIGGINS;18;R;Actividades artísticas, de espectáculos y deportivas;5129.240097391848;28;16;False;1.161401036445479;1.1220514268224204;1.035069345916251
+trabajo;6;O'HIGGINS;17;Q;Actividades de atención de la salud humana y de asistencia social;23784.49967199067;141;90;True;5.385464912128646;5.971046579301609;0.9019298108973295
+trabajo;6;O'HIGGINS;18;R;Actividades artísticas, de entretenimiento y recreativas;5129.240097391848;28;16;False;1.161401036445479;1.1220514268224204;1.035069345916251
 trabajo;6;O'HIGGINS;19;S;Otras actividades de servicios;11675.37575595945;90;56;True;2.6436261992798316;3.592492132566926;0.7358752926178002
-trabajo;6;O'HIGGINS;20;T;Actividades de los hogares como empleadores;14587.207982779979;126;86;True;3.302945104609358;2.9508320542328925;1.119326699691827
+trabajo;6;O'HIGGINS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";14587.207982779979;126;86;True;3.302945104609358;2.9508320542328925;1.119326699691827
 trabajo;7;MAULE;1;A;Agricultura, ganadería, silvicultura y pesca;90368.26307700654;808;234;True;17.79838886025561;5.696850151147789;3.12425083827589
 trabajo;7;MAULE;2;B;Explotación de minas y canteras;828.4595893384845;9;3;False;0.16316841138673854;1.5416199909832322;0.1058421740384095
 trabajo;7;MAULE;3;C;Industrias manufactureras;44380.67421953078;355;190;True;8.740950315338248;9.224495192716669;0.9475803426337942
 trabajo;7;MAULE;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;899.9185749044424;8;2;False;0.17724254282797816;0.48071751988413647;0.3687041463991109
-trabajo;7;MAULE;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";3463.0960206160435;26;9;False;0.682070536011124;0.7400454336218187;0.9216603535718574
+trabajo;7;MAULE;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";3463.0960206160435;26;9;False;0.682070536011124;0.7400454336218187;0.9216603535718574
 trabajo;7;MAULE;6;F;Construcción;36872.080430266724;303;176;True;7.262102902489989;8.845840548663071;0.8209624469873084
-trabajo;7;MAULE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";97877.90056804547;764;297;True;19.277441834319838;18.429456720642392;1.04601248569241
+trabajo;7;MAULE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";97877.90056804547;764;297;True;19.277441834319838;18.429456720642392;1.04601248569241
 trabajo;7;MAULE;8;H;Transporte y almacenamiento;23093.105676501295;175;114;True;4.548279017724386;6.629673395121441;0.6860487307069026
 trabajo;7;MAULE;9;I;Actividades de alojamiento y de servicio de comidas;25457.015296670463;195;111;True;5.013860420062696;4.981306642915655;1.006535188351301
 trabajo;7;MAULE;10;J;Información y comunicaciones;3066.1439880277762;25;13;False;0.6038892542833302;1.9270309947883781;0.31337807015898456
@@ -460,19 +460,19 @@ trabajo;7;MAULE;11;K;Actividades financieras y de seguros;4906.75730238267;32;13
 trabajo;7;MAULE;12;L;Actividades inmobiliarias;1862.8821219974484;17;6;False;0.36690204369508417;0.9034106886800924;0.40612984580815403
 trabajo;7;MAULE;13;M;Actividades profesionales, científicas y técnicas;9033.440946507237;76;42;True;1.7791721256729631;3.861585465252312;0.46073617732469735
 trabajo;7;MAULE;14;N;Actividades de servicios administrativos y de apoyo;19879.199112310453;169;106;True;3.915287336327874;6.334871586503751;0.618053149596477
-trabajo;7;MAULE;15;O;Administración pública, defensa y seguridad social;54881.72635908488;416;213;True;10.809174303026671;8.270347608212775;1.3069794421086658
+trabajo;7;MAULE;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";54881.72635908488;416;213;True;10.809174303026671;8.270347608212775;1.3069794421086658
 trabajo;7;MAULE;16;P;Enseñanza;28631.65942378691;210;133;True;5.6391192083078145;6.531193745024176;0.8634132485510795
-trabajo;7;MAULE;17;Q;Actividades de atención de la salud humana y de servicios sociales;21533.5577015166;151;83;True;4.241119840820118;5.971046579301609;0.710280816686607
-trabajo;7;MAULE;18;R;Actividades artísticas, de espectáculos y deportivas;4711.340162161733;39;18;False;0.927917184682841;1.1220514268224204;0.8269827589905077
+trabajo;7;MAULE;17;Q;Actividades de atención de la salud humana y de asistencia social;21533.5577015166;151;83;True;4.241119840820118;5.971046579301609;0.710280816686607
+trabajo;7;MAULE;18;R;Actividades artísticas, de entretenimiento y recreativas;4711.340162161733;39;18;False;0.927917184682841;1.1220514268224204;0.8269827589905077
 trabajo;7;MAULE;19;S;Otras actividades de servicios;14796.41916684094;118;79;True;2.914213608890113;3.592492132566926;0.8111955437485772
-trabajo;7;MAULE;20;T;Actividades de los hogares como empleadores;21189.1881411088;186;123;True;4.173294886139397;2.9508320542328925;1.4142773324401545
+trabajo;7;MAULE;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";21189.1881411088;186;123;True;4.173294886139397;2.9508320542328925;1.4142773324401545
 trabajo;8;BIOBIO;1;A;Agricultura, ganadería, silvicultura y pesca;41391.60459462159;434;194;True;6.068448108141946;5.696850151147789;1.0652286697271278
 trabajo;8;BIOBIO;2;B;Explotación de minas y canteras;1164.9289821088564;13;6;False;0.17079094050190063;1.5416199909832322;0.11078666694830003
 trabajo;8;BIOBIO;3;C;Industrias manufactureras;82812.71598675729;758;380;True;12.141222225659597;9.224495192716669;1.316193674776466
 trabajo;8;BIOBIO;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;2226.761790282438;19;11;False;0.3264668887776848;0.48071751988413647;0.679124174330843
-trabajo;8;BIOBIO;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";3453.6861845449725;31;15;False;0.5063470140377514;0.7400454336218187;0.6842107133337263
+trabajo;8;BIOBIO;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";3453.6861845449725;31;15;False;0.5063470140377514;0.7400454336218187;0.6842107133337263
 trabajo;8;BIOBIO;6;F;Construcción;61186.023278184475;552;315;True;8.97051976708037;8.845840548663071;1.0140946716969867
-trabajo;8;BIOBIO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";109316.17079832859;952;417;True;16.026909716774746;18.429456720642392;0.8696354949423653
+trabajo;8;BIOBIO;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";109316.17079832859;952;417;True;16.026909716774746;18.429456720642392;0.8696354949423653
 trabajo;8;BIOBIO;8;H;Transporte y almacenamiento;45791.033837304785;389;242;True;6.713451082202398;6.629673395121441;1.0126367744062033
 trabajo;8;BIOBIO;9;I;Actividades de alojamiento y de servicio de comidas;37376.32617130029;354;210;True;5.479765717345395;4.981306642915655;1.1000659285126808
 trabajo;8;BIOBIO;10;J;Información y comunicaciones;5464.708444864277;44;31;False;0.8011842002398002;1.9270309947883781;0.4157609308862125
@@ -480,20 +480,20 @@ trabajo;8;BIOBIO;11;K;Actividades financieras y de seguros;6640.060029729541;53;
 trabajo;8;BIOBIO;12;L;Actividades inmobiliarias;4567.52914211618;42;27;False;0.6696482016780713;0.9034106886800924;0.741244497180397
 trabajo;8;BIOBIO;13;M;Actividades profesionales, científicas y técnicas;20376.872852851546;155;100;True;2.9874656159090716;3.861585465252312;0.7736370573152325
 trabajo;8;BIOBIO;14;N;Actividades de servicios administrativos y de apoyo;37800.946627762954;379;237;True;5.542019578507233;6.334871586503751;0.8748432391769921
-trabajo;8;BIOBIO;15;O;Administración pública, defensa y seguridad social;90787.06456126706;785;377;True;13.31034627858255;8.270347608212775;1.6094059051840652
+trabajo;8;BIOBIO;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";90787.06456126706;785;377;True;13.31034627858255;8.270347608212775;1.6094059051840652
 trabajo;8;BIOBIO;16;P;Enseñanza;45147.37156310027;385;236;True;6.619083368062458;6.531193745024176;1.0134569002956375
-trabajo;8;BIOBIO;17;Q;Actividades de atención de la salud humana y de servicios sociales;37246.18673271221;329;211;True;5.460685895781843;5.971046579301609;0.9145274322111453
-trabajo;8;BIOBIO;18;R;Actividades artísticas, de espectáculos y deportivas;7312.338459553116;60;39;True;1.0720663507868624;1.1220514268224204;0.9554520632114762
+trabajo;8;BIOBIO;17;Q;Actividades de atención de la salud humana y de asistencia social;37246.18673271221;329;211;True;5.460685895781843;5.971046579301609;0.9145274322111453
+trabajo;8;BIOBIO;18;R;Actividades artísticas, de entretenimiento y recreativas;7312.338459553116;60;39;True;1.0720663507868624;1.1220514268224204;0.9554520632114762
 trabajo;8;BIOBIO;19;S;Otras actividades de servicios;20662.506460619326;196;138;True;3.0293425313767406;3.592492132566926;0.8432426348035449
-trabajo;8;BIOBIO;20;T;Actividades de los hogares como empleadores;21263.764483244453;214;148;True;3.117493332623492;2.9508320542328925;1.0564794184581017
-trabajo;8;BIOBIO;21;U;Actividades de organizaciones y organismos extraterritoriales;90.307118612232;1;0;False;0.013239981113594222;0.02005630777738381;0.6601405034541844
+trabajo;8;BIOBIO;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";21263.764483244453;214;148;True;3.117493332623492;2.9508320542328925;1.0564794184581017
+trabajo;8;BIOBIO;21;U;Actividades de organizaciones y órganos extraterritoriales;90.307118612232;1;0;False;0.013239981113594222;0.02005630777738381;0.6601405034541844
 trabajo;9;LA ARAUCANIA;1;A;Agricultura, ganadería, silvicultura y pesca;47003.02321872174;386;134;True;11.482307822801788;5.696850151147789;2.015553774130492
 trabajo;9;LA ARAUCANIA;2;B;Explotación de minas y canteras;530.2969047562962;5;1;False;0.129545545816412;1.5416199909832322;0.08403208739774382
 trabajo;9;LA ARAUCANIA;3;C;Industrias manufactureras;37780.898048445495;289;151;True;9.229446778252154;9.224495192716669;1.0005367866134718
 trabajo;9;LA ARAUCANIA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;626.3030386937339;5;1;False;0.15299876025364234;0.48071751988413647;0.3182716541941688
-trabajo;9;LA ARAUCANIA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";5075.912591297358;31;17;False;1.239988129778363;0.7400454336218187;1.6755567610353328
+trabajo;9;LA ARAUCANIA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";5075.912591297358;31;17;False;1.239988129778363;0.7400454336218187;1.6755567610353328
 trabajo;9;LA ARAUCANIA;6;F;Construcción;42681.300800742996;316;166;True;10.426559836187819;8.845840548663071;1.1786963351677926
-trabajo;9;LA ARAUCANIA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";74778.48191914012;535;227;True;18.26753874792004;18.429456720642392;0.9912141754813102
+trabajo;9;LA ARAUCANIA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";74778.48191914012;535;227;True;18.26753874792004;18.429456720642392;0.9912141754813102
 trabajo;9;LA ARAUCANIA;8;H;Transporte y almacenamiento;23238.169924120437;156;100;True;5.676822511302749;6.629673395121441;0.8562748378344153
 trabajo;9;LA ARAUCANIA;9;I;Actividades de alojamiento y de servicio de comidas;21677.151296858745;150;87;True;5.295483287399234;4.981306642915655;1.0630711311319083
 trabajo;9;LA ARAUCANIA;10;J;Información y comunicaciones;2179.5454873614617;15;6;False;0.5324383515338367;1.9270309947883781;0.2762998379236281
@@ -501,19 +501,19 @@ trabajo;9;LA ARAUCANIA;11;K;Actividades financieras y de seguros;3526.9686062411
 trabajo;9;LA ARAUCANIA;12;L;Actividades inmobiliarias;1819.3639110625343;13;8;False;0.44445005954841893;0.9034106886800924;0.491969007138683
 trabajo;9;LA ARAUCANIA;13;M;Actividades profesionales, científicas y técnicas;6990.266419492356;50;33;False;1.7076431534734917;3.861585465252312;0.44221296377857483
 trabajo;9;LA ARAUCANIA;14;N;Actividades de servicios administrativos y de apoyo;18668.096703771134;148;100;True;4.5604052280014375;6.334871586503751;0.719889135198453
-trabajo;9;LA ARAUCANIA;15;O;Administración pública, defensa y seguridad social;46069.48001236308;322;164;True;11.254253758887321;8.270347608212775;1.3607957358057612
+trabajo;9;LA ARAUCANIA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";46069.48001236308;322;164;True;11.254253758887321;8.270347608212775;1.3607957358057612
 trabajo;9;LA ARAUCANIA;16;P;Enseñanza;27958.328222580647;195;117;True;6.829903884453333;6.531193745024176;1.0457359176730487
-trabajo;9;LA ARAUCANIA;17;Q;Actividades de atención de la salud humana y de servicios sociales;20677.267274851696;156;96;True;5.05122291133021;5.971046579301609;0.8459526892387792
-trabajo;9;LA ARAUCANIA;18;R;Actividades artísticas, de espectáculos y deportivas;2842.8277639282037;21;10;False;0.6944707220370716;1.1220514268224204;0.6189294941710197
+trabajo;9;LA ARAUCANIA;17;Q;Actividades de atención de la salud humana y de asistencia social;20677.267274851696;156;96;True;5.05122291133021;5.971046579301609;0.8459526892387792
+trabajo;9;LA ARAUCANIA;18;R;Actividades artísticas, de entretenimiento y recreativas;2842.8277639282037;21;10;False;0.6944707220370716;1.1220514268224204;0.6189294941710197
 trabajo;9;LA ARAUCANIA;19;S;Otras actividades de servicios;10687.461933552428;84;56;True;2.6108262695035784;3.592492132566926;0.7267451599505876
-trabajo;9;LA ARAUCANIA;20;T;Actividades de los hogares como empleadores;14540.564168179693;132;95;True;3.5520956368980894;2.9508320542328925;1.203760692446966
+trabajo;9;LA ARAUCANIA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";14540.564168179693;132;95;True;3.5520956368980894;2.9508320542328925;1.203760692446966
 trabajo;10;LOS LAGOS;1;A;Agricultura, ganadería, silvicultura y pesca;56199.81881228713;594;225;True;13.584317873753006;5.696850151147789;2.384531366164874
 trabajo;10;LOS LAGOS;2;B;Explotación de minas y canteras;506.70693697396615;4;0;False;0.12247847495168752;1.5416199909832322;0.07944790264011288
 trabajo;10;LOS LAGOS;3;C;Industrias manufactureras;48414.4711769406;416;208;True;11.702485524978666;9.224495192716669;1.2686315381483997
 trabajo;10;LOS LAGOS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;2322.972172013452;16;4;False;0.561496336881677;0.48071751988413647;1.16803801329523
-trabajo;10;LOS LAGOS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";2848.8562415167203;21;7;False;0.6886102051440662;0.7400454336218187;0.9304972017379717
+trabajo;10;LOS LAGOS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";2848.8562415167203;21;7;False;0.6886102051440662;0.7400454336218187;0.9304972017379717
 trabajo;10;LOS LAGOS;6;F;Construcción;41092.399291169466;334;177;True;9.932633698178137;8.845840548663071;1.122859228982973
-trabajo;10;LOS LAGOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";75018.74009096506;605;258;True;18.1331262879681;18.429456720642392;0.9839208264700294
+trabajo;10;LOS LAGOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";75018.74009096506;605;258;True;18.1331262879681;18.429456720642392;0.9839208264700294
 trabajo;10;LOS LAGOS;8;H;Transporte y almacenamiento;30390.85445778614;226;128;True;7.345913850513523;6.629673395121441;1.1080355566111508
 trabajo;10;LOS LAGOS;9;I;Actividades de alojamiento y de servicio de comidas;19887.958861636504;147;89;True;4.807210427830177;4.981306642915655;0.9650500907561924
 trabajo;10;LOS LAGOS;10;J;Información y comunicaciones;2106.3440954497946;21;8;False;0.5091341635755764;1.9270309947883781;0.264206525454194
@@ -521,19 +521,19 @@ trabajo;10;LOS LAGOS;11;K;Actividades financieras y de seguros;2681.597173521033
 trabajo;10;LOS LAGOS;12;L;Actividades inmobiliarias;1278.5566613170852;13;6;False;0.3090458381182247;0.9034106886800924;0.3420878698809166
 trabajo;10;LOS LAGOS;13;M;Actividades profesionales, científicas y técnicas;11187.761375958922;97;49;True;2.704245494711362;3.861585465252312;0.7002940939790049
 trabajo;10;LOS LAGOS;14;N;Actividades de servicios administrativos y de apoyo;18639.23265163535;166;95;True;4.505375045929732;6.334871586503751;0.7112022689660031
-trabajo;10;LOS LAGOS;15;O;Administración pública, defensa y seguridad social;38299.39986698255;283;157;True;9.257524902434671;8.270347608212775;1.1193634585856573
+trabajo;10;LOS LAGOS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";38299.39986698255;283;157;True;9.257524902434671;8.270347608212775;1.1193634585856573
 trabajo;10;LOS LAGOS;16;P;Enseñanza;20313.380124271385;158;99;True;4.9100409668607075;6.531193745024176;0.7517830826258137
-trabajo;10;LOS LAGOS;17;Q;Actividades de atención de la salud humana y de servicios sociales;20021.36427104399;144;88;True;4.839456465731517;5.971046579301609;0.8104871401451291
-trabajo;10;LOS LAGOS;18;R;Actividades artísticas, de espectáculos y deportivas;3876.8287644677093;28;11;False;0.9370861933655271;1.1220514268224204;0.8351544064422223
+trabajo;10;LOS LAGOS;17;Q;Actividades de atención de la salud humana y de asistencia social;20021.36427104399;144;88;True;4.839456465731517;5.971046579301609;0.8104871401451291
+trabajo;10;LOS LAGOS;18;R;Actividades artísticas, de entretenimiento y recreativas;3876.8287644677093;28;11;False;0.9370861933655271;1.1220514268224204;0.8351544064422223
 trabajo;10;LOS LAGOS;19;S;Otras actividades de servicios;7960.0860679329335;52;30;False;1.924069182685556;3.592492132566926;0.5355806252833072
-trabajo;10;LOS LAGOS;20;T;Actividades de los hogares como empleadores;10663.68190119707;112;74;True;2.577567823381966;2.9508320542328925;0.873505430336
+trabajo;10;LOS LAGOS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";10663.68190119707;112;74;True;2.577567823381966;2.9508320542328925;0.873505430336
 trabajo;11;AYSEN;1;A;Agricultura, ganadería, silvicultura y pesca;6214.829549518802;136;73;True;10.172416315062202;5.696850151147789;1.7856211845440038
 trabajo;11;AYSEN;2;B;Explotación de minas y canteras;474.1721490584704;10;5;False;0.7761237000625317;1.5416199909832322;0.5034468316459276
 trabajo;11;AYSEN;3;C;Industrias manufactureras;5042.39288559867;137;74;True;8.253375132450573;9.224495192716669;0.8947237718728656
 trabajo;11;AYSEN;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;219.12565947002633;6;3;False;0.3586642908998604;0.48071751988413647;0.7461019747861621
-trabajo;11;AYSEN;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";229.42297664276185;8;5;False;0.3755189119919892;0.7400454336218187;0.5074268348014543
+trabajo;11;AYSEN;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";229.42297664276185;8;5;False;0.3755189119919892;0.7400454336218187;0.5074268348014543
 trabajo;11;AYSEN;6;F;Construcción;5710.507086906522;139;83;True;9.34694266275154;8.845840548663071;1.0566483322112563
-trabajo;11;AYSEN;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";8270.789860264642;224;103;True;13.537606629858631;18.429456720642392;0.7345635215983053
+trabajo;11;AYSEN;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";8270.789860264642;224;103;True;13.537606629858631;18.429456720642392;0.7345635215983053
 trabajo;11;AYSEN;8;H;Transporte y almacenamiento;3533.3133313084463;81;56;True;5.7833177710258745;6.629673395121441;0.8723382625879622
 trabajo;11;AYSEN;9;I;Actividades de alojamiento y de servicio de comidas;3915.279061258383;101;56;True;6.408518251936605;4.981306642915655;1.286513501643331
 trabajo;11;AYSEN;10;J;Información y comunicaciones;545.4311939129374;16;13;False;0.8927603132950628;1.9270309947883781;0.46328279913998144
@@ -541,19 +541,19 @@ trabajo;11;AYSEN;11;K;Actividades financieras y de seguros;574.3425683669262;14;
 trabajo;11;AYSEN;12;L;Actividades inmobiliarias;107.80902970444272;3;0;False;0.17646153027019246;0.9034106886800924;0.19532814087910289
 trabajo;11;AYSEN;13;M;Actividades profesionales, científicas y técnicas;1579.4816776062885;42;30;False;2.5852913677846665;3.861585465252312;0.6694896153530416
 trabajo;11;AYSEN;14;N;Actividades de servicios administrativos y de apoyo;3092.575541628573;82;57;True;5.061919340597298;6.334871586503751;0.7990563457326525
-trabajo;11;AYSEN;15;O;Administración pública, defensa y seguridad social;9658.424812545187;243;112;True;15.808883792885913;8.270347608212775;1.9115138252698205
+trabajo;11;AYSEN;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";9658.424812545187;243;112;True;15.808883792885913;8.270347608212775;1.9115138252698205
 trabajo;11;AYSEN;16;P;Enseñanza;4657.460039866579;122;76;True;7.623318084396597;6.531193745024176;1.1672166501268564
-trabajo;11;AYSEN;17;Q;Actividades de atención de la salud humana y de servicios sociales;3896.2546139429382;108;73;True;6.377379087665937;5.971046579301609;1.0680504670274829
-trabajo;11;AYSEN;18;R;Actividades artísticas, de espectáculos y deportivas;540.5652086763457;13;8;False;0.8847956817287168;1.1220514268224204;0.7885518083911741
+trabajo;11;AYSEN;17;Q;Actividades de atención de la salud humana y de asistencia social;3896.2546139429382;108;73;True;6.377379087665937;5.971046579301609;1.0680504670274829
+trabajo;11;AYSEN;18;R;Actividades artísticas, de entretenimiento y recreativas;540.5652086763457;13;8;False;0.8847956817287168;1.1220514268224204;0.7885518083911741
 trabajo;11;AYSEN;19;S;Otras actividades de servicios;1307.6498954026918;31;23;False;2.140357836750914;3.592492132566926;0.5957863671705732
-trabajo;11;AYSEN;20;T;Actividades de los hogares como empleadores;1525.092266175925;48;40;False;2.4962669252327867;2.9508320542328925;0.8459535749084588
+trabajo;11;AYSEN;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1525.092266175925;48;40;False;2.4962669252327867;2.9508320542328925;0.8459535749084588
 trabajo;12;MAGALLANES;1;A;Agricultura, ganadería, silvicultura y pesca;6283.051133065034;98;45;True;6.408646170665892;5.696850151147789;1.1249455401902562
 trabajo;12;MAGALLANES;2;B;Explotación de minas y canteras;1385.295911106102;20;14;False;1.412987280849708;1.5416199909832322;0.916560040161724
 trabajo;12;MAGALLANES;3;C;Industrias manufactureras;7660.138162219282;132;70;True;7.813260478134985;9.224495192716669;0.8470122554027733
 trabajo;12;MAGALLANES;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;359.4713221268288;5;2;False;0.3666569733753688;0.48071751988413647;0.7627285426662652
-trabajo;12;MAGALLANES;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";410.31755489676283;8;4;False;0.418519596809863;0.7400454336218187;0.5655323008502431
+trabajo;12;MAGALLANES;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";410.31755489676283;8;4;False;0.418519596809863;0.7400454336218187;0.5655323008502431
 trabajo;12;MAGALLANES;6;F;Construcción;10916.129892562489;148;79;True;11.134337848422847;8.845840548663071;1.2587088572499365
-trabajo;12;MAGALLANES;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";16001.432189450752;238;122;True;16.321292785033915;18.429456720642392;0.8856090026111745
+trabajo;12;MAGALLANES;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";16001.432189450752;238;122;True;16.321292785033915;18.429456720642392;0.8856090026111745
 trabajo;12;MAGALLANES;8;H;Transporte y almacenamiento;8726.589849875361;131;84;True;8.901029999590918;6.629673395121441;1.3426046004228345
 trabajo;12;MAGALLANES;9;I;Actividades de alojamiento y de servicio de comidas;7640.16966585309;110;66;True;7.792892821552071;4.981306642915655;1.5644274444808601
 trabajo;12;MAGALLANES;10;J;Información y comunicaciones;932.7963273584536;16;10;False;0.9514424576106796;1.9270309947883781;0.4937349010907656
@@ -561,19 +561,19 @@ trabajo;12;MAGALLANES;11;K;Actividades financieras y de seguros;843.919534024056
 trabajo;12;MAGALLANES;12;L;Actividades inmobiliarias;624.5209485676343;11;6;False;0.6370048087745163;0.9034106886800924;0.7051109940985949
 trabajo;12;MAGALLANES;13;M;Actividades profesionales, científicas y técnicas;1490.4812474271182;25;20;False;1.520275219233084;3.861585465252312;0.39369197779331055
 trabajo;12;MAGALLANES;14;N;Actividades de servicios administrativos y de apoyo;5018.202386290017;85;59;True;5.118513732489001;6.334871586503751;0.8079901324904261
-trabajo;12;MAGALLANES;15;O;Administración pública, defensa y seguridad social;10053.704711178754;137;79;True;10.254673220663483;8.270347608212775;1.2399325525906788
+trabajo;12;MAGALLANES;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";10053.704711178754;137;79;True;10.254673220663483;8.270347608212775;1.2399325525906788
 trabajo;12;MAGALLANES;16;P;Enseñanza;7936.986773461709;127;71;True;8.095643154117989;6.531193745024176;1.2395349870436314
-trabajo;12;MAGALLANES;17;Q;Actividades de atención de la salud humana y de servicios sociales;6716.341997888179;95;65;True;6.8505983023332915;5.971046579301609;1.14730277370145
-trabajo;12;MAGALLANES;18;R;Actividades artísticas, de espectáculos y deportivas;1128.9409746744711;14;10;False;1.151507937947651;1.1220514268224204;1.0262523717015801
+trabajo;12;MAGALLANES;17;Q;Actividades de atención de la salud humana y de asistencia social;6716.341997888179;95;65;True;6.8505983023332915;5.971046579301609;1.14730277370145
+trabajo;12;MAGALLANES;18;R;Actividades artísticas, de entretenimiento y recreativas;1128.9409746744711;14;10;False;1.151507937947651;1.1220514268224204;1.0262523717015801
 trabajo;12;MAGALLANES;19;S;Otras actividades de servicios;2216.254607183694;39;28;False;2.260556424060127;3.592492132566926;0.6292446415031958
-trabajo;12;MAGALLANES;20;T;Actividades de los hogares como empleadores;1695.4799339099684;34;28;False;1.729371726534461;2.9508320542328925;0.5860624036714397
+trabajo;12;MAGALLANES;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1695.4799339099684;34;28;False;1.729371726534461;2.9508320542328925;0.5860624036714397
 trabajo;13;METROPOLITANA;1;A;Agricultura, ganadería, silvicultura y pesca;61995.61614982528;330;139;True;1.5113888303448142;5.696850151147789;0.265302542676202
 trabajo;13;METROPOLITANA;2;B;Explotación de minas y canteras;20177.189650211887;79;32;True;0.4918989592970628;1.5416199909832322;0.3190792557012275
 trabajo;13;METROPOLITANA;3;C;Industrias manufactureras;371247.00460558425;1257;642;True;9.050616977559164;9.224495192716669;0.9811503815087038
 trabajo;13;METROPOLITANA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;25271.44828993245;60;27;True;0.6160917020283233;0.48071751988413647;1.2816085882969588
-trabajo;13;METROPOLITANA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";25889.16505635218;93;47;True;0.6311509962020795;0.7400454336218187;0.8528543891058087
+trabajo;13;METROPOLITANA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";25889.16505635218;93;47;True;0.6311509962020795;0.7400454336218187;0.8528543891058087
 trabajo;13;METROPOLITANA;6;F;Construcción;304687.4417096558;1055;566;True;7.427963858499506;8.845840548663071;0.8397126104225496
-trabajo;13;METROPOLITANA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";818622.240802568;2664;911;True;19.95716129396564;18.429456720642392;1.0828947155893154
+trabajo;13;METROPOLITANA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";818622.240802568;2664;911;True;19.95716129396564;18.429456720642392;1.0828947155893154
 trabajo;13;METROPOLITANA;8;H;Transporte y almacenamiento;280497.21029093553;916;531;True;6.838231102535711;6.629673395121441;1.031458217469316
 trabajo;13;METROPOLITANA;9;I;Actividades de alojamiento y de servicio de comidas;190784.31163132744;618;382;True;4.651123668289006;4.981306642915655;0.9337155894435387
 trabajo;13;METROPOLITANA;10;J;Información y comunicaciones;129920.07804695929;399;247;True;3.1673167716110227;1.9270309947883781;1.643625234973893
@@ -581,20 +581,20 @@ trabajo;13;METROPOLITANA;11;K;Actividades financieras y de seguros;134417.555426
 trabajo;13;METROPOLITANA;12;L;Actividades inmobiliarias;47989.0320619491;161;112;True;1.1699228355470332;0.9034106886800924;1.2950066345311038
 trabajo;13;METROPOLITANA;13;M;Actividades profesionales, científicas y técnicas;216218.21288260736;679;392;True;5.271175805046192;3.861585465252312;1.36502891169386
 trabajo;13;METROPOLITANA;14;N;Actividades de servicios administrativos y de apoyo;319987.5254169837;1119;573;True;7.800964032620063;6.334871586503751;1.2314320702632358
-trabajo;13;METROPOLITANA;15;O;Administración pública, defensa y seguridad social;253348.20424615088;821;440;True;6.1763664895300545;8.270347608212775;0.746808572277746
+trabajo;13;METROPOLITANA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";253348.20424615088;821;440;True;6.1763664895300545;8.270347608212775;0.746808572277746
 trabajo;13;METROPOLITANA;16;P;Enseñanza;263323.5597032568;863;502;True;6.4195553108195025;6.531193745024176;0.9829068867709329
-trabajo;13;METROPOLITANA;17;Q;Actividades de atención de la salud humana y de servicios sociales;283105.03172175627;889;516;True;6.901807084626945;5.971046579301609;1.1558789557180444
-trabajo;13;METROPOLITANA;18;R;Actividades artísticas, de espectáculos y deportivas;54687.38315341041;185;114;True;1.3332216887578205;1.1220514268224204;1.1882001634572321
+trabajo;13;METROPOLITANA;17;Q;Actividades de atención de la salud humana y de asistencia social;283105.03172175627;889;516;True;6.901807084626945;5.971046579301609;1.1558789557180444
+trabajo;13;METROPOLITANA;18;R;Actividades artísticas, de entretenimiento y recreativas;54687.38315341041;185;114;True;1.3332216887578205;1.1220514268224204;1.1882001634572321
 trabajo;13;METROPOLITANA;19;S;Otras actividades de servicios;185412.67902582095;615;390;True;4.52016883591734;3.592492132566926;1.258226509375141
-trabajo;13;METROPOLITANA;20;T;Actividades de los hogares como empleadores;113110.03556791412;421;271;True;2.757505368510348;2.9508320542328925;0.9344840091982795
-trabajo;13;METROPOLITANA;21;U;Actividades de organizaciones y organismos extraterritoriales;1206.2769948589776;6;0;False;0.029407782187787897;0.02005630777738381;1.4662610144499844
+trabajo;13;METROPOLITANA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";113110.03556791412;421;271;True;2.757505368510348;2.9508320542328925;0.9344840091982795
+trabajo;13;METROPOLITANA;21;U;Actividades de organizaciones y órganos extraterritoriales;1206.2769948589776;6;0;False;0.029407782187787897;0.02005630777738381;1.4662610144499844
 trabajo;14;LOS RIOS;1;A;Agricultura, ganadería, silvicultura y pesca;20081.10142402896;400;136;True;11.278743080389987;5.696850151147789;1.979820915267987
 trabajo;14;LOS RIOS;2;B;Explotación de minas y canteras;352.78968218820285;4;0;False;0.1981477062832765;1.5416199909832322;0.12853213336763983
 trabajo;14;LOS RIOS;3;C;Industrias manufactureras;15995.318171062101;236;130;True;8.983923756524058;9.224495192716669;0.9739203684140291
 trabajo;14;LOS RIOS;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;273.6135731998525;5;1;False;0.15367768581338376;0.48071751988413647;0.31968397126533576
-trabajo;14;LOS RIOS;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1397.195830102283;19;11;False;0.7847484292798391;0.7400454336218187;1.0604057448733137
+trabajo;14;LOS RIOS;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1397.195830102283;19;11;False;0.7847484292798391;0.7400454336218187;1.0604057448733137
 trabajo;14;LOS RIOS;6;F;Construcción;16689.15047502752;255;131;True;9.373621320022094;8.845840548663071;1.059664287238231
-trabajo;14;LOS RIOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";26144.049020520513;402;182;True;14.684055707757631;18.429456720642392;0.7967709482890167
+trabajo;14;LOS RIOS;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";26144.049020520513;402;182;True;14.684055707757631;18.429456720642392;0.7967709482890167
 trabajo;14;LOS RIOS;8;H;Transporte y almacenamiento;8598.989751091156;134;86;True;4.829705009975748;6.629673395121441;0.7284981811516944
 trabajo;14;LOS RIOS;9;I;Actividades de alojamiento y de servicio de comidas;11518.614726867374;169;94;True;6.469540360514152;4.981306642915655;1.2987637229109439
 trabajo;14;LOS RIOS;10;J;Información y comunicaciones;2904.15241950759;33;21;False;1.6311450410147494;1.9270309947883781;0.846455010545317
@@ -602,20 +602,20 @@ trabajo;14;LOS RIOS;11;K;Actividades financieras y de seguros;1170.4739984205614
 trabajo;14;LOS RIOS;12;L;Actividades inmobiliarias;708.7687125315923;13;4;False;0.3980867405259457;0.9034106886800924;0.440648694457624
 trabajo;14;LOS RIOS;13;M;Actividades profesionales, científicas y técnicas;5969.572508998087;67;38;True;3.352867614531469;3.861585465252312;0.8682619210947325
 trabajo;14;LOS RIOS;14;N;Actividades de servicios administrativos y de apoyo;8129.134362797845;132;82;True;4.565806227852377;6.334871586503751;0.7207417175716216
-trabajo;14;LOS RIOS;15;O;Administración pública, defensa y seguridad social;17594.354735127326;261;126;True;9.882037968559287;8.270347608212775;1.1948757702452604
+trabajo;14;LOS RIOS;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";17594.354735127326;261;126;True;9.882037968559287;8.270347608212775;1.1948757702452604
 trabajo;14;LOS RIOS;16;P;Enseñanza;15718.792531048011;219;127;True;8.828610480474005;6.531193745024176;1.351760616074225
-trabajo;14;LOS RIOS;17;Q;Actividades de atención de la salud humana y de servicios sociales;10783.618892688713;167;100;True;6.0567229057435465;5.971046579301609;1.0143486280510574
-trabajo;14;LOS RIOS;18;R;Actividades artísticas, de espectáculos y deportivas;1542.4282555535672;24;13;False;0.8663196130022048;1.1220514268224204;0.7720854786982161
+trabajo;14;LOS RIOS;17;Q;Actividades de atención de la salud humana y de asistencia social;10783.618892688713;167;100;True;6.0567229057435465;5.971046579301609;1.0143486280510574
+trabajo;14;LOS RIOS;18;R;Actividades artísticas, de entretenimiento y recreativas;1542.4282555535672;24;13;False;0.8663196130022048;1.1220514268224204;0.7720854786982161
 trabajo;14;LOS RIOS;19;S;Otras actividades de servicios;4306.4030781945385;67;44;True;2.4187325632167345;3.592492132566926;0.673274282576783
-trabajo;14;LOS RIOS;20;T;Actividades de los hogares como empleadores;8114.474727180534;157;92;True;4.557572503003901;2.9508320542328925;1.544504200591891
-trabajo;14;LOS RIOS;21;U;Actividades de organizaciones y organismos extraterritoriales;50.79116743894613;2;0;False;0.028527345995646453;0.02005630777738381;1.4223627954002023
+trabajo;14;LOS RIOS;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";8114.474727180534;157;92;True;4.557572503003901;2.9508320542328925;1.544504200591891
+trabajo;14;LOS RIOS;21;U;Actividades de organizaciones y órganos extraterritoriales;50.79116743894613;2;0;False;0.028527345995646453;0.02005630777738381;1.4223627954002023
 trabajo;15;ARICA Y PARINACOTA;1;A;Agricultura, ganadería, silvicultura y pesca;7574.236125028272;115;39;True;6.8675887204289365;5.696850151147789;1.20550629527183
 trabajo;15;ARICA Y PARINACOTA;2;B;Explotación de minas y canteras;1657.5189574873693;18;8;False;1.5028787469039855;1.5416199909832322;0.9748697835356054
 trabajo;15;ARICA Y PARINACOTA;3;C;Industrias manufactureras;6680.04688551095;94;63;True;6.056823933872304;9.224495192716669;0.6566022104553273
 trabajo;15;ARICA Y PARINACOTA;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;149.0213045372106;3;1;False;0.13511818396598152;0.48071751988413647;0.28107605480771325
-trabajo;15;ARICA Y PARINACOTA;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";549.7609585029745;9;5;False;0.4984703533431414;0.7400454336218187;0.6735672307355549
+trabajo;15;ARICA Y PARINACOTA;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";549.7609585029745;9;5;False;0.4984703533431414;0.7400454336218187;0.6735672307355549
 trabajo;15;ARICA Y PARINACOTA;6;F;Construcción;8862.632437838009;117;71;True;8.035782560604648;8.845840548663071;0.9084249841943113
-trabajo;15;ARICA Y PARINACOTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";18243.698387097655;260;100;True;16.541630759058464;18.429456720642392;0.8975647524395323
+trabajo;15;ARICA Y PARINACOTA;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";18243.698387097655;260;100;True;16.541630759058464;18.429456720642392;0.8975647524395323
 trabajo;15;ARICA Y PARINACOTA;8;H;Transporte y almacenamiento;10833.385789992819;137;80;True;9.82267212525436;6.629673395121441;1.4816223273506268
 trabajo;15;ARICA Y PARINACOTA;9;I;Actividades de alojamiento y de servicio de comidas;7233.738496540001;109;65;True;6.558858224820031;4.981306642915655;1.3166943324294134
 trabajo;15;ARICA Y PARINACOTA;10;J;Información y comunicaciones;774.1923268794768;11;7;False;0.7019631291862163;1.9270309947883781;0.36427184154518705
@@ -623,19 +623,19 @@ trabajo;15;ARICA Y PARINACOTA;11;K;Actividades financieras y de seguros;1430.690
 trabajo;15;ARICA Y PARINACOTA;12;L;Actividades inmobiliarias;1067.3052383238119;14;8;False;0.9677297215156424;0.9034106886800924;1.0711957846431082
 trabajo;15;ARICA Y PARINACOTA;13;M;Actividades profesionales, científicas y técnicas;2811.6057192679436;37;28;False;2.54929360600914;3.861585465252312;0.6601675992797357
 trabajo;15;ARICA Y PARINACOTA;14;N;Actividades de servicios administrativos y de apoyo;2956.5617785421564;52;33;False;2.6807258166237378;6.334871586503751;0.4231697170207746
-trabajo;15;ARICA Y PARINACOTA;15;O;Administración pública, defensa y seguridad social;15498.767260010254;199;97;True;14.052791259528158;8.270347608212775;1.6991778248320775
+trabajo;15;ARICA Y PARINACOTA;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";15498.767260010254;199;97;True;14.052791259528158;8.270347608212775;1.6991778248320775
 trabajo;15;ARICA Y PARINACOTA;16;P;Enseñanza;10828.63969027722;147;86;True;9.818368818579623;6.531193745024176;1.50330386785108
-trabajo;15;ARICA Y PARINACOTA;17;Q;Actividades de atención de la salud humana y de servicios sociales;7442.978231284908;99;63;True;6.748576688633345;5.971046579301609;1.1302167214750949
-trabajo;15;ARICA Y PARINACOTA;18;R;Actividades artísticas, de espectáculos y deportivas;1070.7003876518625;15;10;False;0.9708081163325726;1.1220514268224204;0.8652082187372111
+trabajo;15;ARICA Y PARINACOTA;17;Q;Actividades de atención de la salud humana y de asistencia social;7442.978231284908;99;63;True;6.748576688633345;5.971046579301609;1.1302167214750949
+trabajo;15;ARICA Y PARINACOTA;18;R;Actividades artísticas, de entretenimiento y recreativas;1070.7003876518625;15;10;False;0.9708081163325726;1.1220514268224204;0.8652082187372111
 trabajo;15;ARICA Y PARINACOTA;19;S;Otras actividades de servicios;3062.520346681704;44;32;False;2.776798853610717;3.592492132566926;0.7729450061806049
-trabajo;15;ARICA Y PARINACOTA;20;T;Actividades de los hogares como empleadores;1561.599545751779;22;17;False;1.4159082512352805;2.9508320542328925;0.4798335605729227
+trabajo;15;ARICA Y PARINACOTA;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";1561.599545751779;22;17;False;1.4159082512352805;2.9508320542328925;0.4798335605729227
 trabajo;16;NUBLE;1;A;Agricultura, ganadería, silvicultura y pesca;28431.48749415176;451;138;True;14.127543226502636;5.696850151147789;2.4798867534994318
 trabajo;16;NUBLE;2;B;Explotación de minas y canteras;92.36734509896986;2;1;False;0.04589712940173815;1.5416199909832322;0.029772012344277756
 trabajo;16;NUBLE;3;C;Industrias manufactureras;19605.808453989357;231;133;True;9.742082839712117;9.224495192716669;1.0561101324443334
 trabajo;16;NUBLE;4;D;Suministro de electricidad, gas, vapor y aire acondicionado;988.9662211319672;8;2;False;0.491415127030084;0.48071751988413647;1.0222534164107975
-trabajo;16;NUBLE;5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";1725.875420359119;21;12;False;0.8575836775932747;0.7400454336218187;1.1588257134379143
+trabajo;16;NUBLE;5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";1725.875420359119;21;12;False;0.8575836775932747;0.7400454336218187;1.1588257134379143
 trabajo;16;NUBLE;6;F;Construcción;19791.755741168756;225;123;True;9.83447963527261;8.845840548663071;1.1117631593256514
-trabajo;16;NUBLE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos";35072.71147061712;388;161;True;17.42755272560814;18.429456720642392;0.9456357281594718
+trabajo;16;NUBLE;7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";35072.71147061712;388;161;True;17.42755272560814;18.429456720642392;0.9456357281594718
 trabajo;16;NUBLE;8;H;Transporte y almacenamiento;10005.718891581435;115;81;True;4.971819577928421;6.629673395121441;0.7499343152540545
 trabajo;16;NUBLE;9;I;Actividades de alojamiento y de servicio de comidas;9973.563347161262;128;78;True;4.955841559055466;4.981306642915655;0.994887870656105
 trabajo;16;NUBLE;10;J;Información y comunicaciones;1635.205854372178;18;8;False;0.8125301708756882;1.9270309947883781;0.4216487296121142
@@ -643,9 +643,9 @@ trabajo;16;NUBLE;11;K;Actividades financieras y de seguros;859.4541029264459;9;5
 trabajo;16;NUBLE;12;L;Actividades inmobiliarias;919.7371294649853;13;6;False;0.4570153445615101;0.9034106886800924;0.5058777256988424
 trabajo;16;NUBLE;13;M;Actividades profesionales, científicas y técnicas;4648.679908381076;47;26;False;2.3099187605058273;3.861585465252312;0.5981788520003402
 trabajo;16;NUBLE;14;N;Actividades de servicios administrativos y de apoyo;9237.527018020723;108;74;True;4.590106735706945;6.334871586503751;0.7245777081710741
-trabajo;16;NUBLE;15;O;Administración pública, defensa y seguridad social;23485.62682568251;252;127;True;11.669956003870297;8.270347608212775;1.4110599163064899
+trabajo;16;NUBLE;15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";23485.62682568251;252;127;True;11.669956003870297;8.270347608212775;1.4110599163064899
 trabajo;16;NUBLE;16;P;Enseñanza;9957.709380730343;107;69;True;4.94796375821545;6.531193745024176;0.757589493036412
-trabajo;16;NUBLE;17;Q;Actividades de atención de la salud humana y de servicios sociales;9941.648589062252;113;74;True;4.939983186372719;5.971046579301609;0.8273228354133043
-trabajo;16;NUBLE;18;R;Actividades artísticas, de espectáculos y deportivas;994.3814853721713;11;3;False;0.49410595984887884;1.1220514268224204;0.4403594595019197
+trabajo;16;NUBLE;17;Q;Actividades de atención de la salud humana y de asistencia social;9941.648589062252;113;74;True;4.939983186372719;5.971046579301609;0.8273228354133043
+trabajo;16;NUBLE;18;R;Actividades artísticas, de entretenimiento y recreativas;994.3814853721713;11;3;False;0.49410595984887884;1.1220514268224204;0.4403594595019197
 trabajo;16;NUBLE;19;S;Otras actividades de servicios;4745.12165488756;57;44;False;2.3578404509516764;3.592492132566926;0.6563244577704725
-trabajo;16;NUBLE;20;T;Actividades de los hogares como empleadores;9135.285776308918;122;77;True;4.539303288925909;2.9508320542328925;1.5383129929114048
+trabajo;16;NUBLE;20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";9135.285776308918;122;77;True;4.539303288925909;2.9508320542328925;1.5383129929114048

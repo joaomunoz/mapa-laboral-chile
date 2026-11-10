@@ -1,22 +1,22 @@
 actividad_caenes;actividad_ciiu;actividad_glosa;origen
-1;A;Agricultura, ganadería, silvicultura y pesca;Libro de códigos ENE 2020, Anexo 5
-2;B;Explotación de minas y canteras;Libro de códigos ENE 2020, Anexo 5
-3;C;Industrias manufactureras;Libro de códigos ENE 2020, Anexo 5
-4;D;Suministro de electricidad, gas, vapor y aire acondicionado;Libro de códigos ENE 2020, Anexo 5
-5;E;"Suministro de agua; evacuación de aguas residuales y gestión de desechos";Libro de códigos ENE 2020, Anexo 5
-6;F;Construcción;Libro de códigos ENE 2020, Anexo 5
-7;G;"Comercio al por mayor y al por menor; reparación de vehículos";Libro de códigos ENE 2020, Anexo 5
-8;H;Transporte y almacenamiento;Libro de códigos ENE 2020, Anexo 5
-9;I;Actividades de alojamiento y de servicio de comidas;Libro de códigos ENE 2020, Anexo 5
-10;J;Información y comunicaciones;Libro de códigos ENE 2020, Anexo 5
-11;K;Actividades financieras y de seguros;Libro de códigos ENE 2020, Anexo 5
-12;L;Actividades inmobiliarias;Libro de códigos ENE 2020, Anexo 5
-13;M;Actividades profesionales, científicas y técnicas;Libro de códigos ENE 2020, Anexo 5
-14;N;Actividades de servicios administrativos y de apoyo;Libro de códigos ENE 2020, Anexo 5
-15;O;Administración pública, defensa y seguridad social;Libro de códigos ENE 2020, Anexo 5
-16;P;Enseñanza;Libro de códigos ENE 2020, Anexo 5
-17;Q;Actividades de atención de la salud humana y de servicios sociales;Libro de códigos ENE 2020, Anexo 5
-18;R;Actividades artísticas, de espectáculos y deportivas;Libro de códigos ENE 2020, Anexo 5
-19;S;Otras actividades de servicios;Libro de códigos ENE 2020, Anexo 5
-20;T;Actividades de los hogares como empleadores;Libro de códigos ENE 2020, Anexo 5
-21;U;Actividades de organizaciones y organismos extraterritoriales;Libro de códigos ENE 2020, Anexo 5
+1;A;Agricultura, ganadería, silvicultura y pesca;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+2;B;Explotación de minas y canteras;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+3;C;Industrias manufactureras;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+4;D;Suministro de electricidad, gas, vapor y aire acondicionado;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+5;E;"Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación";"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+6;F;Construcción;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+7;G;"Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas";"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+8;H;Transporte y almacenamiento;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+9;I;Actividades de alojamiento y de servicio de comidas;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+10;J;Información y comunicaciones;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+11;K;Actividades financieras y de seguros;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+12;L;Actividades inmobiliarias;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+13;M;Actividades profesionales, científicas y técnicas;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+14;N;Actividades de servicios administrativos y de apoyo;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+15;O;"Administración pública y defensa; planes de seguridad social de afiliación obligatoria";"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+16;P;Enseñanza;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+17;Q;Actividades de atención de la salud humana y de asistencia social;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+18;R;Actividades artísticas, de entretenimiento y recreativas;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+19;S;Otras actividades de servicios;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+20;T;"Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio";"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
+21;U;Actividades de organizaciones y órganos extraterritoriales;"Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"

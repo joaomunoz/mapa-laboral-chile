@@ -5,7 +5,7 @@
 🔹 Dimensiones: 650 filas | 13 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
 🔹 Registros Duplicados Absolutos: 0 (0.00%)
-🔹 Memoria Total Estimada: 0.22 MB
+🔹 Memoria Total Estimada: 0.23 MB
 
 🔬 MATRIZ DE CALIDAD POR COLUMNA:
 -------------------------------------------------------------------------------------------------------------------
@@ -16,7 +16,7 @@ codigo_region                  | int64        | 0        | 0.00   % | 16       |
 nombre_region                  | object       | 0        | 0.00   % | 16       | 0               | 0.036    MB
 actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.005    MB
 actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.031    MB
-actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.077    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.086    MB
 ocupados                       | float64      | 0        | 0.00   % | 609      | 0               | 0.005    MB
 n_personas                     | int64        | 0        | 0.00   % | 316      | 0               | 0.005    MB
 gl                             | int64        | 0        | 0.00   % | 233      | 0               | 0.005    MB

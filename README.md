@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una) y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 393 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 394 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 
@@ -143,8 +143,8 @@ Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No 
 | Tasa de desocupación | desocupados ÷ (ocupados + desocupados) | Chile: 777.920 ÷ 9.055.421 = **8,6%** |
 | Tasa de participación | (ocupados + desocupados) ÷ población de 15 años o más | Chile: 9.055.421 ÷ 15.205.784 = **59,6%** |
 | Tasa de ocupación | ocupados ÷ población de 15 años o más | Chile: 8.277.501 ÷ 15.205.784 = **54,4%** |
-| Participación | ocupados de la actividad ÷ ocupados de la región, por lugar de trabajo | Artes y deportes en Valparaíso: 10.007 ÷ 706.053 = **1,42%**; en Chile: 81.498 ÷ 7.395.105 = **1,10%** |
-| Coeficiente de localización (CL) | participación en la región ÷ participación en Chile | Valparaíso en Artes y deportes: 1,42% ÷ 1,10% = **1,29** |
+| Participación | ocupados de la actividad ÷ ocupados de la región, por lugar de trabajo | Artes y recreación en Valparaíso: 10.007 ÷ 706.053 = **1,42%**; en Chile: 81.498 ÷ 7.395.105 = **1,10%** |
+| Coeficiente de localización (CL) | participación en la región ÷ participación en Chile | Valparaíso en Artes y recreación: 1,42% ÷ 1,10% = **1,29** |
 
 - **Un CL de 1,29** significa que la actividad pesa 29% más en Valparaíso que en Chile. No significa que sea la principal de la región: ahí Comercio tiene 124.015 ocupados.
 - **"Participación" y "tasa de participación" son distintas:** la primera es el peso de una actividad entre los ocupados; la segunda, la parte de la población que trabaja o busca trabajo.

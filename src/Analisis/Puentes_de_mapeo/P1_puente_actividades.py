@@ -6,8 +6,11 @@ Generador del P1 · PUENTE_ACTIVIDADES del proyecto.
 Salida: Salida/P1_puente_actividades.csv (CAENES 1-21 ↔ CIIU A-U, 21 filas)
 
   Mapea oficial CAENES (rama de actividad de ENE, `r_p_rev4cl_caenes`) ↔ sección CIIU
-  (`actividad_ciiu`, la que usa el censo). Relación 1:1, transcrita VERBATIM del Libro de códigos ENE
-  2020, Anexo 5 — no se interpreta ni se completa con fuentes externas.
+  (`actividad_ciiu`, la que usa el censo). Relación 1:1 del Libro de códigos ENE 2020, Anexo 5.
+  Los nombres (`actividad_glosa`) son los del diccionario de variables del Censo 2024 (`cod_caenes`):
+  el mapa muestra cifras del Censo, y el Anexo 5 abrevia E, G y T. La transcripción anterior tenía
+  4 nombres que no estaban en ningún glosario (O, Q, R y U); src/Visualizacion/controles.py los compara
+  con el diccionario.
 
 Esquema: esquema.py (PUENTE_ACTIVIDADES)
 """
@@ -29,16 +32,16 @@ DIR_SALIDA = Path(__file__).parent / "Salida"
 SEPARADOR_SALIDA = ";"
 
 # P1 — Actividades: CAENES (ENE, CASEN) ↔ Sección CIIU (censo)
-# Libro de códigos ENE 2020, Anexo 5 (transcripción verbatim, relación 1:1)
+# Códigos: Libro de códigos ENE 2020, Anexo 5 (relación 1:1). Nombres: diccionario del Censo 2024.
 # --------------------------------------------------------------------------- #
 ANEXO_5_ACTIVIDADES: list[tuple[int, str, str]] = [
     (1, "A", "Agricultura, ganadería, silvicultura y pesca"),
     (2, "B", "Explotación de minas y canteras"),
     (3, "C", "Industrias manufactureras"),
     (4, "D", "Suministro de electricidad, gas, vapor y aire acondicionado"),
-    (5, "E", "Suministro de agua; evacuación de aguas residuales y gestión de desechos"),
+    (5, "E", "Suministro de agua; evacuación de aguas residuales, gestión de desechos y descontaminación"),
     (6, "F", "Construcción"),
-    (7, "G", "Comercio al por mayor y al por menor; reparación de vehículos"),
+    (7, "G", "Comercio al por mayor y al por menor; reparación de vehículos automotores y motocicletas"),
     (8, "H", "Transporte y almacenamiento"),
     (9, "I", "Actividades de alojamiento y de servicio de comidas"),
     (10, "J", "Información y comunicaciones"),
@@ -46,15 +49,15 @@ ANEXO_5_ACTIVIDADES: list[tuple[int, str, str]] = [
     (12, "L", "Actividades inmobiliarias"),
     (13, "M", "Actividades profesionales, científicas y técnicas"),
     (14, "N", "Actividades de servicios administrativos y de apoyo"),
-    (15, "O", "Administración pública, defensa y seguridad social"),
+    (15, "O", "Administración pública y defensa; planes de seguridad social de afiliación obligatoria"),
     (16, "P", "Enseñanza"),
-    (17, "Q", "Actividades de atención de la salud humana y de servicios sociales"),
-    (18, "R", "Actividades artísticas, de espectáculos y deportivas"),
+    (17, "Q", "Actividades de atención de la salud humana y de asistencia social"),
+    (18, "R", "Actividades artísticas, de entretenimiento y recreativas"),
     (19, "S", "Otras actividades de servicios"),
-    (20, "T", "Actividades de los hogares como empleadores"),
-    (21, "U", "Actividades de organizaciones y organismos extraterritoriales"),
+    (20, "T", "Actividades de los hogares como empleadores; actividades no diferenciadas de los hogares como productores de bienes y servicios para uso propio"),
+    (21, "U", "Actividades de organizaciones y órganos extraterritoriales"),
 ]
-ORIGEN_ANEXO_5 = "Libro de códigos ENE 2020, Anexo 5"
+ORIGEN_ANEXO_5 = "Códigos: Libro de códigos ENE 2020, Anexo 5; nombres: diccionario de variables Censo 2024"
 
 
 def generar_puente_actividades() -> pd.DataFrame:

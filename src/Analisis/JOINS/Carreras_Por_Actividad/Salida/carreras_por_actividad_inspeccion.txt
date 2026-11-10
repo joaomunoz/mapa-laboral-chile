@@ -5,7 +5,7 @@
 🔹 Dimensiones: 2162 filas | 33 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
 🔹 Registros Duplicados Absolutos: 0 (0.00%)
-🔹 Memoria Total Estimada: 1.63 MB
+🔹 Memoria Total Estimada: 1.66 MB
 
 🔬 MATRIZ DE CALIDAD POR COLUMNA:
 -------------------------------------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   
 -------------------------------------------------------------------------------------------------------------------
 actividad_caenes               | int64        | 0        | 0.00   % | 21       | 0               | 0.017    MB
 actividad_ciiu                 | object       | 0        | 0.00   % | 21       | 0               | 0.103    MB
-actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.257    MB
+actividad_glosa                | object       | 0        | 0.00   % | 21       | 0               | 0.283    MB
 carrera_generica               | object       | 0        | 0.00   % | 189      | 0               | 0.158    MB
 nivel_titulo                   | object       | 0        | 0.00   % | 2        | 0               | 0.121    MB
 area_cine                      | object       | 0        | 0.00   % | 10       | 0               | 0.237    MB
