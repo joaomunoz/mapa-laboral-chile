@@ -32,7 +32,7 @@ function pintarResumen(){
   p.setAttribute("aria-label",`${DATOS.regiones[r]}: mayor CL en ${a.corto}, ${d.txt}`);p.setAttribute("aria-pressed",false)});
  document.getElementById("contorno").setAttribute("d","");
  document.getElementById("lectura").innerHTML=`<strong>${num(POB.poblacion_total)}</strong> habitantes · ${num(ch.total)} de 15 años o más · Tasa de ocupación <strong>${num(ch.pct_trabajan,1)}%</strong>`;
- document.getElementById("n-lista").textContent="Primero, la actividad con mayor CL; debajo, la que tiene más ocupados. Elige una región para ver sus valores.";
+ document.getElementById("n-lista").textContent="Primero, la actividad con mayor CL y su valor; debajo, la que tiene más ocupados. Elige una región para ver sus valores.";
  const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
  const rm=POB.regiones[13],sx=POB.sexo,cl=r=>RES.regiones[r].txt;
  const principal=document.getElementById("principal");principal.hidden=false;document.getElementById("kpis-t").hidden=false;document.getElementById("cabecera").classList.add("con-resumen");
@@ -61,8 +61,8 @@ function pintarResumen(){
    `Total región: ${num(POB.regiones[r].lugar_trabajo)} (${num(POB.regiones[r].pct_lugar_trabajo,1)}%).`;
   return `<button data-r="${r}" class="fila-resumen" aria-pressed="false" title="${esc(valores)}" aria-label="${esc(nomReg(r)+". "+valores+" CL "+d.txt)}">`+
    `<i class="franja${d.suave?" suave":""}" style="background:var(--k${RES.colores[d.ciiu]})"></i>`+
-   `<span>${nomReg(r)}<small class="r-cl">${esc(a.corto)}</small><small>Más ocupados: ${esc(ap.corto)}</small></span>`+
-   `<span class="v">CL ${d.txt}</span></button>`}).join("");
+   // El CL va bajo su actividad: al final de la tarjeta se leía como el CL de la actividad con más ocupados.
+   `<span>${nomReg(r)}<small class="r-cl">${esc(a.corto)}</small><span class="v">CL ${d.txt}</span><small>Más ocupados: ${esc(ap.corto)}</small></span></button>`}).join("");
  document.querySelectorAll("#lista button").forEach(b=>b.onclick=()=>{const r=Number(b.dataset.r);act=porCiiu(RES.regiones[r].ciiu);sel.value=act.ciiu;reg=r;ficha=null;pintar();mostrarDetalle()});
  detalle();
 }
@@ -81,7 +81,7 @@ function pintar(){
  const orden=Object.entries(act.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>ordenar(a[1],b[1]));
  document.getElementById("anotaciones").innerHTML="";document.getElementById("principal").hidden=true;document.getElementById("kpis-t").hidden=true;document.getElementById("cabecera").classList.remove("con-resumen");
  const max=orden[0][1].peso??1,mejor=orden[0],conc=orden.filter(([,d])=>d.lectura==="concentra"),mp=act.nacional.mas_personas;
- document.getElementById("lectura").innerHTML=`<strong>${esc(act.glosa)}:</strong> mayor CL en <strong>${nomReg(mejor[0])}</strong>, `+
+ document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${nomReg(mejor[0])}</strong>, `+
   `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${nomReg(mp.r)}</strong> (${num(mp.n)}). `+
   (conc.length===0?"Ninguna región con CL de 1,2 o más.":conc.length===1?"1 región con CL de 1,2 o más.":conc.length+" regiones con CL de 1,2 o más.");
  document.getElementById("lista").innerHTML=

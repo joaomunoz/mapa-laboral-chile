@@ -21,7 +21,7 @@ function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return 
  return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${enMiles(f.inf[0])} de sus ocupados son informales (${num(f.inf[1],1)}%) y ${enMiles(f.for[0])} formales (${num(f.for[1],1)}%); `+
   `en Chile, ${num(FOR.chile.inf[1],1)}% y ${num(FOR.chile.for[1],1)}%.${f.ind==null?"":` ${enMiles(f.ind[0])} son independientes (${num(f.ind[1],1)}%).`}</p>`}
 function vistaChile(){const n=act.nacional;
- return `<h2>Chile · ${esc(act.glosa)}</h2><div class="nota">Censo 2024.</div>
+ return `<h2>Chile · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024.</div>
  <div class="datos"><div class="dato"><b>${vp(n.ocupados,act.pct_nacional)}</b><span>ocupados (participación), según lugar de trabajo</span></div>
  <div class="dato"><b>${n.conc}</b><span>${n.conc===1?"región con CL de 1,2 o más":"regiones con CL de 1,2 o más"}</span></div>`+
   // Las cantidades por sexo viven aquí: el gráfico del resumen las muestra solo al pasar el mouse.
