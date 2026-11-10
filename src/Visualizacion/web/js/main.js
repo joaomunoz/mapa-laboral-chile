@@ -14,6 +14,8 @@ const svg=`<svg viewBox="-4 -4 ${GEO.ancho+8} ${GEO.alto+8}" role="group" aria-l
  DATOS.orden.map(r=>`<path class="region" data-r="${r}" d="${GEO.trazados[r]}" tabindex="0" role="button" fill-rule="evenodd"></path>`).join("")+
  '<path class="contorno" id="contorno" aria-hidden="true"></path><g id="anotaciones" aria-hidden="true"></g></svg>';
 document.getElementById("mapa").innerHTML=svg;
+// El glosario es HTML fijo: la cifra se completa aquí porque viene de los datos.
+document.getElementById("genero-suprimido").textContent=num(POB.genero_ocupados.suprimido);
 document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
  p.onclick=()=>{if(!act){act=porCiiu(RES.regiones[r].ciiu);sel.value=act.ciiu}reg=r;ficha=null;pintar();mostrarDetalle()};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();p.onclick()}};
  p.onmousemove=e=>{

@@ -128,6 +128,8 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
  const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
  return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
  <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
+  // Sin esta aclaración, los 9,4 millones de ocupados de la ENE parecen contradecir los 8,3 millones del Censo de las pestañas anteriores.
+  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan. `+
   `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
   `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
@@ -208,7 +210,7 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
   const tasas=`desocupación ${num(tasa(x),1)}%, participación ${num(x.tasa_participacion,1)}%`;
   return `<${tag} class="sn-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
    `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
-   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
+   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · tasa de participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
  return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por región</strong></span>`+
   partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+
   fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
@@ -260,7 +262,7 @@ function barrasNivel(){const partes=[["ocupados","Ocupados","s-trabajan"],["deso
   const texto=partes.map(([c,n])=>`${n.toLowerCase()} ${num(x[c])} (${num(pc(x[c]),1)}%)`),tasas=`desocupación ${num(x.tasa_desocupacion,1)}%, participación ${num(x.tasa_participacion,1)}%`;
   return `<div class="sn-fila" role="img" tabindex="0" aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
    `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
-   `<span class="sn-tasas">Desocupación <b>${num(x.tasa_desocupacion,1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></div>`};
+   `<span class="sn-tasas">Desocupación <b>${num(x.tasa_desocupacion,1)}%</b> · tasa de participación <b>${num(x.tasa_participacion,1)}%</b></span></div>`};
  return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por nivel de estudios, Chile</strong></span>`+
   partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+NIVELES.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada nivel. Junto a cada barra, las tasas: desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}

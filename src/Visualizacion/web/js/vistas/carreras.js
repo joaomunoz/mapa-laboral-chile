@@ -5,7 +5,8 @@ Carreras afines de la actividad y ficha de cada carrera.
 */
 // Las carreras van bajo su nivel, junto a los ocupados de ese nivel en el lugar elegido: así se ve a cuánta gente
 // se refiere cada lista y que las carreras no describen a quienes no tienen título superior. El Censo no trae la
-// carrera, por eso la nota aclara que esos ocupados no son titulados de las carreras listadas.
+// carrera, por eso la nota aclara que esos ocupados no son titulados de las carreras listadas. El lugar y la fuente
+// van en la misma fila y en la columna: la cifra regional del Censo quedaba junto a la nacional de la CASEN y se leían como una sola.
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
  const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
@@ -14,8 +15,8 @@ function bloqueCarreras(){
   `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
  if(act.afines.length){
   h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados que trabajan, % en esta actividad</th>`+
-   `<th class="n">Titulados que trabajan en la actividad, en Chile</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
-   const f=filas[i],grupo=`<tr class="grupo"><td colspan="3">${NIVEL_GRUPO[k]} <span class="nota">· ${num(f[0])} ocupados (${num(f[1],1)}%)</span></td></tr>`;
+   `<th class="n">Titulados que trabajan en la actividad, en todo Chile (CASEN)</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
+   const f=filas[i],grupo=`<tr class="grupo"><td colspan="3">${NIVEL_GRUPO[k]} <span class="nota">· en ${lugar}, ${num(f[0])} ocupados de ${esc(act.corto)} con este nivel (${num(f[1],1)}%; Censo)</span></td></tr>`;
    if(k==="Sin_titulo")return grupo+`<tr><td colspan="3" class="nota">Las carreras afines no describen a este grupo.</td></tr>`;
    const cs=act.afines.filter(c=>DATOS.fichas[c.c].nivel===k);
    return grupo+(cs.length?cs.map(c=>

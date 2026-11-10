@@ -200,7 +200,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
 /* Trabajo por región. Las filas de región son botones: abren su vista. */
 button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:left;width:100%;cursor:pointer}.sn-region .sn-nombre{color:var(--acento)}
-.graf-sn .sn-tasas{min-width:21.5em}.sn-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}.sn-total .sn-tasas{font-weight:400}
+.graf-sn .sn-tasas{min-width:25em}.sn-total{font-weight:700;border-bottom:1px solid var(--eje);border-radius:4px 4px 0 0;margin-bottom:4px;padding-bottom:6px}.sn-total .sn-tasas{font-weight:400}
 .gs-leyenda i.s-sin-dato{border-radius:2px}
 .recibe{background:var(--recibe)}.entrega{background:var(--entrega)}.gs-leyenda i.recibe,.gs-leyenda i.entrega{border-radius:2px}
 .tr-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px)}.tr-barra{margin:0 4em 0 1em}
@@ -308,7 +308,7 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 </ul>
 <p><strong>Otros</strong></p>
 <ul>
-<li><strong>Hombres y mujeres:</strong> Variable sexo del Censo, que solo registra esas dos categorías. En Actividades, el % es sobre los ocupados de cada actividad. La identidad de género se mide aparte y está suprimida para ${num(POB.genero_ocupados.suprimido)} ocupados, por lo que no se abre por actividad.</li>
+<li><strong>Hombres y mujeres:</strong> Variable sexo del Censo, que solo registra esas dos categorías. En Actividades, el % es sobre los ocupados de cada actividad. La identidad de género se mide aparte y está suprimida para <span id="genero-suprimido"></span> ocupados, por lo que no se abre por actividad.</li>
 <li><strong>Poco fiable:</strong> Dato de encuesta con coeficiente de variación entre 15 y 30: se muestra, pero debe leerse con cautela.</li>
 </ul>
 </details>
@@ -572,6 +572,8 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
  const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
  return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
  <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
+  // Sin esta aclaración, los 9,4 millones de ocupados de la ENE parecen contradecir los 8,3 millones del Censo de las pestañas anteriores.
+  `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan. `+
   `Independiente: empleador o cuenta propia. Asalariado: sector privado, público o servicio doméstico.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
   `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
@@ -652,7 +654,7 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
   const tasas=`desocupación ${num(tasa(x),1)}%, participación ${num(x.tasa_participacion,1)}%`;
   return `<${tag} class="sn-fila${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
    `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
-   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
+   `<span class="sn-tasas">Desocupación <b>${num(tasa(x),1)}%</b> · tasa de participación <b>${num(x.tasa_participacion,1)}%</b></span></${tag}>`};
  return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por región</strong></span>`+
   partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+
   fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
@@ -704,7 +706,7 @@ function barrasNivel(){const partes=[["ocupados","Ocupados","s-trabajan"],["deso
   const texto=partes.map(([c,n])=>`${n.toLowerCase()} ${num(x[c])} (${num(pc(x[c]),1)}%)`),tasas=`desocupación ${num(x.tasa_desocupacion,1)}%, participación ${num(x.tasa_participacion,1)}%`;
   return `<div class="sn-fila" role="img" tabindex="0" aria-label="${t}: ${texto.join(", ")}; ${tasas}" data-tip="${`<strong>${t}</strong><br>${texto.join("<br>")}`.replace(/"/g,"&quot;")}">`+
    `<span class="sn-nombre">${t}</span><span class="sn-barra" aria-hidden="true">${partes.map(([c,,k])=>`<i class="${k}" style="flex:${x[c]} 0 0">${pc(x[c])>=9?`${num(pc(x[c]),0)}%`:""}</i>`).join("")}</span>`+
-   `<span class="sn-tasas">Desocupación <b>${num(x.tasa_desocupacion,1)}%</b> · participación <b>${num(x.tasa_participacion,1)}%</b></span></div>`};
+   `<span class="sn-tasas">Desocupación <b>${num(x.tasa_desocupacion,1)}%</b> · tasa de participación <b>${num(x.tasa_participacion,1)}%</b></span></div>`};
  return `<figure class="graf-sn" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Situación laboral por nivel de estudios, Chile</strong></span>`+
   partes.map(([,n,k])=>`<span><i class="${k}"></i>${n}</span>`).join("")+`</figcaption>`+NIVELES.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada nivel. Junto a cada barra, las tasas: desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
@@ -887,7 +889,8 @@ function vistaRegion(){
  return h}
 // Las carreras van bajo su nivel, junto a los ocupados de ese nivel en el lugar elegido: así se ve a cuánta gente
 // se refiere cada lista y que las carreras no describen a quienes no tienen título superior. El Censo no trae la
-// carrera, por eso la nota aclara que esos ocupados no son titulados de las carreras listadas.
+// carrera, por eso la nota aclara que esos ocupados no son titulados de las carreras listadas. El lugar y la fuente
+// van en la misma fila y en la columna: la cifra regional del Censo quedaba junto a la nacional de la CASEN y se leían como una sola.
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
  const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
@@ -896,8 +899,8 @@ function bloqueCarreras(){
   `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
  if(act.afines.length){
   h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados que trabajan, % en esta actividad</th>`+
-   `<th class="n">Titulados que trabajan en la actividad, en Chile</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
-   const f=filas[i],grupo=`<tr class="grupo"><td colspan="3">${NIVEL_GRUPO[k]} <span class="nota">· ${num(f[0])} ocupados (${num(f[1],1)}%)</span></td></tr>`;
+   `<th class="n">Titulados que trabajan en la actividad, en todo Chile (CASEN)</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
+   const f=filas[i],grupo=`<tr class="grupo"><td colspan="3">${NIVEL_GRUPO[k]} <span class="nota">· en ${lugar}, ${num(f[0])} ocupados de ${esc(act.corto)} con este nivel (${num(f[1],1)}%; Censo)</span></td></tr>`;
    if(k==="Sin_titulo")return grupo+`<tr><td colspan="3" class="nota">Las carreras afines no describen a este grupo.</td></tr>`;
    const cs=act.afines.filter(c=>DATOS.fichas[c.c].nivel===k);
    return grupo+(cs.length?cs.map(c=>
@@ -972,6 +975,8 @@ const svg=`<svg viewBox="-4 -4 ${GEO.ancho+8} ${GEO.alto+8}" role="group" aria-l
  DATOS.orden.map(r=>`<path class="region" data-r="${r}" d="${GEO.trazados[r]}" tabindex="0" role="button" fill-rule="evenodd"></path>`).join("")+
  '<path class="contorno" id="contorno" aria-hidden="true"></path><g id="anotaciones" aria-hidden="true"></g></svg>';
 document.getElementById("mapa").innerHTML=svg;
+// El glosario es HTML fijo: la cifra se completa aquí porque viene de los datos.
+document.getElementById("genero-suprimido").textContent=num(POB.genero_ocupados.suprimido);
 document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
  p.onclick=()=>{if(!act){act=porCiiu(RES.regiones[r].ciiu);sel.value=act.ciiu}reg=r;ficha=null;pintar();mostrarDetalle()};p.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();p.onclick()}};
  p.onmousemove=e=>{
