@@ -136,6 +136,12 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Estudios: los niveles suman el total y su tasa coincide con la tabla regional": sum(d["ocupados"] for d in datos["estudios"]["niveles"].values()) == datos["estudios"]["total"] and all(datos["estudios"]["niveles"][n]["tasa_desocupacion"] == d["tasa"] for n, d in datos["niveles_chile"].items()),
         "Estudios: mujeres 46,5% y hombres 34,6% de los ocupados con título": datos["estudios"]["sexo"] == {"hombres": 34.6, "mujeres": 46.5},
         # La fila de Chile del gráfico por región se suma desde las personas: debe calzar con las cifras de cada nivel.
+        # "No la explica la edad" (tarjeta y Estudios y trabajo): las 16 regiones con menor desocupación con título en cada
+        # tramo de 25 a 64; Chile de 8,7/11,3 (25-34) a 5,3/8,0 (55-64); al revés de 15 a 24; Aysén con 20% sin edad.
+        "Estudios por edad: 16 regiones con título menor en cada tramo de 25 a 64; Chile 8,7/11,3 y 5,3/8,0; al revés de 15 a 24; Aysén 20% sin edad": (lambda d: (
+            d["regiones_igual_edad"] == 16 and d["chile"]["25-34"] == [8.7, 11.3] and d["chile"]["55-64"] == [5.3, 8.0]
+            and d["chile"]["15-24"][0] > d["chile"]["15-24"][1] and d["sin_edad"] == ["11", 20, 3.9]
+            and all(v[0] < v[1] for t, v in d["chile"].items() if t not in ("15-24",))))(datos["estudios"]["edad"]),
         "Estudios: Chile 6,8% con título y 9,7% sin título, igual que sumar los niveles": (lambda e: e["desocupacion_titulo_chile"] == [6.8, 9.7]
             and round(100 * (e["niveles"]["Profesional"]["desocupados"] + e["niveles"]["Tecnico"]["desocupados"]) / sum(e["niveles"][n]["ocupados"] + e["niveles"][n]["desocupados"] for n in ("Profesional", "Tecnico")), 1) == 6.8
             and e["desocupacion_titulo_chile"][1] == e["niveles"]["Sin_titulo"]["tasa_desocupacion"])(datos["estudios"]),

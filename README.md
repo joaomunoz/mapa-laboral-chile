@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una), el área de estudio de los titulados de cada actividad y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 433 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 434 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 
@@ -17,7 +17,7 @@ La vista inicial resume la población, las 20 actividades (con un gráfico de ho
 - **Concentración:** 42,1% de los ocupados trabaja en la Metropolitana.
 - **Especialización:** 13 de 16 regiones tienen su mayor CL en minería, agricultura o administración pública, aunque en 12 la actividad con más ocupados es Comercio.
 - **Estudios:** 4 de cada 10 ocupados (39,8%) tiene título técnico o profesional. Por actividad, va de 1 de cada 10 en Hogares como empleadores (9,9%) a 8 de cada 10 en Servicios profesionales (78,7%).
-- **Estudios y trabajo:** en las 16 regiones, la tasa de desocupación es menor con título técnico o profesional que sin título superior. En Chile es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior.
+- **Estudios y trabajo:** en las 16 regiones, la tasa de desocupación es menor con título técnico o profesional que sin título superior. En Chile es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior. No la explica la edad: se mantiene en cada tramo de 25 a 64 años, en las 16 regiones (de 25 a 34, 8,7% con título y 11,3% sin título); de 15 a 24 es al revés, con pocos titulados.
 - **Sexo:** la tasa de participación es 69,7% en hombres y 50,2% en mujeres. Entre los ocupados, tiene título 46,5% de las mujeres y 34,6% de los hombres.
 
 **Según la CASEN 2024:**
@@ -95,6 +95,7 @@ flowchart TD
     je["concentracion_region_actividad<br>CL según la ENE, como contraste<br>peso_relativo, fiabilidad"]
     jc["concentracion_region_actividad_censo<br>Ocupados y CL por región y actividad<br>ocupados, pct_en_region, pct_nacional, peso_relativo (CL), ene_peso_relativo"]
     jn["fuerza_trabajo_region_nivel<br>Situación laboral por región y nivel de estudios<br>ocupados_residencia, desocupados, fuera_fuerza_trabajo, tasa_desocupacion"]
+    jt["fuerza_trabajo_titulo_edad<br>Desocupación con y sin título por región y tramo de edad<br>con_titulo, tramo_edad, ocupados, desocupados, tasa_desocupacion"]
     jf["formalidad_ocupados<br>Asalariado o independiente, y formal o informal, según ENE 2026<br>tasa_informalidad, pct_independientes, fiabilidad_informalidad"]
     jv["evolucion_desocupacion<br>Cambio de la desocupación entre 2024 y 2026, según ENE<br>tasa_2024, tasa_2026, diferencia_pp, lectura"]
     ja["areas_por_actividad<br>Áreas de estudio de los titulados en cada actividad<br>area_cine, pct_en_actividad"]
@@ -118,12 +119,13 @@ flowchart TD
   ep & p1 --> je
   cp & p1 & je --> jc
   cp & ep --> jn
+  censo & jn --> jt
   ep --> jv
   ep & p1 --> jf
   kp & p1 & p5 & tp --> ja
   p9 & p5 & tp & mp & kp --> jk
 
-  jc & jn & jv & jf & ja & jk & cp & cs & geo --> gen
+  jc & jn & jt & jv & jf & ja & jk & cp & cs & geo --> gen
   gen --> out
 ```
 
@@ -229,7 +231,7 @@ done
 
 # 3. Tablas del mapa, en este orden
 $PY src/Analisis/Calculos_control/ocupados_region_actividad/crosswalk.py
-for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Evolucion_Desocupacion Formalidad_Ocupados; do
+for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Fuerza_Trabajo_Titulo_Edad Evolucion_Desocupacion Formalidad_Ocupados; do
   $PY src/Analisis/JOINS/$t/crosswalk.py
 done
 

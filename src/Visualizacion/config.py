@@ -19,6 +19,7 @@ RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "co
 RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"
 RUTA_CARRERAS = DIR_JOINS / "Carreras_Por_Actividad" / "Salida" / "carreras_por_actividad.csv"
 RUTA_NIVELES = DIR_JOINS / "Fuerza_Trabajo_Region_Nivel" / "Salida" / "fuerza_trabajo_region_nivel.csv"
+RUTA_TITULO_EDAD = DIR_JOINS / "Fuerza_Trabajo_Titulo_Edad" / "Salida" / "fuerza_trabajo_titulo_edad.csv"
 RUTA_EVOLUCION = DIR_JOINS / "Evolucion_Desocupacion" / "Salida" / "evolucion_desocupacion.csv"
 RUTA_FORMALIDAD = DIR_JOINS / "Formalidad_Ocupados" / "Salida" / "formalidad_ocupados.csv"
 

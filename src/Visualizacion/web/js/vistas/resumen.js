@@ -16,6 +16,12 @@ const AVISO_DESLIZA=`<p class="nota evc-aviso" hidden>Desliza el gráfico hacia 
 // El título de la sección ya dice en cuántas regiones es menor: el párrafo da solo los dos rangos.
 function desocTitulo(){const e=extremosDesoc();
  return `Con título técnico o profesional, la tasa de desocupación va ${e.con}; sin título superior, ${e.sin}.`}
+// La ventaja del título a igual edad (Censo 2024): sin esto, la diferencia podría venir de que los sin título son más
+// jóvenes. Se compara de 25 a 64; de 15 a 24 es al revés y se dice, para que no se generalice. La tarjeta usa edadIgual().
+const edadIgual=()=>{const d=EST.edad;return `No la explica la edad: se mantiene en cada tramo de 25 a 64 años, en ${d.regiones_igual_edad===16?"las 16 regiones":`${d.regiones_igual_edad} de 16 regiones`}`};
+function edadDesoc(){const d=EST.edad,c=d.chile,f=t=>`${num(c[t][0],1)}% con título y ${num(c[t][1],1)}% sin título`;
+ return `${edadIgual()}. En Chile, de 25 a 34 años, ${f("25-34")}; de 55 a 64, ${f("55-64")}. `+
+  `De 15 a 24 es al revés (${f("15-24")}), pero a esa edad están solo el ${num(d.pct_jovenes_con,0)}% de los activos con título.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
 // "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
@@ -512,12 +518,13 @@ function vistaResumen(){
  <div class="aviso">Incluye a jóvenes que aún estudian: el % con título depende de la edad de la población de cada región.</div>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
- <p style="margin:8px 0 0">${desocTitulo()}</p>
+ <p style="margin:8px 0 0">${desocTitulo()} ${edadDesoc()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
  ${barrasNivel()}
  ${columnasTitulo()}
  ${tablaEstudios()}
- <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
+ <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: no las explica la edad, pero pueden influir otras cosas. `+
+  `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${nomReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
  <hr class="separador">${banda("CASEN 2024")}
  ${areasHtml()}
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}

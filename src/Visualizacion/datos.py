@@ -14,7 +14,7 @@ import pandas as pd
 from config import AFINIDADES_VISIBLES, AREAS_CORTAS, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, PERIODOS, TRAMOS
 from formato import nombre_legible, redondear, texto_peso
 from indicadores import (
-    agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, formalidad, rango_ficha, resumen_estudios,
+    agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, formalidad, rango_ficha, resumen_estudios, titulo_edad,
     resumen_general, resumen_nacional, sexo_por_actividad, sexo_por_nivel, situacion_poblacion,
 )
 
@@ -83,6 +83,7 @@ def construir_datos(tablas: dict[str, pd.DataFrame]) -> dict:
     for n, d in niveles_chile.items():
         d["sexo"] = nivel_sexo_chile[n]
     estudios = resumen_estudios(niveles, nivel_sexo_chile)
+    estudios["edad"] = titulo_edad(tablas["titulo_edad"])
     # La tabla educacional exige nivel y situación laboral: la página informa por separado a quienes les falta cada uno.
     sin_nivel = procesado["nivel_titulo"].isna()
     estudios["excluidos"] = {"sin_nivel": int(procesado.loc[sin_nivel, "personas"].sum()),

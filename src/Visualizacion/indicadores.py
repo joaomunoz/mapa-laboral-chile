@@ -145,6 +145,27 @@ def rango_ficha(f: pd.Series, columna: str, decimales: int) -> list | None:
     return None if pd.isna(lo) else [redondear(lo, decimales), redondear(hi, decimales)]
 
 
+def titulo_edad(t: pd.DataFrame) -> dict:
+    """Desocupación con y sin título por tramo de edad (Censo 2024): muestra si la ventaja del título se mantiene a igual edad.
+
+    chile: {tramo: [con título, sin título]}; regiones_igual_edad: regiones con menor desocupación con título en los 4
+    tramos de 25 a 64; sin_edad: [región, %] con más activos sin edad en el Censo, que quedan fuera de la comparación, y el mayor % de las demás.
+    """
+    tasa = lambda g: {f["tramo_edad"]: f["tasa_desocupacion"] for _, f in g.iterrows()}
+    chile = t[t["codigo_region"].isna()]
+    con, sin = tasa(chile[chile["con_titulo"]]), tasa(chile[~chile["con_titulo"]])
+    tramos = ["15-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+    reg = t[t["codigo_region"].notna() & t["tramo_edad"].isin(tramos[1:5])].pivot_table(index=["codigo_region", "tramo_edad"], columns="con_titulo", values="tasa_desocupacion")
+    activos = t[t["codigo_region"].notna()].assign(a=t["ocupados"] + t["desocupados"])
+    pct = 100 * activos[activos["tramo_edad"] == "Sin_edad"].groupby("codigo_region")["a"].sum() / activos.groupby("codigo_region")["a"].sum()
+    activos_con = chile[chile["con_titulo"] & (chile["tramo_edad"] != "Sin_edad")].assign(a=lambda d: d["ocupados"] + d["desocupados"]).set_index("tramo_edad")["a"]
+    return {"chile": {tr: [redondear(con[tr], 1), redondear(sin[tr], 1)] for tr in tramos},
+            "regiones_igual_edad": int((reg[True] < reg[False]).groupby(level="codigo_region").all().sum()),
+            "sin_edad": [str(int(pct.idxmax())), redondear(pct.max(), 0), redondear(pct.drop(pct.idxmax()).max(), 1)],
+            # % de los activos con título que tiene de 15 a 24: dice por qué ese tramo no cambia la lectura.
+            "pct_jovenes_con": redondear(100 * activos_con["15-24"] / activos_con.sum(), 0)}
+
+
 def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     """Relación entre nivel de estudios y trabajo en Chile, según residencia y con nivel informado. Describe, no explica: la edad también influye."""
     suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum()

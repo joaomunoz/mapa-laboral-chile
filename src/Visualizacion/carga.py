@@ -14,7 +14,7 @@ import pandas as pd
 
 from config import (
     ARCHIVOS_CSS, ARCHIVOS_JS, DIR_WEB,
-    RUTA_AREAS, RUTA_CARRERAS, RUTA_CENSO, RUTA_CENSO_PROCESADO, RUTA_CENSO_SEXO, RUTA_EVOLUCION, RUTA_FORMALIDAD, RUTA_NIVELES, RUTA_PLANTILLA,
+    RUTA_AREAS, RUTA_CARRERAS, RUTA_CENSO, RUTA_CENSO_PROCESADO, RUTA_CENSO_SEXO, RUTA_EVOLUCION, RUTA_FORMALIDAD, RUTA_NIVELES, RUTA_PLANTILLA, RUTA_TITULO_EDAD,
     RUTA_REGIONES, RUTA_SALIDA,
 )
 
@@ -22,7 +22,8 @@ from config import (
 def cargar_tablas() -> dict[str, pd.DataFrame]:
     """Tablas del Censo y de los cruces que arman los datos de la página."""
     rutas = {"censo": RUTA_CENSO, "procesado": RUTA_CENSO_PROCESADO, "por_sexo": RUTA_CENSO_SEXO, "areas": RUTA_AREAS,
-             "carreras": RUTA_CARRERAS, "niveles": RUTA_NIVELES, "evolucion": RUTA_EVOLUCION, "formalidad": RUTA_FORMALIDAD}
+             "carreras": RUTA_CARRERAS, "niveles": RUTA_NIVELES, "evolucion": RUTA_EVOLUCION, "formalidad": RUTA_FORMALIDAD,
+             "titulo_edad": RUTA_TITULO_EDAD}
     return {nombre: pd.read_csv(ruta, sep=";") for nombre, ruta in rutas.items()}
 
 
