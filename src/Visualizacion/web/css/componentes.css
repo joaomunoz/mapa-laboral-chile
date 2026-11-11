@@ -204,7 +204,6 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .fo-paneles{grid-template-columns:minmax(0,1fr)}.fo-panel .fo-fila{grid-template-columns:minmax(0,11rem) minmax(0,520px) 7.6em}
 .fo-barra i.fo-for{justify-content:flex-end;padding:0 5px 0 0}
 .gs-cab .fo-miles{white-space:normal}
-.pct-bajo{color:var(--t2);font-size:12px;font-weight:400}
 /* Área de estudio por actividad. */
 .ar-fila{grid-template-columns:minmax(0,20rem) minmax(0,420px) 7em}.ar-si{background:var(--area)}.ar-no{background:var(--area-no)}
 .gs-leyenda i.ar-si,.gs-leyenda i.ar-no{border-radius:2px}

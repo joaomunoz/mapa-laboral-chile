@@ -20,6 +20,9 @@ from config import CLASE_NEUTRA, COLOR_RESUMEN, CORTES_ROJO, DIFERENCIA_AREA_MAX
 from formato import de_cada_10
 from indicadores import clase_color
 
+# Tramos donde la página afirma que la diferencia por título "se mantiene a igual edad"; 18-24 se muestra pero no entra.
+IGUAL_EDAD = ["25-34", "35-44", "45-54", "55-64"]
+
 log = logging.getLogger(__name__)
 
 
@@ -180,6 +183,27 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         # La tabla redondea cada casilla: se tolera 0,2 de diferencia al sumar cinco cifras de un decimal.
         "Formalidad: los repartos suman 100 y la informalidad es la suma de sus casillas": all(abs(d["af"][1] + d["ai"][1] + d["xf"][1] + d["xi"][1] + d["fam"][1] - 100) <= 0.2 and abs(d["ai"][1] + d["xi"][1] + d["fam"][1] - d["inf"][1]) <= 0.2
             for d in [datos["formalidad"]["chile"], *datos["formalidad"]["niveles"].values()] if d["fam"]),
+        # La frase "se mantiene a igual edad" de la sección se apoya en esto: 3 niveles x 4 tramos, y en cada
+        # tramo el rango de sin título queda entero sobre el de profesional.
+        "Formalidad: por edad, 5 tramos de 18 a 64 en asalariados e independientes; de 25 a 64, independientes fiables y sin título sobre profesional con todo el rango; ± 1,3 y 2,4 en los niveles": (lambda f, x: (
+            all(sorted(f["tramos"][g]) == ["Profesional", "Sin_titulo", "Tecnico"] and all(sorted(v) == ["18-24", "25-34", "35-44", "45-54", "55-64"] for v in f["tramos"][g].values()) for g in ("asa", "inx"))
+            and all(c[e][2] == "fiable" for c in x.values() for e in IGUAL_EDAD)
+            and all(x["Sin_titulo"][e][0] - x["Sin_titulo"][e][1] > x["Profesional"][e][0] + x["Profesional"][e][1] for e in IGUAL_EDAD)
+            and (f["niveles"]["Sin_titulo"]["inx_mas"], f["niveles"]["Profesional"]["inx_mas"]) == (1.3, 2.4)))(datos["formalidad"], datos["formalidad"]["tramos"]["inx"]),
+        # "La diferencia es mayor entre los de más edad" (tarjeta y sección): el rango de profesionales de 25-34 queda entero
+        # sobre el de 55-64, y la diferencia con sin título es mayor en 55-64. Si deja de cumplirse, la frase ya no es cierta.
+        "Formalidad: independientes profesionales de 25-34 sobre los de 55-64 con todo el rango, y diferencia con sin título mayor en 55-64": (lambda x: (
+            x["Profesional"]["25-34"][0] - x["Profesional"]["25-34"][1] > x["Profesional"]["55-64"][0] + x["Profesional"]["55-64"][1]
+            and x["Sin_titulo"]["55-64"][0] - x["Profesional"]["55-64"][0] > x["Sin_titulo"]["25-34"][0] - x["Profesional"]["25-34"][0]))(datos["formalidad"]["tramos"]["inx"]),
+        # La fila Chile de la tabla por edad está para comprobar que las filas cuadran: la nota dice que es su suma.
+        "Formalidad: por edad, las 6 filas (asalariados e independientes por nivel) suman la fila Chile (±6 por redondeo), y cada % informal es el de sus ocupados": (lambda f, ch: all(
+            abs(sum(f[g][n][e][i] for g in f for n in f[g]) - ch[e][i]) <= 6 for e in ch for i in (3, 4))
+            and all(abs(100 * c[4] / (c[3] + c[4]) - c[0]) <= 0.1 for c in [*ch.values(), *(f[g][n][e] for g in f for n in f[g] for e in f[g][n])]))(
+            datos["formalidad"]["tramos"], datos["formalidad"]["tramos_chile"]),
+        # La línea de cuadre de la tabla por edad: la tabla más lo que queda fuera da los formales e informales de Chile.
+        "Formalidad: la tabla por edad más 15-17, 65+ y sin nivel suman los asalariados e independientes formales e informales de Chile (±10)": (lambda f: all(
+            abs(sum(v[i] for v in f["tramos_chile"].values()) + sum(v[i - 3] for v in f["tramos_fuera"].values()) - tot) <= 10
+            for i, tot in ((3, f["chile"]["af"][0] + f["chile"]["xf"][0]), (4, f["chile"]["ai"][0] + f["chile"]["xi"][0]))))(datos["formalidad"]),
         "Formalidad: informales dentro de cada grupo, asalariados 16,4% e independientes 57,0% en Chile; independientes 22,6% profesional y 69,2% sin título": (lambda f: (f["chile"]["asa"][1], f["chile"]["inx"][1], f["niveles"]["Profesional"]["inx"][1], f["niveles"]["Sin_titulo"]["inx"][1]) == (16.4, 57.0, 22.6, 69.2))(datos["formalidad"]),
         "Formalidad: los ocupados de asalariados e independientes son la suma de sus casillas publicadas y cuadran con los ocupados": all(d["asa"][0] == d["af"][0] + d["ai"][0] and d["inx"][0] == d["xf"][0] + d["xi"][0] and abs(d["inx"][0] - d["ind"][0]) <= 1 and (d["fam"] is None or abs(d["asa"][0] + d["inx"][0] + d["fam"][0] - d["ocup"]) <= 2)
             for d in [datos["formalidad"]["chile"], *datos["formalidad"]["niveles"].values()]),

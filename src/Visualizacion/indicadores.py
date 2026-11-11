@@ -264,7 +264,13 @@ def formalidad(t: pd.DataFrame) -> dict:
                 # desde los % sin redondear; los ocupados son la suma de las dos casillas publicadas, para que el
                 # gráfico y "Ver cifras" muestren la misma cifra.
                 "asa": dentro(f, f["pct_asalariado_formal"], f["pct_asalariado_informal"]),
-                "inx": dentro(f, f["pct_independiente_formal"], f["pct_independiente_informal"])}
+                "inx": dentro(f, f["pct_independiente_formal"], f["pct_independiente_informal"]),
+                # Margen de error (±, 95%) de esos dos %: la tarjeta de informalidad los compara entre niveles.
+                "asa_mas": mas(f["pct_informal_asalariados"], f["cv_informal_asalariados"]),
+                "inx_mas": mas(f["pct_informal_independientes"], f["cv_informal_independientes"])}
+
+    def mas(pct, cv):
+        return redondear(1.96 * pct * cv / 100, 1)
 
     def dentro(f, formal, informal):
         return [par(f, formal)[0] + par(f, informal)[0], redondear(100 * informal / (formal + informal), 1)]
@@ -272,4 +278,20 @@ def formalidad(t: pd.DataFrame) -> dict:
     return {"chile": reparto(por("chile").iloc[0]),
             "niveles": {f["nivel_titulo"]: reparto(f) for _, f in por("nivel").iterrows()},
             "regiones": {str(int(f["codigo_region"])): base(f) for _, f in por("region").iterrows()},
-            "actividades": {f["actividad_ciiu"]: base(f) for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"}}
+            "actividades": {f["actividad_ciiu"]: base(f) for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"},
+            # Informalidad dentro de asalariados e independientes por nivel y tramo de edad, [% informal, ±, fiabilidad,
+            # ocupados formales, ocupados informales]: muestra que la diferencia por título se mantiene entre personas de la
+            # misma edad. Formal es su complemento. Los ocupados dejan comprobar que las filas suman la fila Chile.
+            "tramos": {g: {n: {f["tramo_edad"]: [redondear(f[f"pct_informal_{col}"], 1), mas(f[f"pct_informal_{col}"], f[f"cv_informal_{col}"]),
+                                                f[f"fiabilidad_informal_{col}"], par(f, f[f"pct_{tipo}_formal"])[0], par(f, f[f"pct_{tipo}_informal"])[0]]
+                                for _, f in t2.iterrows()}
+                           for n, t2 in por("nivel_edad").groupby("nivel_titulo")}
+                       for g, col, tipo in (("asa", "asalariados", "asalariado"), ("inx", "independientes", "independiente"))},
+            # Fila Chile de la tabla por edad, mismo formato: asalariados e independientes de los tres niveles juntos, medidos
+            # en el análisis sobre ese grupo (sin familiar ni sin nivel), para que sea la suma exacta de las filas y tenga su ±.
+            "tramos_chile": {f["tramo_edad"]: [redondear(f["tasa_informalidad"], 1), mas(f["tasa_informalidad"], f["cv_informalidad"]),
+                                               f["fiabilidad_informalidad"], par(f, 100 - f["tasa_informalidad"])[0], par(f, f["tasa_informalidad"])[0]]
+                             for _, f in por("edad").iterrows()},
+            # Lo que queda fuera de la tabla por edad, [formales, informales]: la nota lo suma para cuadrar con Chile.
+            "tramos_fuera": {("sin_nivel" if f["nivel_titulo"] == "Sin_informar" else f["tramo_edad"]):
+                             [par(f, 100 - f["tasa_informalidad"])[0], par(f, f["tasa_informalidad"])[0]] for _, f in por("edad_fuera").iterrows()}}

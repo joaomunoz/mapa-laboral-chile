@@ -61,7 +61,12 @@ function pintarResumen(){
    `Solo en ${ar.dos.map(({a})=>esc(a.corto)).join(" y en ")} se cumple en las dos direcciones. `+
    // Cada actividad con sus dos % en una frase: "respectivamente" obligaba a emparejar cifras. Construcción, el contraste,
    // queda en el párrafo de la sección, para que la tarjeta no doble en largo a las demás.
-   ar.dos.map(({a,x})=>`${esc(a.corto)}: ${num(x.pct,1)}% de sus titulados estudió ${esc(x.corto)}, y ${num(x.en_area,1)}% de los titulados de ${esc(x.corto)} trabaja ahí.`).join(" ")+" CASEN 2024."]]
+   ar.dos.map(({a,x})=>`${esc(a.corto)}: ${num(x.pct,1)}% de sus titulados estudió ${esc(x.corto)}, y ${num(x.en_area,1)}% de los titulados de ${esc(x.corto)} trabaja ahí.`).join(" ")+" CASEN 2024."],
+  // Misma cifra que el título de Formalidad: la brecha por título está en los independientes, no en los asalariados.
+  [`${num(FOR.niveles.Sin_titulo.inx[1],1)}%`,"de los independientes sin título superior tiene empleo informal",
+   // Tres frases, como las demás tarjetas: el rango por edad queda en la sección y aquí va solo lo que no está en otra
+   // parte del inicio, que la diferencia es mayor entre los de más edad. "15 años o más" ya está en la nota de la sección.
+   `Con título profesional, ${num(FOR.niveles.Profesional.inx[1],1)}%; ${brechaEdad().replace(/^L/,"l")}. En asalariados es menor: ${num(FOR.niveles.Sin_titulo.asa[1],1)}% y ${num(FOR.niveles.Profesional.asa[1],1)}%. ENE, ${PER.ene_actual}.`]]
   .map(([v,t,d])=>`<div class="kpi"><b>${v}</b><span class="kpi-t">${t}</span><span class="nota">${d}</span></div>`).join("");
  anotarMapa(NOTAS_MAPA=[[2,"izq","Norte","Minería",cl(2)],[7,"der","Centro-sur","Agricultura y pesca",cl(7)],[11,"der","Extremos","Administración pública",cl(11)]]);
  document.getElementById("lista").innerHTML=orden.map(([r,d])=>{

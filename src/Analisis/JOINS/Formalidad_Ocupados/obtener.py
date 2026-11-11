@@ -15,7 +15,7 @@ from comun.periodos import MESES_ACTUAL, RUTA_ENE_ACTUAL  # noqa: E402
 
 RUTA_PUENTE = DIR_ANALISIS / "Puentes_de_mapeo" / "Salida" / "P1_puente_actividades.csv"
 COLUMNAS = ["idrph", "mes", "codigo_region", "fact_cal", "cae_especifico", "cine11_1d", "categoria_ocupacion", "ocup_form",
-            "r_p_rev4cl_caenes", "estrato", "conglomerado"]
+            "r_p_rev4cl_caenes", "estrato", "conglomerado", "edad"]
 
 
 def cargar_ene() -> pd.DataFrame:

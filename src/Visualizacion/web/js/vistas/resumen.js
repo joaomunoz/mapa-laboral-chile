@@ -130,34 +130,67 @@ function graficoFormalidadRegion(){const c=FOR.chile,tasa=d=>d.inf[1];
   `<p class="nota" style="margin:2px 0 8px">% de los ocupados de la región, según residencia; a la derecha, el % de independientes, formales e informales. `+
   `Son estimaciones con muestra: una diferencia de uno o dos puntos entre regiones puede deberse a ella.</p>`}
 // Formalidad según ENE: dos ejes y no tres grupos, porque un independiente puede ser formal o informal.
+// Tramos de edad de la informalidad de independientes. La frase compara personas de la misma edad: así se ve que la
+// diferencia por título no viene de que los sin título sean más jóvenes o mayores. La tarjeta usa solo brechaEdad.
+const TRAMOS_FOR=["25-34","35-44","45-54","55-64"];
+// La tabla cubre de 18 a 64 años: 18-24 se muestra (marcado donde no es fiable) pero no entra en la frase de igual edad.
+// Fuera quedan 15-17 (muy pocos) y 65 o más (edad de jubilación); la nota de la tabla los suma para cuadrar con Chile.
+const TRAMOS_TABLA=["18-24",...TRAMOS_FOR];
+// Tabla por edad de formales o informales: Chile arriba (la suma de las filas), asalariados e independientes por nivel,
+// los tramos en columnas y el total de 18 a 64 al final, para cuadrar en las dos direcciones. Cada celda tiene un dato:
+// formal e informal en dos líneas de la misma celda confundían. El ± va al pasar el mouse: dentro de la celda, la tabla
+// de informales necesitaba 968 px y a 1400 px hay 860. Es el mismo para formal e informal.
+function tablaEdad(informal){const etq={poco_fiable:"poco fiable",no_fiable:"no fiable"};
+ const celda=([p,m,fi,nf,ni])=>`<td class="n" data-tip="Margen de error: ± ${num(m,1)} puntos (95%)">${num(informal?ni:nf)} (${num(informal?p:100-p,1)}%)${etq[fi]?` <span class="etiqueta">${etq[fi]}</span>`:""}</td>`;
+ const fila=(t,v,clase="")=>{const f=TRAMOS_TABLA.reduce((s,e)=>s+v[e][3],0),i=TRAMOS_TABLA.reduce((s,e)=>s+v[e][4],0),x=informal?i:f;
+  return `<tr class="${clase}"><td>${t}</td>${TRAMOS_TABLA.map(e=>celda(v[e])).join("")}<td class="n ini">${num(x)} (${num(100*x/(f+i),1)}%)</td></tr>`};
+ return `<div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:8px"><thead><tr><th>${informal?"Informales":"Formales"}<br><span class="nota">ocupados (% del grupo)</span></th>`+
+  `${TRAMOS_TABLA.map(e=>`<th class="n">${e} años</th>`).join("")}<th class="n ini">Total<br>18-64 años</th></tr></thead><tbody>`+fila("Chile",FOR.tramos_chile,"total")+
+  [["asa","Asalariados"],["inx","Independientes"]].map(([g,t])=>`<tr class="grupo"><td colspan="${2+TRAMOS_TABLA.length}">${t}</td></tr>`+
+   NIVELES.map(([k,tn])=>fila(tn,FOR.tramos[g][k])).join("")).join("")+`</tbody></table></div>`}
+// Línea de cuadre: la tabla de 18 a 64 más lo que queda fuera da los asalariados e independientes de la tabla por nivel.
+function cuadreEdad(informal){const i=informal?1:0,fu=FOR.tramos_fuera,c=FOR.chile,tab=TRAMOS_TABLA.reduce((s,e)=>s+FOR.tramos_chile[e][3+i],0);
+ const tot=informal?c.ai[0]+c.xi[0]:c.af[0]+c.xf[0],w=informal?"informales":"formales";
+ return `<p class="nota" style="margin:6px 0 0">Cuadre: los ${num(tab)} ${w} de la tabla, más ${num(fu["65+"][i])} de 65 años o más, ${num(fu["15-17"][i])} de 15 a 17 y ${num(fu.sin_nivel[i])} sin nivel de estudios informado, `+
+  `son los ${num(tot)} asalariados e independientes ${w} de Chile de la tabla por nivel${informal?`; su informal total suma además ${num(c.fam[0])} familiares no remunerados`:""}.</p>`}
+function edadFormalidad(){const r=k=>{const v=TRAMOS_FOR.map(e=>FOR.tramos.inx[k][e][0]);return `de ${num(Math.min(...v),0)}% a ${num(Math.max(...v),0)}%`};
+ return `Se mantiene a igual edad: entre los independientes de 25 a 64 años, en cada tramo de 10 años, sin título es informal ${r("Sin_titulo")}, y con título profesional, ${r("Profesional")}. ${brechaEdad()}.`}
+// Sin título casi no cambia con la edad; con título profesional es la mitad de 25-34 a 55-64 (los rangos no se cruzan, lo
+// controla la generación). Son personas distintas en cada tramo: dice "mayor entre los de más edad", no "baja con los años",
+// porque la encuesta no separa la edad de la generación. La tarjeta y la sección usan esta misma frase.
+function brechaEdad(){const t=FOR.tramos.inx,v=(k,e)=>num(t[k][e][0],0);
+ return `La diferencia es mayor entre los de más edad: de 25 a 34 años, ${v("Sin_titulo","25-34")}% frente a ${v("Profesional","25-34")}%; de 55 a 64, ${v("Sin_titulo","55-64")}% frente a ${v("Profesional","55-64")}%`}
+// Grupos de la tabla de "Ver cifras": los mismos tres del gráfico por nivel. Formal e informal van con su % dentro del grupo.
+const GRUPOS_FOR=[["Todos los ocupados",d=>[d.ocup,d.for,d.inf]],
+ ["Asalariados",d=>[d.asa[0],[d.af[0],100-d.asa[1]],[d.ai[0],d.asa[1]]]],["Independientes",d=>[d.inx[0],[d.xf[0],100-d.inx[1]],[d.xi[0],d.inx[1]]]]];
 function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r=>FOR.regiones[r].inf[1]);
  const celda=v=>`<td class="n">${v?vmil(v):"—"}</td>`;
- // Con cifras completas, la tabla por nivel (7 columnas) no cabía en pantalla: el % va bajo cada cifra.
- const celda2=v=>`<td class="n">${v?`${num(v[0])}<br><span class="pct-bajo">${num(v[1],1)}%</span>`:"—"}</td>`;
- const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${["af","ai","xf","xi","fam","for","inf"].map(x=>celda2(d[x])).join("")}</tr>`;
  const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
- return `${encabezado("sec-for","Formalidad",`Sin título superior, ${num(n.Sin_titulo.for[1],1)}% tiene empleo formal y ${num(n.Sin_titulo.inf[1],1)}% informal; con título profesional, ${num(n.Profesional.for[1],1)}% y ${num(n.Profesional.inf[1],1)}%`,true)}
- <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
+ return `${encabezado("sec-for","Formalidad",`${num(n.Sin_titulo.inx[1],1)}% de los independientes sin título superior tiene empleo informal; con título profesional, ${num(n.Profesional.inx[1],1)}%`,true)}
+ <div class="nota">Encuesta Nacional de Empleo (INE), ${PER.ene_actual}. Ocupados de 15 años o más, según región de residencia. Son estimaciones con muestra: las cifras tienen margen de error. `+
   // Sin esta aclaración, los 9,4 millones de ocupados de la ENE parecen contradecir los 8,3 millones del Censo de las pestañas anteriores.
   `Es otra fuente y otro período que el Censo 2024: estima ${enMiles(c.ocup)} de ocupados, frente a los ${enMiles(POB.chile.trabajan)} que contó el Censo, y sus cifras no se mezclan.</div>
  <p style="margin:8px 0 0">En Chile, ${enMiles(c.inf[0])} de ocupados son informales (${num(c.inf[1],1)}%) y ${enMiles(c.for[0])} formales (${num(c.for[1],1)}%). `+
   `Hay ${enMiles(c.asa[0])} de asalariados y ${enMiles(c.inx[0])} de independientes (${num(c.ind[1],1)}% de los ocupados). `+
+  `Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% es informal; con título profesional, ${num(n.Profesional.inf[1],1)}%. `+
+  // El título y la tarjeta dicen dónde está la diferencia: en asalariados la brecha por título es mucho menor.
+  `La diferencia está sobre todo en los independientes (${num(n.Sin_titulo.inx[1],1)}% ± ${num(n.Sin_titulo.inx_mas,1)} y ${num(n.Profesional.inx[1],1)}% ± ${num(n.Profesional.inx_mas,1)}); `+
+  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()} `+
   `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
  ${graficoFormalidadNivel()}
  ${graficoFormalidadRegion()}
  <details><summary>Ver cifras</summary>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel<br><span class="nota">ocupados (%)</span></th><th colspan="2" class="bloque ini">Asalariado</th><th colspan="2" class="bloque ini">Independiente</th>`+
-  `<th rowspan="2" class="n bloque ini">Familiar no remunerado</th><th colspan="2" class="bloque ini">En total</th></tr>`+
-  `<tr><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th><th class="n ini">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
-  fila("Chile",c,"total")+NIVELES.map(([k,t])=>fila(t,n[k],"")).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">Ocupados estimados (% de cada fila). Formal e informal en total suman 100; el familiar no remunerado siempre es informal y entra en el informal total.${
-  sinFam.length?` En ${sinFam.join(" y ")}, el familiar no remunerado no se muestra (—) porque son menos de 60 personas en la muestra: por eso ahí las cinco primeras columnas no llegan a 100, y el informal total es algo mayor que la suma de asalariado e independiente informal (la diferencia es ese familiar, menos de 0,5%).`:""} Estas diferencias no indican causa: la edad, por ejemplo, también influye.</p>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Nivel</th><th colspan="3" class="bloque ini">Asalariados</th><th colspan="3" class="bloque ini">Independientes</th></tr>`+
-  `<tr><th class="n ini">Total</th><th class="n">Formal</th><th class="n">Informal</th><th class="n ini">Total</th><th class="n">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
-  // Los ocupados formal e informal son los de la tabla de arriba; el % se calcula dentro del grupo y suma 100.
-  [["Chile",c,"total"],...NIVELES.map(([k,t])=>[t,n[k],""])].map(([t,d,k])=>`<tr class="${k}"><td>${t}</td>`+
-   [["asa","af","ai"],["inx","xf","xi"]].map(([g,f,i])=>`<td class="n">${num(d[g][0])}</td>${celda2([d[f][0],100-d[g][1]])}${celda2([d[i][0],d[g][1]])}`).join("")+`</tr>`).join("")+`</tbody></table></div>
- <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo): formal e informal suman 100 en asalariados y en independientes. Son los mismos ocupados de la tabla de arriba; cambia la base del %, que aquí es el grupo y no todos los ocupados.</p>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel<br><span class="nota">ocupados (% del grupo)</span></th><th class="n">Total</th><th class="n">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
+  // Un bloque por panel del gráfico, en el mismo orden, como la tabla por edad. Antes eran dos tablas con los mismos ocupados
+  // y % de bases distintas (todos los ocupados y el grupo), que se leían como cifras duplicadas; el reparto sobre el total no
+  // lo usa ningún gráfico. Los tres bloques lado a lado no cabían a 1400 px con la cifra y su % en una línea.
+  GRUPOS_FOR.map(([g,f])=>`<tr class="grupo"><td colspan="4">${g}</td></tr>`+[["Chile",c,"total"],...NIVELES.map(([k,t])=>[t,n[k],""])].map(([t,d,k])=>{
+   const [tot,fo,inf]=f(d);return `<tr class="${k}"><td>${t}</td><td class="n">${num(tot)}</td><td class="n">${vmil(fo)}</td><td class="n">${vmil(inf)}</td></tr>`}).join("")).join("")+`</tbody></table></div>
+ <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo): formal e informal suman 100 en cada uno. Todos los ocupados incluye al familiar no remunerado, que no es asalariado ni independiente y siempre es informal (${vmil(c.fam)} en Chile): por eso no es la suma de los otros dos. Chile incluye además ${num(c.ocup-NIVELES.reduce((s,[k])=>s+n[k].ocup,0))} ocupados sin nivel de estudios informado: por eso supera por poco la suma de los niveles.${
+  sinFam.length?` En ${sinFam.join(" y ")} no se muestra aparte porque son menos de 60 personas en la muestra, pero está en el total.`:""} Estas diferencias no indican causa: en los independientes no las explica la edad (ver la tabla por edad), pero pueden influir otras cosas, como el rubro.</p>
+ ${tablaEdad(false)}${cuadreEdad(false)}
+ ${tablaEdad(true)}${cuadreEdad(true)}
+ <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo, nivel y edad): formal más informal suman 100. Chile es la suma de las filas de abajo, asalariados e independientes de los tres niveles, con su propio % y margen; Total suma los cinco tramos. El margen de error (95%) de cada celda aparece al pasar el mouse. De 18 a 24 años, los independientes con título son muy pocos en la muestra y no son fiables. Fuera quedan 15 a 17 años y 65 o más, la edad de jubilación: también trabajan y son activos, pero ahí trabajar ya es opcional. La comparación a igual edad del texto usa de 25 a 64.</p>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región<br><span class="nota">ocupados (%)</span></th><th class="n">Formal</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
   [["Chile",c,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],FOR.regiones[r],""])].map(([t,d,k])=>
    `<tr class="${k}"><td>${esc(t)}</td>${celda(d.for)}${celda(d.inf)}${celda(d.ind)}</tr>`).join("")+`</tbody></table></div>
