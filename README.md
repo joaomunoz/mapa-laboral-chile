@@ -4,9 +4,9 @@
 
 Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dónde se concentra cada actividad económica, cómo varía el trabajo por sexo y nivel de estudios, cuánto trabajo es informal o independiente, y qué carreras se vinculan con cada actividad.
 
-La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una) y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
+La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una), el área de estudio de los titulados de cada actividad y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, se ven sus cifras por sexo y nivel de estudios, y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 398 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 417 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 
@@ -19,6 +19,10 @@ La vista inicial resume la población, las 20 actividades (con un gráfico de ho
 - **Estudios:** 4 de cada 10 ocupados (39,8%) tiene título técnico o profesional. Por actividad, va de 1 de cada 10 en Hogares como empleadores (9,9%) a 8 de cada 10 en Servicios profesionales (78,7%).
 - **Estudios y trabajo:** en las 16 regiones, la tasa de desocupación es menor con título técnico o profesional que sin título superior. En Chile es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior.
 - **Sexo:** la tasa de participación es 69,7% en hombres y 50,2% en mujeres. Entre los ocupados, tiene título 46,5% de las mujeres y 34,6% de los hombres.
+
+**Según la CASEN 2024:**
+
+- **Área de estudio:** en 5 de 20 actividades, más de la mitad de los titulados ocupados viene de una sola área, con todo su rango de 95% sobre 50%: Salud y asistencia social (76,4% de Salud y Bienestar), Construcción (65,3%) y Minería (62,7%) de Ingeniería, Enseñanza (63,8% de Educación) y Finanzas (60,2% de Administración y Derecho). Solo en Enseñanza y Salud también trabaja ahí la mayoría de los titulados del área (75,8% y 62,8%); Construcción, en cambio, reúne solo 14,3% de los titulados de Ingeniería.
 
 **Según la ENE (marzo a julio de 2026):**
 

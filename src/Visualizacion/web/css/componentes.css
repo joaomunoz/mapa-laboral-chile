@@ -50,12 +50,18 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .celda-muestra{display:flex;align-items:center;gap:6px}
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 8px}
+/* Hallazgos en grilla de 6 pistas: cada tarjeta ocupa 2 (3 por fila) y la última fila se reparte el ancho completo,
+   para que con cualquier cantidad de hallazgos no queden huecos. La cifra va arriba: a su izquierda, en tarjetas de
+   unos 400 px, chocaba con el texto y dejaba poco ancho a la frase. */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 18px;margin:0 0 8px}
+.kpi{grid-column:span 2}
+.kpi:last-child:nth-child(3n+2),.kpi:nth-last-child(2):nth-child(3n+1){grid-column:span 3}
+.kpi:last-child:nth-child(3n+1){grid-column:1/-1}
 .kpis[hidden]{display:none}
 .kpis-t{margin:0 0 8px}
 /* La cifra no se corta en dos líneas ("4 de cada / 10"): se achica con el ancho de la tarjeta. */
-.kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px;container-type:inline-size}
-.kpi b{display:block;font-size:min(26px,15cqi);line-height:1.15;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+.kpi{border-left:3px solid var(--acento);padding:2px 0 2px 10px}
+.kpi b{display:block;font-size:24px;line-height:1.15;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
 .kpi span{display:block}
 .kpi-t{font-weight:600;margin:2px 0}
 .kpi .nota{font-size:12.5px}
@@ -199,3 +205,11 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .fo-barra i.fo-for{justify-content:flex-end;padding:0 5px 0 0}
 .gs-cab .fo-miles{white-space:normal}
 .pct-bajo{color:var(--t2);font-size:12px;font-weight:400}
+/* Área de estudio por actividad. */
+.ar-fila{grid-template-columns:minmax(0,20rem) minmax(0,420px) 7em}.ar-si{background:var(--area)}.ar-no{background:var(--area-no)}
+.gs-leyenda i.ar-si,.gs-leyenda i.ar-no{border-radius:2px}
+.ar-barra i.ar-si{background:var(--area)}.ar-barra i.ar-no{background:var(--area-no)}
+/* Fondo bajo la cifra: sin él, la línea del 50% la cruzaba en las barras que terminan cerca (41,3%, 38,9%). */
+.ar-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ar-fila:hover .cl-valor,.ar-fila:focus-visible .cl-valor{background:var(--plano)}
+/* Los dos bloques de la tabla de áreas: la línea marca dónde cambia la base de los %. */
+.ar-tabla .bloque{text-align:center}.ar-tabla .ini{border-left:2px solid var(--t2);padding-left:6px}

@@ -1,7 +1,7 @@
 # Nota de lectura: Mapa Laboral de Chile
 
 ## Qué muestra
-La vista inicial resume la población, las 20 actividades, la actividad con mayor coeficiente de localización (CL) en cada región, la situación laboral y educacional de cada región, y cómo cambió la desocupación entre 2024 y 2026. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
+La vista inicial resume la población, las 20 actividades, la actividad con mayor coeficiente de localización (CL) en cada región, la situación laboral y educacional de cada región, el área de estudio de los titulados de cada actividad (CASEN), y cómo cambió la desocupación entre 2024 y 2026. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
 
 ## Glosario
 
@@ -35,6 +35,7 @@ La vista inicial resume la población, las 20 actividades, la actividad con mayo
 | **Sin título superior** | Resto de las personas con nivel informado, incluidas quienes no completaron estudios superiores | Censo 2024 |
 | **Títulos** | Títulos de pregrado terminal por carrera, a nivel nacional: el total 2007-2025 y los de 2025, este último por sexo. Son titulaciones, no personas: una persona puede tener más de un título, y el total incluye a quienes hoy no trabajan. No son personas ocupadas y no se abren por región, porque el SIES registra la sede. Las titulaciones no binarias o indefinidas se informan solo como total de las carreras del mapa | SIES |
 | **Carrera afín** | Carrera con al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable. Dato nacional, de la encuesta CASEN | CASEN 2024 |
+| **Área principal de una actividad** | Área de estudio (CINE) de la que viene la mayor parte de los titulados ocupados en la actividad. Se lee en dos direcciones con bases distintas: % de los titulados de la actividad que estudió esa área, y % de los titulados del área que trabaja en la actividad. Dato nacional | CASEN 2024 |
 | **Posible vínculo** | Cumple los dos primeros umbrales de carrera afín, pero con muestra insuficiente y al menos 10 casos. No es un dato firme | CASEN 2024 |
 | **Empleabilidad al 1er año** | % de titulados con ingresos iguales o superiores al sueldo mínimo. Promedio de las instituciones, ponderado por sus títulos de 2021-2023; con 3 o más instituciones se muestra también el rango, de la más baja a la más alta. Solo considera a titulados de hasta 30 años | MiFuturo |
 | **Ingreso medio** | Ingreso bruto mensual medio al 1er y al 5° año, en pesos de septiembre de 2025. Son generaciones distintas, no una evolución. MiFuturo los publica por tipo de institución (universidad, IP o CFT), no por institución, así que no tienen rango. Solo consideran a titulados de hasta 30 años | MiFuturo |
@@ -78,6 +79,8 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 - **Estar fuera de la fuerza de trabajo no es desempleo.**
 - **La tasa de ocupación depende de la edad de cada región:** por sí sola no basta para comparar el empleo.
 - **Afinidad no es ejercer la profesión:** indica dónde trabajan los titulados, no qué tareas realizan.
+- **El área principal dice de dónde vienen los titulados, no si ejercen lo que estudiaron:** la actividad es el rubro del empleador. Que una actividad mezcle áreas no significa que acepte cualquier carrera.
+- **Las dos direcciones del área no se comparan entre sí:** Construcción recibe 65,3% de sus titulados de Ingeniería, pero solo 14,3% de los titulados de Ingeniería trabaja en Construcción. Cada cifra tiene su propia base.
 - **La empleabilidad no es lo contrario del desempleo:** quien gana menos del sueldo mínimo no cuenta en ese indicador.
 - **Los ingresos no muestran una evolución:** el 1er año corresponde a las generaciones 2021-2023 y el 5° a 2017-2019.
 - **La formalidad no tiene evolución:** solo se mide en 2026, porque las cifras de informalidad de la ENE 2024 no cuadran con el boletín del INE.
@@ -85,6 +88,7 @@ El CL se muestra con 2 decimales, y los tramos de color y la lectura se aplican 
 
 ## Criterios y límites
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable (n ≥ 60, gl ≥ 9, CV ≤ 30). Es un criterio de trabajo. Con CV entre 15 y 30, el mapa la marca como "poco fiable".
+- **"Más de la mitad de una sola área":** cuenta solo si todo el rango de 95% supera 50%. Electricidad (54,0%, rango 45,0 a 63,0), Agua y residuos (52,3%, poco fiable) e Inmobiliarias (47,5%, rango hasta 56,2) no entran, porque la muestra no permite afirmarlo. Se muestran las 4 áreas mayores de cada actividad, sin las no fiables. En la tabla de cifras, el rango va como margen de error (±): con 95% de confianza, el valor real está entre el % menos y el % más ese margen.
 - **Posible vínculo:** cumple los dos primeros umbrales con muestra insuficiente, y al menos 10 casos. No es un dato firme.
 - **Carreras por nivel:** las carreras afines se agrupan en título profesional y técnico. Junto a cada nivel van los ocupados de la actividad con ese nivel en el lugar elegido (Censo). El Censo no registra la carrera, así que esos ocupados no son titulados de las carreras listadas. Las carreras afines no describen a quienes no tienen título superior.
 - **Región de trabajo:** 5,8% de los ocupados no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción, Electricidad y Artes aparecen por debajo de su tamaño.

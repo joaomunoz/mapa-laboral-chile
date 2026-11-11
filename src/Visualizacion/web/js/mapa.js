@@ -38,7 +38,7 @@ function pintarResumen(){
  const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
  const rm=POB.regiones[13],sx=POB.sexo,cl=r=>RES.regiones[r].txt;
  const principal=document.getElementById("principal");principal.hidden=false;document.getElementById("kpis-t").hidden=false;document.getElementById("cabecera").classList.add("con-resumen");
- const ed=extremosDesoc();
+ const ed=extremosDesoc(),ar=areasPrincipales();
  const porTitulo=[...DATOS.actividades].sort((a,b)=>conTitulo(a.niveles)-conTitulo(b.niveles)),tMin=porTitulo[0],tMax=porTitulo[porTitulo.length-1];
  const todas=Object.entries(RES.regiones),patron=todas.filter(([,d])=>["B","A","O"].includes(d.ciiu)),brecha=sx.hombres.tasa_participacion-sx.mujeres.tasa_participacion;
  principal.innerHTML=[
@@ -54,7 +54,14 @@ function pintarResumen(){
    `Con título, ${ed.con}; sin título, ${ed.sin}. No indica causa: la edad también influye.`],
   [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",
    `${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres; el Censo no indica su causa. `+
-   `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`]]
+   `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`],
+  // La cifra grande es la del título de su sección y la de la barra (5 de 20), para que al bajar no aparezca otro número; la
+  // otra dirección va en el detalle: con una sola, "Construcción viene de Ingeniería" parecía igual de estrecho que Enseñanza.
+  [`${ar.una.length} de ${ar.filas.length}`,"actividades tienen a la mayoría de sus titulados de una sola área de estudio",
+   `Solo en ${ar.dos.map(({a})=>esc(a.corto)).join(" y en ")} se cumple en las dos direcciones. `+
+   // Cada actividad con sus dos % en una frase: "respectivamente" obligaba a emparejar cifras. Construcción, el contraste,
+   // queda en el párrafo de la sección, para que la tarjeta no doble en largo a las demás.
+   ar.dos.map(({a,x})=>`${esc(a.corto)}: ${num(x.pct,1)}% de sus titulados estudió ${esc(x.corto)}, y ${num(x.en_area,1)}% de los titulados de ${esc(x.corto)} trabaja ahí.`).join(" ")+" CASEN 2024."]]
   .map(([v,t,d])=>`<div class="kpi"><b>${v}</b><span class="kpi-t">${t}</span><span class="nota">${d}</span></div>`).join("");
  anotarMapa(NOTAS_MAPA=[[2,"izq","Norte","Minería",cl(2)],[7,"der","Centro-sur","Agricultura y pesca",cl(7)],[11,"der","Extremos","Administración pública",cl(11)]]);
  document.getElementById("lista").innerHTML=orden.map(([r,d])=>{

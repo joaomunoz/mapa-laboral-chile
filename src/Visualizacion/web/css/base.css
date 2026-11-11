@@ -5,11 +5,13 @@ Colores (modo claro y oscuro), tipografía y estilos generales de texto, tablas 
 */
 /* Años del cambio (--a24, --a26): dos tonos de violeta, claro y oscuro como el par gris de "dentro del margen". Ocre y azul
    no, porque en Formalidad, la sección anterior, significan informal y formal. Validados con validate_palette.js (--ordinal).
+   Área principal (--area) en morado, un tono que no usan las secciones vecinas (verde = título, azul y ocre = formalidad);
+   el resto va en gris, como contexto. Validado con validate_palette.js en claro y oscuro.
    Sin título superior (--tit-sin) va en gris: en verde, el color de los títulos en Educación por región, se leía como titulado. */
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#a3a19a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#a3a19a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#62615b;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#62615b;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--area-no:#55534e;--aviso-fondo:#2a2416;
 --sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}

@@ -65,6 +65,14 @@ NOMBRES_CORTOS = {
     "H": "Transporte", "I": "Alojamiento y comida", "J": "Información y comunicaciones", "K": "Finanzas y seguros", "L": "Inmobiliarias", "M": "Servicios profesionales",
     "N": "Servicios administrativos", "O": "Administración pública", "P": "Enseñanza", "Q": "Salud y asistencia social", "R": "Artes y recreación", "S": "Otros servicios", "T": "Hogares como empleadores",
 }
+# Áreas de estudio (CINE, como en SIES) en corto para las filas del gráfico: con el nombre completo, "Ingeniería,
+# Industria y Construcción" partía en dos líneas la fila de Construcción. El nombre completo va en el globo.
+AREAS_CORTAS = {
+    "Administración de Empresas y Derecho": "Administración y Derecho", "Agricultura, Silvicultura, Pesca y Veterinaria": "Agricultura y Veterinaria",
+    "Artes y Humanidades": "Artes y Humanidades", "Ciencias naturales, matemáticas y estadística": "Ciencias naturales", "Ciencias Sociales, Periodismo e Información": "Ciencias Sociales",
+    "Educación": "Educación", "Ingeniería, Industria y Construcción": "Ingeniería", "Salud y Bienestar": "Salud y Bienestar", "Servicios": "Servicios",
+    "Tecnología de la Información y la Comunicación (TIC)": "Tecnología (TIC)",
+}
 # Índice de color de cada actividad que distingue a alguna región. Sigue a la actividad, no a su orden, y se eligió con
 # validate_palette.js para que las actividades de regiones vecinas se distingan, también con daltonismo (ΔE 8,4 o más).
 COLOR_RESUMEN = {"B": 0, "A": 1, "O": 2, "C": 3, "R": 4, "K": 5}

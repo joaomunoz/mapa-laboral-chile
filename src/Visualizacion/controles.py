@@ -185,6 +185,20 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
             for d in [datos["formalidad"]["chile"], *datos["formalidad"]["niveles"].values()]),
         "Formalidad: familiar no remunerado sin muestra solo en Profesional y Técnico": datos["formalidad"]["chile"]["fam"] is not None and {k for k, d in datos["formalidad"]["niveles"].items() if d["fam"] is None} == {"Profesional", "Tecnico"},
         "Formalidad: informalidad en 15 actividades e independientes en 12 de ellas; Hogares 59,1%": (lambda a: len(a) == 15 and sum(d["ind"] is not None for d in a.values()) == 12 and set(a) <= set(por_ciiu) and a["T"]["inf"][1] == 59.1 and a["T"]["ind"] is None)(datos["formalidad"]["actividades"]),
+        # La sección de áreas cuenta una actividad solo si todo su rango de 95% supera 50%: con el valor puntual,
+        # Electricidad (54,0%, rango 45,0 a 63,0) entraba sin que la muestra lo permita.
+        "Áreas: 5 actividades con más de la mitad de sus titulados de una sola área (Salud 76,4%, Construcción 65,3%)": sorted(a["ciiu"] for a in datos["actividades"] if a["areas"] and a["areas"][0]["min"] > 50) == ["B", "F", "K", "P", "Q"]
+            and por_ciiu["Q"]["areas"][0]["pct"] == 76.4 and por_ciiu["F"]["areas"][0]["pct"] == 65.3,
+        "Áreas: solo Enseñanza y Salud superan 50% en las dos direcciones; Construcción reúne 14,3% de Ingeniería": sorted(a["ciiu"] for a in datos["actividades"] if a["areas"] and a["areas"][0]["min"] > 50 and a["areas"][0]["en_area_min"] > 50) == ["P", "Q"]
+            and (por_ciiu["P"]["areas"][0]["en_area"], por_ciiu["Q"]["areas"][0]["en_area"], por_ciiu["F"]["areas"][0]["en_area"]) == (75.8, 62.8, 14.3),
+        # La tabla de cifras publica la base en personas: cada % debe salir de esas mismas cifras (0,1 de tolerancia por
+        # redondeo). Las 20 actividades suman 3.585.361 de 3.587.295 titulados: el resto (1.934) está en organismos
+        # internacionales, que no son una actividad del mapa pero sí cuentan en el total de cada área.
+        "Áreas: los dos % publicados salen de sus bases, y las 20 actividades suman 3.585.361 titulados": all(abs(100 * x["tit"] / a["tit_casen"] - x["pct"]) <= 0.1 and abs(100 * x["tit"] / x["tit_area"] - x["en_area"]) <= 0.1
+            for a in datos["actividades"] for x in a["areas"]) and sum(a["tit_casen"] for a in datos["actividades"]) == 3_585_361,
+        # La tabla publica el rango como ± (la mitad del rango): vale solo si el rango es simétrico (0,1 por redondeo).
+        "Áreas: el margen de error ± representa el rango publicado (simétrico)": all(abs((x[hi] - x[c]) - (x[c] - x[lo])) <= 0.1 + 1e-9
+            for a in datos["actividades"] for x in a["areas"] for c, lo, hi in (("pct", "min", "max"), ("en_area", "en_area_min", "en_area_max"))),
         # El periodo de la ENE lo escribe la página desde DATOS.periodos: escrito a mano, quedaría atrás al cambiar los meses.
         "Periodos: ningún JS escribe a mano los meses de la ENE": not any(re.search(r"(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) a \w+ de 20\d\d", c) for c in codigo_js.values()),
         "Periodos: la página no nombra el periodo de ENE que ya no se usa": "2025-2026" not in html and "diciembre de 2025" not in html,

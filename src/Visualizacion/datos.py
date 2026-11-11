@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from config import AFINIDADES_VISIBLES, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, PERIODOS, TRAMOS
+from config import AFINIDADES_VISIBLES, AREAS_CORTAS, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, PERIODOS, TRAMOS
 from formato import nombre_legible, redondear, texto_peso
 from indicadores import (
     agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, formalidad, rango_ficha, resumen_estudios,
@@ -31,6 +31,10 @@ def construir_datos(tablas: dict[str, pd.DataFrame]) -> dict:
     por_sexo = tablas["por_sexo"]
     sexo_actividad = sexo_por_actividad(por_sexo)
     areas = tablas["areas"]
+    # Bases de las dos direcciones, con todas las filas (también las no fiables): titulados ocupados de cada actividad
+    # y de cada área. Sin ellas, la tabla de cifras daba % sin decir sobre cuántas personas.
+    tit_actividad = areas.groupby("actividad_ciiu")["ocupados_titulados"].sum()
+    tit_area = areas.groupby("area_cine")["ocupados_titulados"].sum()
     carreras = tablas["carreras"]
     actividades = []
     for (ciiu, glosa), g in censo.groupby(["actividad_ciiu", "actividad_glosa"]):
@@ -42,7 +46,12 @@ def construir_datos(tablas: dict[str, pd.DataFrame]) -> dict:
             "alerta_fuente": bool(primero["alerta_difiere_fuente"]), "nacional": resumen_nacional(g, int(totales_censo[ciiu]), ene_total), "sexo": sexo_actividad[ciiu],
             "regiones": {int(f["codigo_region"]): {"ocupados": int(f["ocupados"]), "pct": redondear(f["pct_en_region"], 2), "peso": redondear(f["peso_relativo"], 6), "clase": clase_color(f["peso_relativo"]), "peso_txt": texto_peso(f["peso_relativo"]), "lectura": f["lectura"],
                                                  "ene_peso_txt": texto_peso(f["ene_peso_relativo"]), "ene_lectura": f["ene_lectura"]} for _, f in g.iterrows()},
-            "areas": [{"area": f["area_cine"], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1)} for _, f in a.iterrows()],
+            "areas": [{"area": f["area_cine"], "corto": AREAS_CORTAS[f["area_cine"]], "pct": redondear(f["pct_en_actividad"], 1), "min": redondear(f["pct_en_actividad_min"], 1), "max": redondear(f["pct_en_actividad_max"], 1),
+                       # La otra dirección: qué parte de los titulados del área trabaja en esta actividad. Sin ella, "Construcción
+                       # viene de Ingeniería" se leía como si Ingeniería fuera a Construcción, y solo va el 14,3%.
+                       "en_area": redondear(f["pct_en_area"], 1), "en_area_min": redondear(f["pct_en_area_min"], 1), "en_area_max": redondear(f["pct_en_area_max"], 1),
+                       "tit": int(f["ocupados_titulados"]), "tit_area": int(tit_area[f["area_cine"]]), "fiab": f["fiabilidad"]} for _, f in a.iterrows()],
+            "tit_casen": int(tit_actividad.get(ciiu, 0)),
             "afines": [{"c": f["carrera_generica"], "pct": redondear(f["pct_en_carrera"], 1), "min": redondear(f["pct_en_carrera_min"], 1), "max": redondear(f["pct_en_carrera_max"], 1),
                         "tit": int(round(f["ocupados_titulados"])), "fiab": f["fiabilidad"]} for _, f in vinculadas[vinculadas["afinidad"] == "afin"].iterrows()],
             "indicios": [{"c": f["carrera_generica"], "n": int(f["n_celda"])} for _, f in vinculadas[vinculadas["afinidad"] == "indicio_sin_muestra"].iterrows()],

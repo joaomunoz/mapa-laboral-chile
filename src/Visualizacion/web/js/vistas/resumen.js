@@ -80,6 +80,7 @@ function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
 // solo lee los títulos se lleva lo principal, y la tabla queda como evidencia. Los botones desplazan sin tocar la
 // dirección: ahí vive la vista elegida (#actividad/región/carrera) y un ancla la borraría.
 const SECCIONES=[["Censo 2024",[["sec-pob","Población"],["sec-act","Actividades"],["sec-lab","Trabajo por región"],["sec-edu","Educación por región"],["sec-est","Estudios y trabajo"]]],
+ ["CASEN 2024",[["sec-area","Área de estudio por actividad"]]],
  ["Encuesta Nacional de Empleo",[["sec-for","Formalidad"],["sec-evo","Cambio 2024–2026"]]]];
 const indiceHtml=()=>`<nav class="indice" aria-label="Secciones del resumen">${SECCIONES.map(([f,s])=>
  `<span class="indice-grupo"><span class="indice-fuente">${f}</span>${s.map(([id,t])=>`<button data-ir="${id}">${t}</button>`).join("")}</span>`).join("")}</nav>`;
@@ -310,10 +311,68 @@ function tablaEstudios(){const filas=Object.entries(EST.desocupacion_titulo).sor
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Con título técnico o profesional</th><th class="n">Sin título superior</th><th class="n">Diferencia</th></tr></thead><tbody>`+
   tr("Chile",EST.desocupacion_titulo_chile,"total")+filas.map(([r,v])=>tr(nomReg(r),v,"")).join("")+`</tbody></table></div>
  <p class="nota" style="margin:4px 0 0">Tasa de desocupación según región de residencia.</p></details>`}
+// Área de estudio por actividad (CASEN): una actividad cuenta como "de una sola área" solo si todo su rango de 95%
+// supera 50%; con el valor puntual entraba Electricidad (54,0%, rango 45,0 a 63,0). La tarjeta, el título y el
+// gráfico leen esta misma función, para que no puedan contar cosas distintas.
+function areasPrincipales(){const filas=DATOS.actividades.filter(a=>a.areas.length).map(a=>({a,x:a.areas[0]})).sort((p,q)=>q.x.pct-p.x.pct);
+ const una=filas.filter(f=>f.x.min>50),dos=una.filter(f=>f.x.en_area_min>50);
+ return {filas,una,dos,solo:una.filter(f=>!dos.includes(f))}}
+// Barras de una dirección (de qué área vienen los titulados de la actividad) y la otra en la columna de la derecha, como
+// cifra: son % de bases distintas, y dos barras lado a lado invitaban a compararlas como si midieran lo mismo.
+// Solo se destacan las que superan 50% con todo su rango. El rango no se dibuja: como línea sobre cada barra se leía
+// como un trazo suelto (blanco en modo oscuro). Va escrito donde cambia la lectura (cruza 50%) y completo en la tabla.
+function graficoAreas(){const {filas}=areasPrincipales(),pos=x=>x;
+ const fila=({a,x})=>{const fuerte=x.min>50,cruza=!fuerte&&x.max>50,poco=x.fiab==="poco_fiable";
+  const partes=[`${num(x.pct,1)}% de sus titulados estudió ${esc(x.area)} (rango ${num(x.min,1)}% a ${num(x.max,1)}%)`,
+   `${num(x.en_area,1)}% de los titulados de esa área trabaja en ${esc(a.corto)} (rango ${num(x.en_area_min,1)}% a ${num(x.en_area_max,1)}%)`];
+  if(cruza)partes.push("El rango cruza 50%: no se puede afirmar que sea más de la mitad");
+  if(poco)partes.push("Poco fiable: léelo con cautela");
+  return `<button class="cl-fila ar-fila" data-a="${a.ciiu}" data-tip="${`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(a.corto)}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${esc(a.corto)} <span class="cl-reg">· ${esc(x.corto)}${poco?" · poco fiable":""}</span></span>`+
+   `<span class="cl-barra ar-barra" aria-hidden="true"><i class="${fuerte?"ar-si":"ar-no"}" style="width:${pos(x.pct)}%"></i>`+
+   `<b style="left:${pos(50)}%"></b>`+
+   // El aviso va junto a la cifra y no junto al nombre, donde partía la fila en dos líneas. La escala va de 0 a 100%,
+   // la natural de un %, y deja a la derecha de las barras grises espacio para el aviso sin tapar la columna.
+   `<span class="cl-valor" style="left:calc(${pos(x.pct)}% + 6px)">${num(x.pct,1)}%${cruza?' <span class="cl-reg">· rango cruza 50%</span>':""}</span></span><span class="gs-num">${x.en_area_min>50?`<strong>${num(x.en_area,1)}%</strong>`:`${num(x.en_area,1)}%`}</span></button>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Área principal de los titulados de cada actividad</strong></span>`+
+  `<span><i class="ar-si"></i>Más de la mitad, con todo el rango</span><span><i class="ar-no"></i>No alcanza o el rango cruza 50%</span><span><span class="ref"></span>50%</span></figcaption>`+
+  `<div class="cl-fila ar-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Actividad · área principal</span><span>% de sus titulados que estudió esa área</span><span class="gs-num">% del área que trabaja ahí</span></div>`+
+  filas.map(fila).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">Titulados técnicos y profesionales ocupados, dato nacional. Barra: % de los titulados de la actividad que estudió en su área principal; `+
+  `se destaca si todo su rango de 95% supera 50%. A la derecha, la otra dirección: % de los titulados de esa área que trabaja en la actividad; en negrita, más de la mitad con todo su rango. Son bases distintas: no se suman ni se comparan entre sí.</p>`}
+// Cifras del gráfico, en dos bloques que siguen las dos direcciones: los titulados de la actividad y los del área. Los que
+// estudiaron el área y trabajan en la actividad son el numerador de ambos %, pero la cifra va una sola vez: repetida en las
+// dos columnas confundía. El ejemplo de la nota la une con el segundo %. El rango de 95% va como margen de error (±, la
+// mitad del rango; es simétrico salvo 0,1 por redondeo): dos columnas de "rango" no se entendían.
+function tablaAreas(){const {filas}=areasPrincipales(),mas=(min,max)=>num((max-min)/2,1),e=filas[0];
+ const pct=(p,min,max)=>`${num(p,1)}% ± ${mas(min,max)}`;
+ return `<details><summary>Ver cifras</summary><div class="nota">Titulados técnicos y profesionales ocupados, dato nacional. Se lee por bloques, cada uno con su base. `+
+  `Ejemplo: en ${esc(e.a.corto)} trabajan ${num(e.a.tit_casen)} titulados y ${num(e.x.tit)} de ellos estudiaron ${esc(e.x.area)} (${num(e.x.pct,1)}%). `+
+  `Esos mismos ${num(e.x.tit)} son el ${num(e.x.en_area,1)}% de los ${num(e.x.tit_area)} titulados de esa área que trabajan en Chile. `+
+  `Por eso los dos % no se comparan entre sí. ± es el margen de error: con 95% de confianza, el valor real está en ese rango.</div>`+
+  `<div class="tabla-ancha"><table class="ar-tabla" style="margin-top:8px"><thead><tr><th rowspan="2">Actividad</th><th rowspan="2">Área de estudio principal</th>`+
+  `<th colspan="2" class="bloque ini">Titulados que trabajan en la actividad</th><th colspan="2" class="bloque ini">Titulados de esa área en Chile</th></tr>`+
+  `<tr><th class="n ini">Total</th><th class="n">Estudiaron esa área</th><th class="n ini">Total</th><th class="n">% que trabaja en esta actividad</th></tr></thead><tbody>`+
+  filas.map(({a,x})=>`<tr><td>${esc(a.corto)}</td><td>${esc(x.area)}${x.fiab==="poco_fiable"?' <span class="etiqueta">poco fiable</span>':""}</td>`+
+   `<td class="n ini">${num(a.tit_casen)}</td><td class="n">${num(x.tit)} (${pct(x.pct,x.min,x.max)})</td>`+
+   `<td class="n ini">${num(x.tit_area)}</td><td class="n">${pct(x.en_area,x.en_area_min,x.en_area_max)}</td></tr>`).join("")+
+  `</tbody></table></div></details>`}
+function areasHtml(){const {filas,una,dos,solo}=areasPrincipales(),c=solo[0];
+ const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
+ // Cuántas afines salen del área principal: dice de dónde viene la cantidad, que sola parecía un ranking de vínculo.
+ const deArea=a=>a.afines.filter(f=>DATOS.fichas[f.c].area===a.areas[0]?.area).length;
+ return `${encabezado("sec-area","Área de estudio por actividad",`En ${una.length} de ${filas.length} actividades, más de la mitad de los titulados viene de una sola área de estudio`,true)}
+ <div class="nota">CASEN 2024 (${PER.casen}).</div>
+ ${graficoAreas()}
+ ${tablaAreas()}
+ <p style="margin:8px 0 0">Solo en ${lista(dos.map(({a,x})=>`${esc(a.corto)} (${esc(x.corto)})`))} la relación va en las dos direcciones: además, más de la mitad de los titulados de esa área trabaja ahí. `+
+  (c?`${esc(c.a.corto)}, en cambio, recibe ${num(c.x.pct,1)}% de sus titulados de ${esc(c.x.corto)}, pero reúne solo ${num(c.x.en_area,1)}% de esa área.`:"")+`</p>
+ <div class="aviso">Dice de dónde vienen los titulados de cada actividad, no si ejercen lo que estudiaron: la actividad es el rubro del empleador, no la tarea. Que una actividad mezcle áreas no significa que acepte cualquier carrera.</div>
+ <p class="invita"><strong>Elige una actividad</strong> para ver sus áreas y carreras afines. Con más carreras afines: `+
+  `${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length}; ${deArea(a)} de ${esc(a.areas[0].corto)})`).join(" &nbsp;·&nbsp; ")}.</p>`}
 function vistaResumen(){
  const ch=POB.chile,sH=POB.sexo.hombres,sM=POB.sexo.mujeres;
  const sinRegion=DATOS.actividades.filter(a=>a.pct_sin_region>=10).sort((a,b)=>b.pct_sin_region-a.pct_sin_region);
- const conMasCarreras=[...DATOS.actividades].sort((a,b)=>b.afines.length-a.afines.length).slice(0,3);
  const corto=c=>esc(porCiiu(c).corto),[d1]=RES.mas_desiguales;
  // El título nombra lo que muestran los dos gráficos de la sección: mujeres por actividad y la mayor concentración.
  const porMujeres=[...DATOS.actividades].sort((a,b)=>b.sexo.pct_m-a.sexo.pct_m),mMax=porMujeres[0],mMin=porMujeres[porMujeres.length-1];
@@ -342,8 +401,7 @@ function vistaResumen(){
   // La ficha de cada región muestra la base de la participación; sin esto, sus dos totales de Chile parecían contradecirse.
   `La participación se calcula sobre ${num(BASE.chile)}, que incluye a los ${num(BASE.chile-RES.total)} de organismos internacionales.</div>
  ${graficoSexo()}
- <p class="invita"><strong>Elige una actividad</strong> para ver en qué regiones se concentra y sus carreras afines, con títulos, empleabilidad e ingresos. `+
-  `Con más carreras afines: ${conMasCarreras.map(a=>`<button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button> (${a.afines.length})`).join(" &nbsp;·&nbsp; ")}.</p>
+ <p class="invita"><strong>Elige una actividad</strong> para ver en qué regiones se concentra y sus carreras afines, con títulos, empleabilidad e ingresos.</p>
  ${graficoCL()}
  ${sinRegion.length?`<p class="nota" style="margin:4px 0 0">Subestimadas por ocupados sin región de trabajo `+
   `(${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>`:""}
@@ -382,6 +440,8 @@ function vistaResumen(){
  ${columnasTitulo()}
  ${tablaEstudios()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: la edad de cada grupo, por ejemplo, también influye.</p>
+ <hr class="separador">${banda("CASEN 2024")}
+ ${areasHtml()}
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}
  ${formalidadHtml()}
  ${evolucionHtml()}`}
