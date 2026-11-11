@@ -175,7 +175,14 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Evolución: el cambio publicado es la resta de las tasas y cae en su rango": all(d["dif"] == round(d["t26"] - d["t24"], 1) and d["min"] <= d["dif"] <= d["max"] for d in evo_filas),
         "Evolución: suben Arica y Parinacota, Tarapacá, Valparaíso, Biobío y Los Lagos; ninguna baja": sorted(int(r) for r, d in datos["evolucion"]["regiones"].items() if d["lect"] == "sube") == [1, 5, 8, 10, 15] and not any(d["lect"] == "baja" for d in evo_filas),
         "Formalidad: Chile 26,6% informal y 24,1% independiente; 12,3%, 17,1% y 36,0% por nivel": (lambda f: (f["chile"]["inf"][1], f["chile"]["ind"][1], f["niveles"]["Profesional"]["inf"][1], f["niveles"]["Tecnico"]["inf"][1], f["niveles"]["Sin_titulo"]["inf"][1]) == (26.6, 24.1, 12.3, 17.1, 36.0))(datos["formalidad"]),
-        "Formalidad: por región va de Antofagasta (21,8%) a La Araucanía (35,6%), con las 16": (lambda t: len(t) == 16 and (min(t, key=t.get), t[min(t, key=t.get)], max(t, key=t.get), t[max(t, key=t.get)]) == ("2", 21.8, "9", 35.6))({r: d["inf"][1] for r, d in datos["formalidad"]["regiones"].items()}),
+        # La frase por región usa grupos: los que se cruzan con la más informal (todos sobre Chile con su rango) y los que
+        # quedan bajo Chile con su rango; los dos grupos no se cruzan entre sí. Si cambia, la frase ya no es la medida.
+        "Formalidad: 16 regiones fiables; más alta en La Araucanía, Ñuble, Los Ríos y Arica (sobre Chile), bajo Chile Antofagasta, Magallanes y Metropolitana; los grupos no se cruzan": (lambda t, c: (
+            len(t) == 16 and all(d["fiab"] == "fiable" for d in t.values())
+            and (lambda top: sorted(r for r, d in t.items() if d["inf"][1] + d["mas"] >= top["inf"][1] - top["mas"]))(max(t.values(), key=lambda d: d["inf"][1])) == ["14", "15", "16", "9"]
+            and all(t[r]["inf"][1] - t[r]["mas"] > c for r in ("9", "14", "15", "16"))
+            and sorted(r for r, d in t.items() if d["inf"][1] + d["mas"] < c) == ["12", "13", "2"]
+            and max(t[r]["inf"][1] + t[r]["mas"] for r in ("2", "12", "13")) < min(t[r]["inf"][1] - t[r]["mas"] for r in ("9", "14", "15", "16"))))(datos["formalidad"]["regiones"], datos["formalidad"]["chile"]["inf"][1]),
         # El complemento se muestra para que el lector vea las dos partes: formal e informal suman 100 exacto en el %
         # y, en miles, el total con 1 de tolerancia por redondear cada cifra.
         "Formalidad: formal e informal suman 100% y los ocupados de cada fila": all(round(d["for"][1] + d["inf"][1], 1) == 100 and abs(d["for"][0] + d["inf"][0] - d["ocup"]) <= 1
@@ -208,7 +215,24 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Formalidad: los ocupados de asalariados e independientes son la suma de sus casillas publicadas y cuadran con los ocupados": all(d["asa"][0] == d["af"][0] + d["ai"][0] and d["inx"][0] == d["xf"][0] + d["xi"][0] and abs(d["inx"][0] - d["ind"][0]) <= 1 and (d["fam"] is None or abs(d["asa"][0] + d["inx"][0] + d["fam"][0] - d["ocup"]) <= 2)
             for d in [datos["formalidad"]["chile"], *datos["formalidad"]["niveles"].values()]),
         "Formalidad: familiar no remunerado sin muestra solo en Profesional y Técnico": datos["formalidad"]["chile"]["fam"] is not None and {k for k, d in datos["formalidad"]["niveles"].items() if d["fam"] is None} == {"Profesional", "Tecnico"},
-        "Formalidad: informalidad en 15 actividades e independientes en 12 de ellas; Hogares 59,1%": (lambda a: len(a) == 15 and sum(d["ind"] is not None for d in a.values()) == 12 and set(a) <= set(por_ciiu) and a["T"]["inf"][1] == 59.1 and a["T"]["ind"] is None)(datos["formalidad"]["actividades"]),
+        # Gráfico por actividad: las 20 del mapa, 15 con informal fiable (las otras 5, las más formales, llevan etiqueta);
+        # de más a menos formal, Minería 96,0% a Hogares 40,9%; y lo que falta para Chile (sin rama y organismos
+        # internacionales) es menos de 1%, como lo dice su nota.
+        # Título del gráfico por actividad: el grupo sobre 93% formal y la más informal, que se separa de la segunda con su
+        # margen. Frase de independientes: Servicios profesionales y Comercio con el mismo % de independientes (los rangos se
+        # cruzan) y un % informal dentro de ellos muy distinto (fiables y sin cruzarse).
+        "Formalidad: sobre 93% formal Minería, Electricidad y Finanzas; Hogares la más informal con todo su rango": (lambda a: (
+            sorted(k for k, d in a.items() if d["for"][1] > 93) == ["B", "D", "K"]
+            and (lambda o: o[0][0] == "T" and o[0][1]["inf"][1] - o[0][1]["mas"] > o[1][1]["inf"][1] + o[1][1]["mas"])(sorted(a.items(), key=lambda x: -x[1]["inf"][1]))))(datos["formalidad"]["actividades"]),
+        "Formalidad: independientes en Servicios profesionales y Comercio, mismo % (rangos se cruzan) y 14,0% frente a 56,6% informal (fiables, sin cruzarse)": (lambda m, g: (
+            m["ind"] is not None and g["ind"] is not None and abs(m["ind"][1] - g["ind"][1]) < m["ind_mas"] + g["ind_mas"]
+            and m["xi"][2] == g["xi"][2] == "fiable" and m["xi"][0] + m["xi"][1] < g["xi"][0] - g["xi"][1]
+            and (m["xi"][0], g["xi"][0]) == (14.0, 56.6)))(datos["formalidad"]["actividades"]["M"], datos["formalidad"]["actividades"]["G"]),
+        "Formalidad: 20 actividades, 15 con informal fiable e independientes en 14; formal de 96,0% en Minería a 40,9% en Hogares; suman Chile salvo menos de 1%": (lambda a, c: (
+            set(a) == set(por_ciiu) and sum(d["fiab"] == "fiable" for d in a.values()) == 15 and sum(d["ind"] is not None for d in a.values()) == 14
+            and all(d["fiab"] in ("fiable", "poco_fiable", "no_fiable") and d["mas"] is not None for d in a.values())
+            and (lambda o: (o[0][0], o[0][1]["for"][1], o[-1][0], o[-1][1]["for"][1]) == ("B", 96.0, "T", 40.9))(sorted(a.items(), key=lambda x: x[1]["inf"][1]))
+            and 0 < c["ocup"] - sum(d["ocup"] for d in a.values()) < c["ocup"] / 100))(datos["formalidad"]["actividades"], datos["formalidad"]["chile"]),
         # La sección de áreas cuenta una actividad solo si todo su rango de 95% supera 50%: con el valor puntual,
         # Electricidad (54,0%, rango 45,0 a 63,0) entraba sin que la muestra lo permita.
         "Áreas: 5 actividades con más de la mitad de sus titulados de una sola área (Salud 76,4%, Construcción 65,3%)": sorted(a["ciiu"] for a in datos["actividades"] if a["areas"] and a["areas"][0]["min"] > 50) == ["B", "F", "K", "P", "Q"]

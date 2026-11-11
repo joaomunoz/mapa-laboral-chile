@@ -244,7 +244,7 @@ def formalidad(t: pd.DataFrame) -> dict:
     las dos partes que suman 100; su % se calcula desde el % informal ya redondeado, así la suma da 100 exacto.
     Chile y los niveles llevan el reparto completo; regiones y actividades solo formal, informal e independientes,
     porque las cuatro casillas por separado quedan con poca muestra en las regiones chicas. Familiar no remunerado
-    va None donde no es fiable, y cada cifra de una actividad se escribe solo si es fiable.
+    va None donde no es fiable; en las actividades, el % de independientes también, y el informal lleva su fiabilidad.
     """
     def par(f, pct):
         return [int(redondear(f["ocupados"] * pct / 100, 0)), redondear(pct, 1)]
@@ -277,8 +277,21 @@ def formalidad(t: pd.DataFrame) -> dict:
     por = lambda a: t[t["ambito"] == a]
     return {"chile": reparto(por("chile").iloc[0]),
             "niveles": {f["nivel_titulo"]: reparto(f) for _, f in por("nivel").iterrows()},
-            "regiones": {str(int(f["codigo_region"])): base(f) for _, f in por("region").iterrows()},
-            "actividades": {f["actividad_ciiu"]: base(f) for _, f in por("actividad").iterrows() if f["fiabilidad_informalidad"] == "fiable"},
+            # Con su ± y fiabilidad: el gráfico marca las regiones sobre o bajo Chile con todo su rango, y la frase agrupa las
+            # que no se distinguen entre sí, porque Antofagasta y Magallanes, por ejemplo, difieren en 0,2 puntos.
+            "regiones": {str(int(f["codigo_region"])): {**base(f), "mas": mas(f["tasa_informalidad"], f["cv_informalidad"]), "fiab": f["fiabilidad_informalidad"]}
+                         for _, f in por("region").iterrows()},
+            # Las 20 actividades del mapa (sin organismos extraterritoriales, 8 casos), con el ± y la fiabilidad del %
+            # informal. Antes entraban solo las 15 con informal fiable, y quedaban fuera justo las más formales (Minería,
+            # Financieras): tienen tan pocos informales que esa cifra chica no es fiable, pero su barra casi toda formal
+            # sí lo es (el ± en puntos es el mismo). Se muestran todas y la cifra chica lleva su etiqueta.
+            # xi: % informal dentro de los independientes de la actividad, [%, ±, fiabilidad]; la sección lo usa para mostrar
+            # que ser independiente no implica ser informal (Servicios profesionales frente a Comercio).
+            "actividades": {f["actividad_ciiu"]: {**base(f), "mas": mas(f["tasa_informalidad"], f["cv_informalidad"]), "fiab": f["fiabilidad_informalidad"],
+                                                  "ind_mas": mas(f["pct_independientes"], f["cv_independientes"]),
+                                                  "xi": [redondear(f["pct_informal_independientes"], 1), mas(f["pct_informal_independientes"], f["cv_informal_independientes"]),
+                                                         f["fiabilidad_informal_independientes"]]}
+                            for _, f in por("actividad").iterrows() if f["actividad_ciiu"] != "U"},
             # Informalidad dentro de asalariados e independientes por nivel y tramo de edad, [% informal, ±, fiabilidad,
             # ocupados formales, ocupados informales]: muestra que la diferencia por título se mantiene entre personas de la
             # misma edad. Formal es su complemento. Los ocupados dejan comprobar que las filas suman la fila Chile.

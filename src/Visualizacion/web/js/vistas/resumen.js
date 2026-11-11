@@ -116,19 +116,57 @@ function graficoFormalidadNivel(){const filas=[["Chile",FOR.chile," cl-total"],.
   // Las definiciones van junto al gráfico que las usa: antes estaban en la nota de arriba y alejaban el gráfico del título.
   `Asalariado: sector privado, público o servicio doméstico. Independiente: empleador o cuenta propia.</p>`}
 // Formalidad por región: barras formal/informal como las de los niveles, de mayor a menor informalidad, con Chile
-// primero y una línea en su informalidad; el % de independientes va como cifra. No se pinta énfasis sobre o bajo Chile:
-// no hay margen de error por región y una diferencia de uno o dos puntos puede deberse a la muestra.
+// primero y una línea en su informalidad; el % de independientes va como cifra. Cada región lleva su ± (95%): se marca
+// "sobre Chile" o "bajo Chile" solo si todo su rango queda a ese lado, porque una diferencia de uno o dos puntos puede
+// ser de la muestra. La marca va en palabras y no en color: el ocre y el azul ya dicen informal y formal.
+const ladoChile=d=>{const c=FOR.chile.inf[1];return d.inf[1]-d.mas>c?"sobre":d.inf[1]+d.mas<c?"bajo":null};
+// Grupos de la frase: los más altos son los que no se distinguen de la región más informal (sus rangos se cruzan), y los
+// más bajos, los que quedan bajo Chile con todo su rango. Así la frase no elige una "mayor" que la muestra no separa.
+function gruposRegion(){const r=Object.entries(FOR.regiones).sort((a,b)=>b[1].inf[1]-a[1].inf[1]),[,top]=r[0];
+ return {alto:r.filter(([,d])=>d.inf[1]+d.mas>=top.inf[1]-top.mas).map(([k])=>k),bajo:r.filter(([,d])=>ladoChile(d)==="bajo").reverse().map(([k])=>k)}}
 function graficoFormalidadRegion(){const c=FOR.chile,tasa=d=>d.inf[1];
  const filas=DATOS.orden.map(r=>[r,FOR.regiones[r]]).sort((a,b)=>tasa(b[1])-tasa(a[1])||a[0]-b[0]);
- const fila=(t,d,clase,attr)=>{const partes=[`informal: ${num(d.inf[0])} (${num(d.inf[1],1)}%)`,`formal: ${num(d.for[0])} (${num(d.for[1],1)}%)`,`independientes: ${num(d.ind[0])} (${num(d.ind[1],1)}%)`],tag=attr?"button":"div";
+ const fila=(t,d,clase,attr)=>{const lado=attr?ladoChile(d):null,tag=attr?"button":"div";
+  const partes=[`informal: ${num(d.inf[0])} (${num(d.inf[1],1)}%)`,`formal: ${num(d.for[0])} (${num(d.for[1],1)}%)`,`independientes: ${num(d.ind[0])} (${num(d.ind[1],1)}%)`];
+  if(attr)partes.push(`Margen de error: ± ${num(d.mas,1)} puntos (95%)`,lado?`Informalidad ${lado} la de Chile con todo su rango`:"No se distingue de Chile con su margen");
   return `<${tag} class="fo-fila fo-reg${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-   `<span class="fo-nombre">${t}</span><span class="fo-ref">${barraFormal(d.inf[1],d.for[1])}<b style="left:${tasa(c)}%"></b></span><span class="fo-miles">${num(d.ind[1],1)}%</span></${tag}>`};
+   `<span class="fo-nombre">${t}${lado?` <span class="cl-reg">· ${lado} Chile</span>`:""}</span><span class="fo-ref">${barraFormal(d.inf[1],d.for[1])}<b style="left:${tasa(c)}%"></b></span><span class="fo-miles">${num(d.ind[1],1)}%</span></${tag}>`};
  return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por región</strong></span>${leyendaFormal}`+
   `<span><span class="ref"></span>Chile: ${num(tasa(c),1)}% informal, ${num(c.for[1],1)}% formal</span></figcaption>`+
   `<div class="fo-fila fo-reg gs-cab" aria-hidden="true"><span class="fo-nombre">Región</span><span>% de los ocupados</span><span class="fo-miles">Indepen&shy;dientes</span></div>`+
   fila("Chile",c," cl-total","")+filas.map(([r,d])=>fila(nomReg(r),d,"",`data-r="${r}"`)).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de los ocupados de la región, según residencia; a la derecha, el % de independientes, formales e informales. `+
-  `Son estimaciones con muestra: una diferencia de uno o dos puntos entre regiones puede deberse a ella.</p>`}
+  `Son estimaciones con muestra: "sobre Chile" o "bajo Chile" marca las regiones cuya informalidad queda a ese lado con todo su margen de error (95%), que aparece al pasar el mouse; `+
+  `sin marca, la diferencia con Chile puede deberse a la muestra.</p>`}
+// Formalidad por actividad: como el gráfico de sexo por actividad, una barra que suma 100% por actividad, de más a menos
+// formal, con Chile arriba y su línea; a la derecha, cuántos son, para que Comercio (1,7 millones) no se lea igual que
+// Artes. Entran las 20: las más formales tienen tan pocos informales que esa cifra chica no es fiable y se marca, pero la
+// barra sí lo es (el ± en puntos es el mismo para formal e informal). Ocre y azul como el resto de la sección.
+const ETQ_FIAB={poco_fiable:"poco fiable",no_fiable:"no fiable"};
+function actividadesFormalidad(){return Object.entries(FOR.actividades).map(([k,d])=>[porCiiu(k),d]).sort((a,b)=>a[1].inf[1]-b[1].inf[1]||a[0].ciiu.localeCompare(b[0].ciiu))}
+// Lo que se ve en el gráfico por actividad, para su título y el párrafo: las que superan 93% formal (es un grupo y no
+// una "más formal": Minería, Finanzas y Electricidad se cruzan con su margen) y la más informal, que sí se separa.
+function fraseActividad(){const f=actividadesFormalidad(),alto=f.filter(([,d])=>d.for[1]>93),[ai,di]=f[f.length-1];
+ return `el empleo formal supera 93% en ${lista(alto.map(([a])=>esc(a.corto)))}; en ${esc(ai.corto)}, ${num(di.inf[1],1)}% es informal`}
+// Ser independiente no implica ser informal: dos actividades con el mismo % de independientes (36%) y muy distinta
+// informalidad dentro de ellos. Un control verifica que sus rangos de independientes se cruzan y los de informal no.
+function fraseIndependientes(){const m=FOR.actividades.M,g=FOR.actividades.G,p=porCiiu("M").corto,c=porCiiu("G").corto;
+ return `Ser independiente no implica ser informal: en ${esc(p)} hay tantos independientes como en ${esc(c)} (${num(m.ind[1],1)}% y ${num(g.ind[1],1)}%), `+
+  `pero ${num(m.xi[0],1)}% de ellos es informal, frente a ${num(g.xi[0],1)}% en ${esc(c)}.`}
+function graficoFormalidadActividad(){const c=FOR.chile,filas=actividadesFormalidad();
+ const fila=(t,d,clase,attr)=>{const e=ETQ_FIAB[d.fiab],tag=attr?"button":"div";
+  const partes=[`${num(d.ocup)} ocupados`,`formal: ${num(d.for[0])} (${num(d.for[1],1)}%)`,`informal: ${num(d.inf[0])} (${num(d.inf[1],1)}%)${e?`, ${e}`:""}`];
+  if(d.mas!=null)partes.push(`Margen de error: ± ${num(d.mas,1)} puntos (95%)`);
+  return `<${tag} class="fo-fila fo-reg${clase}" ${attr}${attr?"":' role="img" tabindex="0"'} data-tip="${`<strong>${esc(t)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(t)}: ${partes.join(", ")}">`+
+   `<span class="fo-nombre">${esc(t)}${e?` <span class="cl-reg">· informal ${e}</span>`:""}</span><span class="fo-ref">${barraFormal(d.inf[1],d.for[1])}<b style="left:${c.inf[1]}%"></b></span><span class="fo-miles">${num(d.ocup)}</span></${tag}>`};
+ const suma=filas.reduce((s,[,d])=>s+d.ocup,0);
+ return `<figure class="graf-fo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Formalidad por actividad: ${fraseActividad()}</strong></span>${leyendaFormal}`+
+  `<span><span class="ref"></span>Chile: ${num(c.inf[1],1)}% informal, ${num(c.for[1],1)}% formal</span></figcaption>`+
+  `<div class="fo-fila fo-reg gs-cab" aria-hidden="true"><span class="fo-nombre">Actividad</span><span>% de los ocupados</span><span class="fo-miles">Ocupados</span></div>`+
+  fila("Chile",c," cl-total","")+filas.map(([a,d])=>fila(a.corto,d,"",`data-a="${a.ciiu}"`)).join("")+`</figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los ocupados de cada actividad; a la derecha, cuántos son. Las actividades suman ${num(suma)} de ${num(c.ocup)}: `+
+  `faltan ${num(c.ocup-suma)} sin actividad informada o en organismos internacionales. Son cifras de la ENE: no coinciden con los ocupados del Censo de la sección Actividades. `+
+  `Donde hay muy pocos informales, su % se marca como poco fiable o no fiable; la barra, casi toda formal, sí lo es. El margen de error aparece al pasar el mouse.</p>`}
 // Formalidad según ENE: dos ejes y no tres grupos, porque un independiente puede ser formal o informal.
 // Tramos de edad de la informalidad de independientes. La frase compara personas de la misma edad: así se ve que la
 // diferencia por título no viene de que los sin título sean más jóvenes o mayores. La tarjeta usa solo brechaEdad.
@@ -163,7 +201,10 @@ function brechaEdad(){const t=FOR.tramos.inx,v=(k,e)=>num(t[k][e][0],0);
 // Grupos de la tabla de "Ver cifras": los mismos tres del gráfico por nivel. Formal e informal van con su % dentro del grupo.
 const GRUPOS_FOR=[["Todos los ocupados",d=>[d.ocup,d.for,d.inf]],
  ["Asalariados",d=>[d.asa[0],[d.af[0],100-d.asa[1]],[d.ai[0],d.asa[1]]]],["Independientes",d=>[d.inx[0],[d.xf[0],100-d.inx[1]],[d.xi[0],d.inx[1]]]]];
-function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r=>FOR.regiones[r].inf[1]);
+// Por región, grupos y no extremos: la más y la menos informal no se distinguen de sus vecinas con el margen de error.
+function frasesRegion(){const {alto,bajo}=gruposRegion(),rango=g=>{const v=g.map(r=>FOR.regiones[r].inf[1]);return `${num(Math.min(...v),0)}% a ${num(Math.max(...v),0)}%`};
+ return `La informalidad es más alta en ${lista(alto.map(enReg))} (${rango(alto)}) y queda bajo la de Chile en ${lista(bajo.map(enReg))} (${rango(bajo)}).`}
+function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
  const celda=v=>`<td class="n">${v?vmil(v):"—"}</td>`;
  const sinFam=NIVELES.filter(([k])=>!n[k].fam).map(([,t])=>t.toLowerCase());
  return `${encabezado("sec-for","Formalidad",`${num(n.Sin_titulo.inx[1],1)}% de los independientes sin título superior tiene empleo informal; con título profesional, ${num(n.Profesional.inx[1],1)}%`,true)}
@@ -175,9 +216,13 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles,[rMin,rMax]=extremos(r
   `Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% es informal; con título profesional, ${num(n.Profesional.inf[1],1)}%. `+
   // El título y la tarjeta dicen dónde está la diferencia: en asalariados la brecha por título es mucho menor.
   `La diferencia está sobre todo en los independientes (${num(n.Sin_titulo.inx[1],1)}% ± ${num(n.Sin_titulo.inx_mas,1)} y ${num(n.Profesional.inx[1],1)}% ± ${num(n.Profesional.inx_mas,1)}); `+
-  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()} `+
-  `La informalidad va de ${num(rMin[1],1)}% en ${enReg(rMin[0])} a ${num(rMax[1],1)}% en ${enReg(rMax[0])}.</p>
+  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()}</p>
+ <p style="margin:8px 0 0">`+
+  // Segundo párrafo: dónde (actividad y región). En uno solo, el título y el rubro se leían como una lista sin pausa.
+  `Por actividad, ${fraseActividad()}. ${fraseIndependientes()} `+
+  `${frasesRegion()}</p>
  ${graficoFormalidadNivel()}
+ ${graficoFormalidadActividad()}
  ${graficoFormalidadRegion()}
  <details><summary>Ver cifras</summary>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel<br><span class="nota">ocupados (% del grupo)</span></th><th class="n">Total</th><th class="n">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+

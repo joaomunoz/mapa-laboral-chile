@@ -17,8 +17,9 @@ function avisos(){let h="";
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;
  return h}
 // Una línea de la ENE, aparte de las cifras del Censo; solo si la muestra la sostiene.
-function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return "";
- return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${enMiles(f.inf[0])} de sus ocupados son informales (${num(f.inf[1],1)}%) y ${enMiles(f.for[0])} formales (${num(f.for[1],1)}%); `+
+// El informal de las actividades muy formales es una cifra chica que no es fiable: se escribe con su etiqueta, como en el resumen.
+function informalidadActividad(){const f=FOR.actividades[act.ciiu];if(!f)return "";const e=ETQ_FIAB[f.fiab];
+ return `<p class="nota" style="margin:8px 0 0">Según la ENE de ${PER.ene_actual}, ${enMiles(f.inf[0])} de sus ocupados son informales (${num(f.inf[1],1)}%${e?`, ${e}`:""}) y ${enMiles(f.for[0])} formales (${num(f.for[1],1)}%); `+
   `en Chile, ${num(FOR.chile.inf[1],1)}% y ${num(FOR.chile.for[1],1)}%.${f.ind==null?"":` ${enMiles(f.ind[0])} son independientes (${num(f.ind[1],1)}%).`}</p>`}
 function vistaChile(){const n=act.nacional;
  return `<h2>Chile · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024.</div>
