@@ -42,4 +42,4 @@ Va al final porque sus reglas para pantallas angostas deben ganar sobre las de c
 @media(max-width:640px){.kpi,.kpi:last-child:nth-child(n),.kpi:nth-last-child(2):nth-child(n){grid-column:1/-1}}
 
 /* En celular, Chile y la diferencia bajan a una línea propia con su rótulo (regla de .gs-extra). */
-@media(max-width:640px){.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}}
+@media(max-width:640px){.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}.gs-region .gs-extra{grid-template-columns:auto}}

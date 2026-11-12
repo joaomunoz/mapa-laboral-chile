@@ -171,7 +171,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 /* Desocupación por nivel en la región: barra y, a la derecha, Chile y la diferencia como números. */
 .dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
 /* Filas sin clic: el nombre va en tinta, no en azul de enlace. */
-div.cl-fila:not(.gs-cab) .cl-nombre{color:var(--t1)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
+div.cl-fila:not(.gs-cab) .cl-nombre{color:var(--t1)}div.gs-fila:not(.gs-cab) .gs-nombre{color:var(--t1)}.gs-region .gs-extra{grid-template-columns:11em}.gs-region{cursor:default}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}

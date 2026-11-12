@@ -177,6 +177,20 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
              and cat("2") == ["menor"] * 3 and cat("4") == ["mayor"] * 3 and cat("3") == ["igual", "mayor", "igual"] and cat("5") == ["mayor", "igual", "igual"])(
                 lambda r: [(lambda d: "igual" if abs(d) < 0.5 else "menor" if d < 0 else "mayor")(round(round(datos["niveles"][r][n]["tasa"] - datos["niveles"][r][n]["nacional"], 1) * 10) / 10)
                            for n in ("Profesional", "Tecnico", "Sin_titulo")]),
+        # Misma regla que lecturaSexoRegion (region.js): brecha de participación con tasas redondeadas, como la de la portada.
+        "Sexo por región: brecha mayor en O'Higgins y Maule (23,8) y menor en Aysén (13,4), frente a 19,5 en Chile; Magallanes con más desocupación en mujeres (6,7% y 6,1%)":
+            (lambda reg, brecha: brecha(pob["sexo"]) == 19.5 and max(brecha(reg[r]["sexo"]) for r in reg) == brecha(reg["6"]["sexo"]) == brecha(reg["7"]["sexo"]) == 23.8
+             and min(brecha(reg[r]["sexo"]) for r in reg) == brecha(reg["11"]["sexo"]) == 13.4
+             and (reg["12"]["sexo"]["mujeres"]["tasa_desocupacion"], reg["12"]["sexo"]["hombres"]["tasa_desocupacion"]) == (6.7, 6.1))(
+                {str(k): v for k, v in pob["regiones"].items()}, lambda x: round(round(x["hombres"]["tasa_participacion"] - x["mujeres"]["tasa_participacion"], 1) * 10) / 10),
+        # El detalle de región concilia los ocupados que viven en la región (Toda la región) con la fila A del CL
+        # (trabajan en ella, con actividad informada): traslado neto + sin actividad informada. Ambos conteos por lugar de
+        # trabajo deben sumar Chile, y el segundo tramo nunca es negativo.
+        "Ocupados por región: viven − trabajan = traslado; trabajan − A = sin actividad (O'Higgins 22.023 y 15.874; Antofagasta recibe 77.575)":
+            (lambda reg: sum(x["lugar_trabajo"] for x in reg.values()) == pob["chile"]["lugar_trabajo"] and sum(datos["base_ocupados"]["regiones"].values()) == datos["base_ocupados"]["chile"]
+             and all(x["lugar_trabajo"] - datos["base_ocupados"]["regiones"][r] >= 0 for r, x in reg.items())
+             and (reg["6"]["trabajan"] - reg["6"]["lugar_trabajo"], reg["6"]["lugar_trabajo"] - datos["base_ocupados"]["regiones"]["6"], reg["2"]["trabajan"] - reg["2"]["lugar_trabajo"]) == (22_023, 15_874, -77_575))(
+                {str(k): v for k, v in pob["regiones"].items()}),
         "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
         "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
