@@ -18,11 +18,15 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
    en claro y oscuro); en oscuro va apagado y no claro, porque el gris claro ya es el de desocupados.
    Desocupados (--desoc) en gris oscuro y no en negro: el negro hacía de la categoría más chica (5,1%) la que más pesaba.
    Con ocupados (azul) separa ΔE 16,4 en claro y 19,9 en oscuro (validate_palette.js); los grises fallan croma a propósito,
-   son contexto neutro con rótulo y tabla. "Sin dato" va con textura: con el mismo gris que "fuera" eran un color para dos. */
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#b8b6ae;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
+   son contexto neutro con rótulo y tabla. "Sin dato" va con textura: con el mismo gris que "fuera" eran un color para dos.
+   Áreas de estudio de una actividad (--ar1 a --ar4): grados del morado de "área" del resumen, para que el morado siga
+   significando área de estudio; no hay un color por área porque aparecen 9 distintas. Pares vecinos ΔE ≥ 16,9 (CVD) y
+   18,1 (normal) en claro, 14,9 y 15,7 en oscuro, donde el área principal es la más clara. "Otras áreas" usa el gris
+   --area-no con rayas: sin ellas se confundía con el morado más claro (ΔE 9 a 11). */
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#b8b6ae;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--ar1:#4a1a5c;--ar2:#8b3d9e;--ar3:#bb7dcc;--ar4:#e6c6ee;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--desoc:#5f5e59;--desoc-txt:#fff;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#55544e;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--area-no:#55534e;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#55544e;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--ar1:#ecc8f5;--ar2:#c084d2;--ar3:#94509f;--ar4:#5e2a6e;--area-no:#55534e;--aviso-fondo:#2a2416;
 --sd:#55534e;--desoc:#d6d4cd;--desoc-txt:#0b0b0b;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -259,6 +263,21 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .ar-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ar-fila:hover .cl-valor,.ar-fila:focus-visible .cl-valor{background:var(--plano)}
 /* Los dos bloques de la tabla de áreas: la línea marca dónde cambia la base de los %. */
 .ar-tabla .bloque{text-align:center}.ar-tabla .ini{border-left:2px solid var(--t2);padding-left:6px}
+/* CL de las actividades de una región: barras que salen de 1 en escala logarítmica. El margen a ambos lados deja sitio a la
+   cifra, que va a la izquierda de las barras bajo 1 y a la derecha de las demás. La elegida se marca con borde y negrita,
+   sin otro color: el color ya es el tramo del mapa. */
+.clr-fila{grid-template-columns:minmax(0,15rem) minmax(0,440px)}
+.clr-barra{margin-left:3.2em}.clr-barra i{position:absolute;top:0;border-radius:0 4px 4px 0}.clr-barra i.izq{border-radius:4px 0 0 4px}
+.clr-eje{position:relative;display:block;height:1.3em;margin:0 3.2em}.clr-eje span{position:absolute;bottom:0;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+.clr-sel{box-shadow:inset 0 0 0 1px var(--t2)}.clr-sel .cl-nombre{font-weight:700}
+/* Circular de áreas de estudio: el circular a la izquierda y los rótulos al lado, que en celular pasan abajo. Las
+   tajadas responden al mouse y al teclado con el mismo globo del resto; el foco se marca con borde. */
+.ar-circulo{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin:10px 0 4px}.ar-circulo svg{width:170px;height:170px;flex:none}
+.ar-circulo path{cursor:default;outline:none}.ar-circulo path:hover,.ar-circulo path:focus-visible{stroke:var(--t1)}
+.ar-rotulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:auto auto auto auto;gap:6px 8px;align-items:center;font-size:13px}
+.ar-rotulos li{display:contents}.ar-rotulos i{width:12px;height:12px;border-radius:2px;display:inline-block}.ar-rotulos b{text-align:right;font-variant-numeric:tabular-nums}
+.ar-rotulos li>span:first-of-type{color:var(--t1)}
+.ar-rayas{background:repeating-linear-gradient(45deg,var(--area-no) 0 3px,var(--sup) 3px 6px)!important}
 .envoltura{max-width:1240px;margin:0 auto}
 /* El mapa ocupa el alto de dos filas: a su derecha van las regiones en 2 filas de 8 y, debajo, el detalle con todo el ancho restante. */
 .grilla{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
@@ -297,7 +316,7 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 @media(max-width:640px){.kpi,.kpi:last-child:nth-child(n),.kpi:nth-last-child(2):nth-child(n){grid-column:1/-1}}
 
 /* En celular, Chile y la diferencia bajan a una línea propia con su rótulo (regla de .gs-extra). */
-@media(max-width:640px){.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}.gs-region .gs-extra{grid-template-columns:auto}}
+@media(max-width:640px){.clr-fila{grid-template-columns:minmax(0,1fr);row-gap:2px}.clr-fila.gs-cab{display:grid}.clr-fila.gs-cab .cl-nombre{display:none}.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}.gs-region .gs-extra{grid-template-columns:auto}}
 </style>
 </head>
 <body>
@@ -1178,9 +1197,34 @@ function filasSituacion(t,h,m,conMuestra){
    .map(([k,e,v,p])=>`<tr><td>${etiqueta(k,e)}</td>${[t,h,m].map(d=>`<td class="n">${num(d[v])} (${num(d[p],1)}%)</td>`).join("")}</tr>`).join("")+
   [["Tasa de desocupación","tasa_desocupacion"],["Tasa de participación","tasa_participacion"]]
    .map(([e,v])=>`<tr><td>${e}</td>${[t,h,m].map(d=>`<td class="n">${num(d[v],1)}%</td>`).join("")}</tr>`).join("")}
+// CL de las 20 actividades de la región: responde "qué distingue a esta región", no solo qué se concentra (la tabla
+// anterior mostraba de 1 a 5 actividades sobre 1,2 y ocultaba las que están bajo Chile, 121 de 320 casos). La línea en 1
+// es Chile, que siempre vale 1. Escala logarítmica, porque el CL es un cociente: 0,5 y 2 quedan a igual distancia de 1,
+// y Minería en Antofagasta (8,06) no aplasta al resto. El dominio es fijo, de 1/16 a 16 (los 320 CL van de 0,07 a 8,06),
+// para que la escala no cambie al pasar de una región a otra. Los colores son los 7 tramos del mapa.
+const CL_MIN=1/16,CL_MAX=16,CL_MARCAS=[0.125,0.25,0.5,1,2,4,8];
+const posCL=v=>100*Math.log(v/CL_MIN)/Math.log(CL_MAX/CL_MIN);
+const porCLRegion=reg=>[...DATOS.actividades].sort((a,b)=>ordenar(a.regiones[reg],b.regiones[reg]));
+function graficoCLRegion(reg){const uno=posCL(1);
+ const fila=a=>{const v=a.regiones[reg],x=posCL(v.peso),sel=a.ciiu===act.ciiu;
+  const partes=[`CL ${v.peso_txt}: ${LECT[v.lectura]}`,`${num(v.ocupados)} ocupados (${part(v.pct)} de los ocupados de la región)`,`En Chile, ${part(a.pct_nacional)}`];
+  return `<button class="cl-fila clr-fila${sel?" clr-sel":""}" data-a="${a.ciiu}" data-tip="${`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(a.corto)}${sel?" (elegida)":""}, ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${esc(a.corto)}</span><span class="cl-barra clr-barra" aria-hidden="true">`+
+   `<i style="left:${Math.min(x,uno)}%;width:${Math.abs(x-uno)}%;background:${relleno(v)}" class="${v.peso<1?"izq":""}"></i><b style="left:${uno}%"></b>`+
+   `<span class="cl-valor" style="${v.peso<1?`right:calc(${100-x}% + 6px)`:`left:calc(${x}% + 6px)`}">${v.peso_txt}</span></span></button>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">CL por actividad · ${nomReg(reg)}</strong></span>`+
+  `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span><span>Color: tramo del mapa</span></figcaption>`+
+  `<div class="cl-fila clr-fila gs-cab" aria-hidden="true"><span class="cl-nombre"></span><span class="clr-eje">${
+   CL_MARCAS.map(m=>`<span style="left:${posCL(m)}%">${num(m,m<0.25?3:m<1?2:0).replace(/0+$/,"").replace(/,$/,"")}</span>`).join("")}</span></div>`+
+  porCLRegion(reg).map(fila).join("")+`</figure>`}
+// La frase usa los mismos cortes del mapa (LECT): 1,2 o más, entre 0,8 y 1,2, y 0,8 o menos.
+function lecturaCLRegion(reg){const n=DATOS.actividades.length,g=k=>porCLRegion(reg).filter(a=>a.regiones[reg].lectura===k);
+ const sobre=g("concentra"),sim=g("similar").length,bajo=g("bajo_lo_nacional").length;
+ const lista=sobre.map(a=>`${esc(a.corto)} (${a.regiones[reg].peso_txt})`),txt=lista.length>1?lista.slice(0,-1).join(", ")+" y "+lista.at(-1):lista[0];
+ return `En ${nomReg(reg)}, `+(sobre.length?`${sobre.length===1?"1 actividad pesa":`${sobre.length} de las ${n} actividades pesan`} más que en Chile (CL de 1,2 o más): ${txt}. `:`ninguna de las ${n} actividades tiene CL de 1,2 o más. `)+
+  `${sobre.length?"Otras ":"Hay "}${sim} ${sim===1?"es similar":"son similares"} a Chile y ${bajo} ${bajo===1?"está":"están"} bajo Chile (CL de 0,8 o menos).`}
 function vistaRegion(){
- const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg],
-  otras=DATOS.actividades.filter(a=>a.ciiu!==act.ciiu&&a.regiones[reg].lectura==="concentra").sort((a,b)=>ordenar(a.regiones[reg],b.regiones[reg]));
+ const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg];
  // El título usa el nombre del selector: con el oficial, el usuario no reconocía la actividad que eligió.
  let h=`<h2>${nomReg(reg)} · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024, según región de trabajo.</div>${RES.regiones[reg].ciiu===act.ciiu?
   `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${nomReg(reg)}. Para ver otra, elígela en Actividad, arriba.</p>`:""}
@@ -1197,11 +1241,13 @@ function vistaRegion(){
   `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de ${PER.ene_contraste}: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
  // Justo bajo la tabla: las cifras por sexo de B ya están ahí; el gráfico las compara con toda la región (fila A).
  h+=`<h3>Hombres y mujeres en ${esc(act.corto)}</h3>${graficoSexoActividad(d,bs)}`;
- if(otras.length)h+=`<h3>Otras actividades con CL de 1,2 o más</h3><table><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
-  otras.slice(0,5).map(a=>{const v=a.regiones[reg];
+ h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><p class="lectura" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
+  `<p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. Escala logarítmica: 0,5 (la mitad que en Chile) y 2 (el doble) quedan a la misma distancia de 1.</p>`+
+  `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
+  porCLRegion(reg).map(a=>{const v=a.regiones[reg];
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
- }</tbody></table>`;
+ }</tbody></table></details>`;
  h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
  // Un solo encabezado para lo que es de toda la región: antes cada sección repetía la base y que no cambia con la actividad.
  h+=`<hr class="separador"><h2>${nomReg(reg)}, todas las actividades</h2><div class="nota">No cambia según la actividad elegida. `+
@@ -1247,8 +1293,30 @@ function bloqueCarreras(){
   h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos, con muestra insuficiente (${act.indicios.length})</summary>${
    por.map(([t,cs])=>`<p style="margin:6px 0 0"><strong>${t}:</strong> ${cs.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</p>`).join("")
   }</details>`}
- if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div>${circuloAreas()}`;
  return h}
+// Composición por área de los titulados ocupados de la actividad: un circular, idea del usuario, porque responde "de
+// qué áreas se compone" y tiene de 2 a 5 partes. Van las áreas con muestra suficiente (hasta 4) y el resto junto en
+// "Otras áreas": cada una de esas, sola, no es fiable. El margen de error va escrito en el rótulo, no cabe en la forma.
+// Grados del morado de "área" y gris con rayas para "Otras áreas" (ver base.css). Empieza a las 12 en sentido del reloj.
+function circuloAreas(){const t=act.areas.reduce((s,a)=>s+a.pct,0),resto=Math.round((100-t)*10)/10,tr=act.tit_casen-act.areas.reduce((s,a)=>s+a.tit,0);
+ const partes=[...act.areas.map((a,i)=>({nombre:a.area,pct:a.pct,mas:(a.max-a.min)/2,tit:a.tit,rango:`${num(a.min,1)}% a ${num(a.max,1)}%`,poco:a.fiab==="poco_fiable",fondo:`var(--ar${i+1})`})),
+  {nombre:"Otras áreas",pct:resto,tit:tr,otras:true,fondo:"url(#ar-rayas)"}];
+  let ang=0;
+ const xy=g=>`${(Math.sin(g)).toFixed(4)} ${(-Math.cos(g)).toFixed(4)}`;
+ const desc=p=>[`${num(p.pct,1)}% de los titulados ocupados`+(p.otras?"":` (entre ${p.rango})`),`${num(p.tit)} titulados`].concat(p.poco?["poco fiable"]:[]);
+ const tajadas=partes.map(p=>{const g=2*Math.PI*p.pct/100,d=`M0 0L${xy(ang)}A1 1 0 ${g>Math.PI?1:0} 1 ${xy(ang+g)}Z`;ang+=g;
+  return `<path d="${d}" fill="${p.fondo}" stroke="var(--sup)" stroke-width="2" vector-effect="non-scaling-stroke" tabindex="0" `+
+   `data-tip="${`<strong>${esc(p.nombre)}</strong><br>${desc(p).join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(p.nombre)}: ${desc(p).join(", ")}"></path>`}).join("");
+ const rotulo=p=>`<li><i style="background:${p.otras?"var(--area-no)":p.fondo}"${p.otras?' class="ar-rayas"':""}></i><span>${esc(p.nombre)}${p.poco?' <span class="etiqueta">poco fiable</span>':""}</span>`+
+  `<b>${num(p.pct,1)}%</b><span class="nota">${p.otras?"":`±${num(p.mas,1)}`}</span></li>`;
+ return `<figure class="ar-circulo"><svg viewBox="-1.02 -1.02 2.04 2.04" role="img" aria-label="Área de estudio de los titulados ocupados de ${esc(act.corto)}: ${partes.map(p=>`${p.nombre} ${num(p.pct,1)}%`).join(", ")}">`+
+  `<defs><pattern id="ar-rayas" width="0.09" height="0.09" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="0.09" height="0.09" fill="var(--sup)"/><rect width="0.045" height="0.09" fill="var(--area-no)"/></pattern></defs>${tajadas}</svg>`+
+  `<ul class="ar-rotulos">${partes.map(rotulo).join("")}</ul></figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los titulados ocupados de la actividad; ± margen de error (95%). Otras áreas: las que, solas, no tienen muestra suficiente.</p>`+
+  `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Área</th><th class="n">%</th><th class="n">Rango 95%</th><th class="n">Titulados ocupados</th></tr></thead><tbody>${
+   partes.map(p=>`<tr><td>${esc(p.nombre)}${p.poco?'<span class="etiqueta">poco fiable</span>':""}</td><td class="n">${num(p.pct,1)}%</td><td class="n">${p.otras?"":p.rango}</td><td class="n">${num(p.tit)}</td></tr>`).join("")
+  }</tbody></table></details>`}
 // El promedio esconde cuánto pesa la institución: en 79 de 115 carreras la más alta y la más baja se separan
 // 20 puntos o más de empleabilidad. Con 1 o 2 instituciones no hay rango y basta el aviso de pocas instituciones.
 const varia=(r,f)=>r?`; varía entre ${f(r[0])} y ${f(r[1])} según institución`:"";

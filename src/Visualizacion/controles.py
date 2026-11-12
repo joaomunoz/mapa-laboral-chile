@@ -191,6 +191,19 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
              and all(x["lugar_trabajo"] - datos["base_ocupados"]["regiones"][r] >= 0 for r, x in reg.items())
              and (reg["6"]["trabajan"] - reg["6"]["lugar_trabajo"], reg["6"]["lugar_trabajo"] - datos["base_ocupados"]["regiones"]["6"], reg["2"]["trabajan"] - reg["2"]["lugar_trabajo"]) == (22_023, 15_874, -77_575))(
                 {str(k): v for k, v in pob["regiones"].items()}),
+        # El gráfico de CL de cada región (region.js) usa escala logarítmica con dominio fijo de 1/16 a 16: un CL fuera
+        # de ese rango, o nulo, se saldría de la barra. Los conteos fijan la frase de lectura con los cortes del mapa.
+        "CL por región: los 320 CL caben entre 1/16 y 16; O'Higgins 2 sobre, 11 similares y 7 bajo Chile; Antofagasta 3, 4 y 13":
+            all(x["regiones"][r]["peso"] is not None and 1 / 16 < x["regiones"][r]["peso"] < 16 for x in datos["actividades"] for r in x["regiones"])
+            and all([sum(x["regiones"][r]["lectura"] == k for x in datos["actividades"]) for k in ("concentra", "similar", "bajo_lo_nacional")] == c
+                    for r, c in ((6, [2, 11, 7]), (2, [3, 4, 13]))),
+        # El circular de áreas (carreras.js) dibuja hasta 4 áreas y "Otras áreas" con el resto hasta 100%: el resto no puede
+        # ser negativo, ni en % ni en titulados, y debe coincidir con el % que dan sus titulados (0,5 por redondeo).
+        "Áreas, circular: hasta 4 áreas y Otras áreas no negativa, que cuadra con sus titulados; Construcción 12,2% e Inmobiliarias 52,5%":
+            all(len(a["areas"]) <= 4 and (r := round(100 - sum(x["pct"] for x in a["areas"]), 1)) >= 0
+                and (t := a["tit_casen"] - sum(x["tit"] for x in a["areas"])) >= 0 and abs(100 * t / a["tit_casen"] - r) <= 0.5
+                for a in datos["actividades"] if a["areas"])
+            and [round(100 - sum(x["pct"] for x in por_ciiu[c]["areas"]), 1) for c in ("F", "L")] == [12.2, 52.5],
         "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
         "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,

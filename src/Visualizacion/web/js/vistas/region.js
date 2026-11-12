@@ -94,9 +94,34 @@ function filasSituacion(t,h,m,conMuestra){
    .map(([k,e,v,p])=>`<tr><td>${etiqueta(k,e)}</td>${[t,h,m].map(d=>`<td class="n">${num(d[v])} (${num(d[p],1)}%)</td>`).join("")}</tr>`).join("")+
   [["Tasa de desocupación","tasa_desocupacion"],["Tasa de participación","tasa_participacion"]]
    .map(([e,v])=>`<tr><td>${e}</td>${[t,h,m].map(d=>`<td class="n">${num(d[v],1)}%</td>`).join("")}</tr>`).join("")}
+// CL de las 20 actividades de la región: responde "qué distingue a esta región", no solo qué se concentra (la tabla
+// anterior mostraba de 1 a 5 actividades sobre 1,2 y ocultaba las que están bajo Chile, 121 de 320 casos). La línea en 1
+// es Chile, que siempre vale 1. Escala logarítmica, porque el CL es un cociente: 0,5 y 2 quedan a igual distancia de 1,
+// y Minería en Antofagasta (8,06) no aplasta al resto. El dominio es fijo, de 1/16 a 16 (los 320 CL van de 0,07 a 8,06),
+// para que la escala no cambie al pasar de una región a otra. Los colores son los 7 tramos del mapa.
+const CL_MIN=1/16,CL_MAX=16,CL_MARCAS=[0.125,0.25,0.5,1,2,4,8];
+const posCL=v=>100*Math.log(v/CL_MIN)/Math.log(CL_MAX/CL_MIN);
+const porCLRegion=reg=>[...DATOS.actividades].sort((a,b)=>ordenar(a.regiones[reg],b.regiones[reg]));
+function graficoCLRegion(reg){const uno=posCL(1);
+ const fila=a=>{const v=a.regiones[reg],x=posCL(v.peso),sel=a.ciiu===act.ciiu;
+  const partes=[`CL ${v.peso_txt}: ${LECT[v.lectura]}`,`${num(v.ocupados)} ocupados (${part(v.pct)} de los ocupados de la región)`,`En Chile, ${part(a.pct_nacional)}`];
+  return `<button class="cl-fila clr-fila${sel?" clr-sel":""}" data-a="${a.ciiu}" data-tip="${`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(a.corto)}${sel?" (elegida)":""}, ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${esc(a.corto)}</span><span class="cl-barra clr-barra" aria-hidden="true">`+
+   `<i style="left:${Math.min(x,uno)}%;width:${Math.abs(x-uno)}%;background:${relleno(v)}" class="${v.peso<1?"izq":""}"></i><b style="left:${uno}%"></b>`+
+   `<span class="cl-valor" style="${v.peso<1?`right:calc(${100-x}% + 6px)`:`left:calc(${x}% + 6px)`}">${v.peso_txt}</span></span></button>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">CL por actividad · ${nomReg(reg)}</strong></span>`+
+  `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span><span>Color: tramo del mapa</span></figcaption>`+
+  `<div class="cl-fila clr-fila gs-cab" aria-hidden="true"><span class="cl-nombre"></span><span class="clr-eje">${
+   CL_MARCAS.map(m=>`<span style="left:${posCL(m)}%">${num(m,m<0.25?3:m<1?2:0).replace(/0+$/,"").replace(/,$/,"")}</span>`).join("")}</span></div>`+
+  porCLRegion(reg).map(fila).join("")+`</figure>`}
+// La frase usa los mismos cortes del mapa (LECT): 1,2 o más, entre 0,8 y 1,2, y 0,8 o menos.
+function lecturaCLRegion(reg){const n=DATOS.actividades.length,g=k=>porCLRegion(reg).filter(a=>a.regiones[reg].lectura===k);
+ const sobre=g("concentra"),sim=g("similar").length,bajo=g("bajo_lo_nacional").length;
+ const lista=sobre.map(a=>`${esc(a.corto)} (${a.regiones[reg].peso_txt})`),txt=lista.length>1?lista.slice(0,-1).join(", ")+" y "+lista.at(-1):lista[0];
+ return `En ${nomReg(reg)}, `+(sobre.length?`${sobre.length===1?"1 actividad pesa":`${sobre.length} de las ${n} actividades pesan`} más que en Chile (CL de 1,2 o más): ${txt}. `:`ninguna de las ${n} actividades tiene CL de 1,2 o más. `)+
+  `${sobre.length?"Otras ":"Hay "}${sim} ${sim===1?"es similar":"son similares"} a Chile y ${bajo} ${bajo===1?"está":"están"} bajo Chile (CL de 0,8 o menos).`}
 function vistaRegion(){
- const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg],
-  otras=DATOS.actividades.filter(a=>a.ciiu!==act.ciiu&&a.regiones[reg].lectura==="concentra").sort((a,b)=>ordenar(a.regiones[reg],b.regiones[reg]));
+ const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg];
  // El título usa el nombre del selector: con el oficial, el usuario no reconocía la actividad que eligió.
  let h=`<h2>${nomReg(reg)} · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024, según región de trabajo.</div>${RES.regiones[reg].ciiu===act.ciiu?
   `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${nomReg(reg)}. Para ver otra, elígela en Actividad, arriba.</p>`:""}
@@ -113,11 +138,13 @@ function vistaRegion(){
   `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de ${PER.ene_contraste}: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
  // Justo bajo la tabla: las cifras por sexo de B ya están ahí; el gráfico las compara con toda la región (fila A).
  h+=`<h3>Hombres y mujeres en ${esc(act.corto)}</h3>${graficoSexoActividad(d,bs)}`;
- if(otras.length)h+=`<h3>Otras actividades con CL de 1,2 o más</h3><table><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
-  otras.slice(0,5).map(a=>{const v=a.regiones[reg];
+ h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><p class="lectura" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
+  `<p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. Escala logarítmica: 0,5 (la mitad que en Chile) y 2 (el doble) quedan a la misma distancia de 1.</p>`+
+  `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
+  porCLRegion(reg).map(a=>{const v=a.regiones[reg];
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
- }</tbody></table>`;
+ }</tbody></table></details>`;
  h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
  // Un solo encabezado para lo que es de toda la región: antes cada sección repetía la base y que no cambia con la actividad.
  h+=`<hr class="separador"><h2>${nomReg(reg)}, todas las actividades</h2><div class="nota">No cambia según la actividad elegida. `+

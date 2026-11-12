@@ -216,3 +216,18 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 .ar-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.ar-fila:hover .cl-valor,.ar-fila:focus-visible .cl-valor{background:var(--plano)}
 /* Los dos bloques de la tabla de áreas: la línea marca dónde cambia la base de los %. */
 .ar-tabla .bloque{text-align:center}.ar-tabla .ini{border-left:2px solid var(--t2);padding-left:6px}
+/* CL de las actividades de una región: barras que salen de 1 en escala logarítmica. El margen a ambos lados deja sitio a la
+   cifra, que va a la izquierda de las barras bajo 1 y a la derecha de las demás. La elegida se marca con borde y negrita,
+   sin otro color: el color ya es el tramo del mapa. */
+.clr-fila{grid-template-columns:minmax(0,15rem) minmax(0,440px)}
+.clr-barra{margin-left:3.2em}.clr-barra i{position:absolute;top:0;border-radius:0 4px 4px 0}.clr-barra i.izq{border-radius:4px 0 0 4px}
+.clr-eje{position:relative;display:block;height:1.3em;margin:0 3.2em}.clr-eje span{position:absolute;bottom:0;transform:translateX(-50%);font-variant-numeric:tabular-nums}
+.clr-sel{box-shadow:inset 0 0 0 1px var(--t2)}.clr-sel .cl-nombre{font-weight:700}
+/* Circular de áreas de estudio: el circular a la izquierda y los rótulos al lado, que en celular pasan abajo. Las
+   tajadas responden al mouse y al teclado con el mismo globo del resto; el foco se marca con borde. */
+.ar-circulo{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin:10px 0 4px}.ar-circulo svg{width:170px;height:170px;flex:none}
+.ar-circulo path{cursor:default;outline:none}.ar-circulo path:hover,.ar-circulo path:focus-visible{stroke:var(--t1)}
+.ar-rotulos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:auto auto auto auto;gap:6px 8px;align-items:center;font-size:13px}
+.ar-rotulos li{display:contents}.ar-rotulos i{width:12px;height:12px;border-radius:2px;display:inline-block}.ar-rotulos b{text-align:right;font-variant-numeric:tabular-nums}
+.ar-rotulos li>span:first-of-type{color:var(--t1)}
+.ar-rayas{background:repeating-linear-gradient(45deg,var(--area-no) 0 3px,var(--sup) 3px 6px)!important}

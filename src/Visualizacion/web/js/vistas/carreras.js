@@ -28,8 +28,30 @@ function bloqueCarreras(){
   h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos, con muestra insuficiente (${act.indicios.length})</summary>${
    por.map(([t,cs])=>`<p style="margin:6px 0 0"><strong>${t}:</strong> ${cs.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</p>`).join("")
   }</details>`}
- if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div><div>${act.areas.map(a=>`${esc(a.area)} <span class="nota">${num(a.pct,1)}%</span>`).join(" &nbsp;·&nbsp; ")}</div>`;
+ if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div>${circuloAreas()}`;
  return h}
+// Composición por área de los titulados ocupados de la actividad: un circular, idea del usuario, porque responde "de
+// qué áreas se compone" y tiene de 2 a 5 partes. Van las áreas con muestra suficiente (hasta 4) y el resto junto en
+// "Otras áreas": cada una de esas, sola, no es fiable. El margen de error va escrito en el rótulo, no cabe en la forma.
+// Grados del morado de "área" y gris con rayas para "Otras áreas" (ver base.css). Empieza a las 12 en sentido del reloj.
+function circuloAreas(){const t=act.areas.reduce((s,a)=>s+a.pct,0),resto=Math.round((100-t)*10)/10,tr=act.tit_casen-act.areas.reduce((s,a)=>s+a.tit,0);
+ const partes=[...act.areas.map((a,i)=>({nombre:a.area,pct:a.pct,mas:(a.max-a.min)/2,tit:a.tit,rango:`${num(a.min,1)}% a ${num(a.max,1)}%`,poco:a.fiab==="poco_fiable",fondo:`var(--ar${i+1})`})),
+  {nombre:"Otras áreas",pct:resto,tit:tr,otras:true,fondo:"url(#ar-rayas)"}];
+  let ang=0;
+ const xy=g=>`${(Math.sin(g)).toFixed(4)} ${(-Math.cos(g)).toFixed(4)}`;
+ const desc=p=>[`${num(p.pct,1)}% de los titulados ocupados`+(p.otras?"":` (entre ${p.rango})`),`${num(p.tit)} titulados`].concat(p.poco?["poco fiable"]:[]);
+ const tajadas=partes.map(p=>{const g=2*Math.PI*p.pct/100,d=`M0 0L${xy(ang)}A1 1 0 ${g>Math.PI?1:0} 1 ${xy(ang+g)}Z`;ang+=g;
+  return `<path d="${d}" fill="${p.fondo}" stroke="var(--sup)" stroke-width="2" vector-effect="non-scaling-stroke" tabindex="0" `+
+   `data-tip="${`<strong>${esc(p.nombre)}</strong><br>${desc(p).join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(p.nombre)}: ${desc(p).join(", ")}"></path>`}).join("");
+ const rotulo=p=>`<li><i style="background:${p.otras?"var(--area-no)":p.fondo}"${p.otras?' class="ar-rayas"':""}></i><span>${esc(p.nombre)}${p.poco?' <span class="etiqueta">poco fiable</span>':""}</span>`+
+  `<b>${num(p.pct,1)}%</b><span class="nota">${p.otras?"":`±${num(p.mas,1)}`}</span></li>`;
+ return `<figure class="ar-circulo"><svg viewBox="-1.02 -1.02 2.04 2.04" role="img" aria-label="Área de estudio de los titulados ocupados de ${esc(act.corto)}: ${partes.map(p=>`${p.nombre} ${num(p.pct,1)}%`).join(", ")}">`+
+  `<defs><pattern id="ar-rayas" width="0.09" height="0.09" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="0.09" height="0.09" fill="var(--sup)"/><rect width="0.045" height="0.09" fill="var(--area-no)"/></pattern></defs>${tajadas}</svg>`+
+  `<ul class="ar-rotulos">${partes.map(rotulo).join("")}</ul></figure>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los titulados ocupados de la actividad; ± margen de error (95%). Otras áreas: las que, solas, no tienen muestra suficiente.</p>`+
+  `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Área</th><th class="n">%</th><th class="n">Rango 95%</th><th class="n">Titulados ocupados</th></tr></thead><tbody>${
+   partes.map(p=>`<tr><td>${esc(p.nombre)}${p.poco?'<span class="etiqueta">poco fiable</span>':""}</td><td class="n">${num(p.pct,1)}%</td><td class="n">${p.otras?"":p.rango}</td><td class="n">${num(p.tit)}</td></tr>`).join("")
+  }</tbody></table></details>`}
 // El promedio esconde cuánto pesa la institución: en 79 de 115 carreras la más alta y la más baja se separan
 // 20 puntos o más de empleabilidad. Con 1 o 2 instituciones no hay rango y basta el aviso de pocas instituciones.
 const varia=(r,f)=>r?`; varía entre ${f(r[0])} y ${f(r[1])} según institución`:"";
