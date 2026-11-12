@@ -86,11 +86,15 @@ def agregar_sexo_por_region(actividades: list[dict], por_sexo: pd.DataFrame) -> 
 
 
 def sexo_por_nivel(por_sexo: pd.DataFrame) -> tuple[dict, dict]:
-    """Ocupados y desocupados por nivel y sexo. La tasa siempre usa residencia, igual que la tabla regional sin abrir."""
+    """Ocupados y desocupados por nivel y sexo, todos según residencia.
+
+    Los desocupados no tienen lugar de trabajo, así que la tasa solo puede usar residencia. Los ocupados van en
+    la misma base para que desocupados / (ocupados + desocupados) reproduzca la tasa de cada fila: con ocupados
+    por lugar de trabajo, la cuenta no cerraba en 38 de 96 filas (Coquimbo técnico, hombres: 12,0% frente a 9,4%).
+    """
     c = por_sexo.dropna(subset=["nivel_titulo"])
     ocupados, desocupados = c[c["sit_fuerza_trabajo"] == OCUPADO], c[c["sit_fuerza_trabajo"] == DESOCUPADO]
     residencia = ocupados.groupby(["codigo_region", "nivel_titulo", "sexo"])["personas"].sum()
-    trabajo = ocupados.dropna(subset=["codigo_region_trabajo"]).groupby(["codigo_region_trabajo", "nivel_titulo", "sexo"])["personas"].sum()
     desoc = desocupados.groupby(["codigo_region", "nivel_titulo", "sexo"])["personas"].sum()
     tasa = lambda d, o: redondear(100 * d / (d + o), 1)
     regiones: dict = {}
@@ -98,8 +102,9 @@ def sexo_por_nivel(por_sexo: pd.DataFrame) -> tuple[dict, dict]:
         regiones[str(int(r))] = {}
         for n in c["nivel_titulo"].unique():
             dh, dm = int(desoc.get((r, n, HOMBRE), 0)), int(desoc.get((r, n, MUJER), 0))
-            regiones[str(int(r))][n] = {"oh": int(trabajo.get((r, n, HOMBRE), 0)), "om": int(trabajo.get((r, n, MUJER), 0)), "dh": dh, "dm": dm,
-                                        "th": tasa(dh, residencia.get((r, n, HOMBRE), 0)), "tm": tasa(dm, residencia.get((r, n, MUJER), 0))}
+            oh, om = int(residencia.get((r, n, HOMBRE), 0)), int(residencia.get((r, n, MUJER), 0))
+            regiones[str(int(r))][n] = {"oh": oh, "om": om, "dh": dh, "dm": dm,
+                                        "th": tasa(dh, oh), "tm": tasa(dm, om)}
     res_chile, des_chile = ocupados.groupby(["nivel_titulo", "sexo"])["personas"].sum(), desocupados.groupby(["nivel_titulo", "sexo"])["personas"].sum()
     chile = {n: {"oh": int(res_chile[(n, HOMBRE)]), "om": int(res_chile[(n, MUJER)]), "dh": int(des_chile[(n, HOMBRE)]), "dm": int(des_chile[(n, MUJER)]),
                  "th": tasa(des_chile[(n, HOMBRE)], res_chile[(n, HOMBRE)]), "tm": tasa(des_chile[(n, MUJER)], res_chile[(n, MUJER)])} for n in c["nivel_titulo"].unique()}

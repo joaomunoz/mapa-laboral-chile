@@ -158,7 +158,7 @@ Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No 
 **Criterios principales** (son criterios de trabajo, no estándares oficiales):
 
 - **Lectura del CL:** una región queda sobre Chile desde 1,2 y bajo Chile hasta 0,8. No se lee con menos de 60 personas.
-- **Bases:** los ocupados se cuentan por lugar de trabajo para participación y CL, y por residencia para tasas de desocupación y participación. Por eso los totales de una región pueden diferir.
+- **Bases:** los ocupados se cuentan por lugar de trabajo para participación y CL, y por residencia para tasas de desocupación y participación. Por eso los totales de una región pueden diferir. Una tasa y sus componentes van siempre en la misma base: en el detalle de región, los bloques "Toda la región" usan residencia, para que desocupados / (ocupados + desocupados) dé la tasa mostrada.
 - **Encuestas (ENE y CASEN):** un dato es fiable con n ≥ 60, gl ≥ 9 y CV ≤ 30, con errores calculados según el diseño muestral (linealización de Taylor).
 - **Carrera afín:** al menos 10% de sus ocupados en la actividad, al menos el doble de lo normal entre titulados y un dato fiable. Si la muestra es insuficiente pero hay 10 casos o más, se muestra como posible vínculo.
 

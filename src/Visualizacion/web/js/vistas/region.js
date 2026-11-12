@@ -3,10 +3,11 @@
 
 Vista de una actividad en una región, con la situación laboral y por nivel de toda la región.
 */
-// La tasa siempre usa residencia, aunque los ocupados de la región se muestren por lugar de trabajo.
-function tablaNivelSexo(x,rotulo){
- return `<h3>Por sexo</h3><div class="nota">Tasa de desocupación según residencia.</div>`+
-  `<div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:6px"><thead><tr><th rowspan="2">Nivel</th><th colspan="2" class="bloque ini">${rotulo}</th>`+
+// Ocupados, desocupados y tasa van según residencia: los desocupados no tienen lugar de trabajo, y con ocupados
+// por lugar de trabajo la cuenta desocupados / (ocupados + desocupados) no reproducía la tasa.
+function tablaNivelSexo(x){
+ return `<h3>Por sexo</h3>`+
+  `<div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:6px"><thead><tr><th rowspan="2">Nivel</th><th colspan="2" class="bloque ini">Ocupados</th>`+
   `<th colspan="2" class="bloque ini">Desocupados</th><th colspan="2" class="bloque ini">Tasa de desocupación</th></tr>`+
   `<tr>${"<th class=\"n ini\">Hombres</th><th class=\"n\">Mujeres</th>".repeat(3)}</tr></thead><tbody>`+
   NIVELES.map(([k,t])=>{const s=x(k);
@@ -42,18 +43,18 @@ function vistaRegion(){
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
  }</tbody></table>`;
  h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
- h+=`<hr class="separador"><details><summary>Toda la región, situación laboral</summary><div class="nota" style="margin-top:6px">`+
+ h+=`<hr class="separador"><details><summary>Toda la región, situación laboral, según residencia</summary><div class="nota" style="margin-top:6px">`+
   `${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Población de 15 años o más, según región de residencia. `+
   `Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
   `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
   `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
- h+=`<details style="margin-top:14px"><summary>Toda la región, por nivel de estudios</summary><div class="nota" style="margin-top:6px">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Desocupados según residencia. Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</div>
- <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados (lugar de trabajo)</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
+ h+=`<details style="margin-top:14px"><summary>Toda la región, por nivel de estudios, según residencia</summary><div class="nota" style="margin-top:6px">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Personas que viven en la región; arriba, los ocupados se cuentan donde trabajan. Tasa = desocupados / (ocupados + desocupados). Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</div>
+ <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
   `<th class="n">Tasa en Chile</th><th class="n">Tasa en ENE</th></tr></thead><tbody>`+
   NIVELES.map(([k,t])=>{const x=DATOS.niveles[reg][k];
-   return `<tr><td>${t}</td><td class="n">${num(x.trabajo)}</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.tasa,1)}%</td><td class="n">${num(x.nacional,1)}%</td>`+
+   return `<tr><td>${t}</td><td class="n">${num(x.ocupados)}</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.tasa,1)}%</td><td class="n">${num(x.nacional,1)}%</td>`+
     `<td class="n" ${x.ene==null?'title="ENE sin muestra suficiente"':""}>${x.ene==null?"sin muestra":num(x.ene,1)+"%"+(x.ene_poco?" *":"")}</td></tr>`}).join("")+
   `</tbody></table>${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?'<p class="nota" style="margin:6px 0 0">* ENE poco fiable.</p>':""}`+
-  tablaNivelSexo(k=>DATOS.niveles[reg][k].sexo,"Ocupados (lugar de trabajo)")+"</details>";
+  tablaNivelSexo(k=>DATOS.niveles[reg][k].sexo)+"</details>";
  return h}

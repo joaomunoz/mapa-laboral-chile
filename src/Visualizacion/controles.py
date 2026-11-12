@@ -164,7 +164,13 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Sexo por región: las bases suman la base de cada región y de Chile": all(v["h"] + v["m"] == datos["base_ocupados"]["regiones"][r] for r, v in datos["base_ocupados"]["sexo"]["regiones"].items()) and sum(datos["base_ocupados"]["sexo"]["chile"].values()) == datos["base_ocupados"]["chile"],
         "Sexo por región: Biobío en Salud 15.108 y 45.643; 4,91% y 17,22%": (lambda d: (d["h"], d["m"], d["pct_h"], d["pct_m"]) == (15_108, 45_643, 4.91, 17.22))(por_ciiu["Q"]["regiones"][8]),
         "Situación por sexo: cada región suma sus grupos": all(d["sexo"]["hombres"][k] + d["sexo"]["mujeres"][k] == d[k] for d in pob["regiones"].values() for k in ("total", "trabajan", "buscan", "no_buscan", "sin_dato")),
-        "Nivel por sexo: suma los ocupados y desocupados de cada región y de Chile": all(d["sexo"]["oh"] + d["sexo"]["om"] == d["trabajo"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for g in datos["niveles"].values() for d in g.values()) and all(d["sexo"]["oh"] + d["sexo"]["om"] == d["ocupados"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for d in datos["niveles_chile"].values()),
+        "Nivel por sexo: suma los ocupados y desocupados de cada región y de Chile": all(d["sexo"]["oh"] + d["sexo"]["om"] == d["ocupados"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for g in datos["niveles"].values() for d in g.values()) and all(d["sexo"]["oh"] + d["sexo"]["om"] == d["ocupados"] and d["sexo"]["dh"] + d["sexo"]["dm"] == d["desocupados"] for d in datos["niveles_chile"].values()),
+        # Ocupados, desocupados y tasa van en la misma base (residencia), así que la cuenta del lector reproduce la tasa.
+        "Nivel por región: desocupados / (ocupados + desocupados) da la tasa en las 48 filas y en las 96 por sexo; Antofagasta técnico 36.901, 2.731 y 6,9%":
+            all(round(100 * d["desocupados"] / (d["ocupados"] + d["desocupados"]), 1) == d["tasa"]
+                and round(100 * d["sexo"]["dh"] / (d["sexo"]["oh"] + d["sexo"]["dh"]), 1) == d["sexo"]["th"]
+                and round(100 * d["sexo"]["dm"] / (d["sexo"]["om"] + d["sexo"]["dm"]), 1) == d["sexo"]["tm"] for g in datos["niveles"].values() for d in g.values())
+            and (lambda d: (d["ocupados"], d["desocupados"], d["tasa"]) == (36_901, 2_731, 6.9))(datos["niveles"]["2"]["Tecnico"]),
         "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
         "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
