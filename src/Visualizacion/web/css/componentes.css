@@ -31,7 +31,7 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .lista .v{font-variant-numeric:tabular-nums;font-weight:600}
 /* En el resumen, el nombre de la actividad no cabe junto a la región: va debajo, con su color al lado. */
 .lista small{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;line-height:1.25;margin-top:2px;color:var(--t2);font-weight:400}
-.muestra{display:inline-block;flex:none;width:12px;height:12px;margin-top:1px;border-radius:3px}
+.muestra{display:inline-block;flex:none;width:12px;height:12px;margin-top:1px;border-radius:3px}.muestra+.muestra{margin-left:-4px}.nw{white-space:nowrap}
 .muestra.suave{opacity:.45}
 .leyenda-cat{display:grid;gap:4px;margin-top:10px;font-size:13px;color:var(--t2)}
 .leyenda-cat div{display:flex;align-items:center;gap:6px}
@@ -46,7 +46,7 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 /* Partes de un todo: la barra usa tonos propios para no confundirse con los colores de actividad ni con el rojo y azul del mapa. */
 .barra-poblacion{display:flex;gap:2px;height:14px;margin:10px 0 4px}
 .barra-poblacion i{display:block;min-width:2px;border-radius:2px}
-.s-trabajan{background:var(--acento)}.s-buscan{background:var(--t1)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:var(--eje);box-shadow:inset 0 0 0 1px var(--sd)}
+.s-trabajan{background:var(--acento)}.s-buscan{background:var(--desoc)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:repeating-linear-gradient(135deg,var(--sd) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1px var(--sd)}
 .celda-muestra{display:flex;align-items:center;gap:6px}
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
@@ -165,7 +165,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .sn-fila{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,420px) auto;justify-content:start;align-items:center;gap:6px 12px;padding:3px 4px;border-radius:4px;font-size:13px}
 .sn-fila:hover,.sn-fila:focus-visible{background:var(--plano)}.sn-fila:focus-visible{outline:2px solid var(--acento)}
 .sn-barra{display:flex;gap:2px;height:20px}.sn-barra i{display:flex;align-items:center;justify-content:center;min-width:2px;border-radius:2px;font-style:normal;font-size:12px;color:#fff;font-variant-numeric:tabular-nums}
-.sn-barra i.s-no-buscan{color:var(--t1)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
+.sn-barra i.s-no-buscan{color:var(--t1)}.sn-barra i.s-buscan{color:var(--desoc-txt)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
 .tcon{background:var(--tit-con)}.tsin{background:var(--tit-sin)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}

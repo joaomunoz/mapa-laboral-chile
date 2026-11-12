@@ -13,12 +13,15 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
    no, porque en Formalidad, la sección anterior, significan informal y formal. Validados con validate_palette.js (--ordinal).
    Área principal (--area) en morado, un tono que no usan las secciones vecinas (verde = título, azul y ocre = formalidad);
    el resto va en gris, como contexto. Validado con validate_palette.js en claro y oscuro.
-   Sin título superior (--tit-sin) va en gris: en verde, el color de los títulos en Educación por región, se leía como titulado. */
+   Sin título superior (--tit-sin) va en gris: en verde, el color de los títulos en Educación por región, se leía como titulado.
+   Desocupados (--desoc) en gris oscuro y no en negro: el negro hacía de la categoría más chica (5,1%) la que más pesaba.
+   Con ocupados (azul) separa ΔE 16,4 en claro y 19,9 en oscuro (validate_palette.js); los grises fallan croma a propósito,
+   son contexto neutro con rótulo y tabla. "Sin dato" va con textura: con el mismo gris que "fuera" eran un color para dos. */
 .viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#a3a19a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
---sd:#bdbbb3;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
+--sd:#bdbbb3;--desoc:#5f5e59;--desoc-txt:#fff;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
 @media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#62615b;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--area-no:#55534e;--aviso-fondo:#2a2416;
---sd:#55534e;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
+--sd:#55534e;--desoc:#d6d4cd;--desoc-txt:#0b0b0b;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--plano)}
@@ -69,7 +72,7 @@ details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
 .lista .v{font-variant-numeric:tabular-nums;font-weight:600}
 /* En el resumen, el nombre de la actividad no cabe junto a la región: va debajo, con su color al lado. */
 .lista small{display:flex;align-items:flex-start;gap:4px;font-size:12.5px;line-height:1.25;margin-top:2px;color:var(--t2);font-weight:400}
-.muestra{display:inline-block;flex:none;width:12px;height:12px;margin-top:1px;border-radius:3px}
+.muestra{display:inline-block;flex:none;width:12px;height:12px;margin-top:1px;border-radius:3px}.muestra+.muestra{margin-left:-4px}.nw{white-space:nowrap}
 .muestra.suave{opacity:.45}
 .leyenda-cat{display:grid;gap:4px;margin-top:10px;font-size:13px;color:var(--t2)}
 .leyenda-cat div{display:flex;align-items:center;gap:6px}
@@ -84,7 +87,7 @@ details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
 /* Partes de un todo: la barra usa tonos propios para no confundirse con los colores de actividad ni con el rojo y azul del mapa. */
 .barra-poblacion{display:flex;gap:2px;height:14px;margin:10px 0 4px}
 .barra-poblacion i{display:block;min-width:2px;border-radius:2px}
-.s-trabajan{background:var(--acento)}.s-buscan{background:var(--t1)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:var(--eje);box-shadow:inset 0 0 0 1px var(--sd)}
+.s-trabajan{background:var(--acento)}.s-buscan{background:var(--desoc)}.s-no-buscan{background:var(--sd)}.s-sin-dato{background:repeating-linear-gradient(135deg,var(--sd) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1px var(--sd)}
 .celda-muestra{display:flex;align-items:center;gap:6px}
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
@@ -203,7 +206,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .sn-fila{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,420px) auto;justify-content:start;align-items:center;gap:6px 12px;padding:3px 4px;border-radius:4px;font-size:13px}
 .sn-fila:hover,.sn-fila:focus-visible{background:var(--plano)}.sn-fila:focus-visible{outline:2px solid var(--acento)}
 .sn-barra{display:flex;gap:2px;height:20px}.sn-barra i{display:flex;align-items:center;justify-content:center;min-width:2px;border-radius:2px;font-style:normal;font-size:12px;color:#fff;font-variant-numeric:tabular-nums}
-.sn-barra i.s-no-buscan{color:var(--t1)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
+.sn-barra i.s-no-buscan{color:var(--t1)}.sn-barra i.s-buscan{color:var(--desoc-txt)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
 .tcon{background:var(--tit-con)}.tsin{background:var(--tit-sin)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
@@ -276,6 +279,9 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 }
 @media(max-width:1290px){.lista{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1290px){.detalle{grid-column:1/-1}.tarjeta.mapa{grid-row:auto}}
+/* Entre 901 y 1290 px el detalle baja bajo el mapa (sus tablas necesitan ~860 px) y la lista quedaba a su lado, de
+   440 a 580 px de alto frente a 1170 del mapa: 500 a 660 px vacíos. En 2 columnas la lista se alarga hasta casi el mapa. */
+@media(min-width:901px) and (max-width:1290px){.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:900px){.grilla{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:640px){.fo-reg.gs-cab{display:grid}.fo-reg.gs-cab .fo-nombre,.fo-reg.gs-cab span:nth-child(2){display:none}.fo-reg.gs-cab .fo-miles{grid-column:2}.fo-panel .fo-fila,.fo-reg{grid-template-columns:minmax(0,1fr) 6.6em}.fo-paneles{grid-template-columns:minmax(0,1fr)}.fo-fila{grid-template-columns:minmax(0,1fr) 5.6em;row-gap:2px}.fo-nombre{grid-column:1/-1}.ed-fila{grid-template-columns:minmax(0,1fr) 5.4em;row-gap:2px}.ed-fila .cl-nombre{grid-column:1/-1}.ed-fila .gs-num{grid-column:2}.ed-fila.gs-cab{display:grid}.ed-fila.gs-cab .cl-nombre,.ed-fila.gs-cab span:nth-child(2){display:none}.ar-fila{grid-template-columns:minmax(0,1fr) 5.4em;row-gap:2px}.ar-fila .cl-nombre{grid-column:1/-1}.ar-fila .gs-num{grid-column:2}.ar-fila.gs-cab{display:grid}.ar-fila.gs-cab .cl-nombre,.ar-fila.gs-cab span:nth-child(2){display:none}.tr-fila{grid-template-columns:minmax(0,1fr)}.gs-fila{grid-template-columns:3.4em minmax(0,1fr) 3.4em;row-gap:2px;padding:4px}.gs-nombre{grid-column:1/-1}.gs-cab{display:none}.sn-fila{grid-template-columns:minmax(0,1fr);row-gap:3px}.evc-col{width:26px}.evc-col em{font-size:11px}.evc-cols{gap:2px}.evc{padding-left:2em}.evc-grilla span{left:2em}.evc.compacto{padding-left:4.4em}.compacto .evc-grilla span{left:4.4em}table{display:block;overflow-x:auto}.viz-root{padding:14px}.grilla{grid-template-columns:minmax(0,1fr)}.mapa svg{max-width:200px}.lista{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Actividades en celular: el encabezado de columnas se oculta, así que cada cifra lleva su rótulo en su propia línea. */
@@ -404,18 +410,23 @@ function anotarMapa(notas){
    `<tspan x="${tx}" dy="${linea}">${esc(d)}</tspan><tspan class="a-d" x="${tx}" dy="${linea}">CL hasta ${v}</tspan></text></g>`}).join("")}
 function pintarResumen(){
  const colores=Object.entries(RES.colores),ch=POB.chile;
- document.getElementById("t-mapa").textContent="13 de 16 regiones se especializan en minería, agricultura o administración pública";
- document.getElementById("n-mapa").textContent="Actividad con mayor CL, según región de trabajo. No es la actividad con más ocupados.";
+ // El título dice qué muestra el mapa; el hallazgo ("13 de 16 regiones…") va en la tarjeta de arriba y en las
+ // anotaciones. Antes eran idénticos y el del mapa ocupaba tres líneas.
+ document.getElementById("t-mapa").textContent="Actividad con mayor CL en cada región";
+ document.getElementById("n-mapa").textContent="Según región de trabajo. No es la actividad con más ocupados.";
  document.getElementById("leyenda").className="leyenda-cat";
- document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+
+ // Cada actividad con su par fuerte y suave: con solo el fuerte, una región en tono suave (Biobío, en salmón) se leía
+ // como otra actividad.
+ document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i><i class="muestra suave" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+
   // El resto del sitio lee "sobre Chile" desde 1,2: la leyenda nombra los dos cortes para que 1,6 no parezca otro umbral.
-  `<div>Color fuerte: CL de ${RES.corte_suave} o más. Suave: de ${RES.corte_sobre} a menos de ${RES.corte_suave}; también pesa más que en Chile.</div>`;
+  `<div>Fuerte: CL de ${RES.corte_suave} o más. Suave: de ${RES.corte_sobre} a menos de ${RES.corte_suave}; también pesa más que en Chile.</div>`;
  document.getElementById("ejes").hidden=true;
  document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=RES.regiones[r],a=porCiiu(d.ciiu);
   p.style.fill=`var(--k${RES.colores[d.ciiu]})`;p.style.opacity=d.suave?.45:1;
   p.setAttribute("aria-label",`${DATOS.regiones[r]}: mayor CL en ${a.corto}, ${d.txt}`);p.setAttribute("aria-pressed",false)});
  document.getElementById("contorno").setAttribute("d","");
- document.getElementById("lectura").innerHTML=`<strong>${num(POB.poblacion_total)}</strong> habitantes · ${num(ch.total)} de 15 años o más · Tasa de ocupación <strong>${num(ch.pct_trabajan,1)}%</strong>`;
+ // Cada dato en un bloque que no se corta: a 1000 px "54,4%" quedaba solo en la segunda línea, lejos de su rótulo.
+ document.getElementById("lectura").innerHTML=`<span class="nw"><strong>${num(POB.poblacion_total)}</strong> habitantes</span> · <span class="nw">${num(ch.total)} de 15 años o más</span> · <span class="nw">Tasa de ocupación <strong>${num(ch.pct_trabajan,1)}%</strong></span>`;
  document.getElementById("n-lista").textContent="Primero, la actividad con mayor CL y su valor; debajo, la que tiene más ocupados. Elige una región para ver sus valores.";
  const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
  const rm=POB.regiones[13],sx=POB.sexo,cl=r=>RES.regiones[r].txt;

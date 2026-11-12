@@ -22,18 +22,23 @@ function anotarMapa(notas){
    `<tspan x="${tx}" dy="${linea}">${esc(d)}</tspan><tspan class="a-d" x="${tx}" dy="${linea}">CL hasta ${v}</tspan></text></g>`}).join("")}
 function pintarResumen(){
  const colores=Object.entries(RES.colores),ch=POB.chile;
- document.getElementById("t-mapa").textContent="13 de 16 regiones se especializan en minería, agricultura o administración pública";
- document.getElementById("n-mapa").textContent="Actividad con mayor CL, según región de trabajo. No es la actividad con más ocupados.";
+ // El título dice qué muestra el mapa; el hallazgo ("13 de 16 regiones…") va en la tarjeta de arriba y en las
+ // anotaciones. Antes eran idénticos y el del mapa ocupaba tres líneas.
+ document.getElementById("t-mapa").textContent="Actividad con mayor CL en cada región";
+ document.getElementById("n-mapa").textContent="Según región de trabajo. No es la actividad con más ocupados.";
  document.getElementById("leyenda").className="leyenda-cat";
- document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+
+ // Cada actividad con su par fuerte y suave: con solo el fuerte, una región en tono suave (Biobío, en salmón) se leía
+ // como otra actividad.
+ document.getElementById("leyenda").innerHTML=colores.map(([c,i])=>`<div><i class="muestra" style="background:var(--k${i})"></i><i class="muestra suave" style="background:var(--k${i})"></i>${esc(porCiiu(c).corto)}</div>`).join("")+
   // El resto del sitio lee "sobre Chile" desde 1,2: la leyenda nombra los dos cortes para que 1,6 no parezca otro umbral.
-  `<div>Color fuerte: CL de ${RES.corte_suave} o más. Suave: de ${RES.corte_sobre} a menos de ${RES.corte_suave}; también pesa más que en Chile.</div>`;
+  `<div>Fuerte: CL de ${RES.corte_suave} o más. Suave: de ${RES.corte_sobre} a menos de ${RES.corte_suave}; también pesa más que en Chile.</div>`;
  document.getElementById("ejes").hidden=true;
  document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r),d=RES.regiones[r],a=porCiiu(d.ciiu);
   p.style.fill=`var(--k${RES.colores[d.ciiu]})`;p.style.opacity=d.suave?.45:1;
   p.setAttribute("aria-label",`${DATOS.regiones[r]}: mayor CL en ${a.corto}, ${d.txt}`);p.setAttribute("aria-pressed",false)});
  document.getElementById("contorno").setAttribute("d","");
- document.getElementById("lectura").innerHTML=`<strong>${num(POB.poblacion_total)}</strong> habitantes · ${num(ch.total)} de 15 años o más · Tasa de ocupación <strong>${num(ch.pct_trabajan,1)}%</strong>`;
+ // Cada dato en un bloque que no se corta: a 1000 px "54,4%" quedaba solo en la segunda línea, lejos de su rótulo.
+ document.getElementById("lectura").innerHTML=`<span class="nw"><strong>${num(POB.poblacion_total)}</strong> habitantes</span> · <span class="nw">${num(ch.total)} de 15 años o más</span> · <span class="nw">Tasa de ocupación <strong>${num(ch.pct_trabajan,1)}%</strong></span>`;
  document.getElementById("n-lista").textContent="Primero, la actividad con mayor CL y su valor; debajo, la que tiene más ocupados. Elige una región para ver sus valores.";
  const orden=Object.entries(RES.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>b[1].peso-a[1].peso);
  const rm=POB.regiones[13],sx=POB.sexo,cl=r=>RES.regiones[r].txt;
