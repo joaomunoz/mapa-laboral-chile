@@ -14,13 +14,15 @@ Estructura de la página. generar_mapa.py le agrega los estilos de css/, el cód
    Área principal (--area) en morado, un tono que no usan las secciones vecinas (verde = título, azul y ocre = formalidad);
    el resto va en gris, como contexto. Validado con validate_palette.js en claro y oscuro.
    Sin título superior (--tit-sin) va en gris: en verde, el color de los títulos en Educación por región, se leía como titulado.
+   Su tono se separa del oliva de técnico, con el que comparte el gráfico de desocupación por nivel de cada región (ΔE ≥ 15
+   en claro y oscuro); en oscuro va apagado y no claro, porque el gris claro ya es el de desocupados.
    Desocupados (--desoc) en gris oscuro y no en negro: el negro hacía de la categoría más chica (5,1%) la que más pesaba.
    Con ocupados (azul) separa ΔE 16,4 en claro y 19,9 en oscuro (validate_palette.js); los grises fallan croma a propósito,
    son contexto neutro con rótulo y tabla. "Sin dato" va con textura: con el mismo gris que "fuera" eran un color para dos. */
-.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#a3a19a;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
+.viz-root{color-scheme:light;--plano:#f9f9f7;--sup:#fcfcfb;--t1:#0b0b0b;--t2:#52514e;--linea:#e1e0d9;--eje:#c3c2b7;--acento:#256abf;--hom:#256abf;--muj:#c8508a;--cl:#c9302f;--a24:#9d92ea;--a26:#4f3dbd;--g24:#cfcdc6;--g26:#9a9890;--tit-con:#08724d;--tit-sin:#b8b6ae;--recibe:#0081a8;--ed-pro:#08724d;--fo-inf:#c08a1e;--fo-for:#2a6ea8;--fo-for-txt:#fff;--ed-tec:#8a8a1a;--entrega:#b5562b;--area:#8b3d9e;--area-no:#bdbbb3;--aviso-fondo:#fdf4e3;
 --sd:#bdbbb3;--desoc:#5f5e59;--desoc-txt:#fff;--c0:#3987e5;--c1:#86b6ef;--c2:#cde2fb;--c3:#e2e0d8;--c4:#f7c6c1;--c5:#ee8a84;--c6:#c9302f;
 --k0:#eda100;--k1:#6250d6;--k2:#1baf7a;--k3:#eb6834;--k4:#e87ba4;--k5:#008300;}
-@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#62615b;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--area-no:#55534e;--aviso-fondo:#2a2416;
+@media (prefers-color-scheme:dark){.viz-root{color-scheme:dark;--plano:#0d0d0d;--sup:#1a1a19;--t1:#f0efec;--t2:#c3c2b7;--linea:#2c2c2a;--eje:#383835;--acento:#6da7ec;--hom:#4f8fe0;--muj:#d9619d;--cl:#e0605a;--a24:#7466d8;--a26:#b2a9f2;--g24:#45443f;--g26:#7a7872;--tit-con:#1aab78;--tit-sin:#55544e;--recibe:#1a9cc4;--ed-pro:#1aab78;--fo-inf:#c08400;--fo-for:#5a9ad0;--fo-for-txt:#0b0b0b;--ed-tec:#7a7a10;--entrega:#c9673a;--area:#b47ac7;--area-no:#55534e;--aviso-fondo:#2a2416;
 --sd:#55534e;--desoc:#d6d4cd;--desoc-txt:#0b0b0b;--c0:#5598e7;--c1:#256abf;--c2:#184f95;--c3:#383835;--c4:#7d2b2a;--c5:#b73a39;--c6:#ee8a84;
 --k0:#c98500;--k1:#9085e9;--k2:#199e70;--k3:#d95926;--k4:#d55181;--k5:#008300;}}
 *{box-sizing:border-box}
@@ -208,7 +210,11 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .sn-barra{display:flex;gap:2px;height:20px}.sn-barra i{display:flex;align-items:center;justify-content:center;min-width:2px;border-radius:2px;font-style:normal;font-size:12px;color:#fff;font-variant-numeric:tabular-nums}
 .sn-barra i.s-no-buscan{color:var(--t1)}.sn-barra i.s-buscan{color:var(--desoc-txt)}.sn-tasas{color:var(--t2);font-size:12.5px}.sn-tasas b{color:var(--t1);font-weight:600}
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
-.tcon{background:var(--tit-con)}.tsin{background:var(--tit-sin)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
+.tcon{background:var(--tit-con)}.tsin,.cl-barra i.tsin{background:var(--tit-sin)}.cl-barra i.ed-pro{background:var(--ed-pro)}.cl-barra i.ed-tec{background:var(--ed-tec)}
+/* Desocupación por nivel en la región: barra y, a la derecha, Chile y la diferencia como números. */
+.dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
+/* Filas sin clic: el nombre va en tinta, no en azul de enlace. */
+div.cl-fila:not(.gs-cab) .cl-nombre{color:var(--t1)}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
 .tema{margin:0;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t1)}
 .invita{margin:8px 0 0;padding:8px 10px;border:1px solid var(--linea);border-radius:6px}
@@ -289,6 +295,9 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 /* Hallazgos: 2 por fila en pantallas medianas y 1 en celular. */
 @media(max-width:1180px){.kpi,.kpi:nth-last-child(2):nth-child(3n+1),.kpi:last-child:nth-child(3n+2),.kpi:last-child:nth-child(3n+1){grid-column:span 3}.kpi:last-child:nth-child(2n+1){grid-column:1/-1}}
 @media(max-width:640px){.kpi,.kpi:last-child:nth-child(n),.kpi:nth-last-child(2):nth-child(n){grid-column:1/-1}}
+
+/* En celular, Chile y la diferencia bajan a una línea propia con su rótulo (regla de .gs-extra). */
+@media(max-width:640px){.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}}
 </style>
 </head>
 <body>
@@ -1027,14 +1036,39 @@ function vistaResumen(){
  ${formalidadHtml()}
  ${evolucionHtml()}`}
 // Perfil de cada actividad. Sin tasas: el Censo registra la actividad solo de quienes trabajan.
-function perfilEstudios(filas,lugar,rotulo,comparacion){
+// Gráfico con el mismo formato y colores que "Población con título" del resumen: la barra es profesional más técnico y
+// la línea es la comparación, para que el nivel se lea igual en todo el mapa. Hombres y mujeres van en filas propias:
+// la diferencia entre ellos (Minería en Antofagasta: 25% y 43% profesionales) se perdía entre las columnas de la tabla.
+// Si un sexo tiene un nivel con menos de 10 personas, su suma no se puede mostrar y la fila lo dice en vez de la barra.
+function graficoPerfil(filas,lugar,corto,rotulo,comparacion){
+ const grupos=[[rotulo,comparacion," cl-total",null],[corto,filas.map(f=>f[1]),"",filas.map(f=>f[0])],
+  ["Hombres",filas.map(f=>f[4]),"",filas.map(f=>f[2])],["Mujeres",filas.map(f=>f[5]),"",filas.map(f=>f[3])]];
+ const con=v=>v[0]+v[1],ref=con(comparacion),validos=grupos.filter(g=>g[1].every(x=>x!=null));
+ const tope=Math.ceil(Math.max(...validos.map(g=>con(g[1])))/5)*5,pos=x=>100*x/tope;
+ const fila=([t,v,clase,n])=>{
+  if(v.some(x=>x==null))return `<div class="cl-fila ed-fila" role="img" tabindex="0" aria-label="${t}: algún nivel tiene menos de 10 personas"><span class="cl-nombre">${t}</span>`+
+   `<span class="nota">Algún nivel tiene menos de 10 personas: ver cifras</span><span class="gs-num"></span></div>`;
+  const chica=n&&n.reduce((a,b)=>a+b,0)<CHICA?" *":"";
+  const partes=[`${num(con(v),1)}% con título técnico o profesional`,...NIVELES.map(([,e],i)=>`${e.toLowerCase()}: ${n?num(n[i])+" ":""}(${num(v[i],1)}%)`)];
+  return `<div class="cl-fila ed-fila${clase}" role="img" tabindex="0" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+   `<span class="cl-nombre">${t}${chica}</span><span class="cl-barra ed-barra" aria-hidden="true"><i class="ed-pro" style="width:${pos(v[0])}%"></i>`+
+   `<i class="ed-tec" style="left:calc(${pos(v[0])}% + 2px);width:calc(${pos(v[1])}% - 2px)"></i><b style="left:${pos(ref)}%"></b>`+
+   `<span class="cl-valor" style="left:calc(${pos(con(v))}% + 6px)">${num(con(v),1)}%</span></span><span class="gs-num">${num(v[2],1)}%</span></div>`};
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Ocupados con título técnico o profesional · ${esc(lugar)}</strong></span>`+
+  `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>${esc(rotulo)} (${num(ref,1)}%)</span></figcaption>`+
+  `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Grupo</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
+  grupos.map(fila).join("")+`</figure>`}
+function perfilEstudios(filas,lugar,corto,rotulo,comparacion){
  const hayChicas=filas.some(f=>f[2]!=null&&f[2]<CHICA||f[3]!=null&&f[3]<CHICA);
- return `<h2>Nivel de estudios de los ocupados</h2><div class="nota">${esc(lugar)}. Según lugar de trabajo, con nivel informado. Entre paréntesis, % de cada columna. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${
+ return `<h2>Nivel de estudios de los ocupados</h2><div class="nota">Según lugar de trabajo, con nivel informado. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>`+
+  graficoPerfil(filas,lugar,corto,rotulo,comparacion)+
+  `<p class="nota" style="margin:2px 0 8px">% de los ocupados de cada grupo. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`+
+  ([2,3].some(k=>filas.every(f=>f[k]!=null)&&filas.reduce((a,f)=>a+f[k],0)<CHICA)?NOTA_CHICA:"")+
+  `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${
   NIVELES.map(([,t],i)=>{const f=filas[i];
    return `<tr><td>${t}</td><td class="n">${num(f[0])} (${num(f[1],1)}%)</td><td class="n">${celdaNivel(f[2],f[4])}</td>`+
     `<td class="n">${celdaNivel(f[3],f[5])}</td><td class="n">${num(comparacion[i],1)}%</td></tr>`}).join("")
- }</tbody></table></div>${hayChicas?NOTA_CHICA:""}`}
+ }</tbody></table></div><p class="nota" style="margin:4px 0 0">${esc(lugar)}. Entre paréntesis, % de cada columna.</p>${hayChicas?NOTA_CHICA:""}</details>`}
 function avisos(){let h="";
  if(act.alerta_fuente)h+=`<div class="aviso">Censo y ENE difieren en el tamaño de esta actividad: usa los ocupados solo como referencia.</div>`;
  if(act.pct_sin_region>=10)h+=`<div class="aviso">${num(act.pct_sin_region,1)}% de los ocupados de esta actividad no tiene región de trabajo: esta cifra está subestimada.</div>`;
@@ -1052,7 +1086,7 @@ function vistaChile(){const n=act.nacional;
   `<div class="dato"><b>${num(act.sexo.m)} (${num(act.sexo.pct_m,1)}%)</b><span>mujeres</span></div>`+
   `<div class="dato"><b>${num(act.sexo.h)} (${num(act.sexo.pct_h,1)}%)</b><span>hombres</span></div></div>
  ${informalidadActividad()}${avisos()}<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">Censo, incluidos ocupados sin región de trabajo: ${num(n.censo_total)}. ENE de ${PER.ene_contraste}, los meses del Censo: ${num(n.ene_ocupados)} (participación ${part(n.ene_pct)}).</p></details>
- <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,"Todas las actividades",DATOS.perfil_estudios.todas)}`}
+ <hr class="separador">${perfilEstudios(act.niveles,`Chile · ${act.corto}`,act.corto,"Todas las actividades",DATOS.perfil_estudios.todas)}`}
 // Ocupados, desocupados y tasa van según residencia: los desocupados no tienen lugar de trabajo, y con ocupados
 // por lugar de trabajo la cuenta desocupados / (ocupados + desocupados) no reproducía la tasa.
 function tablaNivelSexo(x){
@@ -1063,6 +1097,32 @@ function tablaNivelSexo(x){
   NIVELES.map(([k,t])=>{const s=x(k);
    return `<tr><td>${t}</td><td class="n ini">${num(s.oh)}</td><td class="n">${num(s.om)}</td><td class="n ini">${num(s.dh)}</td><td class="n">${num(s.dm)}</td>`+
     `<td class="n ini">${num(s.th,1)}%</td><td class="n">${num(s.tm,1)}%</td></tr>`}).join("")+`</tbody></table></div>`}
+// Desocupación por nivel en la región. Chile va como número y no como línea: con una línea distinta en cada fila y su
+// valor solo en el globo, el lector no sabía qué marcaba. Un color por nivel, los mismos del gráfico de nivel de estudios
+// de arriba: con el verde de "con título" del resumen, técnico salía verde aquí y oliva arriba.
+// La diferencia se calcula con las tasas ya redondeadas, para que la resta del lector coincida con la columna.
+const DIF_CASI_IGUAL=0.5;
+const difNivel=x=>Math.round((x.tasa-x.nacional)*10)/10;
+// Lectura de la región: el Censo no tiene error muestral, así que toda diferencia es real; bajo 0,5 pp se lee "casi igual"
+// para no destacar diferencias mínimas (Valparaíso técnico y sin título: 0,0 pp).
+function lecturaDesocNivel(reg){const g={menor:[],mayor:[],igual:[]},quien={Profesional:"profesionales",Tecnico:"técnicos",Sin_titulo:"quienes no tienen título superior"};
+ NIVELES.forEach(([k])=>{const d=difNivel(DATOS.niveles[reg][k]);g[Math.abs(d)<DIF_CASI_IGUAL?"igual":d<0?"menor":"mayor"].push(quien[k])});
+ const lista=a=>a.length>1?a.slice(0,-1).join(", ")+" y "+a.at(-1):a[0],usadas=[["menor","menor"],["mayor","mayor"],["igual","casi igual"]].filter(([k])=>g[k].length);
+ // Solo la primera parte dice "que en Chile"; repetido en cada parte, la frase se alargaba sin agregar nada.
+ const partes=usadas.map(([k,e],i)=>`${e}${i?"":" que en Chile"} ${g[k].length===3?"en los 3 niveles":"entre "+lista(g[k])}`);
+ const t=NIVELES.map(([k])=>DATOS.niveles[reg][k].tasa),baja=t[0]<t[1]&&t[1]<t[2];
+ return {frase:`La desocupación es ${partes.length>1?partes.slice(0,-1).join(", ")+", y "+partes.at(-1):partes[0]}.`+(baja?" Con más estudios, la tasa es más baja.":""),g,baja}}
+function graficoDesocNivel(reg){const filas=NIVELES.map(([k,t],i)=>[t,DATOS.niveles[reg][k],["ed-pro","ed-tec","tsin"][i]]);
+ const tope=Math.ceil(Math.max(...filas.map(([,x])=>x.tasa))/4)*4,pos=v=>100*v/tope;
+ const signo=d=>d>0?`+${num(d,1)}`:d<0?`−${num(-d,1)}`:num(0,1);
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación · ${nomReg(reg)} y Chile</strong></span></figcaption>`+
+  `<div class="cl-fila dn-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Nivel</span><span>${nomReg(reg)}</span>`+
+  `<span class="gs-extra"><span class="gs-num">Chile</span><span class="gs-num">Diferencia</span></span></div>`+
+  filas.map(([t,x,c])=>{const d=difNivel(x),partes=[`${nomReg(reg)}: ${num(x.tasa,1)}%`,`Chile: ${num(x.nacional,1)}%`,`diferencia: ${signo(d)} pp`,`${num(x.desocupados)} desocupados y ${num(x.ocupados)} ocupados`];
+   return `<div class="cl-fila dn-fila" role="img" tabindex="0" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
+    `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i class="${c}" style="width:${pos(x.tasa)}%"></i>`+
+    `<span class="cl-valor" style="left:calc(${pos(x.tasa)}% + 6px)">${num(x.tasa,1)}%</span></span>`+
+    `<span class="gs-extra"><span class="gs-num"><span class="gs-et">Chile </span>${num(x.nacional,1)}%</span><span class="gs-num"><span class="gs-et">Diferencia </span>${signo(d)} pp</span></span></div>`}).join("")+`</figure>`}
 function filasSituacion(t,h,m,conMuestra){
  const etiqueta=(k,e)=>conMuestra?`<span class="celda-muestra"><i class="muestra ${k}"></i>${e}</span>`:e;
  return [["s-trabajan","Ocupados","trabajan","pct_trabajan"],["s-buscan","Desocupados","buscan","pct_buscan"],
@@ -1092,14 +1152,10 @@ function vistaRegion(){
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
  }</tbody></table>`;
- h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
- h+=`<hr class="separador"><details><summary>Toda la región, situación laboral, según residencia</summary><div class="nota" style="margin-top:6px">`+
-  `${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Población de 15 años o más, según región de residencia. `+
-  `Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
-  `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
-  `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
- h+=`<details style="margin-top:14px"><summary>Toda la región, por nivel de estudios, según residencia</summary><div class="nota" style="margin-top:6px">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Personas que viven en la región; arriba, los ocupados se cuentan donde trabajan. Tasa = desocupados / (ocupados + desocupados). Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</div>
+ h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
+ h+=`<hr class="separador">`;
+ h+=`<h2>Desocupación por nivel de estudios</h2><div class="nota">${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Personas que viven en la región; arriba, los ocupados se cuentan donde trabajan. Tasa = desocupados / (ocupados + desocupados).</div><p class="lectura" style="margin:8px 0 0">${lecturaDesocNivel(reg).frase}</p>${graficoDesocNivel(reg)}
+ <details><summary>Ver cifras</summary><p class="nota" style="margin:6px 0 0">Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</p>
  <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
   `<th class="n">Tasa en Chile</th><th class="n">Tasa en ENE</th></tr></thead><tbody>`+
   NIVELES.map(([k,t])=>{const x=DATOS.niveles[reg][k];
@@ -1107,6 +1163,12 @@ function vistaRegion(){
     `<td class="n" ${x.ene==null?'title="ENE sin muestra suficiente"':""}>${x.ene==null?"sin muestra":num(x.ene,1)+"%"+(x.ene_poco?" *":"")}</td></tr>`}).join("")+
   `</tbody></table>${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?'<p class="nota" style="margin:6px 0 0">* ENE poco fiable.</p>':""}`+
   tablaNivelSexo(k=>DATOS.niveles[reg][k].sexo)+"</details>";
+ h+=`<details style="margin-top:14px"><summary>Toda la región, situación laboral, según residencia</summary><div class="nota" style="margin-top:6px">`+
+  `${nomReg(reg)}, todas las actividades: no cambia según la actividad elegida. Población de 15 años o más, según región de residencia. `+
+  `Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
+  `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
+  `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
  return h}
 // Las carreras van bajo su nivel, junto a los ocupados de ese nivel en el lugar elegido: así se ve a cuánta gente
 // se refiere cada lista y que las carreras no describen a quienes no tienen título superior. El Censo no trae la

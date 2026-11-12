@@ -171,6 +171,12 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
                 and round(100 * d["sexo"]["dh"] / (d["sexo"]["oh"] + d["sexo"]["dh"]), 1) == d["sexo"]["th"]
                 and round(100 * d["sexo"]["dm"] / (d["sexo"]["om"] + d["sexo"]["dm"]), 1) == d["sexo"]["tm"] for g in datos["niveles"].values() for d in g.values())
             and (lambda d: (d["ocupados"], d["desocupados"], d["tasa"]) == (36_901, 2_731, 6.9))(datos["niveles"]["2"]["Tecnico"]),
+        # Misma regla que lecturaDesocNivel (region.js): diferencia con tasas redondeadas; bajo 0,5 pp es "casi igual".
+        "Desocupación por nivel: baja con más estudios en las 16 regiones; Antofagasta menor y Coquimbo mayor que Chile en los 3 niveles; Atacama mayor solo en técnico; Valparaíso 0,5 cuenta como mayor":
+            (lambda cat: all(g["Profesional"]["tasa"] < g["Tecnico"]["tasa"] < g["Sin_titulo"]["tasa"] for g in datos["niveles"].values())
+             and cat("2") == ["menor"] * 3 and cat("4") == ["mayor"] * 3 and cat("3") == ["igual", "mayor", "igual"] and cat("5") == ["mayor", "igual", "igual"])(
+                lambda r: [(lambda d: "igual" if abs(d) < 0.5 else "menor" if d < 0 else "mayor")(round(round(datos["niveles"][r][n]["tasa"] - datos["niveles"][r][n]["nacional"], 1) * 10) / 10)
+                           for n in ("Profesional", "Tecnico", "Sin_titulo")]),
         "Títulos por sexo: hombres y mujeres no superan el total; Enfermería 845 y 4.123": all(f["tit_h"] + f["tit_m"] <= f["tit"] for f in datos["fichas"].values()) and (datos["fichas"]["ENFERMERIA"]["tit_h"], datos["fichas"]["ENFERMERIA"]["tit_m"]) == (845, 4_123),
         "Sexo y género: las constantes coinciden con los microdatos, si están": totales_sexo_genero_correctos(),
         "Población: el total coincide con los microdatos, si están": not RUTA_PERSONAS.exists() or pq.ParquetFile(RUTA_PERSONAS).metadata.num_rows == POBLACION_TOTAL_CENSO,
