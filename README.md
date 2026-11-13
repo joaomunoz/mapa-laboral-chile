@@ -164,7 +164,7 @@ Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No 
 
 **Validación:** cada paso se detiene si falla uno de sus controles.
 
-- **Reproducibilidad:** en un clon limpio, el 03-11-26, la cadena completa generó un `index.html` idéntico byte a byte. Esa prueba es anterior a la última versión del mapa.
+- **Reproducibilidad:** en un clon limpio, el 13-11-26, con un entorno nuevo instalado desde `requirements.txt`, la cadena completa desde `procesar.py` regeneró todas las tablas versionadas sin cambios y un `index.html` idéntico byte a byte.
 - **Contra el dato oficial:** el procesamiento de ENE reproduce el Boletín INE n°336 (julio-septiembre de 2026) con una desviación máxima de 0,08%, y el n°310 (mayo-julio de 2024) con 0,12%. En 2024, la cifra de ocupados informales del boletín no calza con el microdato publicado y no se valida.
 - **Entre fuentes:** con los mismos meses, el CL del Censo y el de ENE tienen una correlación de 0,97 en las 187 combinaciones de región y actividad que ENE mide con fiabilidad.
 - **Coherencia del mapa:** el color y la lectura se deciden con el mismo CL de 2 decimales que se muestra. La generación se detiene si los datos dejan de respaldar el color, la lectura o las frases de la página.
@@ -196,8 +196,7 @@ Probado con Python 3.13 en Linux.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install pandas==2.3.3 numpy==2.3.5 pyarrow==26.0.0 geopandas==1.2.0 shapely==2.2.0 \
-  requests==2.32.5 beautifulsoup4==4.15.0 rapidfuzz==3.12.2 openpyxl==3.1.5
+.venv/bin/pip install -r requirements.txt
 ```
 
 Los datos crudos no están en el repositorio porque pesan hasta 1,6 GB. Para regenerar el mapa hay dos caminos:
@@ -209,7 +208,7 @@ Los datos crudos no están en el repositorio porque pesan hasta 1,6 GB. Para reg
 .venv/bin/python -W ignore src/Visualizacion/generar_mapa.py
 ```
 
-**La cadena completa.** El procesamiento tarda unos 10 minutos con los datos ya descargados:
+**La cadena completa.** El procesamiento tarda unos 11 minutos con los datos ya descargados:
 
 ```bash
 PY=.venv/bin/python
