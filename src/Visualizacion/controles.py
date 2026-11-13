@@ -98,6 +98,12 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "El área de cada región cambia menos de 0,5% al reconstruir los bordes": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
         "El área de cada región cambia menos de 1% al simplificar": geo["diferencia_simplificada_pct"] < DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT,
         "Minería en Chile: 268.491 con región y 275.517 en total": por_ciiu["B"]["nacional"]["ocupados"] == 268_491 and por_ciiu["B"]["nacional"]["censo_total"] == 275_517,
+        # El gráfico "Región donde más pesa" pinta cada barra con el tramo del mapa y nombra a las que no llegan a 1,2: esa
+        # frase solo vale si no concentrar en su región de mayor CL equivale a no concentrar en ninguna.
+        "CL del resumen: Comercio, Servicios administrativos y Hogares no concentran en ninguna región, y las barras usan el color del mapa": (
+            {c for c, a in por_ciiu.items() if not any(v["lectura"] == "concentra" for v in a["regiones"].values())}
+            == {c for c, a in por_ciiu.items() if a["regiones"][a["nacional"]["mas_peso"]["r"]]["lectura"] != "concentra"} == {"G", "N", "T"}
+            and "background:${relleno(v)}" in re.search(r"function graficoCL\(\)\{.*?\n// ", codigo_js["js/vistas/resumen.js"], re.S).group(0)),
         "Salud: más personas en la Metropolitana y más peso en Biobío": por_ciiu["Q"]["nacional"]["mas_personas"]["r"] == 13 and por_ciiu["Q"]["nacional"]["mas_peso"]["r"] == 8,
         "Profesionales desocupados en Chile: 153.695": datos["niveles_chile"]["Profesional"]["desocupados"] == 153_695,
         "Las 16 regiones tienen sus 3 niveles": len(datos["niveles"]) == 16 and all(len(n) == 3 for n in datos["niveles"].values()),

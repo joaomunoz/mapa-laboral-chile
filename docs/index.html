@@ -410,8 +410,9 @@ const vp=(v,p)=>`${num(v)} (${part(p)})`;
 const vmil=([n,p])=>`${num(n)} (${num(p,1)}%)`;  // En tablas: ocupados estimados (% de la fila), en unidades
 // En texto y gráficos, la ENE se redondea a mil o a millón: es una estimación con muestra y se lee mejor así.
 const enMiles=n=>n>=1e6?`${num(n/1e6,1)} millones`:`${num(n/1000,0)} mil`;
-// Si algún nombre ya lleva "y" (Electricidad y gas), una coma antes del último separa la lista de los nombres.
-const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+(x.some(e=>/ y /.test(e))?", y ":" y ")+x[x.length-1];
+// Si el último o el penúltimo nombre ya lleva "y" (Electricidad y gas), una coma antes del último separa la lista de los
+// nombres. Un nombre con "y" más atrás ya queda entre comas, y ahí la coma sobra ("Tarapacá, Valparaíso y Biobío").
+const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+(x.slice(-2).some(e=>/ y /.test(e))?", y ":" y ")+x[x.length-1];
 // % con título técnico o profesional, desde las personas y no desde los porcentajes ya redondeados.
 const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+filas[2][0]);
 // "4 de cada 10" se entiende más rápido que un porcentaje; la cifra exacta queda al lado.
@@ -588,17 +589,20 @@ function columnasEvolucion(titulo,grupos,tope,compacto){const pos=x=>100*x/tope,
   (compacto?`<div class="evc-rotulos" aria-hidden="true"><span>Cambio</span></div>`:"")+
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupos.map(grupo).join("")+`</div></div></figure>`}
-// Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
-function tablaEvolucion(filas){const c=EVO.chile;
- const tr=(t,d,k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
+// Tablas gemelas, una bajo cada gráfico (nivel y región): todas las cifras, para quien no ve el gráfico o quiere el detalle
+// sin pasar el mouse. Chile va en las dos, como en los gráficos.
+function tablaEvolucion(titulo,filas){const c=EVO.chile;
+ const tr=([t,d,k])=>`<tr class="${k}"><td>${t}</td><td class="n">${num(d.t24,1)}%</td><td class="n">${num(d.t26,1)}%</td>`+
   `<td class="n">${ppTxt(d.dif)} pp</td><td class="n">${ppTxt(d.min)} a ${ppTxt(d.max)}</td><td>${LECT_EVO[d.lect]}</td></tr>`;
- return `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th></th><th class="n">2024</th><th class="n">2026</th>`+
+ return `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>${titulo}</th><th class="n">2024</th><th class="n">2026</th>`+
   `<th class="n">Cambio</th><th class="n">Rango del cambio (95%)</th><th>Lectura</th></tr></thead><tbody>`+
-  tr("Chile",c,"total")+NIVELES.map(([k,t])=>tr(t,EVO.niveles[k],"")).join("")+filas.map(([r,d],i)=>tr(nomReg(r),d,i?"":"sep")).join("")+`</tbody></table></div></details>`}
+  [["Chile",c,"total"],...filas].map(tr).join("")+`</tbody></table></div></details>`}
 function graficosEvolucion(filas){const c=EVO.chile,todos=[c,...Object.values(EVO.niveles),...filas.map(([,d])=>d)];
  const tope=Math.ceil(Math.max(...todos.flatMap(d=>[d.t24,d.t26]))/4)*4;
  return columnasEvolucion("Por nivel de estudios",[["Chile",c," evc-total"],...NIVELES.map(([k,t])=>[t,EVO.niveles[k],""])],tope)+
-  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)+tablaEvolucion(filas)}
+  tablaEvolucion("Nivel",NIVELES.map(([k,t])=>[t,EVO.niveles[k],""]))+
+  columnasEvolucion("Por región",[["Chile",c," evc-total",""],...filas.map(([r,d])=>[nomReg(r),d,"",`data-r="${r}"`])],tope,true)+
+  tablaEvolucion("Región",filas.map(([r,d])=>[nomReg(r),d,""]))}
 function evolucionHtml(){const f=frasesEvolucion(),c=EVO.chile;
  const filas=Object.entries(EVO.regiones).sort((a,b)=>b[1].dif-a[1].dif||a[0]-b[0]);
  const titulo=c.lect==="sin_cambio_claro"?`La desocupación pasó de ${num(c.t24,1)}% en 2024 a ${num(c.t26,1)}% en 2026, dentro del margen de error`
@@ -753,11 +757,10 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
   `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()}</p>
  <p style="margin:8px 0 0">`+
   // Segundo párrafo: dónde (actividad y región). En uno solo, el título y el rubro se leían como una lista sin pausa.
-  `Por actividad, ${fraseActividad()}. ${fraseIndependientes()} `+
+  // La frase por actividad no va aquí: es el título de su gráfico, más abajo, y repetida se leía dos veces.
+  `${fraseIndependientes()} `+
   `${frasesRegion()}</p>
  ${graficoFormalidadNivel()}
- ${graficoFormalidadActividad()}
- ${graficoFormalidadRegion()}
  <details><summary>Ver cifras</summary>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel<br><span class="nota">ocupados (% del grupo)</span></th><th class="n">Total</th><th class="n">Formal</th><th class="n">Informal</th></tr></thead><tbody>`+
   // Un bloque por panel del gráfico, en el mismo orden, como la tabla por edad. Antes eran dos tablas con los mismos ocupados
@@ -770,6 +773,10 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
  ${tablaEdad(false)}${cuadreEdad(false)}
  ${tablaEdad(true)}${cuadreEdad(true)}
  <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo, nivel y edad): formal más informal suman 100. Chile es la suma de las filas de abajo, asalariados e independientes de los tres niveles, con su propio % y margen; Total suma los cinco tramos. El margen de error (95%) de cada celda aparece al pasar el mouse. De 18 a 24 años, los independientes con título son muy pocos en la muestra y no son fiables. Fuera quedan 15 a 17 años y 65 o más, la edad de jubilación: también trabajan y son activos, pero ahí trabajar ya es opcional. La comparación a igual edad del texto usa de 25 a 64.</p>
+ </details>
+ ${graficoFormalidadActividad()}
+ ${graficoFormalidadRegion()}
+ <details><summary>Ver cifras</summary>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región<br><span class="nota">ocupados (%)</span></th><th class="n">Formal</th><th class="n">Informal</th><th class="n">Independientes</th></tr></thead><tbody>`+
   [["Chile",c,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],FOR.regiones[r],""])].map(([t,d,k])=>
    `<tr class="${k}"><td>${esc(t)}</td>${celda(d.for)}${celda(d.inf)}${celda(d.ind)}</tr>`).join("")+`</tbody></table></div>
@@ -801,10 +808,12 @@ function graficoSexo(){
 // Barras horizontales: lo que se lee es cada actividad con su región y su CL, no cuántas caen en un tramo.
 function graficoCL(){
  const filas=DATOS.actividades.map(a=>({a,r:a.nacional.mas_peso.r,v:a.regiones[a.nacional.mas_peso.r]})).sort((x,y)=>y.v.peso-x.v.peso);
+ // Misma regla de lectura que el mapa (cifra visible): las que no concentran en su región de mayor CL no lo hacen en ninguna.
+ const similares=filas.filter(({v})=>v.lectura!=="concentra");
  // Escala desde 0 hasta el entero sobre el mayor CL: una barra desde 0 no exagera las diferencias.
  const tope=Math.ceil(filas[0].v.peso),pos=x=>100*x/tope;
  return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Región donde más pesa cada actividad</strong></span>`+
-  `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span></figcaption>`+
+  `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span><span>Color: tramo del mapa</span></figcaption>`+
   // Fila de referencia: en Chile toda actividad tiene CL 1, porque Chile es la base con que se compara cada región.
   `<div class="cl-fila cl-total" role="img" tabindex="0" aria-label="Chile: CL 1 en todas las actividades, es la base de comparación" `+
   `data-tip="<strong>Chile</strong><br>CL 1 en todas las actividades:<br>es la base con que se compara cada región"><span class="cl-nombre">Chile <span class="cl-reg">· todas las actividades</span></span>`+
@@ -814,11 +823,13 @@ function graficoCL(){
    if(a.alerta_fuente)partes.push("⚠ Censo y ENE difieren en el tamaño de esta actividad");
    return `<button class="cl-fila" data-a="${a.ciiu}" data-tip="${`<strong>${esc(a.corto)}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${esc(a.corto)}, ${partes.join(", ")}">`+
     `<span class="cl-nombre">${esc(a.corto)}${a.alerta_fuente?' <span class="cl-alerta">⚠</span>':""} <span class="cl-reg">· ${nomReg(r)}</span></span>`+
-    `<span class="cl-barra" aria-hidden="true"><i style="width:${pos(v.peso)}%"></i><b style="left:${pos(1)}%"></b>`+
+    // Color del tramo del mapa: bajo 1,2 la actividad se lee "similar a Chile" y va en gris, como en el mapa.
+    `<span class="cl-barra" aria-hidden="true"><i style="width:${pos(v.peso)}%;background:${relleno(v)}"></i><b style="left:${pos(1)}%"></b>`+
     // La cifra va pegada al extremo de su barra: en una columna aparte quedaba lejos de las barras cortas.
     `<span class="cl-valor" style="left:calc(${pos(v.peso)}% + 6px)">${v.peso_txt}</span></span></button>`}).join("")+
   `</figure><p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. `+
-  `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.</p>`}
+  `Un CL alto en una región pequeña puede corresponder a pocos ocupados: sus cifras se ven al pasar el mouse. ⚠ Censo y ENE difieren en el tamaño de esta actividad.`+
+  (similares.length?` ${lista(similares.map(({a})=>esc(a.corto)))} no ${similares.length===1?"llega":"llegan"} a CL 1,2 en ninguna región: ${similares.length===1?"se reparte":"se reparten"} de forma parecida a Chile.`:"")+`</p>`}
 // Trabajo por región, 1: una barra 100% por región con el mismo formato y colores que "Situación laboral por nivel de
 // estudios", para que la población se lea igual en ambas secciones. Incluye el tramo sin dato, porque los % de la tabla
 // se calculan sobre toda la población de 15 años o más. Va de mayor a menor desocupación, como dice el título, y las
@@ -914,15 +925,17 @@ function columnasTitulo(){const filas=Object.entries(EST.desocupacion_titulo).so
   `<div class="evc-grilla" aria-hidden="true">${marcas.map(m=>`<span style="bottom:${pos(m)}%"><small>${m}%</small></span>`).join("")}</div>`+
   grupo("Chile",EST.desocupacion_titulo_chile," evc-total","")+filas.map(([r,v])=>grupo(nomReg(r),v,"",`data-r="${r}"`)).join("")+`</div></div></figure>`+
   `<p class="nota" style="margin:2px 0 0">Bajo cada región, la diferencia en pp (sin título menos con título). Tasa según región de residencia.</p>`}
-// Tabla gemela de los dos gráficos: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
-function tablaEstudios(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
- const tr=(t,[c,sn],k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(c,1)}%</td><td class="n">${num(sn,1)}%</td><td class="n">+${num(sn-c,1)} pp</td></tr>`;
+// Tablas gemelas, una bajo cada gráfico: todas las cifras, para quien no ve el gráfico o quiere el detalle sin pasar el mouse.
+function tablaEstudiosNivel(){
  return `<details><summary>Ver cifras</summary>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th>`+
   `<th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>${NIVELES.map(([k,t])=>{const x=EST.niveles[k];
    return `<tr><td>${t}</td><td class="n">${num(x.ocupados)} (${num(x.pct,1)}%)</td><td class="n">${num(x.desocupados)}</td><td class="n">${num(x.fuera)}</td>`+
     `<td class="n">${num(x.tasa_desocupacion,1)}%</td><td class="n">${num(x.tasa_participacion,1)}%</td></tr>`}).join("")}</tbody></table></div>
- <p class="nota" style="margin:4px 0 0">Ocupados: entre paréntesis, % del total de ocupados con nivel informado.</p>
+ <p class="nota" style="margin:4px 0 0">Ocupados: entre paréntesis, % del total de ocupados con nivel informado.</p></details>`}
+function tablaEstudiosRegion(){const filas=Object.entries(EST.desocupacion_titulo).sort((a,b)=>(b[1][1]-b[1][0])-(a[1][1]-a[1][0])||a[0]-b[0]);
+ const tr=(t,[c,sn],k)=>`<tr class="${k}"><td>${t}</td><td class="n">${num(c,1)}%</td><td class="n">${num(sn,1)}%</td><td class="n">+${num(sn-c,1)} pp</td></tr>`;
+ return `<details><summary>Ver cifras</summary>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Con título técnico o profesional</th><th class="n">Sin título superior</th><th class="n">Diferencia</th></tr></thead><tbody>`+
   tr("Chile",EST.desocupacion_titulo_chile,"total")+filas.map(([r,v])=>tr(nomReg(r),v,"")).join("")+`</tbody></table></div>
  <p class="nota" style="margin:4px 0 0">Tasa de desocupación según región de residencia.</p></details>`}
@@ -1022,19 +1035,19 @@ function vistaResumen(){
   `(${num(sinRegion[sinRegion.length-1].pct_sin_region,1)}% a ${num(sinRegion[0].pct_sin_region,1)}%): ${lista(sinRegion.map(a=>esc(a.corto)))}.</p>`:""}
  ${encabezado("sec-lab","Trabajo por región",`La desocupación va de ${num(desMin[1],1)}% en ${enReg(desMin[0])} a ${num(desMax[1],1)}% en ${enReg(desMax[0])}`)}
  ${graficoSituacionRegion()}
- ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
- <div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. `+
-  `Ocupados (lugar de trabajo) cuenta a quienes trabajan en la región, vivan o no en ella. `+
-  `En Chile suma menos que por residencia porque ${num(100*(ch.trabajan-ch.lugar_trabajo)/ch.trabajan,1)}% de los ocupados no tiene región de trabajo.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th><th class="n">Ocupados (residencia)</th>`+
-  `<th class="n">Ocupados (lugar de trabajo)</th><th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th>`+
+ <div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. Los que trabajan en cada región, vivan o no en ella, están en las cifras de "Llegan o salen a trabajar".</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th><th class="n">Ocupados</th>`+
+  `<th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th>`+
   `<th class="n">Tasa de desocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>`+
   [["Chile",ch,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],POB.regiones[r],""])].map(([t,d,k])=>
-   `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.trabajan)} (${num(d.pct_trabajan,1)}%)</td><td class="n">${num(d.lugar_trabajo)}</td>`+
+   `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.trabajan)} (${num(d.pct_trabajan,1)}%)</td>`+
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
-  `</tbody></table></div>
+  `</tbody></table></div></details>
+ <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
+ ${graficoTraslado()}
+ <details><summary>Ver cifras</summary>
  <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Viven en ella</th><th class="n">No informan dónde trabajan</th>`+
   `<th class="n">Salen</th><th class="n">Llegan</th><th class="n">Trabajan en ella</th><th class="n">Neto por cada 100</th></tr></thead><tbody>`+
@@ -1042,7 +1055,6 @@ function vistaResumen(){
    `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.trabajan)}</td><td class="n">${num(d.sin_region_trabajo)}</td><td class="n">${num(d.salen)}</td>`+
    `<td class="n">${num(d.llegan)}</td><td class="n">${num(d.lugar_trabajo)}</td><td class="n">${k?num(0,1):txtNeto(netoTraslado(d))}</td></tr>`).join("")+
   `</tbody></table></div></details>
- <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
  ${encabezado("sec-edu","Educación por región",`Población de 15 años o más con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}
  ${graficoEducacion()}
  <details><summary>Ver cifras</summary>
@@ -1059,8 +1071,9 @@ function vistaResumen(){
  <p style="margin:8px 0 0">${desocTitulo()} ${edadDesoc()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
  ${barrasNivel()}
+ ${tablaEstudiosNivel()}
  ${columnasTitulo()}
- ${tablaEstudios()}
+ ${tablaEstudiosRegion()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: no las explica la edad, pero pueden influir otras cosas. `+
   `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${enReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
  <hr class="separador">${banda("CASEN 2024")}
