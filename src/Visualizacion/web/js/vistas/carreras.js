@@ -12,12 +12,11 @@ function bloqueCarreras(){
  const lugar=reg==null?"Chile":enReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
  // En la región va como subtítulo del detalle, al mismo nivel que "Nivel de estudios"; en Chile sigue siendo una sección.
  const t=reg==null?"h2":"h3";
- let h=`<hr class="separador"><${t}>Carreras afines</${t}><div class="nota">Agrupadas por nivel del título. `+
-  `Las carreras son un dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":` y no indican titulados en ${lugar}`}. Los titulados son personas estimadas por la CASEN, no títulos del SIES. `+
-  `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
+ let h=`<hr class="separador"><${t}>Carreras afines</${t}><div class="nota">Dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":`: no indica titulados en ${lugar}`}. `+
+  `Los titulados son personas estimadas, no títulos del SIES. Junto a cada nivel, los ocupados de la actividad en ${lugar} (Censo), que no indican de qué carrera son.</div>`;
  if(act.afines.length){
-  h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados que trabajan, % en esta actividad</th>`+
-   `<th class="n">Titulados que trabajan en la actividad, en todo Chile (CASEN)</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
+  h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados ocupados, % en esta actividad</th>`+
+   `<th class="n">Titulados ocupados en la actividad, en todo Chile (CASEN)</th></tr></thead><tbody>`+NIVELES.map(([k],i)=>{
    const f=filas[i],grupo=`<tr class="grupo"><td colspan="3">${NIVEL_GRUPO[k]} <span class="nota">· en ${lugar}, ${num(f[0])} ocupados de ${esc(act.corto)} con este nivel (${num(f[1],1)}%; Censo)</span></td></tr>`;
    if(k==="Sin_titulo")return grupo+`<tr><td colspan="3" class="nota">Las carreras afines no describen a este grupo.</td></tr>`;
    const cs=act.afines.filter(c=>DATOS.fichas[c.c].nivel===k);
@@ -33,8 +32,9 @@ function bloqueCarreras(){
  if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div>${circuloAreas()}`;
  return h}
 // Composición por área de los titulados ocupados de la actividad: un circular, idea del usuario, porque responde "de
-// qué áreas se compone" y tiene de 2 a 5 partes. Van las áreas con muestra suficiente (hasta 4) y el resto junto en
-// "Otras áreas": cada una de esas, sola, no es fiable. El margen de error va escrito en el rótulo, no cabe en la forma.
+// qué áreas se compone" y tiene de 2 a 5 partes. Van las 4 mayores con muestra suficiente y el resto junto en "Otras
+// áreas": las que, solas, no tienen muestra y, en 9 actividades, otras que sí la tienen pero son más chicas (Enseñanza y
+// Comercio tienen 9). La nota lo dice así. El margen de error va escrito en el rótulo, no cabe en la forma.
 // Grados del morado de "área" y gris con rayas para "Otras áreas" (ver base.css). Empieza a las 12 en sentido del reloj.
 function circuloAreas(){const t=act.areas.reduce((s,a)=>s+a.pct,0),resto=Math.round((100-t)*10)/10,tr=act.tit_casen-act.areas.reduce((s,a)=>s+a.tit,0);
  const partes=[...act.areas.map((a,i)=>({nombre:a.area,pct:a.pct,mas:(a.max-a.min)/2,tit:a.tit,rango:`${num(a.min,1)}% a ${num(a.max,1)}%`,poco:a.fiab==="poco_fiable",fondo:`var(--ar${i+1})`})),
@@ -50,7 +50,7 @@ function circuloAreas(){const t=act.areas.reduce((s,a)=>s+a.pct,0),resto=Math.ro
  return `<figure class="ar-circulo"><svg viewBox="-1.02 -1.02 2.04 2.04" role="img" aria-label="Área de estudio de los titulados ocupados de ${esc(act.corto)}: ${partes.map(p=>`${p.nombre} ${num(p.pct,1)}%`).join(", ")}">`+
   `<defs><pattern id="ar-rayas" width="0.09" height="0.09" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="0.09" height="0.09" fill="var(--sup)"/><rect width="0.045" height="0.09" fill="var(--area-no)"/></pattern></defs>${tajadas}</svg>`+
   `<ul class="ar-rotulos">${partes.map(rotulo).join("")}</ul></figure>`+
-  `<p class="nota" style="margin:2px 0 8px">% de los titulados ocupados de la actividad; ± margen de error (95%). Otras áreas: las que, solas, no tienen muestra suficiente.</p>`+
+  `<p class="nota" style="margin:2px 0 8px">% de los titulados ocupados de la actividad; ± margen de error (95%). Otras áreas: el resto, fuera de las 4 mayores; incluye las que, solas, no tienen muestra suficiente.</p>`+
   `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Área</th><th class="n">%</th><th class="n">Rango 95%</th><th class="n">Titulados ocupados</th></tr></thead><tbody>${
    partes.map(p=>`<tr><td>${esc(p.nombre)}${p.poco?'<span class="etiqueta">poco fiable</span>':""}</td><td class="n">${num(p.pct,1)}%</td><td class="n">${p.otras?"":p.rango}</td><td class="n">${num(p.tit)}</td></tr>`).join("")
   }</tbody></table></details>`}

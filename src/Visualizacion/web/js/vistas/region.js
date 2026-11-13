@@ -125,7 +125,7 @@ function vistaRegion(){
  const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg];
  // El título usa el nombre del selector: con el oficial, el usuario no reconocía la actividad que eligió.
  let h=`<h2>${nomReg(reg)} · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024, según región de trabajo.</div>${RES.regiones[reg].ciiu===act.ciiu?
-  `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${enReg(reg)}. Para ver otra, elígela en Actividad, arriba.</p>`:""}
+  `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${enReg(reg)}. Para ver otra, elígela en el gráfico del CL, más abajo.</p>`:""}
  <div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:10px"><thead><tr><th rowspan="2">Indicador</th><th rowspan="2">Cálculo</th>`+
   `<th colspan="3" class="bloque ini">${nomReg(reg)}</th><th colspan="3" class="bloque ini">Chile</th></tr>`+
   `<tr><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>

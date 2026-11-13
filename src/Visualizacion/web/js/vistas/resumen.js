@@ -435,7 +435,7 @@ function tablaAreas(){const {filas}=areasPrincipales(),mas=(min,max)=>num((max-m
   `Esos mismos ${num(e.x.tit)} son el ${num(e.x.en_area,1)}% de los ${num(e.x.tit_area)} titulados de esa área que trabajan en Chile. `+
   `Por eso los dos % no se comparan entre sí. ± es el margen de error: con 95% de confianza, el valor real está en ese rango.</div>`+
   `<div class="tabla-ancha"><table class="ar-tabla" style="margin-top:8px"><thead><tr><th rowspan="2">Actividad</th><th rowspan="2">Área de estudio principal</th>`+
-  `<th colspan="2" class="bloque ini">Titulados que trabajan en la actividad</th><th colspan="2" class="bloque ini">Titulados de esa área en Chile</th></tr>`+
+  `<th colspan="2" class="bloque ini">Titulados ocupados en la actividad</th><th colspan="2" class="bloque ini">Titulados de esa área en Chile</th></tr>`+
   `<tr><th class="n ini">Total</th><th class="n">Estudiaron esa área</th><th class="n ini">Total</th><th class="n">% que trabaja en esta actividad</th></tr></thead><tbody>`+
   filas.map(({a,x})=>`<tr><td>${esc(a.corto)}</td><td>${esc(x.area)}${x.fiab==="poco_fiable"?' <span class="etiqueta">poco fiable</span>':""}</td>`+
    `<td class="n ini">${num(a.tit_casen)}</td><td class="n">${num(x.tit)} (${pct(x.pct,x.min,x.max)})</td>`+
