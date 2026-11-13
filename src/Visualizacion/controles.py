@@ -297,6 +297,8 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Áreas: el margen de error ± representa el rango publicado (simétrico)": all(abs((x[hi] - x[c]) - (x[c] - x[lo])) <= 0.1 + 1e-9
             for a in datos["actividades"] for x in a["areas"] for c, lo, hi in (("pct", "min", "max"), ("en_area", "en_area_min", "en_area_max"))),
         # El periodo de la ENE lo escribe la página desde DATOS.periodos: escrito a mano, quedaría atrás al cambiar los meses.
+        # En frases, la región va con enReg ("en la Metropolitana"); nomReg queda para títulos, listas y tablas.
+        "Texto: ninguna frase escribe el nombre de una región tras en, de, a o desde sin pasar por enReg": not any(re.search(r"\b(en|En|de|a|desde)( <strong>)? ?\$\{nomReg\(", c) for c in codigo_js.values()),
         "Periodos: ningún JS escribe a mano los meses de la ENE": not any(re.search(r"(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) a \w+ de 20\d\d", c) for c in codigo_js.values()),
         "Periodos: la página no nombra el periodo de ENE que ya no se usa": "2025-2026" not in html and "diciembre de 2025" not in html,
         "La plantilla quedó completa": all(m not in html for m in ("__DATOS__", "__GEO__", "__ESTILOS__", "__CODIGO__")),

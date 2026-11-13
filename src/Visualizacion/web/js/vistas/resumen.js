@@ -8,7 +8,7 @@ function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d
  // Un rango por grupo, cada uno con sus extremos: con un solo rango (por la tasa con título), Biobío parecía la región
  // con más desocupación sin título, que es La Araucanía, y cuatro cifras en una línea no se leían a simple vista.
  const rango=i=>{const [a,va]=d.reduce((m,x)=>x[1][i]<m[1][i]?x:m),[b,vb]=d.reduce((m,x)=>x[1][i]>m[1][i]?x:m);
-  return `de ${num(va[i],1)}% en ${nomReg(Number(a))} a ${num(vb[i],1)}% en ${nomReg(Number(b))}`};
+  return `de ${num(va[i],1)}% en ${enReg(Number(a))} a ${num(vb[i],1)}% en ${enReg(Number(b))}`};
  return {menor,n:d.length,con:rango(0),sin:rango(1)}}
 // En pantallas angostas las columnas por región se desplazan hacia el lado; sin aviso, parecía que el gráfico terminaba
 // en la región cortada. Va oculto y se muestra solo si el gráfico no cabe (avisoDesliza, en navegacion.js).
@@ -95,7 +95,6 @@ const banda=t=>`<p class="banda">${t}</p>`;
 // Región con el menor y el mayor valor: los títulos lo escriben desde los datos para no afirmar más de lo que muestran.
 function extremos(valor){const r=DATOS.orden.map(k=>[k,valor(k)]).sort((a,b)=>a[1]-b[1]);return [r[0],r[r.length-1]]}
 // "en la Metropolitana": el nombre corto de la región no lleva artículo.
-const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 const pctTitulo=v=>100*(v[0]+v[1])/(v[0]+v[1]+v[2]);
 // Una barra formal/informal: lo informal va primero, para que comparta la base y se compare entre filas, y ambas partes
 // llevan su color y su %, porque son las dos mitades que se leen (solo el informal dejaba la otra mitad sin cifra).
@@ -333,7 +332,7 @@ function graficoTraslado(){
   `<span><i class="entrega"></i>Salen más de los que llegan</span><span><i class="recibe"></i>Llegan más de los que salen</span></figcaption>`+
   filas.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">Ocupados que llegan a trabajar a la región menos los que salen a trabajar a otra, por cada 100 que viven en ella y dicen dónde trabajan. `+
-  `Por ejemplo, a ${nomReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
+  `Por ejemplo, a ${enReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
   `No se cuentan los ${num(ch.sin_region_trabajo)} ocupados (${num(pcs(ch),1)}%) que no informan dónde trabajan: van de ${num(porSin[0][1],1)}% en ${enReg(porSin[0][0])} a ${num(porSin.at(-1)[1],1)}% en ${enReg(porSin.at(-1)[0])}.</p>`}
 // Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
 // % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
@@ -532,7 +531,7 @@ function vistaResumen(){
  ${columnasTitulo()}
  ${tablaEstudios()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: no las explica la edad, pero pueden influir otras cosas. `+
-  `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${nomReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
+  `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${enReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
  <hr class="separador">${banda("CASEN 2024")}
  ${areasHtml()}
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}

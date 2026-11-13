@@ -400,6 +400,8 @@ const pesos=x=>x==null?"Sin dato":"$"+num(x);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const nom=c=>DATOS.fichas[c]?.nombre??c;
 const nomReg=r=>esc(DATOS.regiones[r]);
+// Para frases: "en la Metropolitana", como se dice; en títulos, listas y tablas va el nombre solo (nomReg).
+const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 // Bajo 10 lleva dos decimales: en actividades pequeñas, con uno solo no se ve la diferencia entre la región y Chile.
 const part=p=>num(p,p!=null&&p<10?2:1)+"%";
 // Formato único: ocupados por lugar de trabajo y, entre paréntesis, su participación.
@@ -518,8 +520,8 @@ function pintar(){
  const orden=Object.entries(act.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>ordenar(a[1],b[1]));
  document.getElementById("anotaciones").innerHTML="";document.getElementById("principal").hidden=true;document.getElementById("kpis-t").hidden=true;document.getElementById("cabecera").classList.remove("con-resumen");
  const max=orden[0][1].peso??1,mejor=orden[0],conc=orden.filter(([,d])=>d.lectura==="concentra"),mp=act.nacional.mas_personas;
- document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${nomReg(mejor[0])}</strong>, `+
-  `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${nomReg(mp.r)}</strong> (${num(mp.n)}). `+
+ document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${enReg(mejor[0])}</strong>, `+
+  `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${enReg(mp.r)}</strong> (${num(mp.n)}). `+
   (conc.length===0?"Ninguna región con CL de 1,2 o más.":conc.length===1?"1 región con CL de 1,2 o más.":conc.length+" regiones con CL de 1,2 o más.");
  document.getElementById("lista").innerHTML=
   `<button data-r="${CHILE}" aria-pressed="${reg==null}" class="chile"><span>Chile<small>${vp(act.nacional.ocupados,act.pct_nacional)} · CL 1,00</small></span></button>`+
@@ -534,7 +536,7 @@ function extremosDesoc(){const d=Object.entries(EST.desocupacion_titulo),menor=d
  // Un rango por grupo, cada uno con sus extremos: con un solo rango (por la tasa con título), Biobío parecía la región
  // con más desocupación sin título, que es La Araucanía, y cuatro cifras en una línea no se leían a simple vista.
  const rango=i=>{const [a,va]=d.reduce((m,x)=>x[1][i]<m[1][i]?x:m),[b,vb]=d.reduce((m,x)=>x[1][i]>m[1][i]?x:m);
-  return `de ${num(va[i],1)}% en ${nomReg(Number(a))} a ${num(vb[i],1)}% en ${nomReg(Number(b))}`};
+  return `de ${num(va[i],1)}% en ${enReg(Number(a))} a ${num(vb[i],1)}% en ${enReg(Number(b))}`};
  return {menor,n:d.length,con:rango(0),sin:rango(1)}}
 // En pantallas angostas las columnas por región se desplazan hacia el lado; sin aviso, parecía que el gráfico terminaba
 // en la región cortada. Va oculto y se muestra solo si el gráfico no cabe (avisoDesliza, en navegacion.js).
@@ -621,7 +623,6 @@ const banda=t=>`<p class="banda">${t}</p>`;
 // Región con el menor y el mayor valor: los títulos lo escriben desde los datos para no afirmar más de lo que muestran.
 function extremos(valor){const r=DATOS.orden.map(k=>[k,valor(k)]).sort((a,b)=>a[1]-b[1]);return [r[0],r[r.length-1]]}
 // "en la Metropolitana": el nombre corto de la región no lleva artículo.
-const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 const pctTitulo=v=>100*(v[0]+v[1])/(v[0]+v[1]+v[2]);
 // Una barra formal/informal: lo informal va primero, para que comparta la base y se compare entre filas, y ambas partes
 // llevan su color y su %, porque son las dos mitades que se leen (solo el informal dejaba la otra mitad sin cifra).
@@ -859,7 +860,7 @@ function graficoTraslado(){
   `<span><i class="entrega"></i>Salen más de los que llegan</span><span><i class="recibe"></i>Llegan más de los que salen</span></figcaption>`+
   filas.map(fila).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">Ocupados que llegan a trabajar a la región menos los que salen a trabajar a otra, por cada 100 que viven en ella y dicen dónde trabajan. `+
-  `Por ejemplo, a ${nomReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
+  `Por ejemplo, a ${enReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
   `No se cuentan los ${num(ch.sin_region_trabajo)} ocupados (${num(pcs(ch),1)}%) que no informan dónde trabajan: van de ${num(porSin[0][1],1)}% en ${enReg(porSin[0][0])} a ${num(porSin.at(-1)[1],1)}% en ${enReg(porSin.at(-1)[0])}.</p>`}
 // Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
 // % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
@@ -1058,7 +1059,7 @@ function vistaResumen(){
  ${columnasTitulo()}
  ${tablaEstudios()}
  <p class="nota" style="margin:6px 0 0">Estas diferencias no indican causa: no las explica la edad, pero pueden influir otras cosas. `+
-  `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${nomReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
+  `La comparación por edad deja fuera a quienes no tienen edad en el Censo: ${num(EST.edad.sin_edad[1],0)}% de los activos en ${enReg(EST.edad.sin_edad[0])}, y ${num(EST.edad.sin_edad[2],1)}% o menos en las demás regiones.</p>
  <hr class="separador">${banda("CASEN 2024")}
  ${areasHtml()}
  <hr class="separador">${banda("Encuesta Nacional de Empleo (INE)")}
@@ -1172,9 +1173,10 @@ function figuraSexo(refTexto,ref,cabecera,et,filas){
 // ocupados donde trabajan, como la tabla del CL: la línea es la fila A. Así se ve si la actividad tiene más o menos
 // mujeres que la región en general (Hogares en O'Higgins: 89,0% frente a 42,1%).
 function graficoSexoActividad(d,bs){
- return figuraSexo(`Todas las actividades de ${nomReg(reg)}`,100*bs.m/(bs.h+bs.m),"Ocupados","Ocupados",[
+ return figuraSexo(`Todas las actividades de ${enReg(reg)}`,100*bs.m/(bs.h+bs.m),"Ocupados","Ocupados",[
   [`${act.corto} en Chile`,act.sexo.m,act.sexo.h,num(act.sexo.m+act.sexo.h)," gs-total"],
-  [`${act.corto} en ${nomReg(reg)}`,d.m,d.h,num(d.ocupados),""]])}
+  // Con menos de 60 mujeres u hombres, la fila lleva el mismo "*" que la tabla del CL y que el gráfico de estudios.
+  [`${act.corto} en ${enReg(reg)}${[d.h,d.m].some(v=>v!=null&&v<CHICA)?" *":""}`,d.m,d.h,num(d.ocupados),""]])}
 // Toda la región, por residencia. La línea es el % de mujeres en la población de 15 años o más: se lee de inmediato que
 // las mujeres pesan menos entre los ocupados y más entre quienes están fuera. Sin dato (menos de 1%) queda solo en
 // "Ver cifras": su reparto por sexo no dice nada. Las tasas no son partes de un todo y van en la frase de lectura. Al no
@@ -1229,13 +1231,13 @@ function graficoCLRegion(reg){const uno=posCL(1);
 function lecturaCLRegion(reg){const n=DATOS.actividades.length,g=k=>porCLRegion(reg).filter(a=>a.regiones[reg].lectura===k);
  const sobre=g("concentra"),sim=g("similar").length,bajo=g("bajo_lo_nacional").length;
  const lista=sobre.map(a=>`${esc(a.corto)} (${a.regiones[reg].peso_txt})`),txt=lista.length>1?lista.slice(0,-1).join(", ")+" y "+lista.at(-1):lista[0];
- return `En ${nomReg(reg)}, `+(sobre.length?`${sobre.length===1?"1 actividad pesa":`${sobre.length} de las ${n} actividades pesan`} más que en Chile (CL de 1,2 o más): ${txt}. `:`ninguna de las ${n} actividades tiene CL de 1,2 o más. `)+
+ return `En ${enReg(reg)}, `+(sobre.length?`${sobre.length===1?"1 actividad pesa":`${sobre.length} de las ${n} actividades pesan`} más que en Chile (CL de 1,2 o más): ${txt}. `:`ninguna de las ${n} actividades tiene CL de 1,2 o más. `)+
   `${sobre.length?"Otras ":"Hay "}${sim} ${sim===1?"es similar":"son similares"} a Chile y ${bajo} ${bajo===1?"está":"están"} bajo Chile (CL de 0,8 o menos).`}
 function vistaRegion(){
  const d=act.regiones[reg],n=act.nacional,bs=BASE.sexo.regiones[reg],pr=POB.regiones[reg];
  // El título usa el nombre del selector: con el oficial, el usuario no reconocía la actividad que eligió.
  let h=`<h2>${nomReg(reg)} · ${esc(act.corto)}</h2><div class="nota">${act.glosa!==act.corto?`Nombre oficial: ${esc(act.glosa)}. `:""}Censo 2024, según región de trabajo.</div>${RES.regiones[reg].ciiu===act.ciiu?
-  `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${nomReg(reg)}. Para ver otra, elígela en Actividad, arriba.</p>`:""}
+  `<p class="nota" style="margin:6px 0 0">${esc(act.corto)} es la actividad con mayor CL de ${enReg(reg)}. Para ver otra, elígela en Actividad, arriba.</p>`:""}
  <div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:10px"><thead><tr><th rowspan="2">Indicador</th><th rowspan="2">Cálculo</th>`+
   `<th colspan="3" class="bloque ini">${nomReg(reg)}</th><th colspan="3" class="bloque ini">Chile</th></tr>`+
   `<tr><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n ini">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>
@@ -1250,7 +1252,7 @@ function vistaRegion(){
  // Orden por tema, como pidió el usuario: CL, hombres y mujeres, nivel de estudios y carreras. Cada tema junta la
  // actividad y toda la región, que se comparan entre sí; una nota corta dice cuándo la sección es de toda la región.
  // (Se probó ordenar por alcance y separaba lo que se lee junto: el nivel de los ocupados quedaba lejos de la desocupación por nivel.)
- h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según lugar de trabajo.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
+ h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${enReg(reg)}</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según lugar de trabajo.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
   `<p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. Escala logarítmica: 0,5 (la mitad que en Chile) y 2 (el doble) quedan a la misma distancia de 1.</p>`+
   `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
   porCLRegion(reg).map(a=>{const v=a.regiones[reg];
@@ -1267,7 +1269,7 @@ function vistaRegion(){
   `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
  h+=`<hr class="separador">`;
  h+=perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]),"h3");
- h+=`<h3>Desocupación por nivel de estudios</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según residencia.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaDesocNivel(reg).frase}</p>${graficoDesocNivel(reg)}`+
+ h+=`<h3>Desocupación por nivel de estudios</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según residencia, con nivel informado.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaDesocNivel(reg).frase}</p>${graficoDesocNivel(reg)}`+
   `<p class="nota" style="margin:2px 0 8px">Tasa = desocupados / (ocupados + desocupados).</p>
  <details><summary>Ver cifras</summary><p class="nota" style="margin:6px 0 0">Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</p>
  <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
@@ -1285,7 +1287,7 @@ function vistaRegion(){
 // van en la misma fila y en la columna: la cifra regional del Censo quedaba junto a la nacional de la CASEN y se leían como una sola.
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
- const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
+ const lugar=reg==null?"Chile":enReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
  // En la región va como subtítulo del detalle, al mismo nivel que "Nivel de estudios"; en Chile sigue siendo una sección.
  const t=reg==null?"h2":"h3";
  let h=`<hr class="separador"><${t}>Carreras afines</${t}><div class="nota">Agrupadas por nivel del título. `+

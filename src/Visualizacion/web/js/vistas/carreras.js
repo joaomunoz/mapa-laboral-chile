@@ -9,7 +9,7 @@ Carreras afines de la actividad y ficha de cada carrera.
 // van en la misma fila y en la columna: la cifra regional del Censo quedaba junto a la nacional de la CASEN y se leían como una sola.
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
- const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
+ const lugar=reg==null?"Chile":enReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
  // En la región va como subtítulo del detalle, al mismo nivel que "Nivel de estudios"; en Chile sigue siendo una sección.
  const t=reg==null?"h2":"h3";
  let h=`<hr class="separador"><${t}>Carreras afines</${t}><div class="nota">Agrupadas por nivel del título. `+

@@ -100,8 +100,8 @@ function pintar(){
  const orden=Object.entries(act.regiones).map(([r,d])=>[Number(r),d]).sort((a,b)=>ordenar(a[1],b[1]));
  document.getElementById("anotaciones").innerHTML="";document.getElementById("principal").hidden=true;document.getElementById("kpis-t").hidden=true;document.getElementById("cabecera").classList.remove("con-resumen");
  const max=orden[0][1].peso??1,mejor=orden[0],conc=orden.filter(([,d])=>d.lectura==="concentra"),mp=act.nacional.mas_personas;
- document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${nomReg(mejor[0])}</strong>, `+
-  `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${nomReg(mp.r)}</strong> (${num(mp.n)}). `+
+ document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${enReg(mejor[0])}</strong>, `+
+  `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${enReg(mp.r)}</strong> (${num(mp.n)}). `+
   (conc.length===0?"Ninguna región con CL de 1,2 o más.":conc.length===1?"1 región con CL de 1,2 o más.":conc.length+" regiones con CL de 1,2 o más.");
  document.getElementById("lista").innerHTML=
   `<button data-r="${CHILE}" aria-pressed="${reg==null}" class="chile"><span>Chile<small>${vp(act.nacional.ocupados,act.pct_nacional)} · CL 1,00</small></span></button>`+

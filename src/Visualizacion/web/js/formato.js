@@ -8,6 +8,8 @@ const pesos=x=>x==null?"Sin dato":"$"+num(x);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const nom=c=>DATOS.fichas[c]?.nombre??c;
 const nomReg=r=>esc(DATOS.regiones[r]);
+// Para frases: "en la Metropolitana", como se dice; en títulos, listas y tablas va el nombre solo (nomReg).
+const enReg=r=>(Number(r)===13?"la ":"")+nomReg(r);
 // Bajo 10 lleva dos decimales: en actividades pequeñas, con uno solo no se ve la diferencia entre la región y Chile.
 const part=p=>num(p,p!=null&&p<10?2:1)+"%";
 // Formato único: ocupados por lugar de trabajo y, entre paréntesis, su participación.
