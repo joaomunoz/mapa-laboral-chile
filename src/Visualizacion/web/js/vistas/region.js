@@ -136,27 +136,27 @@ function vistaRegion(){
  ${[d.h,d.m].some(v=>v!=null&&v<CHICA)?NOTA_CHICA:""}
  <p class="nota" style="margin:6px 0 0">Lectura: ${LECT[d.lectura]}. A incluye organismos internacionales.</p>`+avisos()+
   `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de ${PER.ene_contraste}: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
- // Justo bajo la tabla: las cifras por sexo de B ya están ahí; el gráfico las compara con toda la región (fila A).
- h+=`<h3>Hombres y mujeres en ${esc(act.corto)}</h3>${graficoSexoActividad(d,bs)}`;
- h+=perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]),"h3");
- // Orden por alcance: la actividad en la región, la actividad en Chile (CASEN) y toda la región. Antes se alternaban
- // y cada bloque necesitaba una nota para avisar de qué hablaba.
- h+=bloqueCarreras();
- // Un solo encabezado para lo que es de toda la región: antes cada sección repetía la base y que no cambia con la actividad.
- h+=`<hr class="separador"><h2>${nomReg(reg)}, todas las actividades</h2><div class="nota">No cambia según la actividad elegida. El CL cuenta a los ocupados donde trabajan; el resto, a las personas de 15 años o más que viven en la región.</div>`;
- h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><p class="lectura" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
+ // Orden por tema, como pidió el usuario: CL, hombres y mujeres, nivel de estudios y carreras. Cada tema junta la
+ // actividad y toda la región, que se comparan entre sí; una nota corta dice cuándo la sección es de toda la región.
+ // (Se probó ordenar por alcance y separaba lo que se lee junto: el nivel de los ocupados quedaba lejos de la desocupación por nivel.)
+ h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según lugar de trabajo.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
   `<p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. Escala logarítmica: 0,5 (la mitad que en Chile) y 2 (el doble) quedan a la misma distancia de 1.</p>`+
   `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
   porCLRegion(reg).map(a=>{const v=a.regiones[reg];
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
  }</tbody></table></details>`;
- h+=`<h3>Hombres y mujeres en cada grupo, todas las actividades</h3><p class="lectura" style="margin:6px 0 0">${lecturaSexoRegion(reg)}</p>${graficoSexoRegion(reg)}<p class="nota" style="margin:2px 0 8px">${conciliaOcupados(reg)}</p>`+
+ h+=`<hr class="separador">`;
+ // Las cifras por sexo de B están en la tabla; el gráfico las compara con toda la región (fila A).
+ h+=`<h3>Hombres y mujeres en ${esc(act.corto)}</h3>${graficoSexoActividad(d,bs)}`;
+ h+=`<h3>Hombres y mujeres en cada grupo, todas las actividades</h3><div class="nota">Toda la región: no cambia según la actividad elegida; personas de 15 años o más que viven en la región.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaSexoRegion(reg)}</p>${graficoSexoRegion(reg)}<p class="nota" style="margin:2px 0 8px">${conciliaOcupados(reg)}</p>`+
   `<details><summary>Ver cifras</summary><div class="nota" style="margin-top:6px">Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
   `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
   `${filasSituacion(pr,pr.sexo.hombres,pr.sexo.mujeres,false)}</tbody></table></div></details>`;
- h+=`<h3>Desocupación por nivel de estudios</h3><p class="lectura" style="margin:6px 0 0">${lecturaDesocNivel(reg).frase}</p>${graficoDesocNivel(reg)}`+
+ h+=`<hr class="separador">`;
+ h+=perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]),"h3");
+ h+=`<h3>Desocupación por nivel de estudios</h3><div class="nota">Toda la región: no cambia según la actividad elegida; según residencia.</div><p class="lectura lectura-sec" style="margin:6px 0 0">${lecturaDesocNivel(reg).frase}</p>${graficoDesocNivel(reg)}`+
   `<p class="nota" style="margin:2px 0 8px">Tasa = desocupados / (ocupados + desocupados).</p>
  <details><summary>Ver cifras</summary><p class="nota" style="margin:6px 0 0">Tasa en ENE: ${PER.ene_contraste}, los meses del Censo.</p>
  <table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Desocupados</th><th class="n">Tasa de desocupación</th>`+
@@ -166,4 +166,5 @@ function vistaRegion(){
     `<td class="n" ${x.ene==null?'title="ENE sin muestra suficiente"':""}>${x.ene==null?"sin muestra":num(x.ene,1)+"%"+(x.ene_poco?" *":"")}</td></tr>`}).join("")+
   `</tbody></table>${NIVELES.some(([k])=>DATOS.niveles[reg][k].ene_poco)?'<p class="nota" style="margin:6px 0 0">* ENE poco fiable.</p>':""}`+
   tablaNivelSexo(k=>DATOS.niveles[reg][k].sexo)+"</details>";
+ h+=bloqueCarreras();
  return h}
