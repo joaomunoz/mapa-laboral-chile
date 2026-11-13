@@ -183,15 +183,17 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
              and min(brecha(reg[r]["sexo"]) for r in reg) == brecha(reg["11"]["sexo"]) == 13.4
              and (reg["12"]["sexo"]["mujeres"]["tasa_desocupacion"], reg["12"]["sexo"]["hombres"]["tasa_desocupacion"]) == (6.7, 6.1))(
                 {str(k): v for k, v in pob["regiones"].items()}, lambda x: round(round(x["hombres"]["tasa_participacion"] - x["mujeres"]["tasa_participacion"], 1) * 10) / 10),
-        # El detalle de región concilia en escalones los ocupados que viven en la región, los que trabajan en ella y la fila A
-        # (con actividad informada). Ambos conteos por lugar de trabajo deben sumar Chile y el último escalón nunca es negativo.
-        # La frase no puede afirmar hacia dónde va la gente: 5,8% no informa región de trabajo y en O'Higgins, Los Lagos y Los
-        # Ríos esa lectura contradecía al gráfico "Dónde trabajan…" del resumen, que descuenta ese hueco.
-        "Ocupados por región: viven, trabajan en ella y fila A (O'Higgins 423.209, 401.186 y 385.312) y la frase no dice que salen o llegan":
-            (lambda reg: sum(x["lugar_trabajo"] for x in reg.values()) == pob["chile"]["lugar_trabajo"] and sum(datos["base_ocupados"]["regiones"].values()) == datos["base_ocupados"]["chile"]
+        # Traslado medido con la región de residencia y de trabajo de cada ocupado: el cuadre debe cerrar exacto en cada
+        # región, lo que sale de una región llega a otra, y la fila A nunca supera a los que trabajan en la región.
+        # Fija O'Higgins (salen más de los que llegan) y la Metropolitana (llegan más), que el supuesto anterior invertía.
+        "Traslado por región: viven − sin región − salen + llegan = trabajan en ella en las 16; salen = llegan = 292.221; O'Higgins −5.767 y Metropolitana +20.913":
+            (lambda reg: all(x["trabajan"] - x["sin_region_trabajo"] - x["salen"] + x["llegan"] == x["lugar_trabajo"] for x in reg.values())
+             and sum(x["salen"] for x in reg.values()) == sum(x["llegan"] for x in reg.values()) == pob["chile"]["salen"] == 292_221
+             and sum(x["sin_region_trabajo"] for x in reg.values()) == pob["chile"]["sin_region_trabajo"] == pob["chile"]["trabajan"] - pob["chile"]["lugar_trabajo"]
+             and sum(datos["base_ocupados"]["regiones"].values()) == datos["base_ocupados"]["chile"]
              and all(x["lugar_trabajo"] - datos["base_ocupados"]["regiones"][r] >= 0 for r, x in reg.items())
-             and (reg["6"]["trabajan"], reg["6"]["lugar_trabajo"], datos["base_ocupados"]["regiones"]["6"]) == (423_209, 401_186, 385_312)
-             and not re.search(r"salen a trabajar|llegan a trabajar", codigo_js["js/vistas/region.js"]))(
+             and (reg["6"]["trabajan"], reg["6"]["sin_region_trabajo"], reg["6"]["salen"], reg["6"]["llegan"], reg["6"]["lugar_trabajo"], datos["base_ocupados"]["regiones"]["6"]) == (423_209, 16_256, 22_938, 17_171, 401_186, 385_312)
+             and reg["6"]["llegan"] - reg["6"]["salen"] == -5_767 and reg["13"]["llegan"] - reg["13"]["salen"] == 20_913)(
                 {str(k): v for k, v in pob["regiones"].items()}),
         # El gráfico de CL de cada región (region.js) usa escala logarítmica con dominio fijo de 1/16 a 16: un CL fuera
         # de ese rango, o nulo, se saldría de la barra. Los conteos fijan la frase de lectura con los cortes del mapa.

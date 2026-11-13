@@ -309,31 +309,32 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
   fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada región, según residencia. Junto a cada barra, las tasas: `+
   `desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
-// Trabajo por región, 2: cuántos trabajan en la región por cada uno que vive en ella, frente a Chile. Se compara con
-// Chile y no se resta directo porque 5,8% de los ocupados no tiene región de trabajo: con la resta, toda región parecería
-// entregar trabajadores. Supone que esa falta de dato pesa igual en cada región. Barras desde un centro (igual que
-// Chile) con dos colores, uno por sentido. La escala es la misma a ambos lados, para no agrandar las diferencias chicas,
-// y el centro se corre a la izquierda porque ninguna región baja de −10%: así el espacio va a las barras.
-// La leyenda describe la medida y no afirma traslados: una barra negativa también puede venir de más ocupados sin región de trabajo.
-function graficoTraslado(){const ch=POB.chile,base=ch.lugar_trabajo/ch.trabajan,dif=x=>100*(x.lugar_trabajo/x.trabajan/base-1);
- const filas=DATOS.orden.map(r=>[r,POB.regiones[r],dif(POB.regiones[r])]).sort((a,b)=>b[2]-a[2]||a[0]-b[0]);
+// Trabajo por región, 2: los que llegan a trabajar menos los que salen, por cada 100 ocupados que viven en la región y
+// dicen dónde trabajan. Es una medida directa: el Censo trae región de residencia y de trabajo de cada ocupado, y quienes
+// no informan dónde trabajan quedan fuera de la cuenta. Antes se comparaba con Chile suponiendo que esa falta de dato
+// pesaba igual en todas las regiones; pesa de 0,6% a 9,0%, y el supuesto invertía el sentido en la Metropolitana, Los
+// Ríos, O'Higgins y La Araucanía. Barras desde 0 con dos colores, uno por sentido; la escala es la misma a ambos lados,
+// para no agrandar las diferencias chicas, y el centro se corre según el rango, para dar el espacio a las barras.
+const netoTraslado=x=>100*(x.llegan-x.salen)/(x.trabajan-x.sin_region_trabajo);
+// El signo sale de la cifra publicada, para que una cifra que redondea a 0 no se lea −0,0.
+const txtNeto=v=>{const r1=Math.round(10*v)/10;return `${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}`};
+function graficoTraslado(){
+ const filas=DATOS.orden.map(r=>[r,POB.regiones[r],netoTraslado(POB.regiones[r])]).sort((a,b)=>b[2]-a[2]||a[0]-b[0]);
  const lo=Math.min(0,Math.floor(filas[filas.length-1][2]/10)*10),hi=Math.max(0,Math.ceil(filas[0][2]/10)*10),cero=100*-lo/(hi-lo),ancho=v=>100*Math.abs(v)/(hi-lo);
- // El signo sale de la cifra publicada: Maule (−0,04) se lee 0,0%, no −0,0%.
- const fila=([r,x,v])=>{const r1=Math.round(10*v)/10,txt=`${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}%`,t=nomReg(r);
-  const partes=[`${num(x.lugar_trabajo)} ocupados trabajan en la región`,`${num(x.trabajan)} ocupados viven en ella`,
-   `${num(100*x.lugar_trabajo/x.trabajan,0)} trabajan por cada 100 que viven (Chile: ${num(100*base,0)})`,`${txt} frente a Chile`];
+ const fila=([r,x,v])=>{const txt=txtNeto(v),t=nomReg(r),d=x.llegan-x.salen;
+  const partes=[`Llegan a trabajar ${num(x.llegan)} desde otras regiones`,`Salen a trabajar ${num(x.salen)} a otras regiones`,
+   `${d>0?"Llegan":"Salen"} ${num(Math.abs(d))} más de los que ${d>0?"salen":"llegan"}: ${txt} por cada 100 que viven en ella`,`${num(x.sin_region_trabajo)} no informan dónde trabajan`];
   return `<button class="cl-fila tr-fila" data-r="${r}" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
    `<span class="cl-nombre">${t}</span><span class="tr-barra" aria-hidden="true"><b style="left:${cero}%"></b>`+
    (v>=0?`<i class="recibe" style="left:${cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="left:calc(${cero+ancho(v)}% + 6px)">${txt}</span>`
         :`<i class="entrega" style="right:${100-cero}%;width:${ancho(v)}%"></i><span class="cl-valor" style="right:calc(${100-cero+ancho(v)}% + 6px)">${txt}</span>`)+`</span></button>`};
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Dónde trabajan los ocupados de cada región</strong></span>`+
-  `<span><i class="entrega"></i>Trabajan en ella menos de los que viven, frente a Chile</span><span><i class="recibe"></i>Trabajan en ella más de los que viven, frente a Chile</span></figcaption>`+
+ const [r0,x0]=filas[0],ch=POB.chile,pcs=x=>100*x.sin_region_trabajo/x.trabajan,porSin=DATOS.orden.map(r=>[r,pcs(POB.regiones[r])]).sort((a,b)=>a[1]-b[1]);
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Llegan o salen a trabajar, por región</strong></span>`+
+  `<span><i class="entrega"></i>Salen más de los que llegan</span><span><i class="recibe"></i>Llegan más de los que salen</span></figcaption>`+
   filas.map(fila).join("")+`</figure>`+
-  // El % es un índice frente a Chile y se leía como "34% más trabajadores": el ejemplo da la cifra directa.
-  `<p class="nota" style="margin:2px 0 8px">Ocupados que trabajan en la región por cada 100 que viven en ella, comparado con Chile (0 = igual que Chile). `+
-  `Por ejemplo, en ${nomReg(filas[0][0])} trabajan ${num(100*filas[0][1].lugar_trabajo/filas[0][1].trabajan,0)} por cada 100 que viven, y en Chile ${num(100*base,0)}: `+
-  `${num(filas[0][2],1)}% más. Se compara con Chile porque ${num(100*(1-base),1)}% de los ocupados no tiene región de trabajo informada, `+
-  `y se supone que esa falta de dato pesa igual en cada región: donde pese más, la barra baja aunque sus ocupados no trabajen en otra región.</p>`}
+  `<p class="nota" style="margin:2px 0 8px">Ocupados que llegan a trabajar a la región menos los que salen a trabajar a otra, por cada 100 que viven en ella y dicen dónde trabajan. `+
+  `Por ejemplo, a ${nomReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
+  `No se cuentan los ${num(ch.sin_region_trabajo)} ocupados (${num(pcs(ch),1)}%) que no informan dónde trabajan: van de ${num(porSin[0][1],1)}% en ${enReg(porSin[0][0])} a ${num(porSin.at(-1)[1],1)}% en ${enReg(porSin.at(-1)[0])}.</p>`}
 // Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
 // % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
 // Se descartaron las barras 100%: sin título ocupa 67% a 79% de cada barra y la diferencia entre regiones (12 puntos)
@@ -503,6 +504,13 @@ function vistaResumen(){
    `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.trabajan)} (${num(d.pct_trabajan,1)}%)</td><td class="n">${num(d.lugar_trabajo)}</td>`+
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
+  `</tbody></table></div>
+ <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">Viven en ella</th><th class="n">No informan dónde trabajan</th>`+
+  `<th class="n">Salen</th><th class="n">Llegan</th><th class="n">Trabajan en ella</th><th class="n">Neto por cada 100</th></tr></thead><tbody>`+
+  [["Chile",ch,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],POB.regiones[r],""])].map(([t,d,k])=>
+   `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.trabajan)}</td><td class="n">${num(d.sin_region_trabajo)}</td><td class="n">${num(d.salen)}</td>`+
+   `<td class="n">${num(d.llegan)}</td><td class="n">${num(d.lugar_trabajo)}</td><td class="n">${k?num(0,1):txtNeto(netoTraslado(d))}</td></tr>`).join("")+
   `</tbody></table></div></details>
  <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
  ${encabezado("sec-edu","Educación por región",`Población de 15 años o más con título técnico o profesional: de ${num(titMin[1],1)}% en ${enReg(titMin[0])} a ${num(titMax[1],1)}% en ${enReg(titMax[0])}`)}

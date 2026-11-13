@@ -215,7 +215,17 @@ def situacion_poblacion(procesado: pd.DataFrame, por_sexo: pd.DataFrame) -> dict
     ocupados_con_lugar = procesado[(procesado["sit_fuerza_trabajo"] == OCUPADO) & procesado["codigo_region_trabajo"].notna()]
     por_lugar = ocupados_con_lugar.groupby("codigo_region_trabajo")["personas"].sum()
     chile["lugar_trabajo"] = int(por_lugar.sum())
-    regiones = {str(int(r)): contar(g) | {"lugar_trabajo": int(por_lugar.get(r, 0)), "pct_lugar_trabajo": redondear(100 * por_lugar.get(r, 0) / por_lugar.sum(), 1)} for r, g in procesado.groupby("codigo_region")}
+    # Traslado medido, no supuesto: cada ocupado trae región de residencia y de trabajo. Quienes no informan dónde trabajan
+    # van aparte, porque su peso cambia mucho entre regiones (0,6% en Antofagasta, 9,0% en la Metropolitana): suponerlo
+    # igual en todas invertía el sentido del traslado en 4 regiones. Cuadre: viven − sin región − salen + llegan = lugar_trabajo.
+    ocupados = procesado[procesado["sit_fuerza_trabajo"] == OCUPADO]
+    sin_region = ocupados[ocupados["codigo_region_trabajo"].isna()].groupby("codigo_region")["personas"].sum()
+    en_otra = ocupados_con_lugar[ocupados_con_lugar["codigo_region"] != ocupados_con_lugar["codigo_region_trabajo"]]
+    salen, llegan = en_otra.groupby("codigo_region")["personas"].sum(), en_otra.groupby("codigo_region_trabajo")["personas"].sum()
+    chile |= {"sin_region_trabajo": int(sin_region.sum()), "salen": int(en_otra["personas"].sum()), "llegan": int(en_otra["personas"].sum())}
+    regiones = {str(int(r)): contar(g) | {"lugar_trabajo": int(por_lugar.get(r, 0)), "pct_lugar_trabajo": redondear(100 * por_lugar.get(r, 0) / por_lugar.sum(), 1),
+                                          "sin_region_trabajo": int(sin_region.get(r, 0)), "salen": int(salen.get(r, 0)), "llegan": int(llegan.get(r, 0))}
+                for r, g in procesado.groupby("codigo_region")}
     for r, d in regiones.items():
         d["sexo"] = {nombre: contar(por_sexo[(por_sexo["codigo_region"] == int(r)) & (por_sexo["sexo"] == codigo)]) for nombre, codigo in (("hombres", HOMBRE), ("mujeres", MUJER))}
     sexo = {}
