@@ -14,7 +14,7 @@ import pandas as pd
 from config import AFINIDADES_VISIBLES, AREAS_CORTAS, NOMBRES_CORTOS, NOMBRES_REGION, OCUPADO, ORDEN_NORTE_SUR, PERIODOS, TRAMOS
 from formato import nombre_legible, redondear, texto_peso
 from indicadores import (
-    agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, formalidad, rango_ficha, resumen_estudios, titulo_edad,
+    agregar_nivel_por_actividad, agregar_sexo_por_region, clase_color, evolucion_desocupacion, formalidad, rango_ficha, resumen_estudios, titulo_edad, edad_poblacion,
     resumen_general, resumen_nacional, sexo_por_actividad, sexo_por_nivel, situacion_poblacion,
 )
 
@@ -90,5 +90,5 @@ def construir_datos(tablas: dict[str, pd.DataFrame]) -> dict:
                              "sin_situacion": int(procesado.loc[~sin_nivel & procesado["sit_fuerza_trabajo"].isna(), "personas"].sum())}
     return {"actividades": actividades, "fichas": fichas, "estudios": estudios, "perfil_estudios": perfil_estudios,
             # Solo el total de las carreras del mapa: por carrera son 1 o 2 personas, y no se abre.
-            "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo), "base_ocupados": base_ocupados,
+            "titulos_nb": sum(f["tit"] - f["tit_h"] - f["tit_m"] for f in fichas.values()), "niveles": por_region, "niveles_chile": niveles_chile, "regiones": {str(k): v for k, v in NOMBRES_REGION.items()}, "orden": ORDEN_NORTE_SUR, "tramos": TRAMOS, "resumen": resumen_general(censo, actividades), "poblacion": situacion_poblacion(procesado, por_sexo) | {"edad": edad_poblacion(tablas["poblacion_edad"])}, "base_ocupados": base_ocupados,
             "evolucion": evolucion_desocupacion(tablas["evolucion"]), "formalidad": formalidad(tablas["formalidad"]), "periodos": PERIODOS}

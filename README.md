@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una), el área de estudio de los titulados de cada actividad y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, el detalle va por tema: el CL (la tabla de la actividad y el CL de las 20 actividades de la región, en escala logarítmica); hombres y mujeres (en la actividad, en Chile y en la región, y en cada grupo de toda la región, con la brecha de participación frente a Chile); el nivel de estudios (el título técnico o profesional de los ocupados de la actividad, por sexo y frente a Chile, y la desocupación de la región por nivel, con la tasa de Chile y la diferencia escritas); y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos, con el área de estudio de los titulados ocupados en un circular.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 464 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta y baja a su detalle, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 471 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta y baja a su detalle, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 
@@ -96,6 +96,7 @@ flowchart TD
     jc["concentracion_region_actividad_censo<br>Ocupados y CL por región y actividad<br>ocupados, pct_en_region, pct_nacional, peso_relativo (CL), ene_peso_relativo"]
     jn["fuerza_trabajo_region_nivel<br>Situación laboral por región y nivel de estudios<br>ocupados_residencia, desocupados, fuera_fuerza_trabajo, tasa_desocupacion"]
     jt["fuerza_trabajo_titulo_edad<br>Desocupación con y sin título por región y tramo de edad<br>con_titulo, tramo_edad, ocupados, desocupados, tasa_desocupacion"]
+    jp["poblacion_edad_region<br>Población de 15 años o más por región y tramo de edad, con su situación laboral<br>tramo_edad, poblacion, ocupados, fuera_fuerza, pct_ocupados, tasa_participacion"]
     jf["formalidad_ocupados<br>Asalariado o independiente, y formal o informal, según ENE 2026<br>tasa_informalidad, pct_independientes, fiabilidad_informalidad"]
     jv["evolucion_desocupacion<br>Cambio de la desocupación entre 2024 y 2026, según ENE<br>tasa_2024, tasa_2026, diferencia_pp, lectura"]
     ja["areas_por_actividad<br>Áreas de estudio de los titulados en cada actividad<br>area_cine, pct_en_actividad"]
@@ -120,6 +121,7 @@ flowchart TD
   cp & p1 & je --> jc
   cp & ep --> jn
   censo & jn --> jt
+  censo & cp --> jp
   ep --> jv
   ep & p1 --> jf
   kp & p1 & p2 & tp --> ja
@@ -230,7 +232,7 @@ done
 
 # 3. Tablas del mapa, en este orden
 $PY src/Analisis/Calculos_control/ocupados_region_actividad/crosswalk.py
-for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Fuerza_Trabajo_Titulo_Edad Evolucion_Desocupacion Formalidad_Ocupados; do
+for t in Concentracion_Region_Actividad Concentracion_Region_Actividad_Censo Areas_Por_Actividad Carreras_Por_Actividad Fuerza_Trabajo_Region_Nivel Fuerza_Trabajo_Titulo_Edad Poblacion_Edad_Region Evolucion_Desocupacion Formalidad_Ocupados; do
   $PY src/Analisis/JOINS/$t/crosswalk.py
 done
 

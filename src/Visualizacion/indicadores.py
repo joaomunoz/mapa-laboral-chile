@@ -171,6 +171,43 @@ def titulo_edad(t: pd.DataFrame) -> dict:
             "pct_jovenes_con": redondear(100 * activos_con["15-24"] / activos_con.sum(), 0)}
 
 
+def edad_poblacion(t: pd.DataFrame) -> dict:
+    """% de ocupados y participación por tramo de edad, y ajustados por edad, en cada región (Censo 2024, residencia).
+
+    Ajuste directo: las tasas de cada tramo de la región, combinadas con la mezcla de edades de Chile (los 7 tramos con
+    edad conocida, de 15-17 a 65 o más). Responde qué % tendría la región con las edades de Chile, sin dejar fuera a
+    nadie con edad conocida; quienes no tienen edad (Sin_edad) siguen en la cifra sin ajustar. En Chile, el ajustado es
+    su propia cifra con edad conocida. puestos compara el orden de las 16 regiones sin ajustar (todas las personas,
+    como el gráfico) y ajustado.
+    """
+    tramos = ["15-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+    con_edad = t[t["tramo_edad"].isin(tramos)]
+    chile = con_edad[con_edad["codigo_region"].isna()].set_index("tramo_edad")
+    peso = chile["poblacion"] / chile["poblacion"].sum()
+    def tasas(g: pd.DataFrame) -> dict:
+        g = g.set_index("tramo_edad")
+        bruta = {"ocu": 100 * g["ocupados"].sum() / g["poblacion"].sum(), "par": 100 * (g["ocupados"] + g["desocupados"]).sum() / g["poblacion"].sum()}
+        c = g.loc[tramos]
+        aj = {"ocu": (c["pct_ocupados"] * peso).sum(), "par": (c["tasa_participacion"] * peso).sum()}
+        return {"tramos": {tr: [redondear(c.loc[tr, "pct_ocupados"], 1), redondear(c.loc[tr, "tasa_participacion"], 1)] for tr in tramos},
+                "ocu": redondear(bruta["ocu"], 1), "par": redondear(bruta["par"], 1), "ocu_aj": redondear(aj["ocu"], 1), "par_aj": redondear(aj["par"], 1),
+                "_exacto": {"ocu": bruta["ocu"], "par": bruta["par"], "ocu_aj": aj["ocu"], "par_aj": aj["par"]}}
+    regiones = {str(int(r)): tasas(g) for r, g in t[t["codigo_region"].notna()].groupby("codigo_region")}
+    ch = tasas(t[t["codigo_region"].isna()])
+    # El orden se compara con las cifras exactas: con las redondeadas, dos regiones a 0,1 punto quedarían empatadas.
+    exacto = pd.DataFrame({r: d.pop("_exacto") for r, d in regiones.items()}).T
+    ch_ex = ch.pop("_exacto")
+    puestos = {}
+    for k in ("ocu", "par"):
+        mov = exacto[k].rank(ascending=False) - exacto[k + "_aj"].rank(ascending=False)
+        puestos[k] = {"iguales": int((mov == 0).sum()), "max": int(mov.abs().max())}
+    sin_edad = t[(t["tramo_edad"] == "Sin_edad") & t["codigo_region"].isna()]["poblacion"].sum()
+    return {"tramos": tramos, "chile": ch, "regiones": regiones, "puestos": puestos, "sin_edad": int(sin_edad),
+            # En Chile el ajuste no cambia nada: es la cifra con edad conocida (control del método en controles.py).
+            "chile_con_edad": redondear(100 * chile["ocupados"].sum() / chile["poblacion"].sum(), 1),
+            "ajuste_chile_exacto": bool(abs(ch_ex["ocu_aj"] - 100 * chile["ocupados"].sum() / chile["poblacion"].sum()) < 1e-9)}
+
+
 def resumen_estudios(niveles: pd.DataFrame, sexo_chile: dict) -> dict:
     """Relación entre nivel de estudios y trabajo en Chile, según residencia y con nivel informado. Describe, no explica: la edad también influye."""
     suma = niveles.groupby("nivel_titulo")[["ocupados_residencia", "desocupados", "fuera_fuerza_trabajo"]].sum()

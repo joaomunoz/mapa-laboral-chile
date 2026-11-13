@@ -1,0 +1,40 @@
+============================================================
+📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
+📁 Archivo: poblacion_edad_region.csv
+============================================================
+🔹 Dimensiones: 136 filas | 10 columnas
+🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>
+🔹 Registros Duplicados Absolutos: 0 (0.00%)
+🔹 Memoria Total Estimada: 0.02 MB
+
+🔬 MATRIZ DE CALIDAD POR COLUMNA:
+-------------------------------------------------------------------------------------------------------------------
+Columna                        | Tipo         | Nulos    | % Nulos  | Únicos   | Espacios Vacíos | Memoria   
+-------------------------------------------------------------------------------------------------------------------
+codigo_region                  | Int64        | 8        | 5.88   % | 16       | 0               | 0.001    MB
+nombre_region                  | object       | 0        | 0.00   % | 17       | 0               | 0.008    MB
+tramo_edad                     | object       | 0        | 0.00   % | 8        | 0               | 0.007    MB
+poblacion                      | int64        | 0        | 0.00   % | 135      | 0               | 0.001    MB
+ocupados                       | int64        | 0        | 0.00   % | 135      | 0               | 0.001    MB
+desocupados                    | int64        | 0        | 0.00   % | 131      | 0               | 0.001    MB
+fuera_fuerza                   | int64        | 0        | 0.00   % | 135      | 0               | 0.001    MB
+sin_dato                       | int64        | 0        | 0.00   % | 125      | 0               | 0.001    MB
+pct_ocupados                   | float64      | 2        | 1.47   % | 134      | 0               | 0.001    MB
+tasa_participacion             | float64      | 2        | 1.47   % | 134      | 0               | 0.001    MB
+-------------------------------------------------------------------------------------------------------------------
+
+🧠 Clasificación Automática de Variables:
+   - Numéricas (8): ['codigo_region', 'poblacion', 'ocupados', 'desocupados', 'fuera_fuerza', 'sin_dato', 'pct_ocupados', 'tasa_participacion']
+   - Categóricas/Texto (2): ['nombre_region', 'tramo_edad']
+   - Fechas (0): []
+
+🎲 MUESTRA ALEATORIA DE 5 REGISTROS PARA CONTEXTO:
+     codigo_region nombre_region  ... pct_ocupados  tasa_participacion
+73               9  LA ARAUCANIA  ...    29.461930           38.763382
+45               5    VALPARAISO  ...    59.398003           63.971641
+60               7         MAULE  ...    67.426994           73.278702
+42               5    VALPARAISO  ...    72.060306           80.501765
+128             16         NUBLE  ...     1.567255            2.028809
+
+[5 rows x 10 columns]
+============================================================

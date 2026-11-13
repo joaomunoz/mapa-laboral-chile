@@ -98,6 +98,12 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "El área de cada región cambia menos de 0,5% al reconstruir los bordes": geo["diferencia_area_pct"] < DIFERENCIA_AREA_MAXIMA_PCT,
         "El área de cada región cambia menos de 1% al simplificar": geo["diferencia_simplificada_pct"] < DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT,
         "Minería en Chile: 268.491 con región y 275.517 en total": por_ciiu["B"]["nacional"]["ocupados"] == 268_491 and por_ciiu["B"]["nacional"]["censo_total"] == 275_517,
+        # La frase que reemplazó al aviso de edad en Trabajo por región se arma con estos conteos: si cambian, se revisa.
+        # En Chile el ajuste por edad debe dar su propia cifra con edad conocida (la mezcla de referencia es la de Chile).
+        "Edad y empleo por región: ajustando por edad, 14 de 16 regiones en el mismo puesto (máx. 1) en ocupados y 16 de 16 en participación; en Chile el ajuste no cambia nada": (
+            (e := datos["poblacion"]["edad"])["puestos"] == {"ocu": {"iguales": 14, "max": 1}, "par": {"iguales": 16, "max": 0}}
+            and e["ajuste_chile_exacto"] and e["chile"]["ocu_aj"] == e["chile_con_edad"] and e["chile"]["ocu"] == datos["poblacion"]["chile"]["pct_trabajan"]
+            and all(e["regiones"][str(r)]["ocu"] == datos["poblacion"]["regiones"][str(r)]["pct_trabajan"] for r in range(1, 17))),
         # El gráfico "Región donde más pesa" pinta cada barra con el tramo del mapa y nombra a las que no llegan a 1,2: esa
         # frase solo vale si no concentrar en su región de mayor CL equivale a no concentrar en ninguna.
         "CL del resumen: Comercio, Servicios administrativos y Hogares no concentran en ninguna región, y las barras usan el color del mapa": (

@@ -53,12 +53,14 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
 /* Hallazgos en grilla de 6 pistas: cada tarjeta ocupa 2 (3 por fila) y la última fila se reparte el ancho completo,
-   para que con cualquier cantidad de hallazgos no queden huecos. La cifra va arriba: a su izquierda, en tarjetas de
-   unos 400 px, chocaba con el texto y dejaba poco ancho a la frase. */
+   para que con cualquier cantidad de hallazgos no queden huecos. Si sobra una sola (7 tarjetas), las 4 últimas van de
+   a dos (3 + 2 + 2): sola a lo ancho, su frase quedaba en líneas de unos 165 caracteres, el doble de lo que se lee
+   cómodo. La cifra va arriba: a su izquierda, en tarjetas de unos 400 px, chocaba con el texto y dejaba poco ancho a
+   la frase. */
 .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 18px;margin:0 0 8px}
 .kpi{grid-column:span 2}
 .kpi:last-child:nth-child(3n+2),.kpi:nth-last-child(2):nth-child(3n+1){grid-column:span 3}
-.kpi:last-child:nth-child(3n+1){grid-column:1/-1}
+@media(min-width:1181px){.kpi:first-child:nth-last-child(3n+4)~.kpi:nth-last-child(-n+4),.kpi:first-child:nth-last-child(4){grid-column:span 3}}
 .kpis[hidden]{display:none}
 .kpis-t{margin:0 0 8px}
 /* La cifra no se corta en dos líneas ("4 de cada / 10"): se achica con el ancho de la tarjeta. */

@@ -318,6 +318,24 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
   fila("Chile",ch," sn-total","")+filas.map(([r,x])=>fila(nomReg(r),x," sn-region",`data-r="${r}"`)).join("")+`</figure>`+
   `<p class="nota" style="margin:2px 0 8px">% de la población de 15 años o más de cada región, según residencia. Junto a cada barra, las tasas: `+
   `desocupación sobre la fuerza de trabajo (ocupados y desocupados) y participación sobre la población.</p>`}
+// Trabajo por región y edad. Las regiones con más jóvenes o más personas de 65 o más tienen menos ocupados aunque en
+// cada edad trabajen igual. Se ajusta por edad con todos los tramos (Censo, de 15-17 a 65 o más): las tasas de cada
+// tramo de la región con la mezcla de edades de Chile. Antes iba un aviso ("dependen de la edad"); medido, el orden casi
+// no cambia, y la frase lo dice con la cifra. Se descartó comparar solo de 18 a 64: dejaba fuera a 448.019 ocupados de
+// 65 o más. El orden se cuenta en Python con las cifras exactas, no con las redondeadas que se muestran.
+function fraseEdadRegion(){const e=POB.edad,o=e.puestos.ocu,p=e.puestos.par,n=DATOS.orden.length;
+ const mov=x=>x.iguales===n?"el orden es el mismo":`${x.iguales} de ${n} regiones quedan en el mismo puesto y ninguna se mueve más de ${x.max}`;
+ return `A igual edad, el orden casi no cambia. Ajustando por edad, con todos los tramos de 15 a 65 años o más: en el % de ocupados, ${mov(o)}; en la tasa de participación, ${mov(p)}. Las cifras por edad están en "Ver cifras".`}
+function tablaEdadRegion(){const e=POB.edad,ch=e.chile;
+ const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${e.tramos.map(tr=>`<td class="n">${num(d.tramos[tr][0],1)}%</td>`).join("")}`+
+  `<td class="n ini">${num(d.ocu,1)}%</td><td class="n">${num(d.ocu_aj,1)}%</td><td class="n ini">${num(d.par,1)}%</td><td class="n">${num(d.par_aj,1)}%</td></tr>`;
+ return `<div class="nota" style="margin-top:10px">% de ocupados por tramo de edad, según residencia, y las dos tasas sin ajustar y ajustadas por edad. `+
+  `Ajustada: la tasa que tendría la región con la mezcla de edades de Chile; con ella, las diferencias entre regiones no se deben a la edad. `+
+  `No entran los ${num(e.sin_edad)} sin edad en el Censo, que sí están en la cifra sin ajustar; por eso en Chile la ajustada es ${num(e.chile_con_edad,1)}% y no ${num(ch.ocu,1)}%.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Región</th><th class="n" colspan="${e.tramos.length}">% de ocupados por edad</th>`+
+  `<th class="n ini" colspan="2">% de ocupados</th><th class="n ini" colspan="2">Tasa de participación</th></tr>`+
+  `<tr>${e.tramos.map(tr=>`<th class="n">${tr==="65+"?"65 o más":tr}</th>`).join("")}<th class="n ini">Sin ajustar</th><th class="n">Ajustado</th><th class="n ini">Sin ajustar</th><th class="n">Ajustada</th></tr></thead><tbody>`+
+  fila("Chile",ch,"total")+DATOS.orden.map(r=>fila(esc(DATOS.regiones[r]),e.regiones[r],"")).join("")+`</tbody></table></div>`}
 // Trabajo por región, 2: los que llegan a trabajar menos los que salen, por cada 100 ocupados que viven en la región y
 // dicen dónde trabajan. Es una medida directa: el Censo trae región de residencia y de trabajo de cada ocupado, y quienes
 // no informan dónde trabajan quedan fuera de la cuenta. Antes se comparaba con Chile suponiendo que esa falta de dato
@@ -514,8 +532,8 @@ function vistaResumen(){
    `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(d.total)}</td><td class="n">${num(d.trabajan)} (${num(d.pct_trabajan,1)}%)</td>`+
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
-  `</tbody></table></div></details>
- <div class="aviso">La tasa depende de la edad de la población de cada región: por sí sola no basta para comparar el empleo.</div>
+  `</tbody></table></div>${tablaEdadRegion()}</details>
+ <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()}</p>
  ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
