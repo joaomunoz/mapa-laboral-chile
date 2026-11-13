@@ -23,7 +23,11 @@ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
   else{const d=RES.regiones[r],a=porCiiu(d.ciiu);tip.innerHTML=`<strong>${nomReg(r)}</strong><br>Mayor CL: ${esc(a.corto)} (${d.txt})<br>Más ocupados: ${esc(porCiiu(d.mas_personas).corto)}`}
   tip.style.display="block";tip.style.left=Math.min(e.clientX+14,innerWidth-250)+"px";tip.style.top=e.clientY+14+"px"};
  p.onmouseleave=()=>{tip.style.display="none"}});
-addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();if(ficha)document.getElementById("ficha")?.scrollIntoView({block:"nearest"});else if(act)mostrarDetalle();else scrollTo(0,0)});
+// Lleva a lo que nombra la dirección: la ficha, el detalle o el inicio. Al abrir un enlace compartido la página quedaba
+// arriba, y en celular el detalle de una región empieza 2,6 pantallas más abajo y la ficha, unas 8.
+function irAVista(bloque){if(ficha)document.getElementById("ficha")?.scrollIntoView({block:bloque});else if(act)mostrarDetalle();else scrollTo(0,0)}
+addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();irAVista("nearest")});
 leerVista();
 pintar();
+if(act)irAVista("start");
 addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA);avisoDesliza()});

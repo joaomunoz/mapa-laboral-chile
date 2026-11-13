@@ -1175,14 +1175,14 @@ function graficoSexoRegion(reg){const pr=POB.regiones[reg],H=pr.sexo.hombres,M=p
  const filas=[["Población de 15 años o más","total"," gs-total"],["Ocupados que viven en la región","trabajan",""],["Desocupados","buscan",""],["Fuera de la fuerza de trabajo","no_buscan",""]];
  return figuraSexo("Población de 15 años o más",100*M.total/pr.total,"Personas (% del total)","Personas",
   filas.map(([t,k,clase])=>{const n=H[k]+M[k];return [t,M[k],H[k],num(n)+(k==="total"?"":` (${num(100*n/pr.total,1)}%)`),clase]}))}
-// Concilia los ocupados de "Toda la región" (viven en ella) con la fila A del CL (trabajan en ella, con actividad
-// informada); el lector veía dos cifras de "ocupados" y creía que una estaba mal. El traslado es neto: incluye a quienes
-// no informan región de trabajo, por eso en Chile tampoco es cero.
-function conciliaOcupados(reg){const pr=POB.regiones[reg],a=BASE.regiones[reg],t=pr.trabajan-pr.lugar_trabajo,s=pr.lugar_trabajo-a;
- const sin=`${num(s)} trabajan en la región sin actividad informada y no entran en A`;
- return `En este gráfico, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)}; en la fila A de la tabla del inicio, ${num(a)} trabajan en ella con actividad informada. `+(t>=0?
-  `La diferencia tiene dos partes: salen a trabajar a otras regiones ${num(t)} ocupados más de los que llegan (incluye a quienes no informan dónde trabajan), y ${sin}.`:
-  `La fila A es mayor porque llegan a trabajar desde otras regiones ${num(-t)} ocupados más de los que salen; en cambio, ${sin}.`)}
+// Concilia las tres cifras de ocupados de la región en escalones: viven en ella, trabajan en ella (la del hallazgo de la
+// Metropolitana en la portada) y, de esos, con actividad informada (fila A). No dice hacia dónde va la gente: 5,8% de
+// los ocupados no informa región de trabajo, y contarlos como traslado contradecía al resumen (O'Higgins: la frase decía
+// "salen 22.023 más de los que llegan" y "Dónde trabajan…" la muestra sobre Chile, porque ese gráfico descuenta ese hueco).
+function conciliaOcupados(reg){const pr=POB.regiones[reg],a=BASE.regiones[reg];
+ return `En este gráfico, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)} y ${num(pr.lugar_trabajo)} trabajan en ella: la diferencia mezcla el traslado entre regiones `+
+  `y a quienes no informan dónde trabajan (el traslado se ve en "Dónde trabajan los ocupados de cada región", en el resumen). `+
+  `De los ${num(pr.lugar_trabajo)}, ${num(a)} informan su actividad: son la fila A de la tabla del inicio.`}
 // Lectura con las tasas, que no caben en la barra. La brecha es la misma de la portada (participación de hombres menos
 // la de mujeres, con tasas redondeadas). Bajo 0,5 se lee "similar" o "casi igual", el mismo umbral de la desocupación por nivel.
 const brecha=x=>Math.round((x.hombres.tasa_participacion-x.mujeres.tasa_participacion)*10)/10;
@@ -1280,7 +1280,9 @@ function vistaRegion(){
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
  const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
- let h=`<hr class="separador"><h2>Carreras afines</h2><div class="nota">Agrupadas por nivel del título. `+
+ // En la región va como subtítulo del detalle, al mismo nivel que "Nivel de estudios"; en Chile sigue siendo una sección.
+ const t=reg==null?"h2":"h3";
+ let h=`<hr class="separador"><${t}>Carreras afines</${t}><div class="nota">Agrupadas por nivel del título. `+
   `Las carreras son un dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":` y no indican titulados en ${lugar}`}. Los titulados son personas estimadas por la CASEN, no títulos del SIES. `+
   `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
  if(act.afines.length){
@@ -1359,11 +1361,14 @@ function detalle(){
  guardarVista();
  // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
  document.getElementById("tip").style.display="none";
- // El botón vuelve al resumen y también suelta la región: la etiqueta nombra a Chile para que no sorprenda.
- let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile()+bloqueCarreras():vistaRegion());
+ // El botón sube un nivel y dice adónde: de la región a Chile con la misma actividad, y de ahí al resumen. Antes, desde
+ // la región saltaba directo al resumen y no había cómo subir un solo nivel salvo la tarjeta "Chile" de la lista.
+ let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · ${reg==null?"Todas las actividades":esc(act.corto)}</button>`+(reg==null?vistaChile()+bloqueCarreras():vistaRegion());
  if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;avisoDesliza();
- document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});
+ document.getElementById("volver")?.addEventListener("click",()=>{ficha=null;
+  if(reg!=null){reg=null;pintar();document.querySelector(`#lista button[data-r="${CHILE}"]`)?.focus({preventScroll:true});mostrarDetalle()}
+  else{act=null;sel.value="";pintar();sel.focus()}});
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
@@ -1395,9 +1400,13 @@ document.querySelectorAll(".region").forEach(p=>{const r=Number(p.dataset.r);
   else{const d=RES.regiones[r],a=porCiiu(d.ciiu);tip.innerHTML=`<strong>${nomReg(r)}</strong><br>Mayor CL: ${esc(a.corto)} (${d.txt})<br>Más ocupados: ${esc(porCiiu(d.mas_personas).corto)}`}
   tip.style.display="block";tip.style.left=Math.min(e.clientX+14,innerWidth-250)+"px";tip.style.top=e.clientY+14+"px"};
  p.onmouseleave=()=>{tip.style.display="none"}});
-addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();if(ficha)document.getElementById("ficha")?.scrollIntoView({block:"nearest"});else if(act)mostrarDetalle();else scrollTo(0,0)});
+// Lleva a lo que nombra la dirección: la ficha, el detalle o el inicio. Al abrir un enlace compartido la página quedaba
+// arriba, y en celular el detalle de una región empieza 2,6 pantallas más abajo y la ficha, unas 8.
+function irAVista(bloque){if(ficha)document.getElementById("ficha")?.scrollIntoView({block:bloque});else if(act)mostrarDetalle();else scrollTo(0,0)}
+addEventListener("popstate",()=>{reemplazar=true;leerVista();pintar();irAVista("nearest")});
 leerVista();
 pintar();
+if(act)irAVista("start");
 addEventListener("resize",()=>{if(!act)anotarMapa(NOTAS_MAPA);avisoDesliza()});
 </script>
 </body></html>

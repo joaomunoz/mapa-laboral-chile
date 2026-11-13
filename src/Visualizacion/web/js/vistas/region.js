@@ -70,14 +70,14 @@ function graficoSexoRegion(reg){const pr=POB.regiones[reg],H=pr.sexo.hombres,M=p
  const filas=[["Población de 15 años o más","total"," gs-total"],["Ocupados que viven en la región","trabajan",""],["Desocupados","buscan",""],["Fuera de la fuerza de trabajo","no_buscan",""]];
  return figuraSexo("Población de 15 años o más",100*M.total/pr.total,"Personas (% del total)","Personas",
   filas.map(([t,k,clase])=>{const n=H[k]+M[k];return [t,M[k],H[k],num(n)+(k==="total"?"":` (${num(100*n/pr.total,1)}%)`),clase]}))}
-// Concilia los ocupados de "Toda la región" (viven en ella) con la fila A del CL (trabajan en ella, con actividad
-// informada); el lector veía dos cifras de "ocupados" y creía que una estaba mal. El traslado es neto: incluye a quienes
-// no informan región de trabajo, por eso en Chile tampoco es cero.
-function conciliaOcupados(reg){const pr=POB.regiones[reg],a=BASE.regiones[reg],t=pr.trabajan-pr.lugar_trabajo,s=pr.lugar_trabajo-a;
- const sin=`${num(s)} trabajan en la región sin actividad informada y no entran en A`;
- return `En este gráfico, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)}; en la fila A de la tabla del inicio, ${num(a)} trabajan en ella con actividad informada. `+(t>=0?
-  `La diferencia tiene dos partes: salen a trabajar a otras regiones ${num(t)} ocupados más de los que llegan (incluye a quienes no informan dónde trabajan), y ${sin}.`:
-  `La fila A es mayor porque llegan a trabajar desde otras regiones ${num(-t)} ocupados más de los que salen; en cambio, ${sin}.`)}
+// Concilia las tres cifras de ocupados de la región en escalones: viven en ella, trabajan en ella (la del hallazgo de la
+// Metropolitana en la portada) y, de esos, con actividad informada (fila A). No dice hacia dónde va la gente: 5,8% de
+// los ocupados no informa región de trabajo, y contarlos como traslado contradecía al resumen (O'Higgins: la frase decía
+// "salen 22.023 más de los que llegan" y "Dónde trabajan…" la muestra sobre Chile, porque ese gráfico descuenta ese hueco).
+function conciliaOcupados(reg){const pr=POB.regiones[reg],a=BASE.regiones[reg];
+ return `En este gráfico, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)} y ${num(pr.lugar_trabajo)} trabajan en ella: la diferencia mezcla el traslado entre regiones `+
+  `y a quienes no informan dónde trabajan (el traslado se ve en "Dónde trabajan los ocupados de cada región", en el resumen). `+
+  `De los ${num(pr.lugar_trabajo)}, ${num(a)} informan su actividad: son la fila A de la tabla del inicio.`}
 // Lectura con las tasas, que no caben en la barra. La brecha es la misma de la portada (participación de hombres menos
 // la de mujeres, con tasas redondeadas). Bajo 0,5 se lee "similar" o "casi igual", el mismo umbral de la desocupación por nivel.
 const brecha=x=>Math.round((x.hombres.tasa_participacion-x.mujeres.tasa_participacion)*10)/10;

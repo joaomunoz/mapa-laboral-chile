@@ -23,11 +23,14 @@ function detalle(){
  guardarVista();
  // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
  document.getElementById("tip").style.display="none";
- // El botón vuelve al resumen y también suelta la región: la etiqueta nombra a Chile para que no sorprenda.
- let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile()+bloqueCarreras():vistaRegion());
+ // El botón sube un nivel y dice adónde: de la región a Chile con la misma actividad, y de ahí al resumen. Antes, desde
+ // la región saltaba directo al resumen y no había cómo subir un solo nivel salvo la tarjeta "Chile" de la lista.
+ let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · ${reg==null?"Todas las actividades":esc(act.corto)}</button>`+(reg==null?vistaChile()+bloqueCarreras():vistaRegion());
  if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;avisoDesliza();
- document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});
+ document.getElementById("volver")?.addEventListener("click",()=>{ficha=null;
+  if(reg!=null){reg=null;pintar();document.querySelector(`#lista button[data-r="${CHILE}"]`)?.focus({preventScroll:true});mostrarDetalle()}
+  else{act=null;sel.value="";pintar();sel.focus()}});
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});

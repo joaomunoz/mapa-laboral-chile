@@ -183,13 +183,15 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
              and min(brecha(reg[r]["sexo"]) for r in reg) == brecha(reg["11"]["sexo"]) == 13.4
              and (reg["12"]["sexo"]["mujeres"]["tasa_desocupacion"], reg["12"]["sexo"]["hombres"]["tasa_desocupacion"]) == (6.7, 6.1))(
                 {str(k): v for k, v in pob["regiones"].items()}, lambda x: round(round(x["hombres"]["tasa_participacion"] - x["mujeres"]["tasa_participacion"], 1) * 10) / 10),
-        # El detalle de región concilia los ocupados que viven en la región (Toda la región) con la fila A del CL
-        # (trabajan en ella, con actividad informada): traslado neto + sin actividad informada. Ambos conteos por lugar de
-        # trabajo deben sumar Chile, y el segundo tramo nunca es negativo.
-        "Ocupados por región: viven − trabajan = traslado; trabajan − A = sin actividad (O'Higgins 22.023 y 15.874; Antofagasta recibe 77.575)":
+        # El detalle de región concilia en escalones los ocupados que viven en la región, los que trabajan en ella y la fila A
+        # (con actividad informada). Ambos conteos por lugar de trabajo deben sumar Chile y el último escalón nunca es negativo.
+        # La frase no puede afirmar hacia dónde va la gente: 5,8% no informa región de trabajo y en O'Higgins, Los Lagos y Los
+        # Ríos esa lectura contradecía al gráfico "Dónde trabajan…" del resumen, que descuenta ese hueco.
+        "Ocupados por región: viven, trabajan en ella y fila A (O'Higgins 423.209, 401.186 y 385.312) y la frase no dice que salen o llegan":
             (lambda reg: sum(x["lugar_trabajo"] for x in reg.values()) == pob["chile"]["lugar_trabajo"] and sum(datos["base_ocupados"]["regiones"].values()) == datos["base_ocupados"]["chile"]
              and all(x["lugar_trabajo"] - datos["base_ocupados"]["regiones"][r] >= 0 for r, x in reg.items())
-             and (reg["6"]["trabajan"] - reg["6"]["lugar_trabajo"], reg["6"]["lugar_trabajo"] - datos["base_ocupados"]["regiones"]["6"], reg["2"]["trabajan"] - reg["2"]["lugar_trabajo"]) == (22_023, 15_874, -77_575))(
+             and (reg["6"]["trabajan"], reg["6"]["lugar_trabajo"], datos["base_ocupados"]["regiones"]["6"]) == (423_209, 401_186, 385_312)
+             and not re.search(r"salen a trabajar|llegan a trabajar", codigo_js["js/vistas/region.js"]))(
                 {str(k): v for k, v in pob["regiones"].items()}),
         # El gráfico de CL de cada región (region.js) usa escala logarítmica con dominio fijo de 1/16 a 16: un CL fuera
         # de ese rango, o nulo, se saldría de la barra. Los conteos fijan la frase de lectura con los cortes del mapa.
