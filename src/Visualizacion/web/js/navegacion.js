@@ -24,7 +24,7 @@ function detalle(){
  // El panel se redibuja bajo el puntero: sin esto, el texto emergente del gráfico quedaría fijo en pantalla.
  document.getElementById("tip").style.display="none";
  // El botón vuelve al resumen y también suelta la región: la etiqueta nombra a Chile para que no sorprenda.
- let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile():vistaRegion())+bloqueCarreras();
+ let h=!act?vistaResumen():`<button class="enlace volver" id="volver">← Chile · Todas las actividades</button>`+(reg==null?vistaChile()+bloqueCarreras():vistaRegion());
  if(act&&ficha)h+=fichaHtml(ficha);
  const e=document.getElementById("detalle");e.innerHTML=h;avisoDesliza();
  document.getElementById("volver")?.addEventListener("click",()=>{act=null;reg=null;ficha=null;sel.value="";pintar();sel.focus()});

@@ -10,8 +10,11 @@ Carreras afines de la actividad y ficha de cada carrera.
 const NIVEL_GRUPO={Profesional:"Título profesional",Tecnico:"Título técnico",Sin_titulo:"Sin título superior"};
 function bloqueCarreras(){
  const lugar=reg==null?"Chile":nomReg(reg),filas=reg==null?act.niveles:act.regiones[reg].niveles;
- let h=`<hr class="separador"><h2>Carreras afines</h2><div class="nota">Agrupadas por nivel del título. `+
-  `Las carreras son un dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":` y no indican titulados en ${lugar}`}. Los titulados son personas estimadas por la CASEN, no títulos del SIES. `+
+ // Un título para todo lo nacional de la CASEN; va del todo (de qué áreas vienen los titulados) al detalle (qué carreras).
+ let h=`<hr class="separador"><h2>${esc(act.corto)} en Chile · titulados ocupados</h2><div class="nota">Dato nacional de la CASEN 2024 (${PER.casen})${reg==null?"":`: no cambia según la región elegida`}. `+
+  `Los titulados son personas estimadas por la CASEN, no títulos del SIES.</div>`;
+ if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3>${circuloAreas()}`;
+ h+=`<h3>Carreras afines</h3><div class="nota">Agrupadas por nivel del título${reg==null?"":`; no indican titulados en ${lugar}`}. `+
   `Junto a cada nivel, los ocupados de ${esc(act.corto)} en ${lugar} con ese nivel (Censo, lugar de trabajo); no indican de qué carrera son.</div>`;
  if(act.afines.length){
   h+=`<table style="margin-top:8px"><thead><tr><th>Carrera</th><th class="n">De sus titulados que trabajan, % en esta actividad</th>`+
@@ -28,7 +31,6 @@ function bloqueCarreras(){
   h+=`<details ${act.afines.length?"":"open"}><summary>Posibles vínculos, con muestra insuficiente (${act.indicios.length})</summary>${
    por.map(([t,cs])=>`<p style="margin:6px 0 0"><strong>${t}:</strong> ${cs.map(c=>`<button class="enlace" data-c="${esc(c.c)}">${esc(nom(c.c))}</button>`).join(" &nbsp;·&nbsp; ")}</p>`).join("")
   }</details>`}
- if(act.areas.length)h+=`<h3>Área de estudio de los titulados ocupados</h3><div class="nota">CASEN 2024, dato nacional.</div>${circuloAreas()}`;
  return h}
 // Composición por área de los titulados ocupados de la actividad: un circular, idea del usuario, porque responde "de
 // qué áreas se compone" y tiene de 2 a 5 partes. Van las áreas con muestra suficiente (hasta 4) y el resto junto en

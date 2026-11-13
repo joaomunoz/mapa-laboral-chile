@@ -7,6 +7,8 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .filtro{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
 .lectura{font-size:16px;margin:12px 0 16px;max-width:88ch}
 .lectura strong{font-weight:650}
+/* Bajo un subtítulo, la frase es texto normal: a 16 px se leía como título y el subtítulo quedaba debajo en jerarquía. */
+h3+.lectura{font-size:14px}
 .lista{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px}
 .tarjeta{background:var(--sup);border:1px solid var(--linea);border-radius:10px;padding:16px}
 .region{stroke:var(--sup);stroke-width:.7;cursor:pointer;outline:none;transition:opacity .1s}

@@ -8,7 +8,7 @@ Vista de una actividad en Chile, con su perfil de estudios y avisos.
 // la línea es la comparación, para que el nivel se lea igual en todo el mapa. Hombres y mujeres van en filas propias:
 // la diferencia entre ellos (Minería en Antofagasta: 25% y 43% profesionales) se perdía entre las columnas de la tabla.
 // Si un sexo tiene un nivel con menos de 10 personas, su suma no se puede mostrar y la fila lo dice en vez de la barra.
-function graficoPerfil(filas,lugar,corto,rotulo,comparacion){
+function graficoPerfil(filas,corto,rotulo,comparacion){
  const grupos=[[rotulo,comparacion," cl-total",null],[corto,filas.map(f=>f[1]),"",filas.map(f=>f[0])],
   ["Hombres",filas.map(f=>f[4]),"",filas.map(f=>f[2])],["Mujeres",filas.map(f=>f[5]),"",filas.map(f=>f[3])]];
  const con=v=>v[0]+v[1],ref=con(comparacion),validos=grupos.filter(g=>g[1].every(x=>x!=null));
@@ -22,14 +22,14 @@ function graficoPerfil(filas,lugar,corto,rotulo,comparacion){
    `<span class="cl-nombre">${t}${chica}</span><span class="cl-barra ed-barra" aria-hidden="true"><i class="ed-pro" style="width:${pos(v[0])}%"></i>`+
    `<i class="ed-tec" style="left:calc(${pos(v[0])}% + 2px);width:calc(${pos(v[1])}% - 2px)"></i><b style="left:${pos(ref)}%"></b>`+
    `<span class="cl-valor" style="left:calc(${pos(con(v))}% + 6px)">${num(con(v),1)}%</span></span><span class="gs-num">${num(v[2],1)}%</span></div>`};
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Ocupados con título técnico o profesional · ${esc(lugar)}</strong></span>`+
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda">`+
   `<span><i class="ed-pro"></i>Profesional</span><span><i class="ed-tec"></i>Técnico</span><span><span class="ref"></span>${esc(rotulo)} (${num(ref,1)}%)</span></figcaption>`+
   `<div class="cl-fila ed-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Grupo</span><span>% con título técnico o profesional</span><span class="gs-num">Sin título superior</span></div>`+
   grupos.map(fila).join("")+`</figure>`}
-function perfilEstudios(filas,lugar,corto,rotulo,comparacion){
+function perfilEstudios(filas,lugar,corto,rotulo,comparacion,t="h2"){
  const hayChicas=filas.some(f=>f[2]!=null&&f[2]<CHICA||f[3]!=null&&f[3]<CHICA);
- return `<h2>Nivel de estudios de los ocupados</h2><div class="nota">Según lugar de trabajo, con nivel informado. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>`+
-  graficoPerfil(filas,lugar,corto,rotulo,comparacion)+
+ return `<${t}>Nivel de estudios de los ocupados</${t}><div class="nota">Según lugar de trabajo, con nivel informado. El Censo registra la actividad solo de quienes trabajan: no hay desocupación por actividad.</div>`+
+  graficoPerfil(filas,corto,rotulo,comparacion)+
   `<p class="nota" style="margin:2px 0 8px">% de los ocupados de cada grupo. Al final de cada barra, profesional y técnico juntos; a la derecha, el resto, sin título superior.</p>`+
   ([2,3].some(k=>filas.every(f=>f[k]!=null)&&filas.reduce((a,f)=>a+f[k],0)<CHICA)?NOTA_CHICA:"")+
   `<details><summary>Ver cifras</summary><div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Nivel</th><th class="n">Ocupados</th><th class="n">Hombres</th><th class="n">Mujeres</th><th class="n">${esc(rotulo)}</th></tr></thead><tbody>${

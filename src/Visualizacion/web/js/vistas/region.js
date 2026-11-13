@@ -31,7 +31,7 @@ function lecturaDesocNivel(reg){const g={menor:[],mayor:[],igual:[]},quien={Prof
 function graficoDesocNivel(reg){const filas=NIVELES.map(([k,t],i)=>[t,DATOS.niveles[reg][k],["ed-pro","ed-tec","tsin"][i]]);
  const tope=Math.ceil(Math.max(...filas.map(([,x])=>x.tasa))/4)*4,pos=v=>100*v/tope;
  const signo=d=>d>0?`+${num(d,1)}`:d<0?`−${num(-d,1)}`:num(0,1);
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">Tasa de desocupación · ${nomReg(reg)} y Chile</strong></span></figcaption>`+
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0">`+
   `<div class="cl-fila dn-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Nivel</span><span>${nomReg(reg)}</span>`+
   `<span class="gs-extra"><span class="gs-num">Chile</span><span class="gs-num">Diferencia</span></span></div>`+
   filas.map(([t,x,c])=>{const d=difNivel(x),partes=[`${nomReg(reg)}: ${num(x.tasa,1)}%`,`Chile: ${num(x.nacional,1)}%`,`diferencia: ${signo(d)} pp`,`${num(x.desocupados)} desocupados y ${num(x.ocupados)} ocupados`];
@@ -43,7 +43,7 @@ function graficoDesocNivel(reg){const filas=NIVELES.map(([k,t],i)=>[t,DATOS.nive
 // resumen, idea del usuario. Cada fila es su propio 100% y la línea es la referencia de cada gráfico. La usan la
 // actividad (por lugar de trabajo) y toda la región (por residencia): una sola función para que se lean igual.
 // et: rótulo de la cifra cuando el celular oculta la cabecera. filas: [rótulo, mujeres, hombres, texto de la columna, clase]; las de mujeres u hombres nulos (menos de 10) se avisan.
-function figuraSexo(titulo,refTexto,ref,cabecera,et,filas){
+function figuraSexo(refTexto,ref,cabecera,et,filas){
  const fila=([t,m,hh,extra,clase])=>{
   if(m==null||hh==null)return `<div class="gs-fila gs-region${clase}"><span class="gs-nombre">${esc(t)}</span><span class="nota" style="grid-column:2/5">Menos de 10 personas: ver cifras</span></div>`;
   const n=m+hh,pm=100*m/n,ph=100-pm,partes=[extra,`${num(m)} mujeres (${num(pm,1)}%)`,`${num(hh)} hombres (${num(ph,1)}%)`];
@@ -51,7 +51,7 @@ function figuraSexo(titulo,refTexto,ref,cabecera,et,filas){
    `<span class="gs-nombre">${esc(t)}</span><span class="gs-pct">${num(pm,1)}%</span><span class="gs-barra" aria-hidden="true"><i class="m" style="flex:${pm} 0 0"></i><i class="h" style="flex:${ph} 0 0"></i>`+
    `<b style="left:${ref}%"></b></span><span class="gs-pct h">${num(ph,1)}%</span>`+
    `<span class="gs-extra"><span class="gs-num"><span class="gs-et">${et} </span>${extra}</span></span></div>`};
- return `<figure class="graf-sexo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">${titulo}</strong></span>`+
+ return `<figure class="graf-sexo" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda">`+
   `<span><i style="background:var(--muj)"></i>Mujeres</span><span><i style="background:var(--hom)"></i>Hombres</span><span><span class="ref"></span>${refTexto} (${num(ref,1)}% mujeres)</span></figcaption>`+
   `<div class="gs-fila gs-region gs-cab" aria-hidden="true"><span class="gs-nombre"></span><span></span><span></span><span></span><span class="gs-extra"><span class="gs-num">${cabecera}</span></span></div>`+
   filas.map(fila).join("")+`</figure>`}
@@ -59,7 +59,7 @@ function figuraSexo(titulo,refTexto,ref,cabecera,et,filas){
 // ocupados donde trabajan, como la tabla del CL: la línea es la fila A. Así se ve si la actividad tiene más o menos
 // mujeres que la región en general (Hogares en O'Higgins: 89,0% frente a 42,1%).
 function graficoSexoActividad(d,bs){
- return figuraSexo(`% de mujeres y de hombres · ${esc(act.corto)}`,`Todas las actividades de ${nomReg(reg)}`,100*bs.m/(bs.h+bs.m),"Ocupados","Ocupados",[
+ return figuraSexo(`Todas las actividades de ${nomReg(reg)}`,100*bs.m/(bs.h+bs.m),"Ocupados","Ocupados",[
   [`${act.corto} en Chile`,act.sexo.m,act.sexo.h,num(act.sexo.m+act.sexo.h)," gs-total"],
   [`${act.corto} en ${nomReg(reg)}`,d.m,d.h,num(d.ocupados),""]])}
 // Toda la región, por residencia. La línea es el % de mujeres en la población de 15 años o más: se lee de inmediato que
@@ -68,14 +68,14 @@ function graficoSexoActividad(d,bs){
 // usar el gris de "fuera de la fuerza de trabajo", no choca con el gris de "sin título" del gráfico siguiente.
 function graficoSexoRegion(reg){const pr=POB.regiones[reg],H=pr.sexo.hombres,M=pr.sexo.mujeres;
  const filas=[["Población de 15 años o más","total"," gs-total"],["Ocupados que viven en la región","trabajan",""],["Desocupados","buscan",""],["Fuera de la fuerza de trabajo","no_buscan",""]];
- return figuraSexo(`% de mujeres y de hombres · todas las actividades de ${nomReg(reg)}`,"Población de 15 años o más",100*M.total/pr.total,"Personas (% del total)","Personas",
+ return figuraSexo("Población de 15 años o más",100*M.total/pr.total,"Personas (% del total)","Personas",
   filas.map(([t,k,clase])=>{const n=H[k]+M[k];return [t,M[k],H[k],num(n)+(k==="total"?"":` (${num(100*n/pr.total,1)}%)`),clase]}))}
 // Concilia los ocupados de "Toda la región" (viven en ella) con la fila A del CL (trabajan en ella, con actividad
 // informada); el lector veía dos cifras de "ocupados" y creía que una estaba mal. El traslado es neto: incluye a quienes
 // no informan región de trabajo, por eso en Chile tampoco es cero.
 function conciliaOcupados(reg){const pr=POB.regiones[reg],a=BASE.regiones[reg],t=pr.trabajan-pr.lugar_trabajo,s=pr.lugar_trabajo-a;
  const sin=`${num(s)} trabajan en la región sin actividad informada y no entran en A`;
- return `Aquí, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)}; en la fila A de arriba, ${num(a)} trabajan en ella con actividad informada. `+(t>=0?
+ return `En este gráfico, ${num(pr.trabajan)} ocupados viven en ${nomReg(reg)}; en la fila A de la tabla del inicio, ${num(a)} trabajan en ella con actividad informada. `+(t>=0?
   `La diferencia tiene dos partes: salen a trabajar a otras regiones ${num(t)} ocupados más de los que llegan (incluye a quienes no informan dónde trabajan), y ${sin}.`:
   `La fila A es mayor porque llegan a trabajar desde otras regiones ${num(-t)} ocupados más de los que salen; en cambio, ${sin}.`)}
 // Lectura con las tasas, que no caben en la barra. La brecha es la misma de la portada (participación de hombres menos
@@ -109,7 +109,7 @@ function graficoCLRegion(reg){const uno=posCL(1);
    `<span class="cl-nombre">${esc(a.corto)}</span><span class="cl-barra clr-barra" aria-hidden="true">`+
    `<i style="left:${Math.min(x,uno)}%;width:${Math.abs(x-uno)}%;background:${relleno(v)}" class="${v.peso<1?"izq":""}"></i><b style="left:${uno}%"></b>`+
    `<span class="cl-valor" style="${v.peso<1?`right:calc(${100-x}% + 6px)`:`left:calc(${x}% + 6px)`}">${v.peso_txt}</span></span></button>`};
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><strong style="color:var(--t1)">CL por actividad · ${nomReg(reg)}</strong></span>`+
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda">`+
   `<span><span class="ref"></span>CL 1: pesa lo mismo que en Chile</span><span>Color: tramo del mapa</span></figcaption>`+
   `<div class="cl-fila clr-fila gs-cab" aria-hidden="true"><span class="cl-nombre"></span><span class="clr-eje">${
    CL_MARCAS.map(m=>`<span style="left:${posCL(m)}%">${num(m,m<0.25?3:m<1?2:0).replace(/0+$/,"").replace(/,$/,"")}</span>`).join("")}</span></div>`+
@@ -138,6 +138,12 @@ function vistaRegion(){
   `<details><summary>Contraste con ENE</summary><p class="nota" style="margin:6px 0 0">CL en ENE de ${PER.ene_contraste}: ${d.ene_peso_txt}, ${LECT[d.ene_lectura]??d.ene_lectura}.</p></details>`;
  // Justo bajo la tabla: las cifras por sexo de B ya están ahí; el gráfico las compara con toda la región (fila A).
  h+=`<h3>Hombres y mujeres en ${esc(act.corto)}</h3>${graficoSexoActividad(d,bs)}`;
+ h+=perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]),"h3");
+ // Orden por alcance: la actividad en la región, la actividad en Chile (CASEN) y toda la región. Antes se alternaban
+ // y cada bloque necesitaba una nota para avisar de qué hablaba.
+ h+=bloqueCarreras();
+ // Un solo encabezado para lo que es de toda la región: antes cada sección repetía la base y que no cambia con la actividad.
+ h+=`<hr class="separador"><h2>${nomReg(reg)}, todas las actividades</h2><div class="nota">No cambia según la actividad elegida. El CL cuenta a los ocupados donde trabajan; el resto, a las personas de 15 años o más que viven en la región.</div>`;
  h+=`<h3>CL de las ${DATOS.actividades.length} actividades en ${nomReg(reg)}</h3><p class="lectura" style="margin:6px 0 0">${lecturaCLRegion(reg)}</p>${graficoCLRegion(reg)}`+
   `<p class="nota" style="margin:2px 0 8px">CL: cuántas veces pesa la actividad en la región respecto de su peso en Chile, según lugar de trabajo. Escala logarítmica: 0,5 (la mitad que en Chile) y 2 (el doble) quedan a la misma distancia de 1.</p>`+
   `<details><summary>Ver cifras</summary><table style="margin-top:8px"><thead><tr><th>Actividad</th><th class="n">Ocupados (participación)</th><th class="n">Chile</th><th class="n">CL</th></tr></thead><tbody>${
@@ -145,11 +151,7 @@ function vistaRegion(){
    return `<tr><td><button class="enlace" data-a="${a.ciiu}">${esc(a.corto)}</button></td><td class="n">${vp(v.ocupados,v.pct)}</td>`+
     `<td class="n">${vp(a.nacional.ocupados,a.pct_nacional)}</td><td class="n">${v.peso_txt}</td></tr>`}).join("")
  }</tbody></table></details>`;
- h+=`<hr class="separador">${perfilEstudios(d.niveles,`${nomReg(reg)} · ${act.corto}`,nomReg(reg),`${act.corto} en Chile`,act.niveles.map(f=>f[1]))}`;
- // Un solo encabezado para lo que es de toda la región: antes cada sección repetía la base y que no cambia con la actividad.
- h+=`<hr class="separador"><h2>${nomReg(reg)}, todas las actividades</h2><div class="nota">No cambia según la actividad elegida. `+
-  `Personas de 15 años o más que viven en la región. ${conciliaOcupados(reg)}</div>`;
- h+=`<h3>Hombres y mujeres en cada grupo, todas las actividades</h3><p class="lectura" style="margin:6px 0 0">${lecturaSexoRegion(reg)}</p>${graficoSexoRegion(reg)}`+
+ h+=`<h3>Hombres y mujeres en cada grupo, todas las actividades</h3><p class="lectura" style="margin:6px 0 0">${lecturaSexoRegion(reg)}</p>${graficoSexoRegion(reg)}<p class="nota" style="margin:2px 0 8px">${conciliaOcupados(reg)}</p>`+
   `<details><summary>Ver cifras</summary><div class="nota" style="margin-top:6px">Entre paréntesis, % de la población de 15 años o más de cada columna.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Grupo</th><th class="n">Total</th><th class="n">Hombres</th><th class="n">Mujeres</th></tr></thead><tbody>`+
   `<tr class="total"><td>Población de 15 años o más</td><td class="n">${num(pr.total)}</td><td class="n">${num(pr.sexo.hombres.total)}</td><td class="n">${num(pr.sexo.mujeres.total)}</td></tr>`+
