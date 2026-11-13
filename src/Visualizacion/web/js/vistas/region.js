@@ -29,14 +29,16 @@ function lecturaDesocNivel(reg){const g={menor:[],mayor:[],igual:[]},quien={Prof
  const t=NIVELES.map(([k])=>DATOS.niveles[reg][k].tasa),baja=t[0]<t[1]&&t[1]<t[2];
  return {frase:`La desocupación es ${partes.length>1?partes.slice(0,-1).join(", ")+", y "+partes.at(-1):partes[0]}.`+(baja?" Con más estudios, la tasa es más baja.":""),g,baja}}
 function graficoDesocNivel(reg){const filas=NIVELES.map(([k,t],i)=>[t,DATOS.niveles[reg][k],["ed-pro","ed-tec","tsin"][i]]);
- const tope=Math.ceil(Math.max(...filas.map(([,x])=>x.tasa))/4)*4,pos=v=>100*v/tope;
+ const tope=Math.ceil(Math.max(...filas.flatMap(([,x])=>[x.tasa,x.nacional]))/4)*4,pos=v=>100*v/tope;
  const signo=d=>d>0?`+${num(d,1)}`:d<0?`−${num(-d,1)}`:num(0,1);
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0">`+
+ // La tasa de Chile va como línea en cada barra, igual que la comparación de los demás gráficos del detalle: así se ve
+ // si la región está sobre o bajo Chile sin cruzar columnas. Las columnas Chile y Diferencia quedan con la cifra exacta.
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><span class="ref"></span>Chile</span></figcaption>`+
   `<div class="cl-fila dn-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Nivel</span><span>${nomReg(reg)}</span>`+
   `<span class="gs-extra"><span class="gs-num">Chile</span><span class="gs-num">Diferencia</span></span></div>`+
   filas.map(([t,x,c])=>{const d=difNivel(x),partes=[`${nomReg(reg)}: ${num(x.tasa,1)}%`,`Chile: ${num(x.nacional,1)}%`,`diferencia: ${signo(d)} pp`,`${num(x.desocupados)} desocupados y ${num(x.ocupados)} ocupados`];
    return `<div class="cl-fila dn-fila" role="img" tabindex="0" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-    `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i class="${c}" style="width:${pos(x.tasa)}%"></i>`+
+    `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i class="${c}" style="width:${pos(x.tasa)}%"></i><b style="left:${pos(x.nacional)}%"></b>`+
     `<span class="cl-valor" style="left:calc(${pos(x.tasa)}% + 6px)">${num(x.tasa,1)}%</span></span>`+
     `<span class="gs-extra"><span class="gs-num"><span class="gs-et">Chile </span>${num(x.nacional,1)}%</span><span class="gs-num"><span class="gs-et">Diferencia </span>${signo(d)} pp</span></span></div>`}).join("")+`</figure>`}
 // Barra rosa/azul del detalle de región: el mismo componente y colores que "Hombres y mujeres por actividad" del

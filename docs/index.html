@@ -218,7 +218,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
 .tcon{background:var(--tit-con)}.tsin,.cl-barra i.tsin{background:var(--tit-sin)}.cl-barra i.ed-pro{background:var(--ed-pro)}.cl-barra i.ed-tec{background:var(--ed-tec)}
 /* Desocupación por nivel en la región: barra y, a la derecha, Chile y la diferencia como números. */
-.dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
+.dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.dn-fila:hover .cl-valor,.dn-fila:focus-visible .cl-valor{background:var(--plano)}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
 /* Filas sin clic: el nombre va en tinta, no en azul de enlace. */
 div.cl-fila:not(.gs-cab) .cl-nombre{color:var(--t1)}div.gs-fila:not(.gs-cab) .gs-nombre{color:var(--t1)}.gs-region .gs-extra{grid-template-columns:11em}.gs-region{cursor:default}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
@@ -1143,14 +1143,16 @@ function lecturaDesocNivel(reg){const g={menor:[],mayor:[],igual:[]},quien={Prof
  const t=NIVELES.map(([k])=>DATOS.niveles[reg][k].tasa),baja=t[0]<t[1]&&t[1]<t[2];
  return {frase:`La desocupación es ${partes.length>1?partes.slice(0,-1).join(", ")+", y "+partes.at(-1):partes[0]}.`+(baja?" Con más estudios, la tasa es más baja.":""),g,baja}}
 function graficoDesocNivel(reg){const filas=NIVELES.map(([k,t],i)=>[t,DATOS.niveles[reg][k],["ed-pro","ed-tec","tsin"][i]]);
- const tope=Math.ceil(Math.max(...filas.map(([,x])=>x.tasa))/4)*4,pos=v=>100*v/tope;
+ const tope=Math.ceil(Math.max(...filas.flatMap(([,x])=>[x.tasa,x.nacional]))/4)*4,pos=v=>100*v/tope;
  const signo=d=>d>0?`+${num(d,1)}`:d<0?`−${num(-d,1)}`:num(0,1);
- return `<figure class="graf-cl" style="margin-left:0;margin-right:0">`+
+ // La tasa de Chile va como línea en cada barra, igual que la comparación de los demás gráficos del detalle: así se ve
+ // si la región está sobre o bajo Chile sin cruzar columnas. Las columnas Chile y Diferencia quedan con la cifra exacta.
+ return `<figure class="graf-cl" style="margin-left:0;margin-right:0"><figcaption class="gs-leyenda"><span><span class="ref"></span>Chile</span></figcaption>`+
   `<div class="cl-fila dn-fila gs-cab" aria-hidden="true"><span class="cl-nombre">Nivel</span><span>${nomReg(reg)}</span>`+
   `<span class="gs-extra"><span class="gs-num">Chile</span><span class="gs-num">Diferencia</span></span></div>`+
   filas.map(([t,x,c])=>{const d=difNivel(x),partes=[`${nomReg(reg)}: ${num(x.tasa,1)}%`,`Chile: ${num(x.nacional,1)}%`,`diferencia: ${signo(d)} pp`,`${num(x.desocupados)} desocupados y ${num(x.ocupados)} ocupados`];
    return `<div class="cl-fila dn-fila" role="img" tabindex="0" data-tip="${`<strong>${t}</strong><br>${partes.join("<br>")}`.replace(/"/g,"&quot;")}" aria-label="${t}: ${partes.join(", ")}">`+
-    `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i class="${c}" style="width:${pos(x.tasa)}%"></i>`+
+    `<span class="cl-nombre">${t}</span><span class="cl-barra" aria-hidden="true"><i class="${c}" style="width:${pos(x.tasa)}%"></i><b style="left:${pos(x.nacional)}%"></b>`+
     `<span class="cl-valor" style="left:calc(${pos(x.tasa)}% + 6px)">${num(x.tasa,1)}%</span></span>`+
     `<span class="gs-extra"><span class="gs-num"><span class="gs-et">Chile </span>${num(x.nacional,1)}%</span><span class="gs-num"><span class="gs-et">Diferencia </span>${signo(d)} pp</span></span></div>`}).join("")+`</figure>`}
 // Barra rosa/azul del detalle de región: el mismo componente y colores que "Hombres y mujeres por actividad" del
@@ -1380,9 +1382,13 @@ function detalle(){
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
- // Texto emergente del gráfico de hombres y mujeres, con el mismo globo que el mapa.
+ // Globo de los gráficos, el mismo del mapa. Con el teclado aparece al enfocar la fila, bajo ella: antes solo el mouse
+ // lo mostraba y quien navega con Tab veía el borde de foco sin las cifras. Solo con foco visible, para que un clic no lo deje fijo.
  e.querySelectorAll("[data-tip]").forEach(b=>{b.onmousemove=ev=>{tip.innerHTML=b.dataset.tip;tip.style.display="block";
-  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"}});
+  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"};
+  b.onfocus=()=>{if(!b.matches(":focus-visible"))return;const r=b.getBoundingClientRect();tip.innerHTML=b.dataset.tip;tip.style.display="block";
+   tip.style.left=Math.max(4,Math.min(r.left+16,innerWidth-250))+"px";const h=tip.offsetHeight;tip.style.top=(r.bottom+6+h>innerHeight?r.top-h-6:r.bottom+6)+"px"};
+  b.onblur=()=>{tip.style.display="none"}});
  // El índice mueve el foco a la sección, para que el teclado y el lector de pantalla sigan desde ahí.
  e.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>{const s=document.getElementById(b.dataset.ir);
   s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});s.focus({preventScroll:true})});

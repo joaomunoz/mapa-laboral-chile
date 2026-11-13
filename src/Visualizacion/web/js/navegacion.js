@@ -34,9 +34,13 @@ function detalle(){
  e.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{act=porCiiu(b.dataset.a);sel.value=act.ciiu;ficha=null;pintar();sel.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("button[data-r]").forEach(b=>b.onclick=()=>{reg=Number(b.dataset.r);ficha=null;pintar();document.querySelector(`#lista button[data-r="${reg}"]`)?.focus({preventScroll:true});mostrarDetalle()});
  e.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ficha=b.dataset.c;detalle();document.getElementById("ficha")?.scrollIntoView({behavior:"smooth",block:"nearest"});e.querySelector(".cerrar")?.focus()});
- // Texto emergente del gráfico de hombres y mujeres, con el mismo globo que el mapa.
+ // Globo de los gráficos, el mismo del mapa. Con el teclado aparece al enfocar la fila, bajo ella: antes solo el mouse
+ // lo mostraba y quien navega con Tab veía el borde de foco sin las cifras. Solo con foco visible, para que un clic no lo deje fijo.
  e.querySelectorAll("[data-tip]").forEach(b=>{b.onmousemove=ev=>{tip.innerHTML=b.dataset.tip;tip.style.display="block";
-  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"}});
+  tip.style.left=Math.min(ev.clientX+14,innerWidth-250)+"px";tip.style.top=ev.clientY+14+"px"};b.onmouseleave=()=>{tip.style.display="none"};
+  b.onfocus=()=>{if(!b.matches(":focus-visible"))return;const r=b.getBoundingClientRect();tip.innerHTML=b.dataset.tip;tip.style.display="block";
+   tip.style.left=Math.max(4,Math.min(r.left+16,innerWidth-250))+"px";const h=tip.offsetHeight;tip.style.top=(r.bottom+6+h>innerHeight?r.top-h-6:r.bottom+6)+"px"};
+  b.onblur=()=>{tip.style.display="none"}});
  // El índice mueve el foco a la sección, para que el teclado y el lector de pantalla sigan desde ahí.
  e.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>{const s=document.getElementById(b.dataset.ir);
   s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});s.focus({preventScroll:true})});

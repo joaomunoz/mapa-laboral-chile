@@ -171,7 +171,7 @@ button.evc-grupo{all:unset;box-sizing:border-box;cursor:pointer}button.evc-grupo
 .gs-leyenda i.s-trabajan,.gs-leyenda i.s-buscan,.gs-leyenda i.s-no-buscan{border-radius:2px}
 .tcon{background:var(--tit-con)}.tsin,.cl-barra i.tsin{background:var(--tit-sin)}.cl-barra i.ed-pro{background:var(--ed-pro)}.cl-barra i.ed-tec{background:var(--ed-tec)}
 /* Desocupación por nivel en la región: barra y, a la derecha, Chile y la diferencia como números. */
-.dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
+.dn-fila{grid-template-columns:minmax(0,11rem) minmax(0,360px) auto}.dn-fila .cl-valor{z-index:1;background:var(--sup);padding:0 2px;margin-left:-2px}.dn-fila:hover .cl-valor,.dn-fila:focus-visible .cl-valor{background:var(--plano)}.dn-fila .gs-extra{grid-template-columns:4.6em 6.4em}
 /* Filas sin clic: el nombre va en tinta, no en azul de enlace. */
 div.cl-fila:not(.gs-cab) .cl-nombre{color:var(--t1)}div.gs-fila:not(.gs-cab) .gs-nombre{color:var(--t1)}.gs-region .gs-extra{grid-template-columns:11em}.gs-region{cursor:default}.gs-leyenda i.tcon,.gs-leyenda i.tsin{border-radius:2px}
 .gs-barra b{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--t1)}
