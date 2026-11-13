@@ -318,7 +318,7 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 @media(max-width:640px){.kpi,.kpi:last-child:nth-child(n),.kpi:nth-last-child(2):nth-child(n){grid-column:1/-1}}
 
 /* En celular, Chile y la diferencia bajan a una línea propia con su rótulo (regla de .gs-extra). */
-@media(max-width:640px){.clr-fila{grid-template-columns:minmax(0,1fr);row-gap:2px}.clr-fila.gs-cab{display:grid}.clr-fila.gs-cab .cl-nombre{display:none}.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}.gs-region .gs-extra{grid-template-columns:auto}}
+@media(max-width:640px){.tr-fila .tr-barra{margin:0 3.4em}.clr-fila{grid-template-columns:minmax(0,1fr);row-gap:2px}.clr-fila.gs-cab{display:grid}.clr-fila.gs-cab .cl-nombre{display:none}.dn-fila{grid-template-columns:minmax(0,9rem) minmax(0,1fr)}.dn-fila.gs-cab .gs-extra{display:none}.dn-fila .gs-extra{grid-template-columns:auto auto}.gs-region .gs-extra{grid-template-columns:auto}}
 </style>
 </head>
 <body>
@@ -410,7 +410,8 @@ const vp=(v,p)=>`${num(v)} (${part(p)})`;
 const vmil=([n,p])=>`${num(n)} (${num(p,1)}%)`;  // En tablas: ocupados estimados (% de la fila), en unidades
 // En texto y gráficos, la ENE se redondea a mil o a millón: es una estimación con muestra y se lee mejor así.
 const enMiles=n=>n>=1e6?`${num(n/1e6,1)} millones`:`${num(n/1000,0)} mil`;
-const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+" y "+x[x.length-1];
+// Si algún nombre ya lleva "y" (Electricidad y gas), una coma antes del último separa la lista de los nombres.
+const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+(x.some(e=>/ y /.test(e))?", y ":" y ")+x[x.length-1];
 // % con título técnico o profesional, desde las personas y no desde los porcentajes ya redondeados.
 const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+filas[2][0]);
 // "4 de cada 10" se entiende más rápido que un porcentaje; la cifra exacta queda al lado.
@@ -842,6 +843,8 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
 // pesaba igual en todas las regiones; pesa de 0,6% a 9,0%, y el supuesto invertía el sentido en la Metropolitana, Los
 // Ríos, O'Higgins y La Araucanía. Barras desde 0 con dos colores, uno por sentido; la escala es la misma a ambos lados,
 // para no agrandar las diferencias chicas, y el centro se corre según el rango, para dar el espacio a las barras.
+// (Los dos colores se parecen a los de formal e informal, en otra sección y con su leyenda: excepción medida, ver la nota de
+// lectura; el gris chocaba con desocupados y el contorno no se leía a simple vista.)
 const netoTraslado=x=>100*(x.llegan-x.salen)/(x.trabajan-x.sin_region_trabajo);
 // El signo sale de la cifra publicada, para que una cifra que redondea a 0 no se lea −0,0.
 const txtNeto=v=>{const r1=Math.round(10*v)/10;return `${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}`};
@@ -1137,7 +1140,7 @@ const difNivel=x=>Math.round((x.tasa-x.nacional)*10)/10;
 // para no destacar diferencias mínimas (Valparaíso técnico y sin título: 0,0 pp).
 function lecturaDesocNivel(reg){const g={menor:[],mayor:[],igual:[]},quien={Profesional:"profesionales",Tecnico:"técnicos",Sin_titulo:"quienes no tienen título superior"};
  NIVELES.forEach(([k])=>{const d=difNivel(DATOS.niveles[reg][k]);g[Math.abs(d)<DIF_CASI_IGUAL?"igual":d<0?"menor":"mayor"].push(quien[k])});
- const lista=a=>a.length>1?a.slice(0,-1).join(", ")+" y "+a.at(-1):a[0],usadas=[["menor","menor"],["mayor","mayor"],["igual","casi igual"]].filter(([k])=>g[k].length);
+ const usadas=[["menor","menor"],["mayor","mayor"],["igual","casi igual"]].filter(([k])=>g[k].length);
  // Solo la primera parte dice "que en Chile"; repetido en cada parte, la frase se alargaba sin agregar nada.
  const partes=usadas.map(([k,e],i)=>`${e}${i?"":" que en Chile"} ${g[k].length===3?"en los 3 niveles":"entre "+lista(g[k])}`);
  const t=NIVELES.map(([k])=>DATOS.niveles[reg][k].tasa),baja=t[0]<t[1]&&t[1]<t[2];
@@ -1232,7 +1235,7 @@ function graficoCLRegion(reg){const uno=posCL(1);
 // La frase usa los mismos cortes del mapa (LECT): 1,2 o más, entre 0,8 y 1,2, y 0,8 o menos.
 function lecturaCLRegion(reg){const n=DATOS.actividades.length,g=k=>porCLRegion(reg).filter(a=>a.regiones[reg].lectura===k);
  const sobre=g("concentra"),sim=g("similar").length,bajo=g("bajo_lo_nacional").length;
- const lista=sobre.map(a=>`${esc(a.corto)} (${a.regiones[reg].peso_txt})`),txt=lista.length>1?lista.slice(0,-1).join(", ")+" y "+lista.at(-1):lista[0];
+ const txt=lista(sobre.map(a=>`${esc(a.corto)} (${a.regiones[reg].peso_txt})`));
  return `En ${enReg(reg)}, `+(sobre.length?`${sobre.length===1?"1 actividad pesa":`${sobre.length} de las ${n} actividades pesan`} más que en Chile (CL de 1,2 o más): ${txt}. `:`ninguna de las ${n} actividades tiene CL de 1,2 o más. `)+
   `${sobre.length?"Otras ":"Hay "}${sim} ${sim===1?"es similar":"son similares"} a Chile y ${bajo} ${bajo===1?"está":"están"} bajo Chile (CL de 0,8 o menos).`}
 function vistaRegion(){

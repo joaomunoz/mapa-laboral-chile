@@ -314,6 +314,8 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
 // pesaba igual en todas las regiones; pesa de 0,6% a 9,0%, y el supuesto invertía el sentido en la Metropolitana, Los
 // Ríos, O'Higgins y La Araucanía. Barras desde 0 con dos colores, uno por sentido; la escala es la misma a ambos lados,
 // para no agrandar las diferencias chicas, y el centro se corre según el rango, para dar el espacio a las barras.
+// (Los dos colores se parecen a los de formal e informal, en otra sección y con su leyenda: excepción medida, ver la nota de
+// lectura; el gris chocaba con desocupados y el contorno no se leía a simple vista.)
 const netoTraslado=x=>100*(x.llegan-x.salen)/(x.trabajan-x.sin_region_trabajo);
 // El signo sale de la cifra publicada, para que una cifra que redondea a 0 no se lea −0,0.
 const txtNeto=v=>{const r1=Math.round(10*v)/10;return `${r1>0?"+":r1<0?"−":""}${num(Math.abs(r1),1)}`};

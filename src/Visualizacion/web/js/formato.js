@@ -18,7 +18,8 @@ const vp=(v,p)=>`${num(v)} (${part(p)})`;
 const vmil=([n,p])=>`${num(n)} (${num(p,1)}%)`;  // En tablas: ocupados estimados (% de la fila), en unidades
 // En texto y gráficos, la ENE se redondea a mil o a millón: es una estimación con muestra y se lee mejor así.
 const enMiles=n=>n>=1e6?`${num(n/1e6,1)} millones`:`${num(n/1000,0)} mil`;
-const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+" y "+x[x.length-1];
+// Si algún nombre ya lleva "y" (Electricidad y gas), una coma antes del último separa la lista de los nombres.
+const lista=x=>x.length<2?x.join(""):x.slice(0,-1).join(", ")+(x.some(e=>/ y /.test(e))?", y ":" y ")+x[x.length-1];
 // % con título técnico o profesional, desde las personas y no desde los porcentajes ya redondeados.
 const conTitulo=filas=>100*(filas[0][0]+filas[1][0])/(filas[0][0]+filas[1][0]+filas[2][0]);
 // "4 de cada 10" se entiende más rápido que un porcentaje; la cifra exacta queda al lado.
