@@ -1,7 +1,7 @@
 [esquema] Seleccionado diccionario con 20/20 columnas coincidentes.
 ============================================================
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
-📁 Archivo: P9_perfil_laboral_carrera.csv
+📁 Archivo: P4_perfil_laboral_carrera.csv
 ============================================================
 🔹 Dimensiones: 7288 filas | 20 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>

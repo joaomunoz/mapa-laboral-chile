@@ -1,17 +1,17 @@
 """
-<src/Analisis/Puentes_de_mapeo/P6_control_no_asignados.py>
+<src/Analisis/Puentes_de_mapeo/P3_control_no_asignados.py>
 
-Generador del control de sesgo de P6, y fuente de las funciones de error y fiabilidad que usa P9.
+Generador del control de sesgo de P3, y fuente de las funciones de error y fiabilidad que usa P4.
 
 Entradas: src/Scrapers/CASEN/Salida/casen_procesado.csv  (personas con educación superior)
-          Salida/P5_puente_carrera_casen.csv             (texto → carrera_generica)
-Salida:   Salida/P6_control_no_asignados.csv
+          Salida/P2_puente_carrera_casen.csv             (texto → carrera_generica)
+Salida:   Salida/P3_control_no_asignados.csv
 
 Compara a los ocupados con título que tienen carrera asignada con quienes no la tienen: si difieren,
 lo medido por carrera puede estar sesgado.
 
-La matriz carrera × actividad × ocupación se retiró porque ninguna tabla la leía: P9 mide el perfil por su
-cuenta. Se recupera con: git show e1a7160:src/Analisis/Puentes_de_mapeo/Salida/P6_matriz_carrera_actividad_ocupacion.csv
+La matriz carrera × actividad × ocupación se retiró porque ninguna tabla la leía: P4 mide el perfil por su
+cuenta. Se recupera con (la ruta lleva P6, el nombre que tenía este puente hasta el 13-11-26): git show e1a7160:src/Analisis/Puentes_de_mapeo/Salida/P6_matriz_carrera_actividad_ocupacion.csv
 
 Varianza: linealización de Taylor de la razón p = Y/X, con estratos varstrat y conglomerados
 varunit (libro de códigos CASEN), con reemplazo en la primera etapa.
@@ -37,18 +37,18 @@ log = logging.getLogger(__name__)
 DIR_SCRAPERS = Path(__file__).resolve().parents[2] / "Scrapers"
 DIR_SALIDA = Path(__file__).parent / "Salida"
 RUTA_CASEN = DIR_SCRAPERS / "CASEN" / "Salida" / "casen_procesado.csv"
-RUTA_P5 = DIR_SALIDA / "P5_puente_carrera_casen.csv"
+RUTA_P2 = DIR_SALIDA / "P2_puente_carrera_casen.csv"
 
 N_MINIMO, GL_MINIMO, CV_FIABLE, CV_MAXIMO = 60, 9, 15.0, 30.0
 
 
 def cargar() -> pd.DataFrame:
-    """Une CASEN con P5 y devuelve a los ocupados con título."""
+    """Une CASEN con P2 y devuelve a los ocupados con título."""
     casen = pd.read_csv(RUTA_CASEN, sep=";", low_memory=False, dtype={"oficio4_08": "object", "rama4": "object"})
-    p5 = pd.read_csv(RUTA_P5, sep=";")[["e6a", "carrera_normalizada", "estado"]]
+    p5 = pd.read_csv(RUTA_P2, sep=";")[["e6a", "carrera_normalizada", "estado"]]
     d = casen.merge(p5, on=["e6a", "carrera_normalizada"], how="left", validate="many_to_one")
     if d["estado"].isna().any():
-        raise ValueError("Hay textos de CASEN que no están en P5: regenerar P5.")
+        raise ValueError("Hay textos de CASEN que no están en P2: regenerar P2.")
     # CIUO-08 con la numeración de ENE (b1): FF.AA. es 10 aquí y 0 en CASEN.
     d["grupo_ocupacion"] = d["oficio1_08"].replace(0, 10).astype("Int64")
     return d[(d["activ"] == 1) & d["titulo_comun"].notna()].copy()
@@ -107,7 +107,7 @@ def generar_p6() -> Path:
     """Construye, valida y exporta el control de sesgo."""
     sesgo = comparar_no_asignados(cargar())
     validar(sesgo)
-    ruta = DIR_SALIDA / "P6_control_no_asignados.csv"
+    ruta = DIR_SALIDA / "P3_control_no_asignados.csv"
     sesgo.to_csv(ruta, sep=";", index=False, encoding="utf-8")
     log.info("CSV generado: %s (%d filas)", ruta.name, len(sesgo))
     return ruta

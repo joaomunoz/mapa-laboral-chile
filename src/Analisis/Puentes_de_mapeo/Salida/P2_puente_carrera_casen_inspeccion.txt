@@ -1,7 +1,7 @@
 [esquema] Seleccionado diccionario con 11/11 columnas coincidentes.
 ============================================================
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
-📁 Archivo: P5_puente_carrera_casen.csv
+📁 Archivo: P2_puente_carrera_casen.csv
 ============================================================
 🔹 Dimensiones: 11163 filas | 11 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>

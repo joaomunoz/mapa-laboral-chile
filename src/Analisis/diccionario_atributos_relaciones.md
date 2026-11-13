@@ -150,7 +150,7 @@ No tiene columnas laborales.
 
 Ninguna fuente comparte un identificador de persona: las relaciones unen **categorías** (carrera, nivel, actividad, región), no a la misma persona. Solo `id_institucion` y `carrera_generica` unen registros equivalentes de forma directa.
 
-Los puentes están en `Analisis/Puentes_de_mapeo/Salida/`: P1 = actividades, P5 = carrera de CASEN.
+Los puentes están en `Analisis/Puentes_de_mapeo/Salida/`: P1 = actividades, P2 = carrera de CASEN.
 
 ### 3.1 Directas: los valores coinciden
 
@@ -175,9 +175,9 @@ Los puentes están en `Analisis/Puentes_de_mapeo/Salida/`: P1 = actividades, P5 
 ### 3.3 Por puente: se necesita una tabla intermedia
 
 ```text
-<e6a + carrera_normalizada(CASEN) -> e6a + carrera_normalizada(P5)>     88,4% de las personas se asigna a una carrera
-<carrera_generica(P5) -> carrera_generica(Titulados)>                   completa el paso de CASEN a Titulados
-<carrera_generica(P5) -> carrera_generica(MiFuturo)>                    completa el paso de CASEN a MiFuturo
+<e6a + carrera_normalizada(CASEN) -> e6a + carrera_normalizada(P2)>     88,4% de las personas se asigna a una carrera
+<carrera_generica(P2) -> carrera_generica(Titulados)>                   completa el paso de CASEN a Titulados
+<carrera_generica(P2) -> carrera_generica(MiFuturo)>                    completa el paso de CASEN a MiFuturo
 
 
 <r_p_rev4cl_caenes(ENE) -> actividad_caenes(P1)>                        21 de 21 actividades
@@ -189,7 +189,7 @@ Los puentes están en `Analisis/Puentes_de_mapeo/Salida/`: P1 = actividades, P5 
 Cadenas completas:
 
 ```text
-<e7(CASEN) -> carrera_normalizada(CASEN) -> carrera_generica(P5) -> carrera_generica(Titulados) -> carrera_generica(MiFuturo)>
+<e7(CASEN) -> carrera_normalizada(CASEN) -> carrera_generica(P2) -> carrera_generica(Titulados) -> carrera_generica(MiFuturo)>
 ```
 
 ### 3.4 Geográficas: el código coincide, pero el significado cambia

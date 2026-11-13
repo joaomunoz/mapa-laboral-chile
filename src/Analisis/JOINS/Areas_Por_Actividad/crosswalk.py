@@ -7,9 +7,9 @@ Salida: Salida/areas_por_actividad.csv
 
 Decisiones:
   - Nivel nacional: la región de CASEN es la de residencia, así que no se puede leer como lugar de trabajo.
-  - Área según cinef13_area, no según la carrera asignada en P5: cubre a casi todos los titulados, mientras
-    que P5 deja fuera a quienes no se asignan a una carrera.
-  - Nombre del área: CASEN solo trae el código. Se toma el nombre más frecuente en P5 para cada código, y se
+  - Área según cinef13_area, no según la carrera asignada en P2: cubre a casi todos los titulados, mientras
+    que P2 deja fuera a quienes no se asignan a una carrera.
+  - Nombre del área: CASEN solo trae el código. Se toma el nombre más frecuente en P2 para cada código, y se
     exige que exista en Titulados. No hay tabla oficial de equivalencia.
 
 Varianza: linealización de Taylor con varstrat y varunit, usando todo el diseño de la encuesta.
@@ -63,7 +63,7 @@ def clasificar(n: int, gl: int, cv: float) -> str:
 
 
 def nombres_de_area(casen: pd.DataFrame, puente: pd.DataFrame) -> tuple[pd.Series, float]:
-    """Asigna a cada código de área su nombre más frecuente en P5, e informa cuánto coinciden."""
+    """Asigna a cada código de área su nombre más frecuente en P2, e informa cuánto coinciden."""
     c = casen.dropna(subset=["cinef13_area"]).merge(puente, on=["e6a", "carrera_normalizada"], how="inner", validate="many_to_one")
     nombres = c.groupby("cinef13_area")["area_cine_sies"].agg(lambda s: s.value_counts().index[0])
     return nombres, float((c["area_cine_sies"] == c["cinef13_area"].map(nombres)).mean())

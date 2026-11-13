@@ -87,8 +87,8 @@ flowchart TD
 
   subgraph P["3. Análisis: puentes entre fuentes · src/Analisis/Puentes_de_mapeo"]
     p1["P1_puente_actividades<br>Une los códigos de actividad con la sección CIIU<br>actividad_caenes → actividad_ciiu"]
-    p5["P5_puente_carrera_casen<br>Lleva la carrera declarada en CASEN a la carrera del SIES<br>e6a → carrera_generica"]
-    p9["P9_perfil_laboral_carrera<br>Dónde trabajan los titulados de cada carrera<br>carrera_generica × actividad_ciiu: pct_en_carrera, indice_especializacion"]
+    p2["P2_puente_carrera_casen<br>Lleva la carrera declarada en CASEN a la carrera del SIES<br>e6a → carrera_generica"]
+    p4["P4_perfil_laboral_carrera<br>Dónde trabajan los titulados de cada carrera<br>carrera_generica × actividad_ciiu: pct_en_carrera, indice_especializacion"]
   end
 
   subgraph J["4. Análisis: tablas del mapa · src/Analisis/JOINS"]
@@ -113,8 +113,8 @@ flowchart TD
   sies --> tp
   mifuturo --> mp
 
-  kp & tp --> p5
-  kp & p1 & p5 --> p9
+  kp & tp --> p2
+  kp & p1 & p2 --> p4
 
   ep & p1 --> je
   cp & p1 & je --> jc
@@ -122,14 +122,14 @@ flowchart TD
   censo & jn --> jt
   ep --> jv
   ep & p1 --> jf
-  kp & p1 & p5 & tp --> ja
-  p9 & p5 & tp & mp & kp --> jk
+  kp & p1 & p2 & tp --> ja
+  p4 & p2 & tp & mp & kp --> jk
 
   jc & jn & jt & jv & jf & ja & jk & cp & cs & geo --> gen
   gen --> out
 ```
 
-Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No aparecen las tablas que solo validan un paso: `ocupados_region_actividad`, que reproduce el boletín del INE, y `P6_control_no_asignados`, que compara a quienes P5 asigna y a quienes no.
+Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No aparecen las tablas que solo validan un paso: `ocupados_region_actividad`, que reproduce el boletín del INE, y `P3_control_no_asignados`, que compara a quienes P2 asigna y a quienes no.
 
 ### Fórmulas
 
@@ -224,7 +224,7 @@ $PY src/Scrapers/ENE/obtener.py 2024
 $PY src/Scrapers/ENE/procesar.py 2024
 
 # 2. Puentes entre fuentes
-for p in P1_puente_actividades P5_puente_carrera_casen P6_control_no_asignados P9_perfil_laboral_carrera; do
+for p in P1_puente_actividades P2_puente_carrera_casen P3_control_no_asignados P4_perfil_laboral_carrera; do
   $PY src/Analisis/Puentes_de_mapeo/$p.py
 done
 

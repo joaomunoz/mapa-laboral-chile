@@ -1,7 +1,7 @@
 [esquema] Seleccionado diccionario con 8/8 columnas coincidentes.
 ============================================================
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
-📁 Archivo: P5_puente_carrera_casen_cobertura.csv
+📁 Archivo: P2_puente_carrera_casen_cobertura.csv
 ============================================================
 🔹 Dimensiones: 13 filas | 8 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>

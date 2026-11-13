@@ -1,7 +1,7 @@
 """
 <src/Analisis/JOINS/Areas_Por_Actividad/obtener.py>
 
-Carga CASEN, su diseño muestral completo, P1, P5 y las áreas de Titulados.
+Carga CASEN, su diseño muestral completo, P1, P2 y las áreas de Titulados.
 """
 
 from pathlib import Path
@@ -30,7 +30,7 @@ def cargar_actividades() -> pd.DataFrame:
 
 
 def cargar_puente_carrera() -> pd.DataFrame:
-    p = pd.read_csv(DIR_PUENTES / "P5_puente_carrera_casen.csv", sep=";")
+    p = pd.read_csv(DIR_PUENTES / "P2_puente_carrera_casen.csv", sep=";")
     return p[p["estado"] == "asignado"][["e6a", "carrera_normalizada", "area_cine_sies"]]
 
 

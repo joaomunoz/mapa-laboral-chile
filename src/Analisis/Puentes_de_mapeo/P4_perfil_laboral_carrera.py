@@ -1,11 +1,11 @@
 """
-<src/Analisis/Puentes_de_mapeo/P9_perfil_laboral_carrera.py>
+<src/Analisis/Puentes_de_mapeo/P4_perfil_laboral_carrera.py>
 
-Generador del P9 · PERFIL_LABORAL_CARRERA del proyecto.
+Generador del P4 · PERFIL_LABORAL_CARRERA del proyecto.
 
 Entradas: src/Scrapers/CASEN/Salida/casen_procesado.csv, src/Scrapers/CASEN/Entrada/casen_2024.dta
-          (diseño completo), Salida/P5_puente_carrera_casen.csv y Salida/P1_puente_actividades.csv
-Salida:   Salida/P9_perfil_laboral_carrera.csv
+          (diseño completo), Salida/P2_puente_carrera_casen.csv y Salida/P1_puente_actividades.csv
+Salida:   Salida/P4_perfil_laboral_carrera.csv
 
 Dónde trabajan los titulados de cada carrera, a nivel nacional. Es el indicador más directo del
 proyecto, porque CASEN mide carrera y trabajo en la misma persona: no hay reparto ni estimación sintética.
@@ -36,7 +36,7 @@ import numpy as np
 import pandas as pd
 
 from esquema import DIMENSIONES_P9, PERFIL_LABORAL_CARRERA  # noqa: E402
-from P6_control_no_asignados import clasificar, error_estandar  # noqa: E402
+from P3_control_no_asignados import clasificar, error_estandar  # noqa: E402
 
 log = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ LLAVES = {"categoria_ocupacion": ["categoria_ocupacion"], "actividad_economica":
 def cargar() -> tuple[pd.DataFrame, pd.Series, pd.DataFrame]:
     c = pd.read_csv(DIR_SCRAPERS / "CASEN" / "Salida" / "casen_procesado.csv", sep=";", low_memory=False,
                     usecols=["e6a", "carrera_normalizada", "activ", "titulo_comun", "o15", "rama1", "edad", "expr", "varstrat", "varunit"])
-    p5 = pd.read_csv(DIR_SALIDA / "P5_puente_carrera_casen.csv", sep=";")[["e6a", "carrera_normalizada", "carrera_generica", "nivel_titulo", "area_cine_sies", "estado"]]
+    p5 = pd.read_csv(DIR_SALIDA / "P2_puente_carrera_casen.csv", sep=";")[["e6a", "carrera_normalizada", "carrera_generica", "nivel_titulo", "area_cine_sies", "estado"]]
     d = c.merge(p5, on=["e6a", "carrera_normalizada"], validate="many_to_one")
     d = d[(d["activ"] == 1) & d["titulo_comun"].notna() & (d["estado"] == "asignado") & d["o15"].notna()].copy()
     d["categoria_ocupacion"] = d["o15"].astype(int).map(CATEGORIAS)
@@ -128,7 +128,7 @@ if __name__ == "__main__":
     d, psu, actividades = cargar()
     tabla = construir(d, psu, actividades)
     validar(tabla, d)
-    ruta = DIR_SALIDA / "P9_perfil_laboral_carrera.csv"
+    ruta = DIR_SALIDA / "P4_perfil_laboral_carrera.csv"
     tabla.to_csv(ruta, sep=";", index=False, encoding="utf-8")
     log.info("CSV generado: %s (%d filas)", ruta.name, len(tabla))
     sys.path.insert(0, str(DIR_SCRAPERS / "comun"))

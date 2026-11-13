@@ -1,7 +1,7 @@
 """
 <src/Analisis/JOINS/Carreras_Por_Actividad/obtener.py>
 
-Carga P9, P5, CASEN con su diseño muestral, MiFuturo y Titulados.
+Carga P4, P2, CASEN con su diseño muestral, MiFuturo y Titulados.
 """
 
 from pathlib import Path
@@ -10,21 +10,21 @@ import pandas as pd
 
 DIR_ANALISIS = Path(__file__).resolve().parents[2]
 DIR_SCRAPERS = DIR_ANALISIS.parent / "Scrapers"
-RUTA_P9 = DIR_ANALISIS / "Puentes_de_mapeo" / "Salida" / "P9_perfil_laboral_carrera.csv"
-RUTA_P5 = DIR_ANALISIS / "Puentes_de_mapeo" / "Salida" / "P5_puente_carrera_casen.csv"
+RUTA_P4 = DIR_ANALISIS / "Puentes_de_mapeo" / "Salida" / "P4_perfil_laboral_carrera.csv"
+RUTA_P2 = DIR_ANALISIS / "Puentes_de_mapeo" / "Salida" / "P2_puente_carrera_casen.csv"
 CLASES_QUE_COMPITEN = ["Técnico de Nivel Superior", "Profesional Con Licenciatura", "Profesional Sin Licenciatura"]
 
 
 def cargar_perfil() -> pd.DataFrame:
-    p = pd.read_csv(RUTA_P9, sep=";")
+    p = pd.read_csv(RUTA_P4, sep=";")
     return p[p["dimension"] == "actividad_economica"]
 
 
 def cargar_casen() -> pd.DataFrame:
-    """Titulados con carrera asignada y condición de actividad, con la llave de P5."""
+    """Titulados con carrera asignada y condición de actividad, con la llave de P2."""
     c = pd.read_csv(DIR_SCRAPERS / "CASEN" / "Salida" / "casen_procesado.csv", sep=";", low_memory=False,
                     usecols=["e6a", "carrera_normalizada", "titulo_comun", "activ", "edad", "expr", "varstrat", "varunit"])
-    p = pd.read_csv(RUTA_P5, sep=";")
+    p = pd.read_csv(RUTA_P2, sep=";")
     p = p[p["estado"] == "asignado"][["e6a", "carrera_normalizada", "carrera_generica"]]
     return c[c["titulo_comun"].notna() & c["activ"].notna()].merge(p, on=["e6a", "carrera_normalizada"], validate="many_to_one")
 

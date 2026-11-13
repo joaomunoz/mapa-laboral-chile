@@ -14,17 +14,17 @@ P1 · PUENTE_ACTIVIDADES  →  Salida/P1_puente_actividades.csv            (21 f
     y la sección CIIU (actividad_ciiu) del censo → habilita comparar ambas fuentes por actividad.
     Origen: Libro de códigos ENE 2020, Anexo 5 (mapeca verbatim, no interpretada).
 
-P5 · PUENTE_CARRERA_CASEN  →  Salida/P5_puente_carrera_casen.csv  ✅ construido (02-11-26)
+P2 · PUENTE_CARRERA_CASEN  →  Salida/P2_puente_carrera_casen.csv  ✅ construido (02-11-26)
     Grain: 1 fila por (e6a, carrera_normalizada) declarada en CASEN.
     Representa: el texto libre `e7` llevado a `carrera_generica` de SIES, con su método, nivel y
     estado (asignado, generico, posgrado, uniformado, no_valido, sin_asignar). Base para medir
-    carrera → ocupación → actividad. Cobertura en Salida/P5_puente_carrera_casen_cobertura.csv.
+    carrera → ocupación → actividad. Cobertura en Salida/P2_puente_carrera_casen_cobertura.csv.
 
-P6 · CONTROL_NO_ASIGNADOS  →  Salida/P6_control_no_asignados.csv
+P3 · CONTROL_NO_ASIGNADOS  →  Salida/P3_control_no_asignados.csv
     Grain: 1 fila por (dimension, categoria).
     Representa: si los ocupados con título y carrera asignada difieren de quienes no la tienen.
 
-P9 · PERFIL_LABORAL_CARRERA  →  Salida/P9_perfil_laboral_carrera.csv  ✅ construido (02-11-26)
+P4 · PERFIL_LABORAL_CARRERA  →  Salida/P4_perfil_laboral_carrera.csv  ✅ construido (02-11-26)
     Grain: 1 fila por (carrera_generica, dimension, categoría). Representa: dónde trabajan los
     titulados de cada carrera, según categoría en la ocupación y actividad económica. Medido en CASEN.
 
@@ -46,7 +46,7 @@ PUENTE_ACTIVIDADES: dict[str, str] = {
 }
 
 # --------------------------------------------------------------------------- #
-# P5 · Texto de carrera en CASEN → carrera_generica de SIES
+# P2 · Texto de carrera en CASEN → carrera_generica de SIES
 # --------------------------------------------------------------------------- #
 PUENTE_CARRERA_CASEN: dict[str, str] = {
     "e6a": "int64",                     # Nivel declarado: 12 técnico, 13 profesional, 14-15 posgrado
@@ -81,7 +81,7 @@ METODOS_P5: list[str] = [
 ]
 
 # --------------------------------------------------------------------------- #
-# P6 · Control de sesgo de la asignación de carrera (CASEN, nacional)
+# P3 · Control de sesgo de la asignación de carrera (CASEN, nacional)
 # --------------------------------------------------------------------------- #
 CONTROL_NO_ASIGNADOS: dict[str, str] = {
     "dimension": "object",
@@ -93,7 +93,7 @@ CONTROL_NO_ASIGNADOS: dict[str, str] = {
 
 
 # --------------------------------------------------------------------------- #
-# P9 · Perfil laboral de cada carrera (nombres normalizados según glosarios)
+# P4 · Perfil laboral de cada carrera (nombres normalizados según glosarios)
 # --------------------------------------------------------------------------- #
 PERFIL_LABORAL_CARRERA: dict[str, str] = {
     "carrera_generica": "object",

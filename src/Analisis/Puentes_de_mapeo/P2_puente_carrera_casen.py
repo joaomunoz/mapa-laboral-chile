@@ -1,12 +1,12 @@
 """
-<src/Analisis/Puentes_de_mapeo/P5_puente_carrera_casen.py>
+<src/Analisis/Puentes_de_mapeo/P2_puente_carrera_casen.py>
 
-Generador del P5 · PUENTE_CARRERA_CASEN del proyecto.
+Generador del P2 · PUENTE_CARRERA_CASEN del proyecto.
 
 Entradas: src/Scrapers/CASEN/Salida/casen_procesado.csv       (61,070 personas)
           src/Scrapers/Titulados/Salida/titulados_procesado.csv (catálogo SIES)
-Salidas:  Salida/P5_puente_carrera_casen.csv            (1 fila por e6a × texto declarado)
-          Salida/P5_puente_carrera_casen_cobertura.csv  (resumen por método)
+Salidas:  Salida/P2_puente_carrera_casen.csv            (1 fila por e6a × texto declarado)
+          Salida/P2_puente_carrera_casen_cobertura.csv  (resumen por método)
 
 Lleva el texto libre `e7` a `carrera_generica` de SIES para poder medir carrera → actividad.
 
@@ -374,7 +374,7 @@ def validar(puente: pd.DataFrame, resumen: pd.DataFrame, catalogos: dict, n_pers
 
 
 def generar_p5() -> tuple[Path, Path]:
-    """Construye, valida y exporta P5 y su cobertura."""
+    """Construye, valida y exporta P2 y su cobertura."""
     sys.path.insert(0, str(DIR_SCRAPERS / "CASEN"))
     casen = pd.read_csv(RUTA_CASEN, sep=";", low_memory=False,
                         dtype={"carrera_normalizada": "object"})
@@ -386,8 +386,8 @@ def generar_p5() -> tuple[Path, Path]:
     validar(puente, resumen, catalogos, len(casen))
 
     DIR_SALIDA.mkdir(parents=True, exist_ok=True)
-    ruta_puente = DIR_SALIDA / "P5_puente_carrera_casen.csv"
-    ruta_resumen = DIR_SALIDA / "P5_puente_carrera_casen_cobertura.csv"
+    ruta_puente = DIR_SALIDA / "P2_puente_carrera_casen.csv"
+    ruta_resumen = DIR_SALIDA / "P2_puente_carrera_casen_cobertura.csv"
     puente.to_csv(ruta_puente, sep=";", index=False, encoding="utf-8")
     resumen.to_csv(ruta_resumen, sep=";", index=False, encoding="utf-8")
     log.info("CSV generado: %s (%d filas)", ruta_puente.name, len(puente))

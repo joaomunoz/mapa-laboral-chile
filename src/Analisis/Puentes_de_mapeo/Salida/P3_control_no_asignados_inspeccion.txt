@@ -1,7 +1,7 @@
 [esquema] Seleccionado diccionario con 5/5 columnas coincidentes.
 ============================================================
 📋 REPORTE DE INSPECCIÓN RIGUROSA DE DATOS
-📁 Archivo: P6_control_no_asignados.csv
+📁 Archivo: P3_control_no_asignados.csv
 ============================================================
 🔹 Dimensiones: 61 filas | 5 columnas
 🔹 Tipo de Índice: <class 'pandas.core.indexes.range.RangeIndex'>

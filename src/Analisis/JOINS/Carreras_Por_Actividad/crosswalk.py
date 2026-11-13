@@ -148,8 +148,8 @@ def validar(t: pd.DataFrame, carreras: pd.DataFrame, perfil: pd.DataFrame, sin_p
     fila = lambda c: t[t["carrera_generica"] == c].iloc[0]
     controles = {
         "Clave única": not t.duplicated(["carrera_generica", "actividad_caenes"]).any(),
-        "190 carreras resumidas y una sola ausente de P9": len(carreras) == CARRERAS_MIFUTURO and len(faltan) == 1,
-        "Filas conservadas de P9": len(t) == perfil["carrera_generica"].isin(carreras["carrera_generica"]).sum(),
+        "190 carreras resumidas y una sola ausente de P4": len(carreras) == CARRERAS_MIFUTURO and len(faltan) == 1,
+        "Filas conservadas de P4": len(t) == perfil["carrera_generica"].isin(carreras["carrera_generica"]).sum(),
         "Empleabilidad completa y en rango 0-100": t["empleabilidad_1er_anio"].between(0, 100).all(),
         "El % queda dentro de su rango": ((t["pct_en_carrera_min"] <= t["pct_en_carrera"]) & (t["pct_en_carrera"] <= t["pct_en_carrera_max"])).all(),
         "Ing. en Minas: 4.327 titulados en Minería": t.loc[(t["carrera_generica"] == "INGENIERIA EN MINAS") & (t["actividad_ciiu"] == "B"), "ocupados_titulados"].eq(4327).all(),
@@ -172,7 +172,7 @@ def validar(t: pd.DataFrame, carreras: pd.DataFrame, perfil: pd.DataFrame, sin_p
         log.info("  [%s] %s", "✓" if ok else "✗", nombre)
     afin = t[t["afinidad"] == "afin"]
     log.info("  [i] Afinidad: %s", t["afinidad"].value_counts().to_dict())
-    log.info("  [i] Carreras: %d en la tabla; %d con vínculo afín; ausente de P9: %s", t["carrera_generica"].nunique(), afin["carrera_generica"].nunique(), faltan)
+    log.info("  [i] Carreras: %d en la tabla; %d con vínculo afín; ausente de P4: %s", t["carrera_generica"].nunique(), afin["carrera_generica"].nunique(), faltan)
     log.info("  [i] Carreras con promedio simple: %d; sin ingreso: %d", sin_peso, t.drop_duplicates("carrera_generica")["ingreso_medio_5to_anio"].isna().sum())
     fallidos = [n for n, ok in controles.items() if not ok]
     if fallidos:
