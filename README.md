@@ -3,6 +3,19 @@
 > Un mapa interactivo para entender en minutos dónde se trabaja en Chile, en qué, con qué estudios y en qué condiciones.
 > Cruza el Censo 2024 y cuatro fuentes oficiales más, y solo muestra cifras medidas, cada una con su fuente.
 
+## Por qué existe este proyecto
+
+Nació para responder una pregunta concreta: **¿qué probabilidad tiene de encontrar trabajo quien estudia una carrera, en cada región de Chile?**
+
+Al revisar los datos, esa pregunta resultó no medible:
+
+- Las fuentes con región (el Censo y la Encuesta Nacional de Empleo, ENE) no registran qué carrera estudió cada persona.
+- Las que tienen carrera son nacionales. El registro de títulos (SIES) anota la región de la sede donde se estudió, no la del trabajo.
+- La única que tiene ambas, la encuesta CASEN, no tiene muestra suficiente: de **3.040** combinaciones de carrera y región, solo **62** son fiables en ocupados y **0** en desocupados.
+- Ninguna fuente mide la demanda de trabajo por carrera, así que ni siquiera a nivel nacional había una probabilidad.
+
+Llenar ese vacío con una estimación habría supuesto la misma mezcla de carreras en todas las regiones. Por eso el proyecto cambió de pregunta y muestra solo lo que sí se mide: el trabajo por región con el Censo y la ENE, y el vínculo entre carreras y actividades a nivel nacional.
+
 ## Cómo verlo
 
 - **En línea:** [enlace-github-pages] *(se agrega al publicar en GitHub Pages)*.
@@ -111,7 +124,7 @@ La ENE (Encuesta Nacional de Empleo) es la encuesta del INE con la que se calcul
 
 **Objetivo:** dar a quien quiere conocer la situación laboral y educacional de Chile una vista única, con cifras medidas y fuente visible. La vista conecta regiones, actividades, sexo, nivel de estudios y carreras.
 
-Se eligió **mostrar menos, pero medido**. El proyecto partió buscando la probabilidad de empleo por carrera y región, pero ese dato no se puede medir con las fuentes disponibles (detalle en [Enfoque descartado](#metodología-validación-y-reproducibilidad)).
+Se eligió **mostrar menos, pero medido** (el origen está en [Por qué existe este proyecto](#por-qué-existe-este-proyecto), y el detalle técnico en [Metodología](#metodología-validación-y-reproducibilidad)).
 
 **Qué no dice el mapa:**
 
