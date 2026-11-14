@@ -232,7 +232,8 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
   `Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% es informal; con título profesional, ${num(n.Profesional.inf[1],1)}%. `+
   // El título y la tarjeta dicen dónde está la diferencia: en asalariados la brecha por título es mucho menor.
   `La diferencia está sobre todo en los independientes (${num(n.Sin_titulo.inx[1],1)}% ± ${num(n.Sin_titulo.inx_mas,1)} y ${num(n.Profesional.inx[1],1)}% ± ${num(n.Profesional.inx_mas,1)}); `+
-  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()}</p>
+  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%.</p>
+ <p style="margin:8px 0 0">${edadFormalidad()}</p>
  <p style="margin:8px 0 0">`+
   // Segundo párrafo: dónde (actividad y región). En uno solo, el título y el rubro se leían como una lista sin pausa.
   // La frase por actividad no va aquí: es el título de su gráfico, más abajo, y repetida se leía dos veces.
@@ -564,7 +565,8 @@ function vistaResumen(){
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
   `</tbody></table></div>${tablaEdadRegion()}</details>
- <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()} ${fraseMayores()}</p>
+ <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()}</p>
+ <p class="nota" style="margin:6px 0 0">${fraseMayores()}</p>
  ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
@@ -587,7 +589,8 @@ function vistaResumen(){
  <p class="nota" style="margin:6px 0 0">${NOTA_DENSIDAD}</p>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
- <p style="margin:8px 0 0">${desocTitulo()} ${edadDesoc()}</p>
+ <p style="margin:8px 0 0">${desocTitulo()}</p>
+ <p style="margin:8px 0 0">${edadDesoc()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
  ${barrasNivel()}
  ${tablaEstudiosNivel()}

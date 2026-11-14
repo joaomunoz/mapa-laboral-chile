@@ -3,6 +3,8 @@
 ## Qué muestra
 La vista inicial resume la población, las 20 actividades, la actividad con mayor coeficiente de localización (CL) en cada región, la situación laboral y educacional de cada región, el área de estudio de los titulados de cada actividad (CASEN), y cómo cambió la desocupación entre 2024 y 2026. Al elegir una actividad, se ven sus ocupados, participación y CL por región. Al elegir una región, se ven sus cifras frente a Chile y las carreras afines, que son un dato nacional.
 
+Bajo la descripción, una línea dice cómo usarlo (elegir una actividad o una región, y abrir una carrera): antes la primera indicación aparecía recién en la sección Actividades, a unos 1.700 px en celular. Cada una de las 8 tarjetas de hallazgos es un botón que baja a la sección donde está su evidencia (o al mapa, en la de especialización), con una flecha que lo indica también en pantallas táctiles. En celular, el detalle de cada tarjeta se pliega bajo "más", para que el mapa aparezca antes. El texto corrido se limita a unos 80 caracteres por línea (medía hasta unos 130 a 1.400 px); tablas y gráficos usan todo el ancho. Cuando la región con mayor CL de una actividad es también la de más ocupados (8 de 20), el encabezado la nombra una sola vez.
+
 ## Glosario
 
 ### Situación laboral

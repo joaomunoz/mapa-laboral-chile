@@ -45,4 +45,6 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 td.n{white-space:nowrap}
 details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
 /* Título de cada tabla cuando un "Ver cifras" tiene más de una: sin él no se veía dónde empezaba la segunda. */
+/* Texto corrido a unos 80 caracteres por línea (medía hasta ~130 a 1.400 px); tablas y gráficos usan todo el ancho. */
+#detalle p,#detalle .nota,#detalle .aviso,.bajada,.lectura{max-width:80ch}
 .tabla-titulo{font-weight:600;font-size:14px;margin:14px 0 2px}

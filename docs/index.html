@@ -51,6 +51,8 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 td.n{white-space:nowrap}
 details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
 /* Título de cada tabla cuando un "Ver cifras" tiene más de una: sin él no se veía dónde empezaba la segunda. */
+/* Texto corrido a unos 80 caracteres por línea (medía hasta ~130 a 1.400 px); tablas y gráficos usan todo el ancho. */
+#detalle p,#detalle .nota,#detalle .aviso,.bajada,.lectura{max-width:80ch}
 .tabla-titulo{font-weight:600;font-size:14px;margin:14px 0 2px}
 .bajada{color:var(--t2);margin:0 0 18px;max-width:120ch}
 .filtro{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
@@ -118,6 +120,13 @@ details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
 .kpi span{display:block}
 .kpi-t{font-weight:600;margin:2px 0}
 .kpi .nota{font-size:12.5px}
+/* La cifra y su frase son un botón que baja a la sección con la evidencia; la flecha lo dice también en pantallas táctiles. */
+.kpi-ir{all:unset;display:block;cursor:pointer}
+.kpi-ir:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+.kpi-ir:hover .kpi-t{text-decoration:underline;text-underline-offset:2px}
+.kpi .kpi-flecha{display:inline;color:var(--acento)}
+.kpi .kpi-mas{display:none}
+@media(max-width:640px){.kpi:not(.abierta) .kpi-det{display:none}.kpi .kpi-mas{display:inline-block;font-size:12.5px;margin-top:2px}}
 .leyenda-cat{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:12.5px}
 .leyenda-cat>div:last-child{grid-column:1/-1}
 .anotacion{pointer-events:none;fill:var(--t1)}
@@ -329,6 +338,7 @@ button.sn-fila{font:inherit;color:inherit;background:none;border:0;text-align:le
 <div class="viz-root"><div class="envoltura">
 <h1>Mapa Laboral de Chile</h1>
 <p class="bajada">Situación laboral y educacional del país: dónde se concentra el trabajo, cómo varía por sexo y nivel de estudios, y qué carreras se vinculan con cada actividad. Datos del Censo 2024, la Encuesta Nacional de Empleo y la CASEN 2024; carreras, del Ministerio de Educación (SIES y MiFuturo). Detalle de fuentes al pie.</p>
+<p class="bajada como"><strong>Cómo usarlo:</strong> elige una actividad en el selector o una región en el mapa; dentro de una actividad, abre una carrera para ver sus títulos, empleabilidad e ingresos.</p>
 <div class="cabecera" id="cabecera">
 <div class="filtro"><label for="actividad">Actividad</label><select id="actividad"></select></div>
 <p class="lectura" id="lectura" aria-live="polite"></p>
@@ -475,34 +485,41 @@ function pintarResumen(){
  principal.innerHTML=[
   [`${num(rm.pct_lugar_trabajo,1)}%`,"de los ocupados está en la Metropolitana",
    `${num(rm.lugar_trabajo)} de ${num(ch.lugar_trabajo)}, según lugar de trabajo. `+
-   `Tiene más ocupados en ${RES.n_metropolitana} de ${DATOS.actividades.length} actividades.`],
+   `Tiene más ocupados en ${RES.n_metropolitana} de ${DATOS.actividades.length} actividades.`,"sec-lab"],
   [`${patron.length} de ${todas.length}`,"regiones se especializan en minería, agricultura o administración pública",
-   "Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades."],
+   "Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades.","mapa"],
   // Adultos mayores más ocupados (Trabajo por región): misma cifra que la columna 65 o más de su "Ver cifras".
   ...(m=>[[`${num(m.v,1)}%`,`de los adultos mayores de ${enReg(m.r)} trabaja, la tasa más alta del país`,
    `Personas de 65 años o más: ${num(m.ch,1)}% en Chile y ${num(m.vmin,1)}% en ${enReg(m.rmin)}. Es el grupo de edad donde ${nomReg(m.r)} más se aleja de Chile en proporción (${m.rel}% más), `+
-   `y tiene la tasa más alta en ${m.primera} de ${m.n} tramos. Censo 2024, según residencia. No indica causa.`]])(mayoresOcupados()),
+   `y tiene la tasa más alta en ${m.primera} de ${m.n} tramos. Censo 2024, según residencia. No indica causa.`,"sec-lab"]])(mayoresOcupados()),
   [deCada10(EST.pct_con_titulo),"ocupados tiene título técnico o profesional",
    `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
-   `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
+   `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`,"sec-est"],
   [`${ed.menor} de ${ed.n}`,"regiones tienen menor desocupación con título técnico o profesional",
-   `Con título, ${ed.con}; sin título, ${ed.sin}. ${edadIgual()}. No indica causa.`],
+   `Con título, ${ed.con}; sin título superior, ${ed.sin}. ${edadIgual()}. No indica causa.`,"sec-est"],
   [`${num(brecha,1)} puntos`,"de brecha en la tasa de participación",
    `${num(sx.hombres.tasa_participacion,1)}% en hombres y ${num(sx.mujeres.tasa_participacion,1)}% en mujeres; el Censo no indica su causa. `+
-   `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`],
+   `Con título: ${num(EST.sexo.mujeres,1)}% de las mujeres ocupadas y ${num(EST.sexo.hombres,1)}% de los hombres.`,"sec-pob"],
   // La cifra grande es la del título de su sección y la de la barra (5 de 20), para que al bajar no aparezca otro número; la
   // otra dirección va en el detalle: con una sola, "Construcción viene de Ingeniería" parecía igual de estrecho que Enseñanza.
   [`${ar.una.length} de ${ar.filas.length}`,"actividades tienen a la mayoría de sus titulados de una sola área de estudio",
    `Solo en ${ar.dos.map(({a})=>esc(a.corto)).join(" y en ")} se cumple en las dos direcciones. `+
    // Cada actividad con sus dos % en una frase: "respectivamente" obligaba a emparejar cifras. Construcción, el contraste,
    // queda en el párrafo de la sección, para que la tarjeta no doble en largo a las demás.
-   ar.dos.map(({a,x})=>`${esc(a.corto)}: ${num(x.pct,1)}% de sus titulados estudió ${esc(x.corto)}, y ${num(x.en_area,1)}% de los titulados de ${esc(x.corto)} trabaja ahí.`).join(" ")+" CASEN 2024."],
+   ar.dos.map(({a,x})=>`${esc(a.corto)}: ${num(x.pct,1)}% de sus titulados estudió ${esc(x.corto)}, y ${num(x.en_area,1)}% de los titulados de ${esc(x.corto)} trabaja ahí.`).join(" ")+" CASEN 2024.","sec-area"],
   // Misma cifra que el título de Formalidad: la brecha por título está en los independientes, no en los asalariados.
   [`${num(FOR.niveles.Sin_titulo.inx[1],1)}%`,"de los independientes sin título superior tiene empleo informal",
    // Tres frases, como las demás tarjetas: el rango por edad queda en la sección y aquí va solo lo que no está en otra
    // parte del inicio, que la diferencia es mayor entre los de más edad. "15 años o más" ya está en la nota de la sección.
-   `Con título profesional, ${num(FOR.niveles.Profesional.inx[1],1)}%; ${brechaEdad().replace(/^L/,"l")}. En asalariados es menor: ${num(FOR.niveles.Sin_titulo.asa[1],1)}% y ${num(FOR.niveles.Profesional.asa[1],1)}%. ENE, ${PER.ene_actual}.`]]
-  .map(([v,t,d])=>`<div class="kpi"><b>${v}</b><span class="kpi-t">${t}</span><span class="nota">${d}</span></div>`).join("");
+   `Con título profesional, ${num(FOR.niveles.Profesional.inx[1],1)}%; ${brechaEdad().replace(/^L/,"l")}. En asalariados es menor: ${num(FOR.niveles.Sin_titulo.asa[1],1)}% y ${num(FOR.niveles.Profesional.asa[1],1)}%. ENE, ${PER.ene_actual}.`,"sec-for"]]
+  // Cada tarjeta lleva a la sección (o al mapa) donde está su evidencia, como el índice. En celular el detalle se pliega
+  // bajo "más": las 8 tarjetas ocupaban unos 1.450 px antes del mapa.
+  .map(([v,t,d,ir])=>`<div class="kpi"><button class="kpi-ir" data-ir="${ir}"><b>${v}</b><span class="kpi-t">${t} <span class="kpi-flecha" aria-hidden="true">↓</span></span></button>`+
+   `<span class="nota kpi-det">${d}</span><button class="enlace kpi-mas" aria-expanded="false">más</button></div>`).join("");
+ principal.querySelectorAll(".kpi-ir").forEach(b=>b.onclick=()=>{const s=document.getElementById(b.dataset.ir);
+  s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+  if(s.classList.contains("sec-cab"))s.focus({preventScroll:true})});
+ principal.querySelectorAll(".kpi-mas").forEach(b=>b.onclick=()=>{const k=b.closest(".kpi"),a=k.classList.toggle("abierta");b.textContent=a?"menos":"más";b.setAttribute("aria-expanded",a)});
  anotarMapa(NOTAS_MAPA=[[2,"izq","Norte","Minería",cl(2)],[7,"der","Centro-sur","Agricultura y pesca",cl(7)],[11,"der","Extremos","Administración pública",cl(11)]]);
  document.getElementById("lista").innerHTML=orden.map(([r,d])=>{
   const a=porCiiu(d.ciiu),v=a.regiones[r],ap=porCiiu(d.mas_personas),vm=ap.regiones[r];
@@ -531,7 +548,9 @@ function pintar(){
  document.getElementById("anotaciones").innerHTML="";document.getElementById("principal").hidden=true;document.getElementById("kpis-t").hidden=true;document.getElementById("cabecera").classList.remove("con-resumen");
  const max=orden[0][1].peso??1,mejor=orden[0],conc=orden.filter(([,d])=>d.lectura==="concentra"),mp=act.nacional.mas_personas;
  document.getElementById("lectura").innerHTML=`<strong>${esc(act.corto)}:</strong> mayor CL en <strong>${enReg(mejor[0])}</strong>, `+
-  `donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${enReg(mp.r)}</strong> (${num(mp.n)}). `+
+  // Si la región con mayor CL es también la de más ocupados (8 de 20 actividades), se nombra una vez.
+  (String(mp.r)===String(mejor[0])?`donde su participación es ${mejor[1].peso_txt} veces la de Chile; también es la región con más ocupados (${num(mp.n)}). `
+   :`donde su participación es ${mejor[1].peso_txt} veces la de Chile, y más ocupados en <strong>${enReg(mp.r)}</strong> (${num(mp.n)}). `)+
   (conc.length===0?"Ninguna región con CL de 1,2 o más.":conc.length===1?"1 región con CL de 1,2 o más.":conc.length+" regiones con CL de 1,2 o más.");
  document.getElementById("lista").innerHTML=
   `<button data-r="${CHILE}" aria-pressed="${reg==null}" class="chile"><span>Chile<small>${vp(act.nacional.ocupados,act.pct_nacional)} · CL 1,00</small></span></button>`+
@@ -770,7 +789,8 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
   `Sin título superior, ${num(n.Sin_titulo.inf[1],1)}% es informal; con título profesional, ${num(n.Profesional.inf[1],1)}%. `+
   // El título y la tarjeta dicen dónde está la diferencia: en asalariados la brecha por título es mucho menor.
   `La diferencia está sobre todo en los independientes (${num(n.Sin_titulo.inx[1],1)}% ± ${num(n.Sin_titulo.inx_mas,1)} y ${num(n.Profesional.inx[1],1)}% ± ${num(n.Profesional.inx_mas,1)}); `+
-  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%. ${edadFormalidad()}</p>
+  `en asalariados es ${num(n.Sin_titulo.asa[1],1)}% y ${num(n.Profesional.asa[1],1)}%.</p>
+ <p style="margin:8px 0 0">${edadFormalidad()}</p>
  <p style="margin:8px 0 0">`+
   // Segundo párrafo: dónde (actividad y región). En uno solo, el título y el rubro se leían como una lista sin pausa.
   // La frase por actividad no va aquí: es el título de su gráfico, más abajo, y repetida se leía dos veces.
@@ -1102,7 +1122,8 @@ function vistaResumen(){
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
   `</tbody></table></div>${tablaEdadRegion()}</details>
- <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()} ${fraseMayores()}</p>
+ <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()}</p>
+ <p class="nota" style="margin:6px 0 0">${fraseMayores()}</p>
  ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
@@ -1125,7 +1146,8 @@ function vistaResumen(){
  <p class="nota" style="margin:6px 0 0">${NOTA_DENSIDAD}</p>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
- <p style="margin:8px 0 0">${desocTitulo()} ${edadDesoc()}</p>
+ <p style="margin:8px 0 0">${desocTitulo()}</p>
+ <p style="margin:8px 0 0">${edadDesoc()}</p>
  <p style="margin:8px 0 0">Tienen título técnico o profesional ${num(EST.pct_con_titulo,1)}% de los ocupados: ${num(EST.sexo.mujeres,1)}% de las mujeres y ${num(EST.sexo.hombres,1)}% de los hombres.</p>
  ${barrasNivel()}
  ${tablaEstudiosNivel()}

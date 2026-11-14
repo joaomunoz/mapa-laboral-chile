@@ -69,6 +69,13 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .kpi span{display:block}
 .kpi-t{font-weight:600;margin:2px 0}
 .kpi .nota{font-size:12.5px}
+/* La cifra y su frase son un botón que baja a la sección con la evidencia; la flecha lo dice también en pantallas táctiles. */
+.kpi-ir{all:unset;display:block;cursor:pointer}
+.kpi-ir:focus-visible{outline:2px solid var(--acento);outline-offset:3px}
+.kpi-ir:hover .kpi-t{text-decoration:underline;text-underline-offset:2px}
+.kpi .kpi-flecha{display:inline;color:var(--acento)}
+.kpi .kpi-mas{display:none}
+@media(max-width:640px){.kpi:not(.abierta) .kpi-det{display:none}.kpi .kpi-mas{display:inline-block;font-size:12.5px;margin-top:2px}}
 .leyenda-cat{display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;font-size:12.5px}
 .leyenda-cat>div:last-child{grid-column:1/-1}
 .anotacion{pointer-events:none;fill:var(--t1)}
