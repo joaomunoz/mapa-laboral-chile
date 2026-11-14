@@ -6,7 +6,7 @@ Mapa interactivo sobre la situación laboral y educacional de Chile. Muestra dó
 
 La vista inicial resume la población, las 20 actividades (con un gráfico de hombres y mujeres y otro de la región donde más pesa cada una), el área de estudio de los titulados de cada actividad y la formalidad del trabajo, con un índice de secciones y el hallazgo de cada una como título. Al elegir una actividad, el mapa colorea cada región según su coeficiente de localización (CL). Al elegir una región, el detalle va por tema: el CL (la tabla de la actividad y el CL de las 20 actividades de la región, en escala logarítmica); hombres y mujeres (en la actividad, en Chile y en la región, y en cada grupo de toda la región, con la brecha de participación frente a Chile); el nivel de estudios (el título técnico o profesional de los ocupados de la actividad, por sexo y frente a Chile, y la desocupación de la región por nivel, con la tasa de Chile y la diferencia escritas); y las carreras afines a nivel nacional, cada una con su ficha de titulados, empleabilidad e ingresos, con el área de estudio de los titulados ocupados en un circular.
 
-**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 474 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta y baja a su detalle, y el botón "atrás" del navegador vuelve a la vista anterior.
+**Para verlo:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de 477 KB, sin servidor ni dependencias. Cada vista tiene su propio enlace: por ejemplo, `index.html#B/2` abre Minería en Antofagasta y baja a su detalle, y el botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
 
@@ -16,6 +16,7 @@ La vista inicial resume la población, las 20 actividades (con un gráfico de ho
 
 - **Concentración:** 42,1% de los ocupados trabaja en la Metropolitana.
 - **Especialización:** 13 de 16 regiones tienen su mayor CL en minería, agricultura o administración pública, aunque en 12 la actividad con más ocupados es Comercio.
+- **Adultos mayores:** Aysén tiene a los adultos mayores más ocupados del país: 24,2% de las personas de 65 años o más trabaja, frente a 17,5% en Chile y 11,6% en Ñuble. Es el grupo de edad donde Aysén más se aleja de Chile en proporción (38% más), y tiene la tasa más alta en 5 de 7 tramos.
 - **Estudios:** 4 de cada 10 ocupados (39,8%) tiene título técnico o profesional. Por actividad, va de 1 de cada 10 en Hogares como empleadores (9,9%) a 8 de cada 10 en Servicios profesionales (78,7%).
 - **Estudios y trabajo:** en las 16 regiones, la tasa de desocupación es menor con título técnico o profesional que sin título superior. En Chile es 6,3% en profesionales, 7,8% en técnicos y 9,7% sin título superior. No la explica la edad: se mantiene en cada tramo de 25 a 64 años, en las 16 regiones (de 25 a 34, 8,7% con título y 11,3% sin título); de 18 a 24 es al revés, con pocos titulados.
 - **Sexo:** la tasa de participación es 69,7% en hombres y 50,2% en mujeres. Entre los ocupados, tiene título 46,5% de las mujeres y 34,6% de los hombres.
@@ -27,7 +28,7 @@ La vista inicial resume la población, las 20 actividades (con un gráfico de ho
 **Según la ENE (marzo a julio de 2026):**
 
 - **Formalidad:** 73,4% de los ocupados tiene empleo formal y 26,6% informal. Sin título superior, 64,0% formal y 36,0% informal; con título técnico, 82,9% y 17,1%; con título profesional, 87,7% y 12,3%. La diferencia está sobre todo en los independientes: 69,2% de los que no tienen título superior es informal, frente a 22,6% de los profesionales. Se mantiene a igual edad: de 25 a 64 años, en cada tramo de 10 años, va de 68% a 72% sin título y de 16% a 31% en profesionales. La diferencia es mayor entre los de más edad: de 25 a 34 años, 72% frente a 31%; de 55 a 64, 68% frente a 16%. Por actividad, el empleo formal supera 93% en Minería, Electricidad y gas y Finanzas y seguros; en Hogares como empleadores, 59,1% es informal. Ser independiente no implica ser informal: Servicios profesionales y Comercio tienen 36% de independientes, pero 14,0% de ellos es informal en el primero y 56,6% en el segundo. Por región, la informalidad es más alta en La Araucanía, Ñuble, Los Ríos y Arica y Parinacota (33% a 36%) y queda bajo la de Chile en Antofagasta, Magallanes y la Metropolitana (22% a 23%); con el margen de error, la más y la menos informal no se distinguen de sus vecinas.
-- **Independientes:** son 24,1% de los ocupados: 13,8% informales y 10,4% formales.
+- **Independientes:** son 24,1% de los ocupados, y 57,0% de ellos tiene empleo informal.
 - **Desocupación:** subió de 8,6% en 2024 a 9,5% en 2026, con los mismos meses.
 
 Estas diferencias son descriptivas: el mapa no les atribuye causas.
@@ -127,7 +128,7 @@ flowchart TD
   kp & p1 & p2 & tp --> ja
   p4 & p2 & tp & mp & kp --> jk
 
-  jc & jn & jt & jv & jf & ja & jk & cp & cs & geo --> gen
+  jc & jn & jt & jp & jv & jf & ja & jk & cp & cs & geo --> gen
   gen --> out
 ```
 

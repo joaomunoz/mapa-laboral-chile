@@ -105,6 +105,14 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
             (e := datos["poblacion"]["edad"])["puestos"] == {"ocu": {"iguales": 14, "max": 1}, "par": {"iguales": 16, "max": 0}}
             and e["ajuste_chile_exacto"] and e["chile"]["ocu_aj"] == e["chile_con_edad"] and e["chile"]["ocu"] == datos["poblacion"]["chile"]["pct_trabajan"]
             and all(e["regiones"][str(r)]["ocu"] == datos["poblacion"]["regiones"][str(r)]["pct_trabajan"] for r in range(1, 17))),
+        # Tarjeta y frase de adultos mayores (Trabajo por región): Aysén con la tasa de ocupación más alta de 65 o más (24,2%)
+        # y Ñuble la más baja (11,6%), frente a 17,5% en Chile; desde los 18 años, 65 o más es donde Aysén más supera a
+        # Chile en proporción (38%), y es la más alta en 5 de 7 tramos. Si algo cambia, la tarjeta deja de ser cierta.
+        "Adultos mayores: Aysén la más alta en 65 o más (24,2%), Ñuble la más baja (11,6%), Chile 17,5%; 38% más, su mayor diferencia desde los 18; la más alta en 5 de 7 tramos": (lambda e: (
+            (v := {r: d["tramos"]["65+"][0] for r, d in e["regiones"].items()}) and max(v, key=v.get) == "11" and min(v, key=v.get) == "16"
+            and (v["11"], v["16"], e["chile"]["tramos"]["65+"][0]) == (24.2, 11.6, 17.5) and round(100 * (24.2 / 17.5 - 1)) == 38
+            and max(e["tramos"][1:], key=lambda tr: e["regiones"]["11"]["tramos"][tr][0] / e["chile"]["tramos"][tr][0]) == "65+"
+            and sum(all(d["tramos"][tr][0] <= e["regiones"]["11"]["tramos"][tr][0] for d in e["regiones"].values()) for tr in e["tramos"]) == 5))(datos["poblacion"]["edad"]),
         # El gráfico "Región donde más pesa" pinta cada barra con el tramo del mapa y nombra a las que no llegan a 1,2: esa
         # frase solo vale si no concentrar en su región de mayor CL equivale a no concentrar en ninguna.
         "CL del resumen: Comercio, Servicios administrativos y Hogares no concentran en ninguna región, y las barras usan el color del mapa": (

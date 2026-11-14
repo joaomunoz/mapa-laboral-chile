@@ -53,7 +53,7 @@ Piezas de la página: lectura, lista de regiones, mapa y leyenda, cifras grandes
 .total td{font-weight:650}
 /* Lo que un lector debe llevarse en segundos va en cifras grandes; el resto queda en los paneles. */
 /* Hallazgos en grilla de 6 pistas: cada tarjeta ocupa 2 (3 por fila) y la última fila se reparte el ancho completo,
-   para que con cualquier cantidad de hallazgos no queden huecos. Si sobra una sola (7 tarjetas), las 4 últimas van de
+   para que con cualquier cantidad de hallazgos no queden huecos (con 8, las 2 últimas van de a 3). Si sobra una sola (7 tarjetas), las 4 últimas van de
    a dos (3 + 2 + 2): sola a lo ancho, su frase quedaba en líneas de unos 165 caracteres, el doble de lo que se lee
    cómodo. La cifra va arriba: a su izquierda, en tarjetas de unos 400 px, chocaba con el texto y dejaba poco ancho a
    la frase. */

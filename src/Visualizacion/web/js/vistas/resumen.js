@@ -331,9 +331,21 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
 // tramo de la región con la mezcla de edades de Chile. Antes iba un aviso ("dependen de la edad"); medido, el orden casi
 // no cambia, y la frase lo dice con la cifra. Se descartó comparar solo de 18 a 64: dejaba fuera a 448.019 ocupados de
 // 65 o más. El orden se cuenta en Python con las cifras exactas, no con las redondeadas que se muestran.
+// Adultos mayores que trabajan (hallazgo del usuario, 14-11-26): la región con la tasa de ocupación más alta de 65 o
+// más, comparada con las otras regiones y no con sus otros tramos (dentro de cada región, los mayores trabajan menos que
+// los de 25 a 64, como en todas partes). Se dice en qué proporción supera a Chile y en cuántos tramos es la más alta,
+// para que no se lea como algo solo de los mayores. Las cifras están en la tabla por edad de "Ver cifras"; el control
+// vigila que siga siendo así. La tarjeta y la sección usan esta misma función.
+function mayoresOcupados(){const e=POB.edad,R=DATOS.orden,v=(r,tr)=>e.regiones[r].tramos[tr][0],ch=tr=>e.chile.tramos[tr][0];
+ const ext=k=>R.reduce((a,b)=>k*(v(b,"65+")-v(a,"65+"))>0?b:a),r=ext(1),rmin=ext(-1);
+ const primera=e.tramos.filter(tr=>R.every(o=>v(o,tr)<=v(r,tr))).length;
+ return {r,rmin,v:v(r,"65+"),vmin:v(rmin,"65+"),ch:ch("65+"),rel:Math.round(100*(v(r,"65+")/ch("65+")-1)),primera,n:e.tramos.length}}
+function fraseMayores(){const m=mayoresOcupados();
+ return `${nomReg(m.r)} tiene a los adultos mayores más ocupados del país: ${num(m.v,1)}% de las personas de 65 años o más trabaja, frente a ${num(m.ch,1)}% en Chile y ${num(m.vmin,1)}% en ${enReg(m.rmin)}. `+
+  `Es el grupo donde ${nomReg(m.r)} más se aleja de Chile en proporción (${m.rel}% más); también tiene la tasa más alta en otros ${m.primera-1} de los ${m.n} tramos de edad.`}
 function fraseEdadRegion(){const e=POB.edad,o=e.puestos.ocu,p=e.puestos.par,n=DATOS.orden.length;
  const mov=x=>x.iguales===n?"el orden es el mismo":`${x.iguales} de ${n} regiones quedan en el mismo puesto y ninguna se mueve más de ${x.max}`;
- return `A igual edad, el orden casi no cambia. Ajustando por edad, con todos los tramos de 15 a 65 años o más: en el % de ocupados, ${mov(o)}; en la tasa de participación, ${mov(p)}. Las cifras por edad están en "Ver cifras".`}
+ return `A igual edad, el orden casi no cambia. Ajustando por edad, con todas las edades, desde 15 años: en la tasa de ocupación, ${mov(o)}; en la tasa de participación, ${mov(p)}. Las cifras por edad están en "Ver cifras".`}
 // Segunda tabla del "Ver cifras", con su título: las cifras sin ajustar no se repiten (son las de la tabla de arriba, con
 // otro nombre se leían como cifras distintas), y "a igual edad" es la palabra de la frase de abajo. Cada % muestra su
 // base al pasar el mouse, como el margen en Formalidad: dentro de la celda, la tabla no cabría.
@@ -344,10 +356,10 @@ function tablaEdadRegion(){const e=POB.edad,ch=e.chile;
  return `<p class="tabla-titulo">Ocupados por edad y tasas a igual edad</p>
  <div class="nota">Ocupados de cada tramo de edad, como % de la población de ese tramo, según residencia; al pasar el mouse, cuántos son. `+
   `A igual edad: la cifra que tendría la región con la mezcla de edades de Chile; con ella, las diferencias entre regiones no se deben a la edad. Las cifras sin ajustar son las de la tabla de arriba. `+
-  `No entran los ${num(e.sin_edad)} sin edad en el Censo: por eso en Chile, a igual edad, el % de ocupados es ${num(e.chile_con_edad,1)}% y no el ${num(ch.ocu,1)}% de arriba.</div>
+  `No entran los ${num(e.sin_edad)} sin edad en el Censo: por eso en Chile, a igual edad, la tasa de ocupación es ${num(e.chile_con_edad,1)}% y no el ${num(ch.ocu,1)}% de arriba.</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Región</th><th class="n" colspan="${e.tramos.length}">Ocupados (% de la población de cada edad)</th>`+
   `<th class="n ini" colspan="2">A igual edad</th></tr>`+
-  `<tr>${e.tramos.map(tr=>`<th class="n">${nomTramo(tr)}</th>`).join("")}<th class="n ini">Ocupados</th><th class="n">Tasa de participación</th></tr></thead><tbody>`+
+  `<tr>${e.tramos.map(tr=>`<th class="n">${nomTramo(tr)}</th>`).join("")}<th class="n ini">Tasa de ocupación</th><th class="n">Tasa de participación</th></tr></thead><tbody>`+
   fila("Chile",ch,"total")+DATOS.orden.map(r=>fila(esc(DATOS.regiones[r]),e.regiones[r],"")).join("")+`</tbody></table></div>`}
 // Trabajo por región, 2: los que llegan a trabajar menos los que salen, por cada 100 ocupados que viven en la región y
 // dicen dónde trabajan. Es una medida directa: el Censo trae región de residencia y de trabajo de cada ocupado, y quienes
@@ -377,6 +389,11 @@ function graficoTraslado(){
   `<p class="nota" style="margin:2px 0 8px">Ocupados que llegan a trabajar a la región menos los que salen a trabajar a otra, por cada 100 que viven en ella y dicen dónde trabajan. `+
   `Por ejemplo, a ${enReg(r0)} llegan ${num(x0.llegan)} y salen ${num(x0.salen)}: ${num(x0.llegan-x0.salen)} más, ${num(filas[0][2],1)} por cada 100. `+
   `No se cuentan los ${num(ch.sin_region_trabajo)} ocupados (${num(pcs(ch),1)}%) que no informan dónde trabajan: van de ${num(porSin[0][1],1)}% en ${enReg(porSin[0][0])} a ${num(porSin.at(-1)[1],1)}% en ${enReg(porSin.at(-1)[0])}.</p>`}
+// Educación por región mide densidad de titulados: cuántos de cada región están en cada uno de los 3 grupos
+// (profesional, técnico, sin título superior), sin tramos de edad (decisión del usuario, 14-11-26). La edad sí mueve
+// el % (10,5% con título de 18 a 24 años, 45,2% de 25 a 34), pero la sección no pregunta por qué; la nota dice la base
+// para que una densidad baja no se lea como "región menos educada". La medición a igual edad está en la nota de lectura.
+const NOTA_DENSIDAD="Densidad de titulados: % de toda la población de 15 años o más de la región, de todas las edades; quienes aún estudian cuentan como no titulados.";
 // Educación por región: barras apiladas solo con la parte titulada (profesional abajo, técnico encima), de mayor a menor
 // % con título, con "sin título superior" como cifra a la derecha para que los tres niveles sumen 100 a la vista.
 // Se descartaron las barras 100%: sin título ocupa 67% a 79% de cada barra y la diferencia entre regiones (12 puntos)
@@ -547,7 +564,7 @@ function vistaResumen(){
    `<td class="n">${num(d.buscan)} (${num(d.pct_buscan,1)}%)</td><td class="n">${num(d.no_buscan)} (${num(d.pct_no_buscan,1)}%)</td>`+
    `<td class="n">${num(d.tasa_desocupacion,1)}%</td><td class="n">${num(d.tasa_participacion,1)}%</td></tr>`).join("")+
   `</tbody></table></div>${tablaEdadRegion()}</details>
- <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()}</p>
+ <p class="nota" style="margin:6px 0 0">${fraseEdadRegion()} ${fraseMayores()}</p>
  ${graficoTraslado()}
  <details><summary>Ver cifras</summary>
  <div class="nota" style="margin-top:10px">Traslado entre regiones: ocupados que viven en la región, menos los que no informan dónde trabajan y los que salen, más los que llegan, da los que trabajan en ella.</div>
@@ -567,7 +584,7 @@ function vistaResumen(){
   [["Chile",EDU.chile,"total"],...DATOS.orden.map(r=>[DATOS.regiones[r],EDU[r],""])].map(([t,v,k])=>{const tot=v[0]+v[1]+v[2];
    return `<tr class="${k}"><td>${esc(t)}</td><td class="n">${num(tot)}</td>${v.map(x=>`<td class="n">${num(x)} (${num(100*x/tot,1)}%)</td>`).join("")}`+
     `<td class="n">${num(pctTitulo(v),1)}%</td></tr>`}).join("")+`</tbody></table></div></details>
- <div class="aviso">Incluye a jóvenes que aún estudian: el % con título depende de la edad de la población de cada región.</div>
+ <p class="nota" style="margin:6px 0 0">${NOTA_DENSIDAD}</p>
  ${encabezado("sec-est","Estudios y trabajo",`${e.menor===e.n?`En las ${e.n} regiones`:`En ${e.menor} de ${e.n} regiones`}, menos desocupación con título técnico o profesional`)}
  <div class="nota">Chile, Censo 2024. Según residencia, con nivel de estudios informado: ${num(EST.total)} ocupados.</div>
  <p style="margin:8px 0 0">${desocTitulo()} ${edadDesoc()}</p>

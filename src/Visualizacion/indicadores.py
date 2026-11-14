@@ -173,7 +173,7 @@ def titulo_edad(t: pd.DataFrame) -> dict:
 
 
 def edad_poblacion(t: pd.DataFrame) -> dict:
-    """% de ocupados y participación por tramo de edad, y ajustados por edad, en cada región (Censo 2024, residencia).
+    """Tasa de ocupación y participación por tramo de edad, y ajustados por edad, en cada región (Censo 2024, residencia).
 
     Ajuste directo: las tasas de cada tramo de la región, combinadas con la mezcla de edades de Chile (los 7 tramos con
     edad conocida, de 15-17 a 65 o más). Responde qué % tendría la región con las edades de Chile, sin dejar fuera a

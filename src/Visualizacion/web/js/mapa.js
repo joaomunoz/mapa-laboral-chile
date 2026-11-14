@@ -52,6 +52,10 @@ function pintarResumen(){
    `Tiene más ocupados en ${RES.n_metropolitana} de ${DATOS.actividades.length} actividades.`],
   [`${patron.length} de ${todas.length}`,"regiones se especializan en minería, agricultura o administración pública",
    "Según su mayor CL. Metropolitana, Valparaíso y Biobío se distinguen por otras actividades."],
+  // Adultos mayores más ocupados (Trabajo por región): misma cifra que la columna 65 o más de su "Ver cifras".
+  ...(m=>[[`${num(m.v,1)}%`,`de los adultos mayores de ${enReg(m.r)} trabaja, la tasa más alta del país`,
+   `Personas de 65 años o más: ${num(m.ch,1)}% en Chile y ${num(m.vmin,1)}% en ${enReg(m.rmin)}. Es el grupo de edad donde ${nomReg(m.r)} más se aleja de Chile en proporción (${m.rel}% más), `+
+   `y tiene la tasa más alta en ${m.primera} de ${m.n} tramos. Censo 2024, según residencia. No indica causa.`]])(mayoresOcupados()),
   [deCada10(EST.pct_con_titulo),"ocupados tiene título técnico o profesional",
    `${num(EST.pct_con_titulo,1)}%, según residencia. Por actividad, de ${deCada10(conTitulo(tMin.niveles))} en ${esc(tMin.corto)} (${num(conTitulo(tMin.niveles),1)}%) `+
    `a ${deCada10(conTitulo(tMax.niveles))} en ${esc(tMax.corto)} (${num(conTitulo(tMax.niveles),1)}%), según lugar de trabajo.`],
