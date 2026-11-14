@@ -15,9 +15,10 @@ Decisiones (aprobadas el 08-11-26):
   - Independiente = empleador o cuenta propia (CISE 1-2). Asalariado = privado, público y servicio doméstico (3-6).
     Familiar no remunerado (7) aparte; en la ENE es siempre informal.
   - Ocupados sin rama o sin nivel informado quedan fuera de esas filas, pero cuentan en Chile y en su región.
-  - Tramos de edad (11-11-26): cada nivel en 25-34, 35-44, 45-54 y 55-64 años, para ver si la diferencia por título
-    se mantiene entre personas de la misma edad. Los ocupados son de 15 años o más, como define el INE; con título no
-    hay nadie menor de 20, así que un límite distinto por nivel no cambiaría las cifras.
+  - Tramos de edad (11-11-26): cada nivel por tramo, para ver si la diferencia por título se mantiene entre personas
+    de la misma edad (de 25 a 64). Desde el 13-11-26, los 7 tramos de comun/tramos_edad.py, de 15-17 a 65 o más: la
+    tabla de 18 a 64 dejaba fuera a 612.502 ocupados de 65 o más (56,3% informales) y su fila Chile daba 24,0% de
+    informalidad, frente a 26,6% en Chile.
 
 Varianza: linealización de Taylor con estrato y conglomerado, usando todo el diseño (igual que Evolucion_Desocupacion).
 Fiabilidad de cada cifra medida sobre su numerador: n >= 60, gl >= 9 y CV <= 30 (poco fiable si CV > 15).
@@ -37,6 +38,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
 from comun.periodos import FACTOR_CONTRASTE, MESES_ACTUAL  # noqa: E402
+from comun.tramos_edad import TRAMOS_EDAD as TRAMOS, TRAMOS_IGUAL_EDAD  # noqa: E402
 from esquema import FORMALIDAD_OCUPADOS  # noqa: E402
 import obtener  # noqa: E402
 
@@ -51,13 +53,10 @@ TIPO_POR_CISE = {1: "independiente", 2: "independiente", 3: "asalariado", 4: "as
 FORMAL, INFORMAL = 1, 2
 N_MINIMO, GL_MINIMO, CV_MAXIMO, CV_POCO_FIABLE = 60, 9, 30, 15
 N_REGIONES, N_ACTIVIDADES = 16, 21
-TRAMOS = {"18-24": (18, 24), "25-34": (25, 34), "35-44": (35, 44), "45-54": (45, 54), "55-64": (55, 64)}
-# La frase "se mantiene a igual edad" se apoya solo en 25-64: de 18 a 24, los independientes con título son muy pocos
-# (30 profesionales y 50 técnicos en la muestra) y no son fiables. Se muestran en la tabla, marcados, para que cuadre.
-TRAMOS_IGUAL_EDAD = ["25-34", "35-44", "45-54", "55-64"]
-# Fuera de la tabla por edad: 15-17 (la edad mínima para trabajar es 15) y 65 o más (edad de jubilación). Se miden para
-# que la nota cuadre la tabla con Chile; también los de 18 a 64 sin nivel informado.
-FUERA_EDAD = {"15-17": (15, 17), "65+": (65, 200)}
+# Los 7 tramos de todas las tablas por edad (comun/tramos_edad.py), de 15-17 a 65 o más. La frase "se mantiene a igual
+# edad" se apoya solo en 25-64: de 18 a 24 (30 profesionales y 50 técnicos independientes en la muestra) y de 65 o más
+# (independientes profesionales con CV 20) no son fiables. Se muestran en la tabla, marcados.
+# Con título no hay nadie de 15 a 17 en la muestra: Profesional y Técnico no tienen fila en ese tramo.
 INFORMALIDAD_CHILE = 26.6  # Medida al proponer la sección (08-11-26)
 
 
@@ -128,16 +127,15 @@ def construir(ene: pd.DataFrame, puente: pd.DataFrame) -> pd.DataFrame:
                 + [({"ambito": "region", **vacio, "codigo_region": r, "nombre": REGIONES[r]}, o[o["codigo_region"] == r]) for r in range(1, N_REGIONES + 1)]
                 + [({"ambito": "actividad", **vacio, "actividad_ciiu": f.actividad_ciiu, "nombre": f.actividad_glosa}, o[o["actividad_ciiu"] == f.actividad_ciiu])
                    for f in puente.sort_values("actividad_ciiu").itertuples()]
-                + [({"ambito": "nivel_edad", **vacio, "nivel_titulo": n, "tramo_edad": e, "nombre": f"{NOMBRE_NIVEL[n]}, {e} años"},
-                    o[(o["nivel_titulo"] == n) & (o["tramo_edad"] == e)]) for n in NIVELES for e in TRAMOS]
+                + [({"ambito": "nivel_edad", **vacio, "nivel_titulo": n, "tramo_edad": e, "nombre": f"{NOMBRE_NIVEL[n]}, {e} años"}, c)
+                   for n in NIVELES for e in TRAMOS if len(c := o[(o["nivel_titulo"] == n) & (o["tramo_edad"] == e)])]
                 # Fila Chile de la tabla por edad: la suma de sus filas, asalariados e independientes de los tres niveles (sin
                 # familiar ni sin nivel informado), para que cuadre exacta. Medirla aquí, y no sumar en el mapa, le da su margen.
                 + [({"ambito": "edad", **vacio, "tramo_edad": e, "nombre": f"Asalariados e independientes, {e} años"},
                     o[o["nivel_titulo"].notna() & o["tipo"].isin(["asalariado", "independiente"]) & (o["tramo_edad"] == e)]) for e in TRAMOS]
-                + [({"ambito": "edad_fuera", **vacio, "tramo_edad": e, "nombre": f"Asalariados e independientes, {e} años"},
-                    o[o["tipo"].isin(["asalariado", "independiente"]) & o["edad"].between(*r)]) for e, r in FUERA_EDAD.items()]
-                + [({"ambito": "edad_fuera", **vacio, "nivel_titulo": "Sin_informar", "tramo_edad": "18-64", "nombre": "Asalariados e independientes sin nivel informado, 18-64 años"},
-                    o[o["tipo"].isin(["asalariado", "independiente"]) & o["nivel_titulo"].isna() & o["edad"].between(18, 64)])])
+                # Lo único que queda fuera de la tabla por edad: los sin nivel informado. Se mide para que la nota cuadre con Chile.
+                + [({"ambito": "sin_nivel", **vacio, "nivel_titulo": "Sin_informar", "nombre": "Asalariados e independientes sin nivel informado"},
+                    o[o["tipo"].isin(["asalariado", "independiente"]) & o["nivel_titulo"].isna()])])
     filas = [{**clave, **medir(celda, dis)} for clave, celda in dominios]
     return pd.DataFrame(filas)[list(FORMALIDAD_OCUPADOS)].astype(FORMALIDAD_OCUPADOS)
 
@@ -165,7 +163,8 @@ def validar(t: pd.DataFrame, ene: pd.DataFrame, casillas_ok: bool) -> None:
     repartos = ["pct_asalariado_formal", "pct_asalariado_informal", "pct_independiente_formal", "pct_independiente_informal", "pct_familiar"]
     region = t[t["ambito"] == "region"]
     controles = {
-        "64 filas con clave única": len(t) == 1 + len(NIVELES) + N_REGIONES + N_ACTIVIDADES + (len(NIVELES) + 1) * len(TRAMOS) + len(FUERA_EDAD) + 1
+        # Profesional y Técnico no tienen fila de 15 a 17: nadie con título a esa edad.
+        "68 filas con clave única": len(t) == 1 + len(NIVELES) + N_REGIONES + N_ACTIVIDADES + (len(NIVELES) + 1) * len(TRAMOS) - 2 + 1
             and not t.duplicated(["ambito", "codigo_region", "nivel_titulo", "tramo_edad", "actividad_ciiu"]).any(),
         "Solo los 5 meses de 2026": sorted(ene["mes"].unique()) == MESES_ACTUAL,
         "Los cinco repartos suman 100 en cada fila": np.allclose(t[repartos].sum(axis=1), 100),
@@ -184,8 +183,8 @@ def validar(t: pd.DataFrame, ene: pd.DataFrame, casillas_ok: bool) -> None:
         "Cada tramo de edad: los asalariados e independientes de sus 3 niveles suman su fila Chile (±3 por redondeo)": all(abs((lambda x: (x["ocupados"]
             * (100 - x["pct_familiar"]) / 100).sum())(t[(t["ambito"] == "nivel_edad") & (t["tramo_edad"] == e)])
             - t.loc[(t["ambito"] == "edad") & (t["tramo_edad"] == e), "ocupados"].iloc[0]) <= len(NIVELES) for e in TRAMOS),
-        "La tabla por edad y lo que queda fuera (15-17, 65+, sin nivel) suman los asalariados e independientes de Chile (±8 por redondeo)":
-            abs(t.loc[t["ambito"].isin(["edad", "edad_fuera"]), "ocupados"].sum() - chile["ocupados"] * (100 - chile["pct_familiar"]) / 100) <= 8,
+        "La tabla por edad y los sin nivel informado suman los asalariados e independientes de Chile (±8 por redondeo)":
+            abs(t.loc[t["ambito"].isin(["edad", "sin_nivel"]), "ocupados"].sum() - chile["ocupados"] * (100 - chile["pct_familiar"]) / 100) <= 8,
         "Tramos de edad de 25 a 64: independientes fiables, y sin título supera a profesional con todo el rango en cada tramo": tramos_ok(t),
         "El factor coincide con el del contraste (mismo largo de ventana)": FACTOR == FACTOR_CONTRASTE,
     }

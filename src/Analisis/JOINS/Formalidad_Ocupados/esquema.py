@@ -4,22 +4,22 @@
 Single Source of Truth de formalidad_ocupados.csv: cómo trabajan los ocupados según la ENE de marzo a julio de 2026,
 en dos ejes: tipo de trabajo (asalariado o independiente) y condición (formal o informal).
 
-Grano: 1 fila por (ambito, codigo_region, nivel_titulo, tramo_edad, actividad_ciiu). Son 64 filas: Chile, Chile por
-nivel de título (3), las 16 regiones, las 21 actividades, cada nivel por tramo de edad de 18 a 64 años (15), el
-total de cada tramo (5: asalariados e independientes de los tres niveles, la suma de las filas por nivel) y lo que
-queda fuera de esa tabla (3: 15-17 años, 65 o más y 18-64 sin nivel informado), para cuadrarla con Chile.
+Grano: 1 fila por (ambito, codigo_region, nivel_titulo, tramo_edad, actividad_ciiu). Son 68 filas: Chile, Chile por
+nivel de título (3), las 16 regiones, las 21 actividades, cada nivel por tramo de edad (19: 3 niveles × 7 tramos, sin
+Profesional ni Técnico de 15 a 17, donde nadie tiene título), el total de cada tramo (7: asalariados e independientes
+de los tres niveles, la suma de las filas por nivel) y los sin nivel informado (1), para cuadrar la tabla con Chile.
 Los tramos (agregados el 11-11-26) responden si la diferencia por título es de edad: se comparan personas de la misma
-edad, de 25 a 64. El tramo 18-24 (agregado el 11-11-26) se muestra para que la tabla cubra la edad de trabajar, pero
-no entra en esa comparación: sus independientes con título no son fiables. Fuera quedan 15-17 (muy pocos) y 65 o más
-(edad de jubilación; sí son ocupados y activos, pero trabajar ya es opcional).
+edad, de 25 a 64. Desde el 13-11-26 son los 7 de comun/tramos_edad.py, de 15-17 a 65 o más, los mismos de las otras
+tablas por edad: de 18 a 64 quedaban fuera 612.502 ocupados de 65 o más, 56,3% informales. 15-17, 18-24 y 65 o más se
+muestran, pero no entran en la comparación a igual edad: tienen cifras no fiables.
 Región: donde VIVE la persona, igual que la desocupación. Actividad: la rama del empleo (CAENES ↔ CIIU, puente P1).
 """
 
 FORMALIDAD_OCUPADOS = {
-    "ambito": "object",                     # chile, nivel, region, actividad, nivel_edad, edad o edad_fuera
+    "ambito": "object",                     # chile, nivel, region, actividad, nivel_edad, edad o sin_nivel
     "codigo_region": "Int64",               # Solo en las filas de región
-    "nivel_titulo": "object",               # Profesional, Tecnico o Sin_titulo; Sin_informar en edad_fuera 18-64; "Todos" en el resto
-    "tramo_edad": "object",                 # 18-24 a 55-64 en nivel_edad y edad; 15-17, 65+ o 18-64 en edad_fuera; "Todos" en el resto
+    "nivel_titulo": "object",               # Profesional, Tecnico o Sin_titulo; Sin_informar en sin_nivel; "Todos" en el resto
+    "tramo_edad": "object",                 # 15-17 a 65+ en nivel_edad y edad (comun/tramos_edad.py); "Todos" en el resto
     "actividad_ciiu": "object",             # Letra A-U; solo en las filas de actividad
     "nombre": "object",                     # Chile, la región, el nivel o la actividad
     "ocupados": "int64",                    # Estimados, promedio trimestral (suma de 5 meses x 3/5)

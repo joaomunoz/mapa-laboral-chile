@@ -22,7 +22,7 @@ import pandas as pd
 from config import (
     CLASE_NEUTRA, COLOR_RESUMEN, CORTES_AZUL, CORTES_ROJO, DECIMALES_CL, DESOCUPADO, FUERA_FUERZA_TRABAJO, HOMBRE,
     MINIMO_VISIBLE, MUJER, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO, ORDEN_NIVELES,
-    POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, REGION_METROPOLITANA,
+    POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, REGION_METROPOLITANA, TRAMOS_EDAD, TRAMOS_IGUAL_EDAD,
 )
 from formato import redondear, texto_peso
 
@@ -159,16 +159,17 @@ def titulo_edad(t: pd.DataFrame) -> dict:
     tasa = lambda g: {f["tramo_edad"]: f["tasa_desocupacion"] for _, f in g.iterrows()}
     chile = t[t["codigo_region"].isna()]
     con, sin = tasa(chile[chile["con_titulo"]]), tasa(chile[~chile["con_titulo"]])
-    tramos = ["15-24", "25-34", "35-44", "45-54", "55-64", "65+"]
-    reg = t[t["codigo_region"].notna() & t["tramo_edad"].isin(tramos[1:5])].pivot_table(index=["codigo_region", "tramo_edad"], columns="con_titulo", values="tasa_desocupacion")
+    tramos = TRAMOS_EDAD
+    reg = t[t["codigo_region"].notna() & t["tramo_edad"].isin(TRAMOS_IGUAL_EDAD)].pivot_table(index=["codigo_region", "tramo_edad"], columns="con_titulo", values="tasa_desocupacion")
     activos = t[t["codigo_region"].notna()].assign(a=t["ocupados"] + t["desocupados"])
     pct = 100 * activos[activos["tramo_edad"] == "Sin_edad"].groupby("codigo_region")["a"].sum() / activos.groupby("codigo_region")["a"].sum()
     activos_con = chile[chile["con_titulo"] & (chile["tramo_edad"] != "Sin_edad")].assign(a=lambda d: d["ocupados"] + d["desocupados"]).set_index("tramo_edad")["a"]
     return {"chile": {tr: [redondear(con[tr], 1), redondear(sin[tr], 1)] for tr in tramos},
             "regiones_igual_edad": int((reg[True] < reg[False]).groupby(level="codigo_region").all().sum()),
             "sin_edad": [str(int(pct.idxmax())), redondear(pct.max(), 0), redondear(pct.drop(pct.idxmax()).max(), 1)],
-            # % de los activos con título que tiene de 15 a 24: dice por qué ese tramo no cambia la lectura.
-            "pct_jovenes_con": redondear(100 * activos_con["15-24"] / activos_con.sum(), 0)}
+            # % de los activos con título que tiene de 18 a 24: dice por qué ese tramo no cambia la lectura. De 15 a 17 nadie
+            # tiene título (su tasa con título es None).
+            "pct_jovenes_con": redondear(100 * activos_con["18-24"] / activos_con.sum(), 0)}
 
 
 def edad_poblacion(t: pd.DataFrame) -> dict:
@@ -180,7 +181,7 @@ def edad_poblacion(t: pd.DataFrame) -> dict:
     su propia cifra con edad conocida. puestos compara el orden de las 16 regiones sin ajustar (todas las personas,
     como el gráfico) y ajustado.
     """
-    tramos = ["15-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+    tramos = TRAMOS_EDAD
     con_edad = t[t["tramo_edad"].isin(tramos)]
     chile = con_edad[con_edad["codigo_region"].isna()].set_index("tramo_edad")
     peso = chile["poblacion"] / chile["poblacion"].sum()
@@ -189,7 +190,9 @@ def edad_poblacion(t: pd.DataFrame) -> dict:
         bruta = {"ocu": 100 * g["ocupados"].sum() / g["poblacion"].sum(), "par": 100 * (g["ocupados"] + g["desocupados"]).sum() / g["poblacion"].sum()}
         c = g.loc[tramos]
         aj = {"ocu": (c["pct_ocupados"] * peso).sum(), "par": (c["tasa_participacion"] * peso).sum()}
-        return {"tramos": {tr: [redondear(c.loc[tr, "pct_ocupados"], 1), redondear(c.loc[tr, "tasa_participacion"], 1)] for tr in tramos},
+        # [% ocupados, participación, ocupados, población]: los dos totales van al pasar el mouse, para que cada % muestre su base.
+        return {"tramos": {tr: [redondear(c.loc[tr, "pct_ocupados"], 1), redondear(c.loc[tr, "tasa_participacion"], 1),
+                                int(c.loc[tr, "ocupados"]), int(c.loc[tr, "poblacion"])] for tr in tramos},
                 "ocu": redondear(bruta["ocu"], 1), "par": redondear(bruta["par"], 1), "ocu_aj": redondear(aj["ocu"], 1), "par_aj": redondear(aj["par"], 1),
                 "_exacto": {"ocu": bruta["ocu"], "par": bruta["par"], "ocu_aj": aj["ocu"], "par_aj": aj["par"]}}
     regiones = {str(int(r)): tasas(g) for r, g in t[t["codigo_region"].notna()].groupby("codigo_region")}
@@ -378,6 +381,6 @@ def formalidad(t: pd.DataFrame) -> dict:
             "tramos_chile": {f["tramo_edad"]: [redondear(f["tasa_informalidad"], 1), mas(f["tasa_informalidad"], f["cv_informalidad"]),
                                                f["fiabilidad_informalidad"], par(f, 100 - f["tasa_informalidad"])[0], par(f, f["tasa_informalidad"])[0]]
                              for _, f in por("edad").iterrows()},
-            # Lo que queda fuera de la tabla por edad, [formales, informales]: la nota lo suma para cuadrar con Chile.
-            "tramos_fuera": {("sin_nivel" if f["nivel_titulo"] == "Sin_informar" else f["tramo_edad"]):
-                             [par(f, 100 - f["tasa_informalidad"])[0], par(f, f["tasa_informalidad"])[0]] for _, f in por("edad_fuera").iterrows()}}
+            # Lo único que queda fuera de la tabla por edad, los sin nivel informado, [formales, informales]: la nota lo suma
+            # para cuadrar con Chile. Los tramos cubren todas las edades desde el 13-11-26.
+            "sin_nivel": (lambda f: [par(f, 100 - f["tasa_informalidad"])[0], par(f, f["tasa_informalidad"])[0]])(por("sin_nivel").iloc[0])}

@@ -14,6 +14,9 @@ DIR = Path(__file__).parent
 DIR_SRC = DIR.parent
 sys.path.append(str(DIR_SRC / "Scrapers"))  # Al final: no debe tapar los módulos de Visualizacion.
 from comun.periodos import TEXTO_ACTUAL, TEXTO_CONTRASTE, TEXTO_EVOLUCION  # noqa: E402
+# Los mismos tramos de edad que usan las tablas (13-11-26): el mapa los toma de ahí y se los pasa a la página.
+from comun.tramos_edad import TRAMOS_EDAD as _TRAMOS_EDAD, TRAMOS_IGUAL_EDAD  # noqa: E402
+TRAMOS_EDAD = list(_TRAMOS_EDAD)
 DIR_JOINS = DIR_SRC / "Analisis" / "JOINS"
 RUTA_CENSO = DIR_JOINS / "Concentracion_Region_Actividad_Censo" / "Salida" / "concentracion_region_actividad_censo.csv"
 RUTA_AREAS = DIR_JOINS / "Areas_Por_Actividad" / "Salida" / "areas_por_actividad.csv"

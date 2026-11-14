@@ -10,8 +10,9 @@ Decisiones (aprobadas el 11-11-26):
     antes de crear la tabla: sí, en los 4 tramos de 25 a 64 de las 16 regiones; ajustada por edad, la brecha de
     Chile casi no cambia (3,0 a 2,9 puntos con todas las edades).
   - Dos grupos y no tres niveles: es la comparación de la tarjeta y de "Estudios y trabajo".
-  - Tramos de 10 años como en Formalidad; 15-24 y 65 o más se publican, pero la comparación usa de 25 a 64: de 15
-    a 24 los titulados recién buscan su primer trabajo y la relación se invierte, y desde 65 hay pocos activos.
+  - Tramos de comun/tramos_edad.py, los mismos de todas las tablas por edad (13-11-26; antes 15-24 junto). Todos se
+    publican, pero la comparación usa de 25 a 64: de 18 a 24 los titulados recién buscan su primer trabajo y la
+    relación se invierte (21,7% con título y 18,6% sin título en Chile), y a los 15-17 nadie tiene título.
   - La edad sin dato (-66) queda como su propio tramo, para cuadrar exacto con la tabla por región y nivel.
 """
 
@@ -25,6 +26,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
+from comun.tramos_edad import TRAMOS_EDAD as TRAMOS, TRAMOS_IGUAL_EDAD  # noqa: E402
 sys.path.insert(0, str(Path(__file__).parent))
 from esquema import FUERZA_TRABAJO_TITULO_EDAD  # noqa: E402
 import obtener  # noqa: E402
@@ -34,9 +36,7 @@ log = logging.getLogger(__name__)
 RUTA_SALIDA = Path(__file__).parent / "Salida" / "fuerza_trabajo_titulo_edad.csv"
 OCUPADO, DESOCUPADO = 1, 2
 CON_TITULO = ["Tecnico", "Profesional"]
-TRAMOS = {"15-24": (15, 24), "25-34": (25, 34), "35-44": (35, 44), "45-54": (45, 54), "55-64": (55, 64), "65+": (65, 200)}
 SIN_EDAD = "Sin_edad"
-TRAMOS_COMPARACION = ["25-34", "35-44", "45-54", "55-64"]
 N_REGIONES = 16
 SIN_EDAD_CHILE = 68_783  # Activos con nivel informado y edad -66, medido al aprobar la tabla
 
@@ -69,10 +69,10 @@ def validar(t: pd.DataFrame, niveles: pd.DataFrame) -> None:
     ref = niveles.assign(con_titulo=niveles["nivel_titulo"].isin(CON_TITULO)).groupby(["codigo_region", "con_titulo"])[["ocupados_residencia", "desocupados"]].sum()
     ref.index = ref.index.set_levels(ref.index.levels[0].astype("Int64"), level=0)
     comp = (lambda tr: reg[reg["tramo_edad"].isin(tr)].pivot_table(index=["codigo_region", "tramo_edad"], columns="con_titulo", values="tasa_desocupacion"))
-    c = comp(TRAMOS_COMPARACION)
+    c = comp(TRAMOS_IGUAL_EDAD)
     chile = t[t["codigo_region"].isna()].set_index(["con_titulo", "tramo_edad"])
     controles = {
-        f"{(N_REGIONES + 1) * 2 * 7} filas con clave única": len(t) == (N_REGIONES + 1) * 2 * 7 and not t.duplicated(["codigo_region", "con_titulo", "tramo_edad"]).any(),
+        f"{(N_REGIONES + 1) * 2 * (len(TRAMOS) + 1)} filas con clave única": len(t) == (N_REGIONES + 1) * 2 * (len(TRAMOS) + 1) and not t.duplicated(["codigo_region", "con_titulo", "tramo_edad"]).any(),
         "Los tramos suman exacto la tabla por región y nivel (ocupados por residencia y desocupados)":
             (suma["ocupados"].values == ref.loc[suma.index, "ocupados_residencia"].values).all() and (suma["desocupados"].values == ref.loc[suma.index, "desocupados"].values).all(),
         "Chile es la suma de las regiones": (chile[["ocupados", "desocupados"]].sort_index().values == reg.groupby(["con_titulo", "tramo_edad"])[["ocupados", "desocupados"]].sum().sort_index().values).all(),

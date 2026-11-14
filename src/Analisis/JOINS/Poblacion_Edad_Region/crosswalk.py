@@ -9,8 +9,8 @@ Decisiones (aprobadas el 13-11-26):
   - Todas las edades: excluir a los de 65 o más (como el rango 18-64) dejaba fuera a 448.019 ocupados, de 3,8% a 6,3%
     de los de cada región; dejarlos sin ajustar castiga a las regiones con más personas mayores. El ajuste por edad
     evita las dos cosas.
-  - Tramos 15-17 y 18-24 separados, como en Formalidad (18 es la edad mínima para trabajar sin restricciones), y 65 o
-    más en un solo tramo.
+  - Tramos de comun/tramos_edad.py, los mismos de todas las tablas por edad: 15-17 y 18-24 separados (18 es la edad
+    para trabajar sin restricciones) y 65 o más en un solo tramo.
   - La edad sin dato (-66) queda como su propio tramo, para cuadrar exacto con la población de cada región.
 """
 
@@ -24,6 +24,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "Scrapers"))
 from comun.normalizador import REGIONES  # noqa: E402
+from comun.tramos_edad import TRAMOS_EDAD as TRAMOS  # noqa: E402  (los mismos de todas las tablas por edad)
 
 sys.path.insert(0, str(Path(__file__).parent))
 from esquema import POBLACION_EDAD_REGION  # noqa: E402
@@ -33,7 +34,6 @@ log = logging.getLogger(__name__)
 RUTA_SALIDA = Path(__file__).parent / "Salida" / "poblacion_edad_region.csv"
 
 OCUPADO, DESOCUPADO, FUERA_FUERZA = 1, 2, 3
-TRAMOS = {"15-17": (15, 17), "18-24": (18, 24), "25-34": (25, 34), "35-44": (35, 44), "45-54": (45, 54), "55-64": (55, 64), "65+": (65, 200)}
 SIN_EDAD = "Sin_edad"
 N_REGIONES = 16
 # Medidos al aprobar la tabla: población de 15 años o más del Censo, su situación y las personas sin edad.

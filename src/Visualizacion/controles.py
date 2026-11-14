@@ -16,12 +16,13 @@ from pathlib import Path
 import pandas as pd
 import pyarrow.parquet as pq
 
-from config import CLASE_NEUTRA, COLOR_RESUMEN, CORTES_ROJO, DIFERENCIA_AREA_MAXIMA_PCT, DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT, MINIMO_VISIBLE, NOMBRES_REGION, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO, POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, RUTA_PERSONAS
+from config import CLASE_NEUTRA, COLOR_RESUMEN, CORTES_ROJO, DIFERENCIA_AREA_MAXIMA_PCT, DIFERENCIA_AREA_SIMPLIFICADA_MAXIMA_PCT, MINIMO_VISIBLE, NOMBRES_REGION, OCUPADO, OCUPADOS_DIVERSIDAD_GENERO, OCUPADOS_GENERO_SUPRIMIDO, POBLACION_POR_SEXO, POBLACION_TOTAL_CENSO, RUTA_PERSONAS, TRAMOS_EDAD, TRAMOS_IGUAL_EDAD
 from formato import de_cada_10
 from indicadores import clase_color
 
-# Tramos donde la página afirma que la diferencia por título "se mantiene a igual edad"; 18-24 se muestra pero no entra.
-IGUAL_EDAD = ["25-34", "35-44", "45-54", "55-64"]
+# Tramos donde la página afirma que la diferencia por título "se mantiene a igual edad" (comun/tramos_edad.py); los
+# demás se muestran pero no entran.
+IGUAL_EDAD = TRAMOS_IGUAL_EDAD
 
 log = logging.getLogger(__name__)
 
@@ -149,11 +150,18 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
         "Estudios: mujeres 46,5% y hombres 34,6% de los ocupados con título": datos["estudios"]["sexo"] == {"hombres": 34.6, "mujeres": 46.5},
         # La fila de Chile del gráfico por región se suma desde las personas: debe calzar con las cifras de cada nivel.
         # "No la explica la edad" (tarjeta y Estudios y trabajo): las 16 regiones con menor desocupación con título en cada
-        # tramo de 25 a 64; Chile de 8,7/11,3 (25-34) a 5,3/8,0 (55-64); al revés de 15 a 24; Aysén con 20% sin edad.
-        "Estudios por edad: 16 regiones con título menor en cada tramo de 25 a 64; Chile 8,7/11,3 y 5,3/8,0; al revés de 15 a 24; Aysén 20% sin edad": (lambda d: (
+        # tramo de 25 a 64; Chile de 8,7/11,3 (25-34) a 5,3/8,0 (55-64); al revés de 18 a 24; nadie con título de 15 a 17;
+        # Aysén con 20% sin edad.
+        "Estudios por edad: 16 regiones con título menor en cada tramo de 25 a 64; Chile 8,7/11,3 y 5,3/8,0; al revés de 18 a 24; sin título de 15 a 17; Aysén 20% sin edad": (lambda d: (
             d["regiones_igual_edad"] == 16 and d["chile"]["25-34"] == [8.7, 11.3] and d["chile"]["55-64"] == [5.3, 8.0]
-            and d["chile"]["15-24"][0] > d["chile"]["15-24"][1] and d["sin_edad"] == ["11", 20, 3.9]
-            and all(v[0] < v[1] for t, v in d["chile"].items() if t not in ("15-24",))))(datos["estudios"]["edad"]),
+            and d["chile"]["18-24"][0] > d["chile"]["18-24"][1] and d["chile"]["15-17"][0] is None and d["sin_edad"] == ["11", 20, 3.9]
+            and all(v[0] < v[1] for t, v in d["chile"].items() if t not in ("15-17", "18-24"))))(datos["estudios"]["edad"]),
+        # Una sola definición de tramos (comun/tramos_edad.py): si una tabla por edad se aparta, las secciones dejan de
+        # poder compararse entre sí, que es lo que pasaba con 15-24 y 18-64.
+        "Edad: las 3 tablas por edad (Trabajo por región, Estudios y trabajo, Formalidad) usan los mismos 7 tramos, de 15-17 a 65 o más": (
+            datos["tramos_edad"] == TRAMOS_EDAD == ["15-17", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"]
+            and datos["poblacion"]["edad"]["tramos"] == TRAMOS_EDAD and list(datos["estudios"]["edad"]["chile"]) == TRAMOS_EDAD
+            and list(datos["formalidad"]["tramos_chile"]) == TRAMOS_EDAD),
         "Estudios: Chile 6,8% con título y 9,7% sin título, igual que sumar los niveles": (lambda e: e["desocupacion_titulo_chile"] == [6.8, 9.7]
             and round(100 * (e["niveles"]["Profesional"]["desocupados"] + e["niveles"]["Tecnico"]["desocupados"]) / sum(e["niveles"][n]["ocupados"] + e["niveles"][n]["desocupados"] for n in ("Profesional", "Tecnico")), 1) == 6.8
             and e["desocupacion_titulo_chile"][1] == e["niveles"]["Sin_titulo"]["tasa_desocupacion"])(datos["estudios"]),
@@ -253,8 +261,8 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
             for d in [datos["formalidad"]["chile"], *datos["formalidad"]["niveles"].values()] if d["fam"]),
         # La frase "se mantiene a igual edad" de la sección se apoya en esto: 3 niveles x 4 tramos, y en cada
         # tramo el rango de sin título queda entero sobre el de profesional.
-        "Formalidad: por edad, 5 tramos de 18 a 64 en asalariados e independientes; de 25 a 64, independientes fiables y sin título sobre profesional con todo el rango; ± 1,3 y 2,4 en los niveles": (lambda f, x: (
-            all(sorted(f["tramos"][g]) == ["Profesional", "Sin_titulo", "Tecnico"] and all(sorted(v) == ["18-24", "25-34", "35-44", "45-54", "55-64"] for v in f["tramos"][g].values()) for g in ("asa", "inx"))
+        "Formalidad: por edad, los 7 tramos en asalariados e independientes (sin título superior de 15 a 17 años); de 25 a 64, independientes fiables y sin título sobre profesional con todo el rango; ± 1,3 y 2,4 en los niveles": (lambda f, x: (
+            all(sorted(f["tramos"][g]) == ["Profesional", "Sin_titulo", "Tecnico"] and all(list(v) == (TRAMOS_EDAD if n == "Sin_titulo" else TRAMOS_EDAD[1:]) for n, v in f["tramos"][g].items()) for g in ("asa", "inx"))
             and all(c[e][2] == "fiable" for c in x.values() for e in IGUAL_EDAD)
             and all(x["Sin_titulo"][e][0] - x["Sin_titulo"][e][1] > x["Profesional"][e][0] + x["Profesional"][e][1] for e in IGUAL_EDAD)
             and (f["niveles"]["Sin_titulo"]["inx_mas"], f["niveles"]["Profesional"]["inx_mas"]) == (1.3, 2.4)))(datos["formalidad"], datos["formalidad"]["tramos"]["inx"]),
@@ -264,13 +272,14 @@ def validar(datos: dict, geo: dict, html: str, codigo_js: dict[str, str], sin_li
             x["Profesional"]["25-34"][0] - x["Profesional"]["25-34"][1] > x["Profesional"]["55-64"][0] + x["Profesional"]["55-64"][1]
             and x["Sin_titulo"]["55-64"][0] - x["Profesional"]["55-64"][0] > x["Sin_titulo"]["25-34"][0] - x["Profesional"]["25-34"][0]))(datos["formalidad"]["tramos"]["inx"]),
         # La fila Chile de la tabla por edad está para comprobar que las filas cuadran: la nota dice que es su suma.
+        # De 15 a 17 solo hay filas sin título superior: nadie tiene título a esa edad.
         "Formalidad: por edad, las 6 filas (asalariados e independientes por nivel) suman la fila Chile (±6 por redondeo), y cada % informal es el de sus ocupados": (lambda f, ch: all(
-            abs(sum(f[g][n][e][i] for g in f for n in f[g]) - ch[e][i]) <= 6 for e in ch for i in (3, 4))
+            abs(sum(f[g][n][e][i] for g in f for n in f[g] if e in f[g][n]) - ch[e][i]) <= 6 for e in ch for i in (3, 4))
             and all(abs(100 * c[4] / (c[3] + c[4]) - c[0]) <= 0.1 for c in [*ch.values(), *(f[g][n][e] for g in f for n in f[g] for e in f[g][n])]))(
             datos["formalidad"]["tramos"], datos["formalidad"]["tramos_chile"]),
         # La línea de cuadre de la tabla por edad: la tabla más lo que queda fuera da los formales e informales de Chile.
-        "Formalidad: la tabla por edad más 15-17, 65+ y sin nivel suman los asalariados e independientes formales e informales de Chile (±10)": (lambda f: all(
-            abs(sum(v[i] for v in f["tramos_chile"].values()) + sum(v[i - 3] for v in f["tramos_fuera"].values()) - tot) <= 10
+        "Formalidad: la tabla por edad más los sin nivel informado suman los asalariados e independientes formales e informales de Chile (±10)": (lambda f: all(
+            abs(sum(v[i] for v in f["tramos_chile"].values()) + f["sin_nivel"][i - 3] - tot) <= 10
             for i, tot in ((3, f["chile"]["af"][0] + f["chile"]["xf"][0]), (4, f["chile"]["ai"][0] + f["chile"]["xi"][0]))))(datos["formalidad"]),
         "Formalidad: informales dentro de cada grupo, asalariados 16,4% e independientes 57,0% en Chile; independientes 22,6% profesional y 69,2% sin título": (lambda f: (f["chile"]["asa"][1], f["chile"]["inx"][1], f["niveles"]["Profesional"]["inx"][1], f["niveles"]["Sin_titulo"]["inx"][1]) == (16.4, 57.0, 22.6, 69.2))(datos["formalidad"]),
         "Formalidad: los ocupados de asalariados e independientes son la suma de sus casillas publicadas y cuadran con los ocupados": all(d["asa"][0] == d["af"][0] + d["ai"][0] and d["inx"][0] == d["xf"][0] + d["xi"][0] and abs(d["inx"][0] - d["ind"][0]) <= 1 and (d["fam"] is None or abs(d["asa"][0] + d["inx"][0] + d["fam"][0] - d["ocup"]) <= 2)

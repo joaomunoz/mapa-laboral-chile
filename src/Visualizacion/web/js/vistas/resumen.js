@@ -17,11 +17,11 @@ const AVISO_DESLIZA=`<p class="nota evc-aviso" hidden>Desliza el gráfico hacia 
 function desocTitulo(){const e=extremosDesoc();
  return `Con título técnico o profesional, la tasa de desocupación va ${e.con}; sin título superior, ${e.sin}.`}
 // La ventaja del título a igual edad (Censo 2024): sin esto, la diferencia podría venir de que los sin título son más
-// jóvenes. Se compara de 25 a 64; de 15 a 24 es al revés y se dice, para que no se generalice. La tarjeta usa edadIgual().
+// jóvenes. Se compara de 25 a 64; de 18 a 24 es al revés y se dice, para que no se generalice. La tarjeta usa edadIgual().
 const edadIgual=()=>{const d=EST.edad;return `No la explica la edad: se mantiene en cada tramo de 25 a 64 años, en ${d.regiones_igual_edad===16?"las 16 regiones":`${d.regiones_igual_edad} de 16 regiones`}`};
 function edadDesoc(){const d=EST.edad,c=d.chile,f=t=>`${num(c[t][0],1)}% con título y ${num(c[t][1],1)}% sin título`;
  return `${edadIgual()}. En Chile, de 25 a 34 años, ${f("25-34")}; de 55 a 64, ${f("55-64")}. `+
-  `De 15 a 24 es al revés (${f("15-24")}), pero a esa edad están solo el ${num(d.pct_jovenes_con,0)}% de los activos con título.`}
+  `De 18 a 24 es al revés (${f("18-24")}), pero a esa edad están solo el ${num(d.pct_jovenes_con,0)}% de los activos con título.`}
 // Evolución según ENE: las frases salen de la lectura de cada fila, que solo dice "sube" o "baja" si el rango
 // entero queda a un lado del cero.
 // "Dentro del margen" y no "sin cambio claro": dice por qué no se afirma un cambio, aunque las columnas difieran.
@@ -178,26 +178,34 @@ function graficoFormalidadActividad(){const c=FOR.chile,filas=actividadesFormali
 // Formalidad según ENE: dos ejes y no tres grupos, porque un independiente puede ser formal o informal.
 // Tramos de edad de la informalidad de independientes. La frase compara personas de la misma edad: así se ve que la
 // diferencia por título no viene de que los sin título sean más jóvenes o mayores. La tarjeta usa solo brechaEdad.
-const TRAMOS_FOR=["25-34","35-44","45-54","55-64"];
-// La tabla cubre de 18 a 64 años: 18-24 se muestra (marcado donde no es fiable) pero no entra en la frase de igual edad.
-// Fuera quedan 15-17 (muy pocos) y 65 o más (edad de jubilación); la nota de la tabla los suma para cuadrar con Chile.
-const TRAMOS_TABLA=["18-24",...TRAMOS_FOR];
+// Los dos vienen de comun/tramos_edad.py, los mismos de todas las tablas por edad: la frase usa de 25 a 64, donde los
+// independientes son fiables en los tres niveles.
+const TRAMOS_FOR=DATOS.tramos_igual_edad;
+// La tabla cubre todas las edades, de 15-17 a 65 o más (13-11-26): de 18 a 64 dejaba fuera a los de 65 o más, los más
+// informales después de los de 15-17, y su fila Chile se veía más formal que Chile. Los tramos con pocos casos se
+// muestran marcados; de 15 a 17 nadie tiene título y la celda va con "—".
+const TRAMOS_TABLA=DATOS.tramos_edad;
+const nomTramo=e=>e==="65+"?"65 años o más":`${e} años`;
 // Tabla por edad de formales o informales: Chile arriba (la suma de las filas), asalariados e independientes por nivel,
-// los tramos en columnas y el total de 18 a 64 al final, para cuadrar en las dos direcciones. Cada celda tiene un dato:
+// los tramos en columnas y el total de 15 años o más al final, para cuadrar en las dos direcciones. Cada celda tiene un dato:
 // formal e informal en dos líneas de la misma celda confundían. El ± va al pasar el mouse: dentro de la celda, la tabla
 // de informales necesitaba 968 px y a 1400 px hay 860. Es el mismo para formal e informal.
 function tablaEdad(informal){const etq={poco_fiable:"poco fiable",no_fiable:"no fiable"};
- const celda=([p,m,fi,nf,ni])=>`<td class="n" data-tip="Margen de error: ± ${num(m,1)} puntos (95%)">${num(informal?ni:nf)} (${num(informal?p:100-p,1)}%)${etq[fi]?` <span class="etiqueta">${etq[fi]}</span>`:""}</td>`;
- const fila=(t,v,clase="")=>{const f=TRAMOS_TABLA.reduce((s,e)=>s+v[e][3],0),i=TRAMOS_TABLA.reduce((s,e)=>s+v[e][4],0),x=informal?i:f;
+ const celda=v=>v?celdaEdad(v):`<td class="n">—</td>`;
+ // Con 7 tramos, la cifra y su % no cabían (1.146 px a 1.400, con 860 de espacio): la celda muestra el % y, al pasar el
+ // mouse, los ocupados y el margen, como la tabla por edad de Trabajo por región. El total sí muestra los ocupados, que
+ // son los que suma la línea de cuadre.
+ const celdaEdad=([p,m,fi,nf,ni])=>`<td class="n" data-tip="${num(informal?ni:nf)} ocupados · margen de error: ± ${num(m,1)} puntos (95%)">${num(informal?p:100-p,1)}%${etq[fi]?` <span class="etiqueta">${etq[fi]}</span>`:""}</td>`;
+ const fila=(t,v,clase="")=>{const f=TRAMOS_TABLA.reduce((s,e)=>s+(v[e]?v[e][3]:0),0),i=TRAMOS_TABLA.reduce((s,e)=>s+(v[e]?v[e][4]:0),0),x=informal?i:f;
   return `<tr class="${clase}"><td>${t}</td>${TRAMOS_TABLA.map(e=>celda(v[e])).join("")}<td class="n ini">${num(x)} (${num(100*x/(f+i),1)}%)</td></tr>`};
- return `<div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:8px"><thead><tr><th>${informal?"Informales":"Formales"}<br><span class="nota">ocupados (% del grupo)</span></th>`+
-  `${TRAMOS_TABLA.map(e=>`<th class="n">${e} años</th>`).join("")}<th class="n ini">Total<br>18-64 años</th></tr></thead><tbody>`+fila("Chile",FOR.tramos_chile,"total")+
+ return `<div class="tabla-ancha"><table class="tabla-compacta" style="margin-top:8px"><thead><tr><th>${informal?"Informales":"Formales"}<br><span class="nota">% del grupo</span></th>`+
+  `${TRAMOS_TABLA.map(e=>`<th class="n">${nomTramo(e)}</th>`).join("")}<th class="n ini">Total<br>15 años o más<br><span class="nota">ocupados (%)</span></th></tr></thead><tbody>`+fila("Chile",FOR.tramos_chile,"total")+
   [["asa","Asalariados"],["inx","Independientes"]].map(([g,t])=>`<tr class="grupo"><td colspan="${2+TRAMOS_TABLA.length}">${t}</td></tr>`+
    NIVELES.map(([k,tn])=>fila(tn,FOR.tramos[g][k])).join("")).join("")+`</tbody></table></div>`}
-// Línea de cuadre: la tabla de 18 a 64 más lo que queda fuera da los asalariados e independientes de la tabla por nivel.
-function cuadreEdad(informal){const i=informal?1:0,fu=FOR.tramos_fuera,c=FOR.chile,tab=TRAMOS_TABLA.reduce((s,e)=>s+FOR.tramos_chile[e][3+i],0);
+// Línea de cuadre: la tabla más los sin nivel informado da los asalariados e independientes de la tabla por nivel.
+function cuadreEdad(informal){const i=informal?1:0,c=FOR.chile,tab=TRAMOS_TABLA.reduce((s,e)=>s+FOR.tramos_chile[e][3+i],0);
  const tot=informal?c.ai[0]+c.xi[0]:c.af[0]+c.xf[0],w=informal?"informales":"formales";
- return `<p class="nota" style="margin:6px 0 0">Cuadre: los ${num(tab)} ${w} de la tabla, más ${num(fu["65+"][i])} de 65 años o más, ${num(fu["15-17"][i])} de 15 a 17 y ${num(fu.sin_nivel[i])} sin nivel de estudios informado, `+
+ return `<p class="nota" style="margin:6px 0 0">Cuadre: los ${num(tab)} ${w} de la tabla, más ${num(FOR.sin_nivel[i])} sin nivel de estudios informado, `+
   `son los ${num(tot)} asalariados e independientes ${w} de Chile de la tabla por nivel${informal?`; su informal total suma además ${num(c.fam[0])} familiares no remunerados`:""}.</p>`}
 function edadFormalidad(){const r=k=>{const v=TRAMOS_FOR.map(e=>FOR.tramos.inx[k][e][0]);return `de ${num(Math.min(...v),0)}% a ${num(Math.max(...v),0)}%`};
  return `Se mantiene a igual edad: entre los independientes de 25 a 64 años, en cada tramo de 10 años, sin título es informal ${r("Sin_titulo")}, y con título profesional, ${r("Profesional")}. ${brechaEdad()}.`}
@@ -242,7 +250,7 @@ function formalidadHtml(){const c=FOR.chile,n=FOR.niveles;
   sinFam.length?` En ${sinFam.join(" y ")} no se muestra aparte porque son menos de 60 personas en la muestra, pero está en el total.`:""} Estas diferencias no indican causa: en los independientes no las explica la edad (ver la tabla por edad), pero pueden influir otras cosas, como el rubro.</p>
  ${tablaEdad(false)}${cuadreEdad(false)}
  ${tablaEdad(true)}${cuadreEdad(true)}
- <p class="nota" style="margin:6px 0 0">Ocupados estimados (% dentro de cada grupo, nivel y edad): formal más informal suman 100. Chile es la suma de las filas de abajo, asalariados e independientes de los tres niveles, con su propio % y margen; Total suma los cinco tramos. El margen de error (95%) de cada celda aparece al pasar el mouse. De 18 a 24 años, los independientes con título son muy pocos en la muestra y no son fiables. Fuera quedan 15 a 17 años y 65 o más, la edad de jubilación: también trabajan y son activos, pero ahí trabajar ya es opcional. La comparación a igual edad del texto usa de 25 a 64.</p>
+ <p class="nota" style="margin:6px 0 0">% de ocupados formales o informales dentro de cada grupo, nivel y edad: formal más informal suman 100. Al pasar el mouse, los ocupados estimados y el margen de error (95%) de cada celda. Chile es la suma de las filas de abajo, asalariados e independientes de los tres niveles, con su propio % y margen; Total suma los siete tramos. Las celdas con pocos casos en la muestra van marcadas: de 15 a 17 años todas (y nadie tiene título, por eso "—"), de 18 a 24 los independientes con título y de 65 o más los independientes profesionales. La comparación a igual edad del texto usa de 25 a 64, donde las cifras de independientes son fiables en los tres niveles.</p>
  </details>
  ${graficoFormalidadActividad()}
  ${graficoFormalidadRegion()}
@@ -326,15 +334,20 @@ function graficoSituacionRegion(){const ch=POB.chile,tasa=d=>d.tasa_desocupacion
 function fraseEdadRegion(){const e=POB.edad,o=e.puestos.ocu,p=e.puestos.par,n=DATOS.orden.length;
  const mov=x=>x.iguales===n?"el orden es el mismo":`${x.iguales} de ${n} regiones quedan en el mismo puesto y ninguna se mueve más de ${x.max}`;
  return `A igual edad, el orden casi no cambia. Ajustando por edad, con todos los tramos de 15 a 65 años o más: en el % de ocupados, ${mov(o)}; en la tasa de participación, ${mov(p)}. Las cifras por edad están en "Ver cifras".`}
+// Segunda tabla del "Ver cifras", con su título: las cifras sin ajustar no se repiten (son las de la tabla de arriba, con
+// otro nombre se leían como cifras distintas), y "a igual edad" es la palabra de la frase de abajo. Cada % muestra su
+// base al pasar el mouse, como el margen en Formalidad: dentro de la celda, la tabla no cabría.
 function tablaEdadRegion(){const e=POB.edad,ch=e.chile;
- const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${e.tramos.map(tr=>`<td class="n">${num(d.tramos[tr][0],1)}%</td>`).join("")}`+
-  `<td class="n ini">${num(d.ocu,1)}%</td><td class="n">${num(d.ocu_aj,1)}%</td><td class="n ini">${num(d.par,1)}%</td><td class="n">${num(d.par_aj,1)}%</td></tr>`;
- return `<div class="nota" style="margin-top:10px">% de ocupados por tramo de edad, según residencia, y las dos tasas sin ajustar y ajustadas por edad. `+
-  `Ajustada: la tasa que tendría la región con la mezcla de edades de Chile; con ella, las diferencias entre regiones no se deben a la edad. `+
-  `No entran los ${num(e.sin_edad)} sin edad en el Censo, que sí están en la cifra sin ajustar; por eso en Chile la ajustada es ${num(e.chile_con_edad,1)}% y no ${num(ch.ocu,1)}%.</div>
- <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Región</th><th class="n" colspan="${e.tramos.length}">% de ocupados por edad</th>`+
-  `<th class="n ini" colspan="2">% de ocupados</th><th class="n ini" colspan="2">Tasa de participación</th></tr>`+
-  `<tr>${e.tramos.map(tr=>`<th class="n">${tr==="65+"?"65 o más":tr}</th>`).join("")}<th class="n ini">Sin ajustar</th><th class="n">Ajustado</th><th class="n ini">Sin ajustar</th><th class="n">Ajustada</th></tr></thead><tbody>`+
+ const celda=(d,tr)=>{const [p,,o,n]=d.tramos[tr];return `<td class="n" data-tip="${num(o)} ocupados de ${num(n)} personas de ${nomTramo(tr)}">${num(p,1)}%</td>`};
+ const fila=(t,d,k)=>`<tr class="${k}"><td>${t}</td>${e.tramos.map(tr=>celda(d,tr)).join("")}`+
+  `<td class="n ini">${num(d.ocu_aj,1)}%</td><td class="n">${num(d.par_aj,1)}%</td></tr>`;
+ return `<p class="tabla-titulo">Ocupados por edad y tasas a igual edad</p>
+ <div class="nota">Ocupados de cada tramo de edad, como % de la población de ese tramo, según residencia; al pasar el mouse, cuántos son. `+
+  `A igual edad: la cifra que tendría la región con la mezcla de edades de Chile; con ella, las diferencias entre regiones no se deben a la edad. Las cifras sin ajustar son las de la tabla de arriba. `+
+  `No entran los ${num(e.sin_edad)} sin edad en el Censo: por eso en Chile, a igual edad, el % de ocupados es ${num(e.chile_con_edad,1)}% y no el ${num(ch.ocu,1)}% de arriba.</div>
+ <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th rowspan="2">Región</th><th class="n" colspan="${e.tramos.length}">Ocupados (% de la población de cada edad)</th>`+
+  `<th class="n ini" colspan="2">A igual edad</th></tr>`+
+  `<tr>${e.tramos.map(tr=>`<th class="n">${nomTramo(tr)}</th>`).join("")}<th class="n ini">Ocupados</th><th class="n">Tasa de participación</th></tr></thead><tbody>`+
   fila("Chile",ch,"total")+DATOS.orden.map(r=>fila(esc(DATOS.regiones[r]),e.regiones[r],"")).join("")+`</tbody></table></div>`}
 // Trabajo por región, 2: los que llegan a trabajar menos los que salen, por cada 100 ocupados que viven en la región y
 // dicen dónde trabajan. Es una medida directa: el Censo trae región de residencia y de trabajo de cada ocupado, y quienes
@@ -524,6 +537,7 @@ function vistaResumen(){
  ${encabezado("sec-lab","Trabajo por región",`La desocupación va de ${num(desMin[1],1)}% en ${enReg(desMin[0])} a ${num(desMax[1],1)}% en ${enReg(desMax[0])}`)}
  ${graficoSituacionRegion()}
  <details><summary>Ver cifras</summary>
+ <p class="tabla-titulo">Población de 15 años o más por situación</p>
  <div class="nota">Población de 15 años o más, según región de residencia. Entre paréntesis, % de esa población. Los que trabajan en cada región, vivan o no en ella, están en las cifras de "Llegan o salen a trabajar".</div>
  <div class="tabla-ancha"><table style="margin-top:8px"><thead><tr><th>Región</th><th class="n">15 años o más</th><th class="n">Ocupados</th>`+
   `<th class="n">Desocupados</th><th class="n">Fuera de la fuerza de trabajo</th>`+

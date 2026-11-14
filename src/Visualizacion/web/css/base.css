@@ -44,3 +44,5 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
 /* Solo las cifras no se cortan: los encabezados en lenguaje simple son largos y deben poder pasar a dos líneas. */
 td.n{white-space:nowrap}
 details{margin-top:8px}summary{cursor:pointer;color:var(--t2);font-size:13.5px}
+/* Título de cada tabla cuando un "Ver cifras" tiene más de una: sin él no se veía dónde empezaba la segunda. */
+.tabla-titulo{font-weight:600;font-size:14px;margin:14px 0 2px}
