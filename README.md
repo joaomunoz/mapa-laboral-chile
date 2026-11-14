@@ -18,8 +18,8 @@ Llenar ese vacío con una estimación habría supuesto la misma mezcla de carrer
 
 ## Cómo verlo
 
-- **En línea:** [enlace-github-pages] *(se agrega al publicar en GitHub Pages)*.
-- **Sin internet:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de **479 KB**, sin servidor ni dependencias.
+- **En línea:** [joaomunoz.github.io/mapa-laboral-chile](https://joaomunoz.github.io/mapa-laboral-chile/).
+- **Sin internet:** descarga [`docs/index.html`](docs/index.html) y ábrelo en el navegador. Es un solo archivo de **480 KB**, sin servidor ni dependencias.
 - **Enlaces directos:** cada vista tiene su propio enlace. Por ejemplo, `index.html#B/2` abre Minería en Antofagasta y baja a su detalle. El botón "atrás" del navegador vuelve a la vista anterior.
 
 ![Vista inicial del mapa: cada región tiene el color de la actividad que la distingue, junto a los principales hallazgos, la lista de regiones y el gráfico de hombres y mujeres por actividad](docs/mapa.png)
@@ -366,7 +366,7 @@ src/Analisis/Puentes_de_mapeo/    Cruces entre fuentes: actividades y carreras
 src/Analisis/Calculos_control/    Control de la tabla regional de ENE
 src/Analisis/JOINS/               Tablas que alimentan el mapa
 src/Visualizacion/                Generador del mapa (Python) y su página en web/ (HTML, CSS y JS)
-docs/                             Mapa final, nota de lectura y captura
+docs/                             Mapa final, nota de lectura, captura y vista previa para compartir
 ```
 
 Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scrapers/comun/inspect_data.py`. Los periodos de la ENE que usan las tablas se definen en `src/Scrapers/comun/periodos.py`.
@@ -376,3 +376,9 @@ Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scr
 - **Nota de lectura:** la explicación completa de cada dato, el glosario y los colores están en [`docs/nota_de_lectura.md`](docs/nota_de_lectura.md).
 - **Tecnologías:** Python, pandas, GeoPandas, Shapely, requests y BeautifulSoup para los datos. HTML, CSS, JavaScript y SVG para el mapa, sin bibliotecas externas.
 - **Estado:** el mapa está generado y validado en sus datos. El autor confirmó su uso con mouse y teclado, y por última vez los clics, el 05-11-26.
+
+## Licencia
+
+- **Código** (`src/` y `requirements.txt`): [MIT](LICENSE).
+- **Mapa, nota de lectura, imágenes y este README:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). Puedes usarlos y adaptarlos citando la fuente.
+- **Documentos de las fuentes** en `Datos/datos_externos/glosarios/`: son de sus autores (INE, Ministerio de Desarrollo Social y Familia y Mineduc) y no entran en estas licencias.
