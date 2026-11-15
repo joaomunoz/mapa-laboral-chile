@@ -116,7 +116,7 @@ La ENE (Encuesta Nacional de Empleo) es la encuesta del INE con la que se calcul
   - Con el margen de error, la región más informal y la menos informal no se distinguen de sus vecinas.
 - **Independientes:** son el **24,1%** de los ocupados, y el **57,0%** de ellos tiene empleo informal.
 
-**Desocupación.** Subió de **8,6%** en 2024 a **9,5%** en 2026, comparando los mismos meses.
+**Desocupación.** Subió de **8,6%** a **9,5%** entre marzo a julio de 2024 y los mismos meses de 2026, ambos según la ENE.
 
 > **Nota:** estas diferencias son descriptivas. El mapa muestra cómo son las cosas, no por qué ocurren.
 
@@ -137,7 +137,7 @@ Se eligió **mostrar menos, pero medido** (el origen está en [Por qué existe e
 - **El Censo y la ENE difieren** en el tamaño de seis actividades, incluso con los mismos meses, y la causa no está comprobada. En desempleo difieren poco (profesionales: **6,3%** y **6,9%**).
 - **Región de trabajo:** **5,8%** de los ocupados del Censo no la tiene, sobre todo quienes trabajan en varias comunas. Por eso Transporte, Construcción y Electricidad aparecen bajo su tamaño.
 - **Solo hay evolución de la desocupación.** El mapa usa un solo censo, y el cambio de la desocupación entre 2024 y 2026 se mide con la ENE, en los mismos meses. Los ingresos de MiFuturo no muestran una evolución, porque el 1er y el 5° año vienen de generaciones distintas.
-- **La formalidad es solo de 2026 y solo de la ENE.** El Censo no mide formalidad, y las ocupadas informales de la ENE 2024 no reproducen el boletín del INE, así que no hay evolución de la informalidad. Por actividad se muestra solo donde la muestra la sostiene.
+- **La formalidad es solo de 2026 y solo de la ENE.** El Censo no mide formalidad, y los ocupados informales de la ENE 2024 no reproducen el boletín del INE, así que no hay evolución de la informalidad. Por actividad se muestra solo donde la muestra la sostiene.
 - **Las encuestas tienen margen de error.** Una cifra de la ENE o la CASEN se muestra solo si la muestra la sostiene, y las de menor precisión van marcadas (criterio exacto en [Metodología](#metodología-validación-y-reproducibilidad)).
 - **Rapa Nui y Juan Fernández no se dibujan,** pero sus datos siguen en Valparaíso.
 
@@ -278,7 +278,7 @@ Las columnas completas de cada tabla están en su reporte `_inspeccion.txt`. No 
 
 Cada paso se detiene si falla uno de sus controles.
 
-- **Reproducibilidad:** en un clon limpio, el 13-11-26, con un entorno nuevo instalado desde `requirements.txt`, la cadena completa desde `procesar.py` regeneró todas las tablas versionadas sin cambios y un `index.html` idéntico byte a byte.
+- **Reproducibilidad:** en un clon limpio, el 13 de noviembre de 2026, con un entorno nuevo instalado desde `requirements.txt`, la cadena completa desde `procesar.py` regeneró todas las tablas versionadas sin cambios y un `index.html` idéntico byte a byte.
 - **Contra el dato oficial:** el procesamiento de ENE reproduce el Boletín INE n°336 (julio-septiembre de 2026) con una desviación máxima de 0,08%, y el n°310 (mayo-julio de 2024) con 0,12%. En 2024, la cifra de ocupados informales del boletín no calza con el microdato publicado y no se valida.
 - **Entre fuentes:** con los mismos meses, el CL del Censo y el de ENE tienen una correlación de 0,97 en las 187 combinaciones de región y actividad que ENE mide con fiabilidad.
 - **Coherencia del mapa:** el color y la lectura se deciden con el mismo CL de 2 decimales que se muestra. La generación se detiene si los datos dejan de respaldar el color, la lectura o las frases de la página.
@@ -286,10 +286,10 @@ Cada paso se detiene si falla uno de sus controles.
 | Indicador | INE | Este proyecto | Desviación |
 |---|---:|---:|---:|
 | Fuerza de trabajo | 10.282.718 | 10.282.930 | +0,00% |
-| Ocupadas | 9.274.742 | 9.275.130 | +0,00% |
-| Desocupadas | 1.007.976 | 1.007.799 | −0,02% |
-| Inactivas | 6.416.440 | 6.421.373 | +0,08% |
-| Ocupadas informales | 2.451.443 | 2.452.190 | +0,03% |
+| Personas ocupadas | 9.274.742 | 9.275.130 | +0,00% |
+| Personas desocupadas | 1.007.976 | 1.007.799 | −0,02% |
+| Personas fuera de la fuerza de trabajo | 6.416.440 | 6.421.373 | +0,08% |
+| Personas ocupadas informales | 2.451.443 | 2.452.190 | +0,03% |
 | Tasa de desocupación | 9,8% | 9,80% | exacta |
 
 </details>
@@ -375,10 +375,14 @@ Cada tabla va acompañada de un reporte `_inspeccion.txt`, generado por `src/Scr
 
 - **Nota de lectura:** la explicación completa de cada dato, el glosario y los colores están en [`docs/nota_de_lectura.md`](docs/nota_de_lectura.md).
 - **Tecnologías:** Python, pandas, GeoPandas, Shapely, requests y BeautifulSoup para los datos. HTML, CSS, JavaScript y SVG para el mapa, sin bibliotecas externas.
-- **Estado:** el mapa está generado y validado en sus datos. El autor confirmó su uso con mouse y teclado, y por última vez los clics, el 05-11-26.
+- **Estado:** el mapa está generado y validado en sus datos. El autor confirmó su uso con mouse y teclado, y por última vez los clics, el 5 de noviembre de 2026.
 
 ## Licencia
 
 - **Código** (`src/` y `requirements.txt`): [MIT](LICENSE).
 - **Mapa, nota de lectura, imágenes y este README:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). Puedes usarlos y adaptarlos citando la fuente.
 - **Documentos de las fuentes** en `Datos/datos_externos/glosarios/`: son de sus autores (INE, Ministerio de Desarrollo Social y Familia y Mineduc) y no entran en estas licencias.
+
+**Cómo citarlo:** Muñoz, J. (2026). *Mapa Laboral de Chile*. https://joaomunoz.github.io/mapa-laboral-chile/
+
+**¿Encontraste un error o tienes una pregunta?** Abre un [Issue](https://github.com/joaomunoz/mapa-laboral-chile/issues) en este repositorio.
