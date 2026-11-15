@@ -116,7 +116,7 @@ La ENE (Encuesta Nacional de Empleo) es la encuesta del INE con la que se calcul
   - Con el margen de error, la región más informal y la menos informal no se distinguen de sus vecinas.
 - **Independientes:** son el **24,1%** de los ocupados, y el **57,0%** de ellos tiene empleo informal.
 
-**Desocupación.** Subió de **8,6%** a **9,5%** entre marzo a julio de 2024 y los mismos meses de 2026, ambos según la ENE.
+**Desocupación.** Entre marzo y julio, subió de **8,6%** en 2024 a **9,5%** en 2026, ambos según la ENE.
 
 > **Nota:** estas diferencias son descriptivas. El mapa muestra cómo son las cosas, no por qué ocurren.
 
